@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spark 2.0大型项目实战：移动电商app交互式数据分析平台 | ITEnergy</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="课程大纲 一、大数据集群搭建第1讲-课程介绍第2讲-课程环境搭建：CentOS 6.4集群搭建第3讲-课程环境搭建：hadoop-2.5.0-cdh5.3.6集群搭建第4讲-课程环境搭建：hive-0.13.1-cdh5.3.6安装第5讲-课程环境搭建：zookeeper-3.4.5-cdh5.3.6集群搭建第6讲-课程环境搭建：kafka_2.9.2-0.8.1集群搭建第7讲-课程环境搭建：">
+<meta name="keywords" content="spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark 2.0大型项目实战：移动电商app交互式数据分析平台">
+<meta property="og:url" content="http://yoursite.com/2017/09/08/Spark大型项目实战/index.html">
+<meta property="og:site_name" content="ITEnergy">
+<meta property="og:description" content="课程大纲 一、大数据集群搭建第1讲-课程介绍第2讲-课程环境搭建：CentOS 6.4集群搭建第3讲-课程环境搭建：hadoop-2.5.0-cdh5.3.6集群搭建第4讲-课程环境搭建：hive-0.13.1-cdh5.3.6安装第5讲-课程环境搭建：zookeeper-3.4.5-cdh5.3.6集群搭建第6讲-课程环境搭建：kafka_2.9.2-0.8.1集群搭建第7讲-课程环境搭建：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.ibeifeng.com/images/201610/source_img/582_G_1477639195635.jpg">
+<meta property="og:image" content="http://www.ibeifeng.com/images/upload/Image/spark001.jpg">
+<meta property="og:updated_time" content="2017-09-15T12:59:18.542Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark 2.0大型项目实战：移动电商app交互式数据分析平台">
+<meta name="twitter:description" content="课程大纲 一、大数据集群搭建第1讲-课程介绍第2讲-课程环境搭建：CentOS 6.4集群搭建第3讲-课程环境搭建：hadoop-2.5.0-cdh5.3.6集群搭建第4讲-课程环境搭建：hive-0.13.1-cdh5.3.6安装第5讲-课程环境搭建：zookeeper-3.4.5-cdh5.3.6集群搭建第6讲-课程环境搭建：kafka_2.9.2-0.8.1集群搭建第7讲-课程环境搭建：">
+<meta name="twitter:image" content="http://www.ibeifeng.com/images/201610/source_img/582_G_1477639195635.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="ITEnergy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">ITEnergy</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">首页</a></li><li><a href="/categories/大数据">大数据</a></li><li><a href="/categories/七月在线">七月在线</a></li><li><a href="/categories/小象学院">小象学院</a></li><li><a href="/dataguru">练数成金</a></li><li><a href="/architecture">架构师</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Spark大型项目实战" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/09/08/Spark大型项目实战/" class="article-date">
+  <time datetime="2017-09-08T08:16:55.000Z" itemprop="datePublished">2017-09-08</time>
+</a>
+		</span>
+		<span class="meta-elements author">ITEnergy</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Spark 2.0大型项目实战：移动电商app交互式数据分析平台
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><img src="http://www.ibeifeng.com/images/201610/source_img/582_G_1477639195635.jpg" alt=""></p>
+<ul>
+<li>课程大纲<ul>
+<li>一、大数据集群搭建<br>第1讲-课程介绍<br>第2讲-课程环境搭建：CentOS 6.4集群搭建<br>第3讲-课程环境搭建：hadoop-2.5.0-cdh5.3.6集群搭建<br>第4讲-课程环境搭建：hive-0.13.1-cdh5.3.6安装<br>第5讲-课程环境搭建：zookeeper-3.4.5-cdh5.3.6集群搭建<br>第6讲-课程环境搭建：kafka_2.9.2-0.8.1集群搭建<br>第7讲-课程环境搭建：flume-ng-1.5.0-cdh5.3.6安装<br>第8讲-课程环境搭建：离线日志采集流程介绍<br>第9讲-课程环境搭建：实时数据采集流程介绍<br>第10讲-课程环境搭建：Spark 1.5.1客户端安装以及基于YARN的提交模式<br><br></li>
+<li>二、用户访问session分析：<br>第11讲-用户访问session分析：模块介绍<br>第12讲-用户访问session分析：基础数据结构以及大数据平台架构介绍<br>第13讲-用户访问session分析：需求分析<br>第14讲-用户访问session分析：技术方案设计<br>第15讲-用户访问session分析：数据表设计<br>第16讲-用户访问session分析：Eclipse工程搭建以及工具类说明<br>第17讲-用户访问session分析：开发配置管理组件<br>第18讲-用户访问session分析：JDBC原理介绍以及增删改查示范<br>第19讲-用户访问session分析：数据库连接池原理<br>第20讲-用户访问session分析：单例设计模式<br>第21讲-用户访问session分析：内部类以及匿名内部类<br>第22讲-用户访问session分析：开发JDBC辅助组件（上）<br>第23讲-用户访问session分析：开发JDBC辅助组件（下）<br>第24讲-用户访问session分析：JavaBean概念讲解<br>第25讲-用户访问session分析：DAO模式讲解以及TaskDAO开发<br>第26讲-用户访问session分析：工厂模式讲解以及DAOFactory开发<br>第27讲-用户访问session分析：JSON数据格式讲解以及fastjson介绍<br>第28讲-用户访问session分析：Spark上下文构建以及模拟数据生成<br>第29讲-用户访问session分析：按session粒度进行数据聚合<br>第30讲-用户访问session分析：按筛选参数对session粒度聚合数据进行过滤<br>第31讲-用户访问session分析：session聚合统计之自定义Accumulator<br>第32讲-用户访问session分析：session聚合统计之重构实现思路与重构session聚合<br>第33讲-用户访问session分析：session聚合统计之重构过滤进行统计<br>第34讲-用户访问session分析：session聚合统计之计算统计结果并写入MySQL<br>第35讲-用户访问session分析：session聚合统计之本地测试<br>第36讲-用户访问session分析：session聚合统计之使用Scala实现自定义Accumulator<br>第37讲-用户访问session分析：session随机抽取之实现思路分析<br>第38讲-用户访问session分析：session随机抽取之计算每天每小时session数量<br>第39讲-用户访问session分析：session随机抽取之按时间比例随机抽取算法实现<br>第40讲-用户访问session分析：session随机抽取之根据随机索引进行抽取<br>第41讲-用户访问session分析：session随机抽取之获取抽取session的明细数据<br>第42讲-用户访问session分析：session随机抽取之本地测试<br>第43讲-用户访问session分析：top10热门品类之需求回顾以及实现思路分析<br>第44讲-用户访问session分析：top10热门品类之获取session访问过的所有品类<br>第45讲-用户访问session分析：top10热门品类之计算各品类点击、下单和支付的次数<br>第46讲-用户访问session分析：top10热门品类之join品类与点击下单支付次数<br>第47讲-用户访问session分析：top10热门品类之自定义二次排序key<br>第48讲-用户访问session分析：top10热门品类之进行二次排序<br>第49讲-用户访问session分析：top10热门品类之获取top10品类并写入MySQL<br>第50讲-用户访问session分析：top10热门品类之本地测试<br>第51讲-用户访问session分析：top10热门品类之使用Scala实现二次排序<br>第52讲-用户访问session分析：top10活跃session之开发准备以及top10品类RDD生成<br>第53讲-用户访问session分析：top10活跃session之计算top10品类被各sessoin点击的次数<br>第54讲-用户访问session分析：top10活跃session之分组取TopN算法获取top10活跃session<br>第55讲-用户访问session分析：top10活跃session之本地测试以及阶段总结<br><br></li>
+<li>三、企业级性能调优、troubleshooting经验与数据倾斜解决方案：<br>第56讲-用户访问session分析：性能调优之在实际项目中分配更多资源<br>第57讲-用户访问session分析：性能调优之在实际项目中调节并行度<br>第58讲-用户访问session分析：性能调优之在实际项目中重构RDD架构以及RDD持久化<br>第59讲-用户访问session分析：性能调优之在实际项目中广播大变量<br>第60讲-用户访问session分析：性能调优之在实际项目中使用Kryo序列化<br>第61讲-用户访问session分析：性能调优之在实际项目中使用fastutil优化数据格式<br>第62讲-用户访问session分析：性能调优之在实际项目中调节数据本地化等待时长<br>第63讲-用户访问session分析：JVM调优之原理概述以及降低cache操作的内存占比<br>第64讲-用户访问session分析：JVM调优之调节executor堆外内存与连接等待时长<br>第65讲-用户访问session分析：Shuffle调优之原理概述<br>第66讲-用户访问session分析：Shuffle调优之合并map端输出文件<br>第67讲-用户访问session分析：Shuffle调优之调节map端内存缓冲与reduce端内存占比<br>第68讲-用户访问session分析：Shuffle调优之HashShuffleManager与SortShuffleManager<br>第69讲-用户访问session分析：算子调优之MapPartitions提升Map类操作性能<br>第70讲-用户访问session分析：算子调优之filter过后使用coalesce减少分区数量<br>第71讲-用户访问session分析：算子调优之使用foreachPartition优化写数据库性能<br>第72讲-用户访问session分析：算子调优之使用repartition解决Spark SQL低并行度的性能问题<br>第73讲-用户访问session分析：算子调优之reduceByKey本地聚合介绍<br>第74讲-用户访问session分析：troubleshooting之控制shuffle reduce端缓冲大小以避免OOM<br>第75讲-用户访问session分析：troubleshooting之解决JVM GC导致的shuffle文件拉取失败<br>第76讲-用户访问session分析：troubleshooting之解决YARN队列资源不足导致的application直接失败<br>第77讲-用户访问session分析：troubleshooting之解决各种序列化导致的报错<br>第78讲-用户访问session分析：troubleshooting之解决算子函数返回NULL导致的问题<br>第79讲-用户访问session分析：troubleshooting之解决yarn-client模式导致的网卡流量激增问题<br>第80讲-用户访问session分析：troubleshooting之解决yarn-cluster模式的JVM栈内存溢出问题<br>第81讲-用户访问session分析：troubleshooting之错误的持久化方式以及checkpoint的使用<br>第82讲-用户访问session分析：数据倾斜解决方案之原理以及现象分析<br>第83讲-用户访问session分析：数据倾斜解决方案之聚合源数据以及过滤导致倾斜的key<br>第84讲-用户访问session分析：数据倾斜解决方案之提高shuffle操作reduce并行度<br>第85讲-用户访问session分析：数据倾斜解决方案之使用随机key实现双重聚合<br>第86讲-用户访问session分析：数据倾斜解决方案之将reduce join转换为map join<br>第87讲-用户访问session分析：数据倾斜解决方案之sample采样倾斜key单独进行join<br>第88讲-用户访问session分析：数据倾斜解决方案之使用随机数以及扩容表进行join<br><br></li>
+<li>四、页面单跳转化率统计：<br>第89讲-页面单跳转化率：模块介绍<br>第90讲-页面单跳转化率：需求分析、技术方案设计、数据表设计<br>第91讲-页面单跳转化率：编写基础代码<br>第92讲-页面单跳转化率：页面切片生成以及页面流匹配算法实现<br>第93讲-页面单跳转化率：计算页面流起始页面的pv<br>第94讲-页面单跳转化率：计算页面切片的转化率<br>第95讲-页面单跳转化率：将页面切片转化率写入MySQL<br>第96讲-页面单跳转化率：本地测试<br>第97讲-页面单跳转化率：生产环境测试<br>第98讲-用户访问session分析：生产环境测试<br><br></li>
+<li>五、各区域热门商品统计：<br>第99讲-各区域热门商品统计：模块介绍<br>第100讲-各区域热门商品统计：需求分析、技术方案设计以及数据设计<br>第101讲-各区域热门商品统计：查询用户指定日期范围内的点击行为数据<br>第102讲-各区域热门商品统计：异构数据源之从MySQL中查询城市数据<br>第103讲-各区域热门商品统计：关联城市信息以及RDD转换为DataFrame后注册临时表<br>第104讲-各区域热门商品统计：开发自定义UDAF聚合函数之group_concat_distinct()<br>第105讲-各区域热门商品统计：查询各区域各商品的点击次数并拼接城市列表<br>第106讲-各区域热门商品统计：关联商品信息并使用自定义get_json_object函数和内置if函数标记经营类型<br>第106讲-各区域热门商品统计：使用开窗函数统计各区域的top3热门商品<br>第107讲-各区域热门商品统计：使用内置case when函数给各个区域打上级别标记<br>第108讲-各区域热门商品统计：将结果数据写入MySQL中<br>第109讲-各区域热门商品统计：Spark SQL数据倾斜解决方案<br>第110讲-各区域热门商品统计：生产环境测试<br><br></li>
+<li>六、广告点击流量实时统计：<br>第111讲-广告点击流量实时统计：需求分析、技术方案设计以及数据设计<br>第112讲-广告点击流量实时统计：为动态黑名单实时计算每天各用户对各广告的点击次数<br>第113讲-广告点击流量实时统计：使用高性能方式将实时计算结果写入MySQL中<br>第114讲-广告点击流量实时统计：过滤出每个batch中的黑名单用户以生成动态黑名单<br>第115讲-广告点击流量实时统计：基于动态黑名单进行点击行为过滤<br>第116讲-广告点击流量实时统计：计算每天各省各城市各广告的点击量<br>第117讲-广告点击流量实时统计：计算每天各省的top3热门广告<br>第118讲-广告点击流量实时统计：计算每天各广告最近1小时滑动窗口内的点击趋势<br>第119讲-广告点击流量实时统计：实现实时计算程序的HA高可用性<br>第120讲-广告点击流量实时统计：对实时计算程序进行性能调优<br>第121讲-广告点击流量实时统计：生产环境测试<br>第122讲-课程总结：都学到了什么？<br><br><br>新升级增加课程大纲：<br>第123讲-（赠送）Spark 2.0-新特性介绍<br>第124讲-（赠送）Spark 2.0-新特性介绍-易用性：标准化SQL支持以及更合理的API<br>第125讲-（赠送）Spark 2.0-新特性介绍-高性能：让Spark作为编译器来运行<br>第126讲-（赠送）Spark 2.0-新特性介绍-智能化：Structured Streaming介绍<br>第127讲-（赠送）Spark 2.0-新特性介绍-Spark 1.x的Volcano Iterator Model技术缺陷分析<br>第128讲-（赠送）Spark 2.0-新特性介绍-whole-stage code generation技术和vectorization技术<br>第129讲-（赠送）Spark 2.0-Spark 2.x与1.x对比以及分析、学习建议以及使用建议<br>第130讲-（赠送）Spark 2.0-课程环境搭建：虚拟机、CentOS、Hadoop、Spark等<br>第131讲-（赠送）Spark 2.0-开发环境搭建：Eclipse+Maven+Scala+Spark<br>第132讲-基于Spark 2.0的用户活跃度分析：模块介绍以及交互式用户行为分析系统的解释<br>第133讲-基于Spark 2.0的用户活跃度分析：统计指定时间内访问次数最多的10个用户<br>第134讲-基于Spark 2.0的用户活跃度分析：统计指定时间内购买金额最多的10个用户<br>第135讲-基于Spark 2.0的用户活跃度分析：统计最近一个周期相比上一个周期访问次数增长最多的10个用户<br>第136讲-基于Spark 2.0的用户活跃度分析：统计最近一个周期相比上一个周期购买金额增长最多的10个用户<br>第137讲-基于Spark 2.0的用户活跃度分析：统计指定注册时间范围内头7天访问次数最高的10个用户<br>第138讲-基于Spark 2.0的用户活跃度分析：统计指定注册时间范围内头7天购买金额最高的10个用户<br><br></li>
+</ul>
+</li>
+<li><p>视频大小：13.29GB</p>
+</li>
+<li><p>视频截图</p>
+</li>
+</ul>
+<p><img src="http://www.ibeifeng.com/images/upload/Image/spark001.jpg" alt=""></p>
+<ul>
+<li>试看链接：链接：<a href="http://pan.baidu.com/s/1sljsVLz" target="_blank" rel="external">http://pan.baidu.com/s/1sljsVLz</a> 密码：y1h1</li>
+</ul>
+<p>试看链接失效请联系：waitcoding@gmail.com</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/大数据/">大数据</a>
+  </div>
+
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spark/">spark</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2017/09/08/BAT面试算法特训班/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          BAT面试算法特训班【更新至第三课】
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/08/徐培成IT十八掌大数据第三期/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          【推荐】徐培成IT十八掌大数据第三期
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">ITEnergy</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 ITEnergy<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
