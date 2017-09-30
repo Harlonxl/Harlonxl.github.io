@@ -106,7 +106,7 @@
 
   // Mobile nav
 
-  $(".mobile-nav-panel").click(function() {
+  $(".mobile-nav-panel").on("touchend click", function() {
     //$(".nav").toggleClass("active")
     if ($(".nav").is(":hidden")) {
       $(".nav").show();
