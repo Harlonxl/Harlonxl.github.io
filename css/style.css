@@ -415,6 +415,7 @@ pre .deletion {
   text-transform: uppercase;
   float: right;
   position: relative;
+  display: none;
 }
 .nav ul {
   display: block;
@@ -1032,7 +1033,6 @@ pre .deletion {
   .mobile-nav-panel {
     display: block;
     cursor: pointer;
-    background: #0ff;
   }
   .nav {
     height: 0;
@@ -1051,6 +1051,7 @@ pre .deletion {
     -ms-transition: all 0.2s ease-out;
     transition: all 0.2s ease-out;
     z-index: 2;
+    display: none;
   }
   .nav ul {
     display: block;
