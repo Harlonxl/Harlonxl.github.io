@@ -1031,6 +1031,7 @@ pre .deletion {
   }
   .mobile-nav-panel {
     display: block;
+    cursor: pointer;
   }
   .nav {
     height: 0;
