@@ -1032,7 +1032,7 @@ pre .deletion {
   .mobile-nav-panel {
     display: block;
     cursor: pointer;
-    background: #f0f;
+    background: #0ff;
   }
   .nav {
     height: 0;
