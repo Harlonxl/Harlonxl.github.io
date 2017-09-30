@@ -105,16 +105,16 @@
   }
 
   // Mobile nav
-  $(document).ready(function() {
-    $(".mobile-nav-panel").on("click", function() {
-    //$(".nav").toggleClass("active")
-      if ($(".nav").is(":hidden")) {
-        $(".nav").show();
-      } else {
-        $(".nav").hide();
-      }
-    });
-  })
+  // $(document).ready(function() {
+  //   $(".mobile-nav-panel").on("click", function() {
+  //   //$(".nav").toggleClass("active")
+  //     if ($(".nav").is(":hidden")) {
+  //       $(".nav").show();
+  //     } else {
+  //       $(".nav").hide();
+  //     }
+  //   });
+  // })
   
 
 })(jQuery);
