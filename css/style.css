@@ -1030,7 +1030,6 @@ pre .deletion {
   }
   .mobile-nav-panel {
     display: block;
-    cursor: pointer;
   }
   .nav {
     height: 0;
@@ -1049,7 +1048,6 @@ pre .deletion {
     -ms-transition: all 0.2s ease-out;
     transition: all 0.2s ease-out;
     z-index: 2;
-    display: none;
   }
   .nav ul {
     display: block;
