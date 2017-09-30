@@ -1049,6 +1049,7 @@ pre .deletion {
     transition: all 0.2s ease-out;
     z-index: 2;
     display: none;
+    cursor: pointer;
   }
   .nav ul {
     display: block;
