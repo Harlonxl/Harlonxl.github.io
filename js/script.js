@@ -108,10 +108,10 @@
 
   $(".mobile-nav-panel").click(function() {
     //$(".nav").toggleClass("active")
-    if ($(".nav").attr("id") == "active") {
-      $(".nav").removeAttr("id");
+    if ($(".nav").is(":hidden")) {
+      $(".nav").show();
     } else {
-      $(".nav").attr("id", "active");
+      $(".nav").hide();
     }
   });
 
