@@ -397,6 +397,7 @@ pre .deletion {
 .mobile-nav-panel {
   display: none;
   padding: 15px 0 0;
+  cursor: pointer;
 }
 .mobile-nav-panel .icon-reorder {
   cursor: pointer;
