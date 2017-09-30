@@ -415,7 +415,6 @@ pre .deletion {
   text-transform: uppercase;
   float: right;
   position: relative;
-  display: none;
 }
 .nav ul {
   display: block;

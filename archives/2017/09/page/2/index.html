@@ -29,7 +29,7 @@
 	<h1 class="blog-title">
 		<a href="/">ITEnergy</a>
 	</h1>
-	<nav class="nav" style = "display: none">
+	<nav class="nav">
 		<ul>
 			<li><a href="/">首页</a></li><li><a href="/categories/大数据">大数据</a></li><li><a href="/categories/人工智能">人工智能</a></li><li><a href="/categories/数据分析">数据分析</a></li><li><a href="/security">信息安全</a></li><li><a href="/categories/七月在线">七月在线</a></li><li><a href="/categories/小象学院">小象学院</a></li><li><a href="/dataguru">练数成金</a></li><li><a href="/architecture">架构师</a></li>
 			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
@@ -41,8 +41,10 @@
 			var nav = document.getElementsByClassName("nav");
 			if (nav[0].style.display == "none") {
 				nav[0].style.display = "block";
-			} else {
+			} else if(nav[0].style.display == "block") {
 				nav[0].style.display = "none";
+			} else {
+				nav[0].style.display = "block";
 			}
 		}
 	</script>
@@ -159,14 +161,14 @@
       <article class="post post">
         <footer class="entry-meta-header">
           <span class="meta-elements date">
-            <time datetime="2017-09-08T11:16:55.000Z"><a href="/2017/09/08/BAT面试算法特训班/">2017-09-08</a></time>
+            <time datetime="2017-09-08T11:16:55.000Z"><a href="/2017/09/08/金融数据分析第二期/">2017-09-08</a></time>
           </span>
         </footer>
         <div class="entry-content">
           <header>
             
               
-                <h1><a href="/2017/09/08/BAT面试算法特训班/">BAT面试算法特训班</a></h1>
+                <h1><a href="/2017/09/08/金融数据分析第二期/">金融数据分析第二期</a></h1>
               
             
           </header>
@@ -176,14 +178,14 @@
       <article class="post post">
         <footer class="entry-meta-header">
           <span class="meta-elements date">
-            <time datetime="2017-09-08T11:16:55.000Z"><a href="/2017/09/08/金融数据分析第二期/">2017-09-08</a></time>
+            <time datetime="2017-09-08T11:16:55.000Z"><a href="/2017/09/08/BAT面试算法特训班/">2017-09-08</a></time>
           </span>
         </footer>
         <div class="entry-content">
           <header>
             
               
-                <h1><a href="/2017/09/08/金融数据分析第二期/">金融数据分析第二期</a></h1>
+                <h1><a href="/2017/09/08/BAT面试算法特训班/">BAT面试算法特训班</a></h1>
               
             
           </header>

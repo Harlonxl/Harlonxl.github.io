@@ -41,7 +41,7 @@
 	<h1 class="blog-title">
 		<a href="/">ITEnergy</a>
 	</h1>
-	<nav class="nav" style = "display: none">
+	<nav class="nav">
 		<ul>
 			<li><a href="/">首页</a></li><li><a href="/categories/大数据">大数据</a></li><li><a href="/categories/人工智能">人工智能</a></li><li><a href="/categories/数据分析">数据分析</a></li><li><a href="/security">信息安全</a></li><li><a href="/categories/七月在线">七月在线</a></li><li><a href="/categories/小象学院">小象学院</a></li><li><a href="/dataguru">练数成金</a></li><li><a href="/architecture">架构师</a></li>
 			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
@@ -53,8 +53,10 @@
 			var nav = document.getElementsByClassName("nav");
 			if (nav[0].style.display == "none") {
 				nav[0].style.display = "block";
-			} else {
+			} else if(nav[0].style.display == "block") {
 				nav[0].style.display = "none";
+			} else {
+				nav[0].style.display = "block";
 			}
 		}
 	</script>
@@ -124,21 +126,21 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/09/12/深入浅出大数据挖掘技术/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/09/12/Spark全面精讲/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          玩转大数据：深入浅出大数据挖掘技术
+          Spark全面精讲（基于Spark2版本+含Spark调优+超多案例）
         
       </div>
     </a>
   
   
-    <a href="/2017/09/12/Cloudera Hadoop 5&Hadoop高阶管理及调优课程/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/09/12/深入浅出大数据挖掘技术/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">
         
-          Cloudera Hadoop 5&amp;Hadoop高阶管理及调优课程
+          玩转大数据：深入浅出大数据挖掘技术
         
       </div>
     </a>

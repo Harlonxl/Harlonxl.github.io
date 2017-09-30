@@ -37,7 +37,7 @@
 	<h1 class="blog-title">
 		<a href="/">ITEnergy</a>
 	</h1>
-	<nav class="nav" style = "display: none">
+	<nav class="nav">
 		<ul>
 			<li><a href="/">首页</a></li><li><a href="/categories/大数据">大数据</a></li><li><a href="/categories/人工智能">人工智能</a></li><li><a href="/categories/数据分析">数据分析</a></li><li><a href="/security">信息安全</a></li><li><a href="/categories/七月在线">七月在线</a></li><li><a href="/categories/小象学院">小象学院</a></li><li><a href="/dataguru">练数成金</a></li><li><a href="/architecture">架构师</a></li>
 			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
@@ -49,8 +49,10 @@
 			var nav = document.getElementsByClassName("nav");
 			if (nav[0].style.display == "none") {
 				nav[0].style.display = "block";
-			} else {
+			} else if(nav[0].style.display == "block") {
 				nav[0].style.display = "none";
+			} else {
+				nav[0].style.display = "block";
 			}
 		}
 	</script>
@@ -185,21 +187,21 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/09/08/BAT面试算法特训班/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/09/08/TensorFlow框架案例实战/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          BAT面试算法特训班
+          TensorFlow框架案例实战
         
       </div>
     </a>
   
   
-    <a href="/2017/09/08/Spark大型项目实战/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/09/08/BAT面试算法特训班/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">
         
-          Spark 2.0大型项目实战：移动电商app交互式数据分析平台
+          BAT面试算法特训班
         
       </div>
     </a>
