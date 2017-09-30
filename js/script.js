@@ -105,14 +105,16 @@
   }
 
   // Mobile nav
-
-  $(".mobile-nav-panel").on("touchend click", function() {
+  $(document).ready(function() {
+    $(".mobile-nav-panel").on("click", function() {
     //$(".nav").toggleClass("active")
-    if ($(".nav").is(":hidden")) {
-      $(".nav").show();
-    } else {
-      $(".nav").hide();
-    }
-  });
+      if ($(".nav").is(":hidden")) {
+        $(".nav").show();
+      } else {
+        $(".nav").hide();
+      }
+    });
+  })
+  
 
 })(jQuery);
