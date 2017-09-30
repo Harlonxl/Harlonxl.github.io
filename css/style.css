@@ -1067,6 +1067,16 @@ pre .deletion {
     border-bottom: 1px solid #677174;
     text-align: left;
   }
+  #active {
+    height: auto;
+    overflow: visible;
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    z-index: 2;
+  }
   #search-form-wrap {
     display: none;
   }

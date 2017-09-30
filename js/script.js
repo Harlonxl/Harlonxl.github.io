@@ -107,7 +107,12 @@
   // Mobile nav
 
   $(".mobile-nav-panel").click(function() {
-    $(".nav").toggleClass("active")
+    //$(".nav").toggleClass("active")
+    if ($(".nav").attr("id") == "active") {
+      $(".nav").removeAttr("id");
+    } else {
+      $(".nav").attr("id", "active");
+    }
   });
 
 })(jQuery);
