@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>唐宇迪python数据分析与机器学习实战 | ITEnergy</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="课程概述：  使用数据领域最主流语言Python及其分析与建模库作为核心武器。对于机器学习经典算法给出完整的原理推导并基于实例进行讲解，基于案例演示如何应用机器学习算法解决实际问题。 学习路线： 课程目录： 章节1:Python科学计算库-Numpy 章节2:python数据分析处理库-Pandas 章节3:Python数据可视化库-Matplotlib 章节4:Python可视化库Seabo">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="唐宇迪python数据分析与机器学习实战">
+<meta property="og:url" content="http://itenergy.vip/2017/10/09/Python数据分析与机器学习实战/index.html">
+<meta property="og:site_name" content="ITEnergy">
+<meta property="og:description" content="课程概述：  使用数据领域最主流语言Python及其分析与建模库作为核心武器。对于机器学习经典算法给出完整的原理推导并基于实例进行讲解，基于案例演示如何应用机器学习算法解决实际问题。 学习路线： 课程目录： 章节1:Python科学计算库-Numpy 章节2:python数据分析处理库-Pandas 章节3:Python数据可视化库-Matplotlib 章节4:Python可视化库Seabo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://imgsize.ph.126.net/?enlarge=true&imgurl=http://img1.ph.126.net/IPwLYk5SZifWj5LpKll19g==/6632568599070753166.png_450x250x1x95.png">
+<meta property="og:image" content="http://edu-image.nosdn.127.net/126e4372-1df1-4afe-99f8-63d1065c3ecc.png">
+<meta property="og:image" content="http://itenergy.vip/img/20171009181913.png">
+<meta property="og:updated_time" content="2017-10-09T10:19:27.968Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="唐宇迪python数据分析与机器学习实战">
+<meta name="twitter:description" content="课程概述：  使用数据领域最主流语言Python及其分析与建模库作为核心武器。对于机器学习经典算法给出完整的原理推导并基于实例进行讲解，基于案例演示如何应用机器学习算法解决实际问题。 学习路线： 课程目录： 章节1:Python科学计算库-Numpy 章节2:python数据分析处理库-Pandas 章节3:Python数据可视化库-Matplotlib 章节4:Python可视化库Seabo">
+<meta name="twitter:image" content="http://imgsize.ph.126.net/?enlarge=true&imgurl=http://img1.ph.126.net/IPwLYk5SZifWj5LpKll19g==/6632568599070753166.png_450x250x1x95.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel" onclick="mobile();">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">ITEnergy</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">首页</a></li><li><a href="/categories/大数据">大数据</a></li><li><a href="/categories/人工智能">人工智能</a></li><li><a href="/categories/数据分析">数据分析</a></li><li><a href="/security">信息安全</a></li><li><a href="/categories/七月在线">七月在线</a></li><li><a href="/categories/小象学院">小象学院</a></li><li><a href="/dataguru">练数成金</a></li><li><a href="/architecture">架构师</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			
+		</ul>
+	</nav>
+	<script>
+		function mobile() {
+			var nav = document.getElementsByClassName("nav");
+			if (nav[0].style.display == "none") {
+				nav[0].style.display = "block";
+			} else if(nav[0].style.display == "block") {
+				nav[0].style.display = "none";
+			} else {
+				nav[0].style.display = "block";
+			}
+		}
+	</script>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://itenergy.vip"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Python数据分析与机器学习实战" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/10/09/Python数据分析与机器学习实战/" class="article-date">
+  <time datetime="2017-10-09T09:56:55.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+		</span>
+		<span class="meta-elements author">ITEnergy</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      唐宇迪python数据分析与机器学习实战
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><img src="http://imgsize.ph.126.net/?enlarge=true&amp;imgurl=http://img1.ph.126.net/IPwLYk5SZifWj5LpKll19g==/6632568599070753166.png_450x250x1x95.png" alt=""></p>
+<ul>
+<li>课程概述：<br>  使用数据领域最主流语言Python及其分析与建模库作为核心武器。对于机器学习经典算法给出完整的原理推导并基于实例进行讲解，基于案例演示如何应用机器学习算法解决实际问题。</li>
+<li>学习路线：<br><img src="http://edu-image.nosdn.127.net/126e4372-1df1-4afe-99f8-63d1065c3ecc.png" alt=""></li>
+<li>课程目录：<ul>
+<li><a href="#jump1">章节1:Python科学计算库-Numpy</a></li>
+<li><a href="#jump2">章节2:python数据分析处理库-Pandas</a></li>
+<li><a href="#jump3">章节3:Python数据可视化库-Matplotlib</a></li>
+<li><a href="#jump4">章节4:Python可视化库Seaborn</a></li>
+<li><a href="#jump5">章节5:回归算法</a></li>
+<li><a href="#jump6">章节6:决策树</a></li>
+<li><a href="#jump7">章节7:贝叶斯算法</a></li>
+<li><a href="#jump8">章节8:支持向量机</a></li>
+<li><a href="#jump9">章节9:神经网络</a></li>
+<li><a href="#jump10">章节10:Xgboost集成算法</a></li>
+<li><a href="#jump11">章节11:自然语言处理词向量模型-Word2Vec</a></li>
+<li><a href="#jump12">章节12:K近邻与聚类</a></li>
+<li><a href="#jump13">章节13:PCA降维与SVD矩阵分解</a></li>
+<li><a href="#jump14">章节14:scikit-learn模型建立与评估</a></li>
+<li><a href="#jump15">章节15:Python库分析科比生涯数据</a></li>
+<li><a href="#jump16">章节16:机器学习项目实战-泰坦尼克获救预测</a></li>
+<li><a href="#jump17">章节17:机器学习项目实战-交易数据异常检测</a></li>
+<li><a href="#jump18">章节18:Python文本数据分析：新闻分类任务</a></li>
+<li><a href="#jump19">章节20:使用Gensim库构造中文维基百度数据词向量模型</a></li>
+<li><a href="#jump21">章节21:机器学习项目实战-贷款申请最大化利润</a></li>
+<li><a href="#jump22">章节22:机器学习项目实战-用户流失预警</a></li>
+<li><a href="#jump23">章节23:探索性数据分析-足球赛事数据集</a></li>
+<li><a href="#jump24">章节24:探索性数据分析-农粮组织数据集</a></li>
+<li><a href="#jump25">章节25:机器学习项目实战-HTTP日志聚类分析</a><br><br></li>
+</ul>
+</li>
+<li><span id="jump1"><font color="red">章节1:Python科学计算库-Numpy</font></span></li>
+</ul>
+<ul>
+<li>课时1课程介绍（主题与大纲）</li>
+<li>课时2机器学习概述</li>
+<li>课时3使用Anaconda安装python环境（Python新手先看这个）</li>
+<li>课时4课程数据，代码，PPT（在参考资料界面）</li>
+<li>课时5科学计算库Numpy</li>
+<li>课时6Numpy基础结构</li>
+<li>课时7Numpy矩阵基础</li>
+<li>课时8Numpy常用函数</li>
+<li>课时9矩阵常用操作</li>
+<li>课时10不同复制操作对比</li>
+</ul>
+<ul>
+<li><span id="jump2"><font color="red">章节2:python数据分析处理库-Pandas</font></span></li>
+</ul>
+<ul>
+<li>课时11Pandas数据读取</li>
+<li>课时12Pandas索引与计算</li>
+<li>课时13Pandas数据预处理实例</li>
+<li>课时14Pandas常用预处理方法</li>
+<li>课时15Pandas自定义函数</li>
+<li>课时16Series结构</li>
+</ul>
+<ul>
+<li><span id="jump3"><font color="red">章节3:Python数据可视化库-Matplotlib</font></span></li>
+</ul>
+<ul>
+<li>课时17折线图绘制</li>
+<li>课时18子图操作</li>
+<li>课时19条形图与散点图</li>
+<li>课时20柱形图与盒图</li>
+<li>课时21细节设置</li>
+</ul>
+<ul>
+<li><span id="jump4"><font color="red">章节4:Python可视化库Seaborn</font></span></li>
+</ul>
+<ul>
+<li>课时22Seaborn简介</li>
+<li>课时23整体布局风格设置</li>
+<li>课时24风格细节设置</li>
+<li>课时25调色板</li>
+<li>课时26调色板颜色设置</li>
+<li>课时27单变量分析绘图</li>
+<li>课时28回归分析绘图</li>
+<li>课时29多变量分析绘图</li>
+<li>课时30分类属性绘图</li>
+<li>课时31Facetgrid使用方法</li>
+<li>课时32Facetgrid绘制多变量</li>
+<li>课时33热度图绘制</li>
+</ul>
+<ul>
+<li><span id="jump5"><font color="red">章节5:回归算法</font></span></li>
+</ul>
+<ul>
+<li>课时34回归算法综述</li>
+<li>课时35回归误差原理推导</li>
+<li>课时36回归算法如何得出最优解</li>
+<li>课时37基于公式推导完成简易线性回归</li>
+<li>课时38逻辑回归与梯度下降</li>
+<li>课时39使用梯度下降求解回归问题</li>
+</ul>
+<ul>
+<li><span id="jump6"><font color="red">章节6:决策树</font></span></li>
+</ul>
+<ul>
+<li>课时40决策树算法综述</li>
+<li>课时41决策树熵原理</li>
+<li>课时42决策树构造实例</li>
+<li>课时43信息增益原理</li>
+<li>课时44信息增益率的作用</li>
+<li>课时45决策树剪枝策略</li>
+<li>课时46随机森林模型</li>
+<li>课时47决策树参数详解</li>
+</ul>
+<ul>
+<li><span id="jump7"><font color="red">章节7:贝叶斯算法</font></span></li>
+</ul>
+<ul>
+<li>课时48贝叶斯算法概述</li>
+<li>课时49贝叶斯推导实例</li>
+<li>课时50贝叶斯拼写纠错实例</li>
+<li>课时51垃圾邮件过滤实例</li>
+<li>课时52贝叶斯实现拼写检查器</li>
+</ul>
+<ul>
+<li><span id="jump8"><font color="red">章节8:支持向量机</font></span></li>
+</ul>
+<ul>
+<li>课时53支持向量机要解决的问题</li>
+<li>课时54支持向量机目标函数</li>
+<li>课时55支持向量机目标函数求解</li>
+<li>课时56支持向量机求解实例</li>
+<li>课时57支持向量机软间隔问题</li>
+<li>课时58支持向量核变换</li>
+<li>课时59SMO算法求解支持向量机</li>
+</ul>
+<ul>
+<li><span id="jump9"><font color="red">章节9:神经网络</font></span></li>
+</ul>
+<ul>
+<li>课时60初识神经网络</li>
+<li>课时61计算机视觉所面临的挑战</li>
+<li>课时62K近邻尝试图像分类</li>
+<li>课时63超参数的作用</li>
+<li>课时64线性分类原理</li>
+<li>课时65神经网络-损失函数</li>
+<li>课时66神经网络-正则化惩罚项</li>
+<li>课时67神经网络-softmax分类器</li>
+<li>课时68神经网络-最优化形象解读</li>
+<li>课时69神经网络-梯度下降细节问题</li>
+<li>课时70神经网络-反向传播</li>
+<li>课时71神经网络架构</li>
+<li>课时72神经网络实例演示</li>
+<li>课时73神经网络过拟合解决方案</li>
+<li>课时74感受神经网络的强大</li>
+</ul>
+<ul>
+<li><span id="jump10"><font color="red">章节10:Xgboost集成算法</font></span></li>
+</ul>
+<ul>
+<li>课时75集成算法思想</li>
+<li>课时76xgboost基本原理</li>
+<li>课时77xgboost目标函数推导</li>
+<li>课时78xgboost求解实例</li>
+<li>课时79xgboost安装</li>
+<li>课时80xgboost实战演示</li>
+<li>课时81Adaboost算法概述</li>
+</ul>
+<ul>
+<li><span id="jump11"><font color="red">章节11:自然语言处理词向量模型-Word2Vec</font></span></li>
+</ul>
+<ul>
+<li>课时82自然语言处理与深度学习</li>
+<li>课时83语言模型</li>
+<li>课时84-N-gram模型</li>
+<li>课时85词向量</li>
+<li>课时86神经网络模型</li>
+<li>课时87Hierarchical Softmax</li>
+<li>课时88CBOW模型实例</li>
+<li>课时89CBOW求解目标</li>
+<li>课时90梯度上升求解</li>
+<li>课时91负采样模型</li>
+</ul>
+<ul>
+<li><span id="jump12"><font color="red">章节12:K近邻与聚类</font></span></li>
+</ul>
+<ul>
+<li>课时92无监督聚类问题</li>
+<li>课时93聚类结果与离群点分析</li>
+<li>课时94K-means聚类案例对NBA球员进行评估</li>
+<li>课时95使用Kmeans进行图像压缩</li>
+<li>课时96K近邻算法原理</li>
+<li>课时97K近邻算法代码实现</li>
+</ul>
+<ul>
+<li><span id="jump13"><font color="red">章节13:PCA降维与SVD矩阵分解</font></span></li>
+</ul>
+<ul>
+<li>课时98PCA基本原理</li>
+<li>课时99PCA实例</li>
+<li>课时100SVD奇异值分解原理</li>
+<li>课时101SVD推荐系统应用实例</li>
+</ul>
+<ul>
+<li><span id="jump14"><font color="red">章节14:scikit-learn模型建立与评估</font></span></li>
+</ul>
+<ul>
+<li>课时102使用python库分析汽车油耗效率</li>
+<li>课时103使用scikit-learn库建立回归模型</li>
+<li>课时104使用逻辑回归改进模型效果</li>
+<li>课时105 模型效果衡量标准</li>
+<li>课时106ROC指标与测试集的价值</li>
+<li>课时107交叉验证</li>
+<li>课时108多类别问题</li>
+</ul>
+<ul>
+<li><span id="jump15"><font color="red">章节15:Python库分析科比生涯数据</font></span></li>
+</ul>
+<ul>
+<li>课时109Kobe Bryan生涯数据读取与简介</li>
+<li>课时110特征数据可视化展示</li>
+<li>课时111数据预处理</li>
+<li>课时112使用Scikit-learn建立模型</li>
+</ul>
+<ul>
+<li><span id="jump16"><font color="red">章节16:机器学习项目实战-泰坦尼克获救预测</font></span></li>
+</ul>
+<ul>
+<li>课时113船员数据分析</li>
+<li>课时114数据预处理</li>
+<li>课时115使用回归算法进行预测</li>
+<li>课时116使用随机森林改进模型</li>
+<li>课时117随机森林特征重要性分析</li>
+</ul>
+<ul>
+<li><span id="jump17"><font color="red">章节17:机器学习项目实战-交易数据异常检测</font></span></li>
+</ul>
+<ul>
+<li>课时118案例背景和目标</li>
+<li>课时119样本不均衡解决方案</li>
+<li>课时120下采样策略</li>
+<li>课时121交叉验证</li>
+<li>课时122模型评估方法</li>
+<li>课时123正则化惩罚</li>
+<li>课时124逻辑回归模型</li>
+<li>课时125混淆矩阵</li>
+<li>课时126逻辑回归阈值对结果的影响</li>
+<li>课时127SMOTE样本生成策略</li>
+</ul>
+<ul>
+<li><span id="jump18"><font color="red">章节18:Python文本数据分析：新闻分类任务</font></span></li>
+</ul>
+<ul>
+<li>课时128文本分析与关键词提取</li>
+<li>课时129相似度计算</li>
+<li>课时130新闻数据与任务简介</li>
+<li>课时131TF-IDF关键词提取</li>
+<li>课时132LDA建模</li>
+<li>课时133基于贝叶斯算法进行新闻分类</li>
+</ul>
+<ul>
+<li><span id="jump19"><font color="red">章节19:Python时间序列分析</font></span></li>
+</ul>
+<ul>
+<li>课时134章节简介</li>
+<li>课时135Pandas生成时间序列</li>
+<li>课时136Pandas数据重采样</li>
+<li>课时137Pandas滑动窗口</li>
+<li>课时138数据平稳性与差分法</li>
+<li>课时139ARIMA模型</li>
+<li>课时140相关函数评估方法</li>
+<li>课时141建立ARIMA模型</li>
+<li>课时142参数选择</li>
+<li>课时143股票预测案例</li>
+<li>课时144使用tsfresh库进行分类任务</li>
+<li>课时145维基百科词条EDA</li>
+</ul>
+<ul>
+<li><span id="jump1"><font color="red">章节20:使用Gensim库构造中文维基百度数据词向量模型</font></span></li>
+</ul>
+<ul>
+<li>课时146使用Gensim库构造词向量</li>
+<li>课时147维基百科中文数据处理</li>
+<li>课时148Gensim构造word2vec模型</li>
+<li>课时149测试模型相似度结果</li>
+</ul>
+<ul>
+<li><span id="jump21"><font color="red">章节21:机器学习项目实战-贷款申请最大化利润</font></span></li>
+</ul>
+<ul>
+<li>课时150数据清洗过滤无用特征</li>
+<li>课时151数据预处理</li>
+<li>课时152获得最大利润的条件与做法</li>
+<li>课时153预测结果并解决样本不均衡问题</li>
+</ul>
+<ul>
+<li><span id="jump22"><font color="red">章节22:机器学习项目实战-用户流失预警</font></span></li>
+</ul>
+<ul>
+<li>课时154数据背景介绍</li>
+<li>课时155数据预处理</li>
+<li>课时156尝试多种分类器效果</li>
+<li>课时157结果衡量指标的意义</li>
+<li>课时158应用阈值得出结果</li>
+</ul>
+<ul>
+<li><span id="jump23"><font color="red">章节23:探索性数据分析-足球赛事数据集</font></span></li>
+</ul>
+<ul>
+<li>课时159内容简介</li>
+<li>课时160数据背景介绍</li>
+<li>课时161数据读取与预处理</li>
+<li>课时162数据切分模块</li>
+<li>课时163缺失值可视化分析</li>
+<li>课时164特征可视化展示</li>
+<li>课时165多特征之间关系分析</li>
+<li>课时166报表可视化分析</li>
+<li>课时167红牌和肤色的关系</li>
+</ul>
+<ul>
+<li><span id="jump25"><font color="red">章节24:探索性数据分析-农粮组织数据集</font></span></li>
+</ul>
+<ul>
+<li>课时168数据背景简介</li>
+<li>课时169数据切片分析</li>
+<li>课时170单变量分析</li>
+<li>课时171峰度与偏度</li>
+<li>课时172数据对数变换</li>
+<li>课时173数据分析维度</li>
+<li>课时174变量关系可视化展示</li>
+</ul>
+<ul>
+<li><span id="jump1"><font color="red">章节25:机器学习项目实战-HTTP日志聚类分析</font></span></li>
+</ul>
+<ul>
+<li>课时175建立特征工程</li>
+<li>课时176特征数据预处理</li>
+<li>课时177应用聚类算法得出异常IP点<br><br></li>
+</ul>
+<ul>
+<li>视频大小：12.52GB<br><br></li>
+<li>视频截图<br><img src="/img/20171009181913.png" alt=""><br><br></li>
+<li>试看链接：链接：<a href="http://pan.baidu.com/s/1nv3LhBr" target="_blank" rel="external">http://pan.baidu.com/s/1nv3LhBr</a> 密码：8qa7</li>
+</ul>
+<p>试看链接失效请联系：waitcoding@gmail.com</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/人工智能/">人工智能</a>
+  </div>
+
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/10/09/徐培成IT十八掌大数据第四期/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          【推荐】徐培成IT十八掌大数据第四期
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:itenergy.vip">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">ITEnergy</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 ITEnergy<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
