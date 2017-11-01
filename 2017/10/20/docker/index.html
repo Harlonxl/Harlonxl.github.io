@@ -79,14 +79,20 @@
 
 
 
+<meta name="description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker安装实践记录">
-<meta property="og:url" content="http://harlon.org/2017/10/20/kafka/index.html">
+<meta property="og:title" content="Docker">
+<meta property="og:url" content="http://harlon.org/2017/10/20/docker/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-01T07:56:39.474Z">
+<meta property="og:image" content="http://harlon.org/img/1377574-b0de2f14feb4d41f.png">
+<meta property="og:image" content="http://harlon.org/img/1377574-f8a941f6cf12d249.png">
+<meta property="og:updated_time" content="2017-11-01T10:02:36.305Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker安装实践记录">
+<meta name="twitter:title" content="Docker">
+<meta name="twitter:description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
+<meta name="twitter:image" content="http://harlon.org/img/1377574-b0de2f14feb4d41f.png">
 
 
 
@@ -116,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2017/10/20/kafka/"/>
+  <link rel="canonical" href="http://harlon.org/2017/10/20/docker/"/>
 
 
 
 
 
-  <title>Docker安装实践记录 | Harlon's BLOG</title>
+  <title>Docker | Harlon's BLOG</title>
   
 
 
@@ -259,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/10/20/kafka/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/10/20/docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -276,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Docker安装实践记录</h1>
+          <h1 class="post-title" itemprop="name headline">Docker</h1>
         
 
         <div class="post-meta">
@@ -348,7 +354,22 @@
       
 
       
-        
+        <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>Docker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。<br><a id="more"></a></p>
+<p><img src="/img/1377574-b0de2f14feb4d41f.png" alt="Docker"></p>
+<h1 id="Docker-Machine"><a href="#Docker-Machine" class="headerlink" title="Docker Machine"></a>Docker Machine</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Docker Machine是Docker三剑客之一，刚开始有点困惑Docker Machine存在的必要性。其主要功能是创建一个虚拟主机，再其上运行docker engine，Docker存在的必要性如下：</p>
+<ol>
+<li>跨平台的支持，Docker不支持Mac和Windows，如果你想在这两个平台下面安装Docker，就必须要安装Docker Machine。</li>
+<li>快速部署，统一环境。Docker Machine创建Docker运行的虚拟环境，在不同平台上保持一致，这样在本地开发的应用也可以快速部署到云端，并且Docker可以非常方便管理多个Docker主机，不需要再去实现监控Docker主机的功能。<br><img src="/img/1377574-f8a941f6cf12d249.png" alt="Docker Machine"></li>
+</ol>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装Docker Machine非常简单，直接从官方Release库中下载编译好的二进制文件即可。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl -o /usr/local/bin/docker-machine -L https://github.com/docker/machine/releases/download/v0.3.1-rc1/docker-machine_linux-amd64</div><div class="line">chmod +x /usr/local/bin/docker-machine</div></pre></td></tr></table></figure></p>
+<pre><code>完成后，检查版本信息，验证是否运行正常
+</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> docker-machine -v</div><div class="line">docker-machine version 0.3.1-rc1 (993f2db)</div></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>创建一个virtualbox虚拟主机bigdata：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 2048 bigdata</div></pre></td></tr></table></figure></p>
+<p>查看系统运行的虚拟主机：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-machine ls</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>参考资料：<br><a href="https://www.gitbook.com/book/yeasy/docker_practice/details" target="_blank" rel="external">Docker — 从入门到实践</a><br><a href="http://www.010lm.com/roll/2016/0326/1382516.html" target="_blank" rel="external">关于Docker你不知道的事-Docker Machine</a></p>
+</blockquote>
+
       
     </div>
     
@@ -436,8 +457,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -499,6 +529,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Machine"><span class="nav-number">2.</span> <span class="nav-text">Docker Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.3.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
