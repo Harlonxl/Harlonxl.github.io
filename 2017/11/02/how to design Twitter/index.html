@@ -92,7 +92,8 @@
 <meta property="og:image" content="http://harlon.org/img/twitter_push.png">
 <meta property="og:image" content="http://harlon.org/img/twitter_pull.png">
 <meta property="og:image" content="http://harlon.org/img/twitter_pushandpull.png">
-<meta property="og:updated_time" content="2017-11-02T12:25:18.356Z">
+<meta property="og:image" content="http://harlon.org/img/twitter_storage.png">
+<meta property="og:updated_time" content="2017-11-02T13:35:11.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【001】如何设计Twitter？">
 <meta name="twitter:description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
@@ -192,7 +193,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -242,7 +243,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -306,7 +307,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-02T16:30:23+08:00">
                 2017-11-02
@@ -327,7 +328,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -393,7 +394,39 @@
 <h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><p>把Twitter的主要功能拆分成几个服务模块，Twitter系统的架构如下：<br><img src="/img/architecture.png" alt="Architecture"><br>Twitter架构内部实现可以分为Push和Pull模型。</p>
 <h2 id="Push"><a href="#Push" class="headerlink" title="Push"></a>Push</h2><p>Push模型的流程如下：<br><img src="/img/twitter_push.png" alt="Push"><br>Push模型中，用户发送一条Tweet后Tweet服务将这个Tweet插入到关注该用户的News Feed中，是一个主动服务的过程。<br>问题：Push模型存在的问题是Lady Gaga的风暴问题，如果某个用户被关注的人数太多，生成这些用户的News Feed会占用比较长的时间，可以缓解这个问题的一个办法是先通知在线的用户，再去处理离线用户的News Feed。</p>
 <h2 id="Pull"><a href="#Pull" class="headerlink" title="Pull"></a>Pull</h2><p>Pull模型的流程如下：<br><img src="/img/twitter_pull.png" alt="Pull"><br>Pull模型中，用户发送一条Tweet后立即存储在DB中，当用户需要自己的News Feed的时候，读取用户关注者的Tweet，然后根据时间戳合成该用户的News Feed，是一个用户主动请求的工程。<br>问题：上帝视角，如果某个用户关注非常多的其他用户，合并过程会比较慢。</p>
-<h2 id="Push-vs-Pull"><a href="#Push-vs-Pull" class="headerlink" title="Push vs. Pull"></a>Push vs. Pull</h2><p>Push和Pull模型各有各的问题，到底哪一个模型好呢？实际应用中Twitter和Facebook使用的是Pull模型，Instagram使用Pull和Push结合的模型，Pull模型相对于Push模型的好处有：逻辑比较简单，实现起来比较容易；上帝视角的问题较Lady Gaga的风暴问题来说出现的概率很低。<br>当然也可以将Push和Pull模型结合起来：<br><img src="/img/twitter_pushandpull.png" alt="Push and Pull"></p>
+<h2 id="Push-vs-Pull"><a href="#Push-vs-Pull" class="headerlink" title="Push vs. Pull"></a>Push vs. Pull</h2><p>Push和Pull模型各有各的问题，到底哪一个模型好呢？实际应用中Twitter和Facebook使用的是Pull模型，Instagram使用Pull和Push结合的模型，Pull模型相对于Push模型的好处有：逻辑比较简单，实现起来比较容易；上帝视角的问题较Lady Gaga的风暴问题来说出现的概率很低。<br>当然也可以将Push和Pull模型结合起来：<br><img src="/img/twitter_pushandpull.png" alt="Push and Pull"><br>问题：摇摆问题，比如邓超有100k的粉丝，发了一条比较作的微博，一下子掉了好几十万的粉丝，不发微博又涨了几十万粉丝，这样处于中间不停的摇摆，系统会切换来切换去，可以采取的一个策略是，对于大于100k的使用Pull模型，只有当粉丝掉到90k以下是才是用Push模型。设置一个缓冲地带，可以缓解摇摆问题带来的影响。</p>
+<hr>
+<h1 id="Storage"><a href="#Storage" class="headerlink" title="Storage"></a>Storage</h1><p>不管什么样的系统，本质上都是用户对数据的读取，所以存储这部分的设计比较关键。一般来说我们选择的存储类型有以下三个：</p>
+<ul>
+<li>关系型数据库 SQL Database：用户信息 - MySQL</li>
+<li>非关系型数据库 NoSQL Database：社交图谱 - MongoDB</li>
+<li>文件系统 File System：图片、视频  - Amazon S3</li>
+</ul>
+<p><img src="/img/twitter_storage.png" alt="Storage"></p>
+<hr>
+<h1 id="Evolve"><a href="#Evolve" class="headerlink" title="Evolve"></a>Evolve</h1><h2 id="如何加速？"><a href="#如何加速？" class="headerlink" title="如何加速？"></a>如何加速？</h2><p>加速的第一个思路就是Cache，将所有的内容都放在内存中，加速访问。<br>仅仅Cache一周之内访问Twitter的用户，并只Cache最新的800条Tweet。<br>Assumption:</p>
+<ul>
+<li>Weekly active users: 300 million</li>
+<li>Average news feed size: 80 tweets</li>
+<li>Average timeline size: 500 tweets</li>
+<li>Tweet size: 200B</li>
+<li>Average follower : 20</li>
+</ul>
+<p>Momory need:</p>
+<ul>
+<li>Size of timeline = 300 million * 500 * 200 = 30T</li>
+<li>Size of news feed = 300 million * 80 * 200 = 4.8T</li>
+<li>Size of social graph = 300 million * 20 *  2 * 8 = 64G</li>
+</ul>
+<h2 id="如何节省空间？"><a href="#如何节省空间？" class="headerlink" title="如何节省空间？"></a>如何节省空间？</h2><p>将Tweet内容隔离出来，Timline只存Tweet的ID，这样可以去掉很多重复的Tweet。<br>Assumption:</p>
+<ul>
+<li>Tweet size: 20B = userID(8)+tweetID(8)+Indicators(4)</li>
+</ul>
+<p>Momory need:</p>
+<ul>
+<li>Size of timeline = 300 million * 500 * 20 = 3T</li>
+<li>Size of news feed = 300 million * 80 * 20 = 480G</li>
+</ul>
 
       
     </div>
@@ -486,10 +519,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -510,7 +543,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -521,7 +554,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -532,7 +565,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -566,7 +599,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scenario"><span class="nav-number">2.</span> <span class="nav-text">Scenario</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Suppose"><span class="nav-number">3.</span> <span class="nav-text">Suppose</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service"><span class="nav-number">4.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Push"><span class="nav-number">4.1.</span> <span class="nav-text">Push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pull"><span class="nav-number">4.2.</span> <span class="nav-text">Pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Push-vs-Pull"><span class="nav-number">4.3.</span> <span class="nav-text">Push vs. Pull</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scenario"><span class="nav-number">2.</span> <span class="nav-text">Scenario</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Suppose"><span class="nav-number">3.</span> <span class="nav-text">Suppose</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service"><span class="nav-number">4.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Push"><span class="nav-number">4.1.</span> <span class="nav-text">Push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pull"><span class="nav-number">4.2.</span> <span class="nav-text">Pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Push-vs-Pull"><span class="nav-number">4.3.</span> <span class="nav-text">Push vs. Pull</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Storage"><span class="nav-number">5.</span> <span class="nav-text">Storage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Evolve"><span class="nav-number">6.</span> <span class="nav-text">Evolve</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何加速？"><span class="nav-number">6.1.</span> <span class="nav-text">如何加速？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何节省空间？"><span class="nav-number">6.2.</span> <span class="nav-text">如何节省空间？</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -596,7 +629,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
