@@ -91,7 +91,8 @@
 <meta property="og:image" content="http://harlon.org/img/architecture.png">
 <meta property="og:image" content="http://harlon.org/img/twitter_push.png">
 <meta property="og:image" content="http://harlon.org/img/twitter_pull.png">
-<meta property="og:updated_time" content="2017-11-02T12:09:09.357Z">
+<meta property="og:image" content="http://harlon.org/img/twitter_pushandpull.png">
+<meta property="og:updated_time" content="2017-11-02T12:25:18.356Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【001】如何设计Twitter？">
 <meta name="twitter:description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
@@ -392,7 +393,7 @@
 <h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><p>把Twitter的主要功能拆分成几个服务模块，Twitter系统的架构如下：<br><img src="/img/architecture.png" alt="Architecture"><br>Twitter架构内部实现可以分为Push和Pull模型。</p>
 <h2 id="Push"><a href="#Push" class="headerlink" title="Push"></a>Push</h2><p>Push模型的流程如下：<br><img src="/img/twitter_push.png" alt="Push"><br>Push模型中，用户发送一条Tweet后Tweet服务将这个Tweet插入到关注该用户的News Feed中，是一个主动服务的过程。<br>问题：Push模型存在的问题是Lady Gaga的风暴问题，如果某个用户被关注的人数太多，生成这些用户的News Feed会占用比较长的时间，可以缓解这个问题的一个办法是先通知在线的用户，再去处理离线用户的News Feed。</p>
 <h2 id="Pull"><a href="#Pull" class="headerlink" title="Pull"></a>Pull</h2><p>Pull模型的流程如下：<br><img src="/img/twitter_pull.png" alt="Pull"><br>Pull模型中，用户发送一条Tweet后立即存储在DB中，当用户需要自己的News Feed的时候，读取用户关注者的Tweet，然后根据时间戳合成该用户的News Feed，是一个用户主动请求的工程。<br>问题：上帝视角，如果某个用户关注非常多的其他用户，合并过程会比较慢。</p>
-<h2 id="Push-vs-Pull"><a href="#Push-vs-Pull" class="headerlink" title="Push vs. Pull"></a>Push vs. Pull</h2><p>Push和Pull模型各有各的问题，到底哪一个模型好呢？实际应用中Twitter和Facebook使用的是Pull模型，Instagram使用Pull和Push结合的模型，Pull模型相对于Push模型的好处有：逻辑比较简单，实现起来比较容易；上帝视角的问题较Lady Gaga的风暴问题来说出现的概率很低。<br>当然也可以将Push和Pull模型结合起来：</p>
+<h2 id="Push-vs-Pull"><a href="#Push-vs-Pull" class="headerlink" title="Push vs. Pull"></a>Push vs. Pull</h2><p>Push和Pull模型各有各的问题，到底哪一个模型好呢？实际应用中Twitter和Facebook使用的是Pull模型，Instagram使用Pull和Push结合的模型，Pull模型相对于Push模型的好处有：逻辑比较简单，实现起来比较容易；上帝视角的问题较Lady Gaga的风暴问题来说出现的概率很低。<br>当然也可以将Push和Pull模型结合起来：<br><img src="/img/twitter_pushandpull.png" alt="Push and Pull"></p>
 
       
     </div>
