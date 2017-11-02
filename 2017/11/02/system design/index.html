@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Linux," />
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
+<meta name="description" content="系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。">
+<meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker">
-<meta property="og:url" content="http://harlon.org/2017/10/20/docker/index.html">
+<meta property="og:title" content="【000】系统设计的原则-4SE原则">
+<meta property="og:url" content="http://harlon.org/2017/11/02/system design/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
+<meta property="og:description" content="系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/1377574-b0de2f14feb4d41f.png">
-<meta property="og:image" content="http://harlon.org/img/1377574-f8a941f6cf12d249.png">
-<meta property="og:updated_time" content="2017-11-01T10:02:36.305Z">
+<meta property="og:updated_time" content="2017-11-02T09:53:47.770Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker">
-<meta name="twitter:description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
-<meta name="twitter:image" content="http://harlon.org/img/1377574-b0de2f14feb4d41f.png">
+<meta name="twitter:title" content="【000】系统设计的原则-4SE原则">
+<meta name="twitter:description" content="系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2017/10/20/docker/"/>
+  <link rel="canonical" href="http://harlon.org/2017/11/02/system design/"/>
 
 
 
 
 
-  <title>Docker | Harlon's BLOG</title>
+  <title>【000】系统设计的原则-4SE原则 | Harlon's BLOG</title>
   
 
 
@@ -223,6 +221,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -265,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/10/20/docker/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/11/02/system design/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -282,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Docker</h1>
+          <h1 class="post-title" itemprop="name headline">【000】系统设计的原则-4SE原则</h1>
         
 
         <div class="post-meta">
@@ -294,8 +302,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-20T11:01:23+08:00">
-                2017-10-20
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-02T15:30:23+08:00">
+                2017-11-02
               </time>
             
 
@@ -317,8 +325,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Technology/" itemprop="url" rel="index">
-                    <span itemprop="name">Technology</span>
+                  <a href="/categories/Design/" itemprop="url" rel="index">
+                    <span itemprop="name">Design</span>
                   </a>
                 </span>
 
@@ -354,21 +362,12 @@
       
 
       
-        <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>Docker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。<br><a id="more"></a></p>
-<p><img src="/img/1377574-b0de2f14feb4d41f.png" alt="Docker"></p>
-<h1 id="Docker-Machine"><a href="#Docker-Machine" class="headerlink" title="Docker Machine"></a>Docker Machine</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Docker Machine是Docker三剑客之一，刚开始有点困惑Docker Machine存在的必要性。其主要功能是创建一个虚拟主机，再其上运行docker engine，Docker存在的必要性如下：</p>
-<ol>
-<li>跨平台的支持，Docker不支持Mac和Windows，如果你想在这两个平台下面安装Docker，就必须要安装Docker Machine。</li>
-<li>快速部署，统一环境。Docker Machine创建Docker运行的虚拟环境，在不同平台上保持一致，这样在本地开发的应用也可以快速部署到云端，并且Docker可以非常方便管理多个Docker主机，不需要再去实现监控Docker主机的功能。<br><img src="/img/1377574-f8a941f6cf12d249.png" alt="Docker Machine"></li>
-</ol>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装Docker Machine非常简单，直接从官方Release库中下载编译好的二进制文件即可。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl -o /usr/local/bin/docker-machine -L https://github.com/docker/machine/releases/download/v0.3.1-rc1/docker-machine_linux-amd64</div><div class="line">chmod +x /usr/local/bin/docker-machine</div></pre></td></tr></table></figure></p>
-<pre><code>完成后，检查版本信息，验证是否运行正常
-</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> docker-machine -v</div><div class="line">docker-machine version 0.3.1-rc1 (993f2db)</div></pre></td></tr></table></figure>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>创建一个virtualbox虚拟主机bigdata：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 2048 bigdata</div></pre></td></tr></table></figure></p>
-<p>查看系统运行的虚拟主机：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-machine ls</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>参考资料：<br><a href="https://www.gitbook.com/book/yeasy/docker_practice/details" target="_blank" rel="external">Docker — 从入门到实践</a><br><a href="http://www.010lm.com/roll/2016/0326/1382516.html" target="_blank" rel="external">关于Docker你不知道的事-Docker Machine</a></p>
-</blockquote>
+        <p>系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。<br><a id="more"></a><br>设计一个可用的系统并不是一蹴而就的事情，而是随着整个业务逻辑的提升，系统的架构也会随之变化，所以在系统设计之前一定要明确系统设计的处于什么样的场景，需要多大的用户量，才能决定整个系统的架构，选择合适的存储系统。</p>
+<h1 id="Scenario"><a href="#Scenario" class="headerlink" title="Scenario"></a>Scenario</h1><p><strong>场景：</strong>首先明确系统设计所在的场景，具体要设计哪些功能，具有什么样的特性等等。<br><strong>关键词：</strong>功能</p>
+<h1 id="Suppose"><a href="#Suppose" class="headerlink" title="Suppose"></a>Suppose</h1><p><strong>假设：</strong>假设用户量，QPS，DAU（日活跃用户）等。<br><strong>关键词：</strong>QPS/DAU/PAU（高峰活跃用户）</p>
+<h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><p><strong>服务：</strong>将实现的整个系统拆分成小的服务和模块。<br><strong>关键词：</strong>SOA/Push/Pull</p>
+<h1 id="Storage"><a href="#Storage" class="headerlink" title="Storage"></a>Storage</h1><p><strong>存储：</strong>选择合适的存储系统。<br><strong>关键词</strong>SQL/NoSQL/File System</p>
+<h1 id="Evolve"><a href="#Evolve" class="headerlink" title="Evolve"></a>Evolve</h1><p><strong>扩展：</strong>解决可能会遇到的一些问题。<br><strong>关键词：</strong>雪崩问题/单点失败/多点失败</p>
 
       
     </div>
@@ -384,6 +383,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
 
       
       
@@ -393,8 +398,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/12/README/" rel="next" title="Harlon's BLOG">
-                <i class="fa fa-chevron-left"></i> Harlon's BLOG
+              <a href="/2017/11/01/Linux Command/" rel="next" title="Linux命令记录">
+                <i class="fa fa-chevron-left"></i> Linux命令记录
               </a>
             
           </div>
@@ -403,8 +408,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/20/Linux Command/" rel="prev" title="Linux命令记录">
-                Linux命令记录 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/02/how to design Twitter/" rel="prev" title="【001】如何设计Twitter？">
+                【001】如何设计Twitter？ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -482,7 +487,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -493,7 +498,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">Kategorien</span>
                 
               </div>
@@ -539,7 +544,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Machine"><span class="nav-number">2.</span> <span class="nav-text">Docker Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.3.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Scenario"><span class="nav-number">1.</span> <span class="nav-text">Scenario</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Suppose"><span class="nav-number">2.</span> <span class="nav-text">Suppose</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service"><span class="nav-number">3.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Storage"><span class="nav-number">4.</span> <span class="nav-text">Storage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Evolve"><span class="nav-number">5.</span> <span class="nav-text">Evolve</span></a></li></ol></div>
             
 
           </div>

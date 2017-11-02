@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Linux," />
 
 
 
@@ -79,17 +79,20 @@
 
 
 
-<meta name="description" content="越努力，越幸运！">
+<meta name="description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
+<meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Harlon&#39;s BLOG">
-<meta property="og:url" content="http://harlon.org/2017/09/12/README/index.html">
+<meta property="og:title" content="【001】如何设计Twitter？">
+<meta property="og:url" content="http://harlon.org/2017/11/02/how to design Twitter/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="越努力，越幸运！">
+<meta property="og:description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-01T08:54:31.295Z">
+<meta property="og:image" content="http://harlon.org/img/twitter.png">
+<meta property="og:updated_time" content="2017-11-02T09:56:13.057Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harlon&#39;s BLOG">
-<meta name="twitter:description" content="越努力，越幸运！">
+<meta name="twitter:title" content="【001】如何设计Twitter？">
+<meta name="twitter:description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
+<meta name="twitter:image" content="http://harlon.org/img/twitter.png">
 
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2017/09/12/README/"/>
+  <link rel="canonical" href="http://harlon.org/2017/11/02/how to design Twitter/"/>
 
 
 
 
 
-  <title>Harlon's BLOG | Harlon's BLOG</title>
+  <title>【001】如何设计Twitter？ | Harlon's BLOG</title>
   
 
 
@@ -272,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/09/12/README/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/11/02/how to design Twitter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -289,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Harlon's BLOG</h1>
+          <h1 class="post-title" itemprop="name headline">【001】如何设计Twitter？</h1>
         
 
         <div class="post-meta">
@@ -301,8 +304,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-12T17:03:49+08:00">
-                2017-09-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-02T16:30:23+08:00">
+                2017-11-02
               </time>
             
 
@@ -311,6 +314,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design/" itemprop="url" rel="index">
+                    <span itemprop="name">Design</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -339,8 +364,9 @@
       
 
       
-        <p>越努力，越幸运！</p>
-
+        <p>系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。<br><a id="more"></a><br><img src="/img/twitter.png" alt="Twitter"></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>写这篇博文的目的很简单，陆续看了太阁和九章算法对Twitter的讲解后，对这个系统设计问题有了比较深入的理解，特此做一个记录，以后若遇到同类的设计问题，举一反三，融会贯通。<br>系统设计<a href="">4SE</a>原则</p>
+<h1 id="Twitter"><a href="#Twitter" class="headerlink" title="Twitter"></a>Twitter</h1>
       
     </div>
     
@@ -355,6 +381,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
 
       
       
@@ -364,15 +396,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/11/02/system design/" rel="next" title="【000】系统设计的原则-4SE原则">
+                <i class="fa fa-chevron-left"></i> 【000】系统设计的原则-4SE原则
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/11/01/docker/" rel="prev" title="Docker实践">
-                Docker实践 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -424,8 +456,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -487,6 +528,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Twitter"><span class="nav-number">2.</span> <span class="nav-text">Twitter</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
