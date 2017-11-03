@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="记录工作学习中经常使用的Linux命令。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-02T08:49:39.679Z">
+<meta property="og:updated_time" content="2017-11-03T08:30:36.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux命令记录">
 <meta name="twitter:description" content="记录工作学习中经常使用的Linux命令。">
@@ -376,6 +376,32 @@
 </li>
 </ol>
 <hr>
+<h1 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h1><h2 id="DESCRIPTION-1"><a href="#DESCRIPTION-1" class="headerlink" title="DESCRIPTION"></a>DESCRIPTION</h2><p>tar命令可以为Linux的文件和目录创建档案，进行压缩、解压缩、打包、解打包等操作。</p>
+<h2 id="Usage-1"><a href="#Usage-1" class="headerlink" title="Usage"></a>Usage</h2><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>-c 建立新的压缩文件</li>
+<li>-x 从压缩文件中提取文件</li>
+<li>-z 支持gzip解压文件</li>
+<li>-j 支持bzip2解压文件</li>
+<li>-v 显示过程</li>
+<li>-f 指定压缩文件</li>
+</ul>
+<h3 id="tar-1"><a href="#tar-1" class="headerlink" title="tar"></a>tar</h3><p>解包：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar xvf Filename.tar</div></pre></td></tr></table></figure></p>
+<p>打包：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar cvf Filename.tar</div></pre></td></tr></table></figure></p>
+<h3 id="gz"><a href="#gz" class="headerlink" title=".gz"></a>.gz</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gunzip Filename.gz</div><div class="line">gzip -d Filename.gz</div></pre></td></tr></table></figure></p>
+<p>压缩：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gzip Filename</div></pre></td></tr></table></figure></p>
+<h3 id="tar-gz-amp-tgz"><a href="#tar-gz-amp-tgz" class="headerlink" title=".tar.gz &amp; .tgz"></a>.tar.gz &amp; .tgz</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxvf Filename.tar.gz</div></pre></td></tr></table></figure></p>
+<p>压缩：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zcvf Filename.tar.gz Filename</div></pre></td></tr></table></figure></p>
+<h3 id="bz2"><a href="#bz2" class="headerlink" title=".bz2"></a>.bz2</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bzip2 -d Filename.bz2</div><div class="line">bunzip2 Filename.bz2</div></pre></td></tr></table></figure></p>
+<p>压缩：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bzip2 -z Filename</div></pre></td></tr></table></figure></p>
+<h3 id="tar-bz2"><a href="#tar-bz2" class="headerlink" title=".tar.bz2"></a>.tar.bz2</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar jxvf Filename.tar.bz2</div></pre></td></tr></table></figure></p>
+<p>压缩：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar jcvf Filename.tar.bz2 Filename</div></pre></td></tr></table></figure></p>
+<h3 id="bz"><a href="#bz" class="headerlink" title=".bz"></a>.bz</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bzip2 -d Filename.bz</div><div class="line">bunzip2 Filename.bz</div></pre></td></tr></table></figure></p>
+<p>压缩：未知</p>
+<h3 id="tar-gz"><a href="#tar-gz" class="headerlink" title=".tar.gz"></a>.tar.gz</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar jxvf Filename.tar.bz</div></pre></td></tr></table></figure></p>
+<p>压缩：未知</p>
+<h3 id="zip"><a href="#zip" class="headerlink" title=".zip"></a>.zip</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unzip Filename.zip</div></pre></td></tr></table></figure></p>
+<p>压缩：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip Filename.zip Filename</div></pre></td></tr></table></figure></p>
+<hr>
 
       
     </div>
@@ -552,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Curl"><span class="nav-number">1.</span> <span class="nav-text">Curl</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION"><span class="nav-number">1.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number">1.2.</span> <span class="nav-text">Usage</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Curl"><span class="nav-number">1.</span> <span class="nav-text">Curl</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION"><span class="nav-number">1.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number">1.2.</span> <span class="nav-text">Usage</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tar"><span class="nav-number">2.</span> <span class="nav-text">tar</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-1"><span class="nav-number">2.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-1"><span class="nav-number">2.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gz"><span class="nav-number">2.2.3.</span> <span class="nav-text">.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz-amp-tgz"><span class="nav-number">2.2.4.</span> <span class="nav-text">.tar.gz & .tgz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz2"><span class="nav-number">2.2.5.</span> <span class="nav-text">.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-bz2"><span class="nav-number">2.2.6.</span> <span class="nav-text">.tar.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz"><span class="nav-number">2.2.7.</span> <span class="nav-text">.bz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz"><span class="nav-number">2.2.8.</span> <span class="nav-text">.tar.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip"><span class="nav-number">2.2.9.</span> <span class="nav-text">.zip</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

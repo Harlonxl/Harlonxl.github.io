@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/1377574-b0de2f14feb4d41f.png">
 <meta property="og:image" content="http://harlon.org/img/1377574-f8a941f6cf12d249.png">
-<meta property="og:updated_time" content="2017-11-02T09:37:47.307Z">
+<meta property="og:updated_time" content="2017-11-03T10:22:56.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker实践">
 <meta name="twitter:description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
@@ -366,6 +366,7 @@
       
         <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>Docker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。<br><a id="more"></a></p>
 <p><img src="/img/1377574-b0de2f14feb4d41f.png" alt="Docker"></p>
+<hr>
 <h1 id="Docker-Machine"><a href="#Docker-Machine" class="headerlink" title="Docker Machine"></a>Docker Machine</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Docker Machine是Docker三剑客之一，刚开始有点困惑Docker Machine存在的必要性。其主要功能是创建一个虚拟主机，再其上运行docker engine，Docker存在的必要性如下：</p>
 <ol>
 <li>跨平台的支持，Docker不支持Mac和Windows，如果你想在这两个平台下面安装Docker，就必须要安装Docker Machine。</li>
@@ -378,6 +379,14 @@
 <p>查看帮助：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-machine --help</div></pre></td></tr></table></figure></p>
 <p>在Linux下，虚拟机创建完成时候，Docker客户端要链接虚拟主机的话要执行下面的命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eval $(docker-machine env bigdata)</div></pre></td></tr></table></figure></p>
 <p>查看系统运行的虚拟主机：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> docker-machine ls</div><div class="line">NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS</div><div class="line">bigdata   *        virtualbox   Running   tcp://192.168.99.100:2376           v17.10.0-ce</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h1><h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 --name zookeeper confluent/zookeeper</div></pre></td></tr></table></figure>
+<p>-d 选项表明容器创建后后台运行，-p 选项绑定端口</p>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker start zookeeper</div></pre></td></tr></table></figure>
+<h2 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker ps</div></pre></td></tr></table></figure>
+<h2 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker exec zookeeper -it /bin/bash</div></pre></td></tr></table></figure>
+<p>-t 选项让Docker分配一个伪终端并绑定到容器的标准输入上，-i 则让容器的标准输入保持打开。</p>
+<h1 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h1><p>列出本地所有镜像：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker images</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>参考资料：<br><a href="https://www.gitbook.com/book/yeasy/docker_practice/details" target="_blank" rel="external">Docker — 从入门到实践</a><br><a href="http://www.010lm.com/roll/2016/0326/1382516.html" target="_blank" rel="external">关于Docker你不知道的事-Docker Machine</a></p>
 </blockquote>
@@ -551,7 +560,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Machine"><span class="nav-number">2.</span> <span class="nav-text">Docker Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.3.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Machine"><span class="nav-number">2.</span> <span class="nav-text">Docker Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器操作"><span class="nav-number">3.</span> <span class="nav-text">容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建"><span class="nav-number">3.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">3.2.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看"><span class="nav-number">3.3.</span> <span class="nav-text">查看</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行命令"><span class="nav-number">3.4.</span> <span class="nav-text">执行命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#镜像操作"><span class="nav-number">4.</span> <span class="nav-text">镜像操作</span></a></li></ol></div>
             
 
           </div>
