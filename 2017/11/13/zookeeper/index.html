@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Apache Zookeeper是Apache的一个软件项目，主要为大型分布式系统提供协调服务，例如分布式配置、同步服务和命名注册等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper入门到实战">
+<meta property="og:url" content="http://harlon.org/2017/11/13/zookeeper/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Apache Zookeeper是Apache的一个软件项目，主要为大型分布式系统提供协调服务，例如分布式配置、同步服务和命名注册等。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/zookeeper-tree.png">
+<meta property="og:image" content="https://holynull.gitbooks.io/zookeeper/content/assets/00063.jpeg">
+<meta property="og:updated_time" content="2017-11-14T06:13:13.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zookeeper入门到实战">
+<meta name="twitter:description" content="Apache Zookeeper是Apache的一个软件项目，主要为大型分布式系统提供协调服务，例如分布式配置、同步服务和命名注册等。">
+<meta name="twitter:image" content="http://harlon.org/img/zookeeper-tree.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2017/11/13/zookeeper/"/>
+
+
+
+
+
+  <title>Zookeeper入门到实战 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/11/13/zookeeper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Zookeeper入门到实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-13T16:42:26+08:00">
+                2017-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index">
+                    <span itemprop="name">Technology</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Apache Zookeeper是Apache的一个软件项目，主要为大型分布式系统提供协调服务，例如分布式配置、同步服务和命名注册等。<br><a id="more"></a></p>
+<h1 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h1><p>Zookeeper定位是一个分布式系统的管理者的角度，因为大多数大数据分布式系统的Logo都是动物的标志，Zookeeper顾名思义动物园管理者，在Zookeeper的论文中也提到Zookeeper是一个用于协调分布式系统应用的服务，它在集群中类似一个大脑的地位，其所维护的信息具有高可用性的特点。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h2><p>下载安装包，进行解压<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget http://apache.forsale.plus/zookeeper/zookeeper-3.4.11/zookeeper-3.4.11.tar.gz</div><div class="line">tar zxvf zookeeper-3.4.11.tar.gz</div></pre></td></tr></table></figure></p>
+<p>修改配置文档，在Zookeeper的conf目录下，这个目录下有zoo_sample.cfg，将其更名为zoo.cfg<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mv zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure></p>
+<p>配置文件信息如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tickTime=2000</div><div class="line">dataDir=/tmp/zookeeper</div><div class="line">clientPort=2181</div></pre></td></tr></table></figure></p>
+<ul>
+<li>tickTime：这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。</li>
+<li>dataDir： 顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper 将写数据的日志文件也保存在这个目录里。</li>
+<li>clientPort：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。</li>
+</ul>
+<p>完成上述配置之后，通过bin下面的zkServer.sh脚本启动Zookeeper。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./zkServer.sh start</div></pre></td></tr></table></figure></p>
+<h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><p>Zookeeper不仅可以单机提供服务，同时也支持多机组成集群来提供服务。<br>Zookeeper集群配置非常简单，就是在其配置项中添加几个配置项：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">initLimit=10</div><div class="line">syncLimit=5</div><div class="line">server.1=192.168.58.129:2888:3888</div><div class="line">server.2=192.168.58.130:2888:3888</div><div class="line">server.3=192.168.58.131:2888:3888</div></pre></td></tr></table></figure></p>
+<ul>
+<li>initLimit：这个配置项是用来配置 Zookeeper 接受客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 10 个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5*2000=10 秒。</li>
+<li>syncLimit：这个配置项标识 Leader 与 Follower 之间发送消息，请求和应答时间长度，最长不能超过多少个 tickTime 的时间长度，总的时间长度就是 2*2000=4 秒。</li>
+<li>server.A=B：C：D：其中 A 是一个数字，表示这个是第几号服务器；B 是这个服务器的 ip 地址；C 表示的是这个服务器与集群中的 Leader 服务器交换信息的端口；D 表示的是万一集群中的 Leader 服务器挂了，需要一个端口来重新进行选举，选出一个新的 Leader，而这个端口就是用来执行选举时服务器相互通信的端口。如果是伪集群的配置方式，由于 B 都是一样，所以不同的 Zookeeper 实例通信端口号不能一样，所以要给它们分配不同的端口号。</li>
+</ul>
+<p>除了修改 zoo.cfg 配置文件，集群模式下还要配置一个文件 myid，这个文件在 dataDir 目录下，这个文件里面就有一个数据就是 A 的值，Zookeeper 启动时会读取这个文件，拿到里面的数据与 zoo.cfg 里面的配置信息比较从而判断到底是那个 server。</p>
+<hr>
+<h1 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h1><h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p><img src="/img/zookeeper-tree.png" alt="zookeeper-data-tree"><br>Zookeeper的数据定义成一个树形结构，每一个节点称作为znode。</p>
+<ul>
+<li>znode：znode包括了存储的数据和ACL（Access Control List）</li>
+<li>znode有两种类型：<ul>
+<li>Ephemeral znodes: 当客户端与服务器断开之后自动删除。</li>
+<li>Persistent znode: 只能自己创建或删除。</li>
+</ul>
+</li>
+<li>znode序号：如果创建znode时，需要排序标志的话，Zookeeper会自动进行排序。如果我们请求创建一个znode，指定命名为/a/b-，那么ZooKeeper会为我们创建一个名字为/a/b-3的znode。我们再请求创建一个名字为/a/b-的znode，ZooKeeper会为我们创建一个名字/a/b-5的znode。ZooKeeper给我们指定的序号是不断增长的。API中的create()的返回结果就是znode的实际名字。</li>
+<li>观察模式：客户端可以设置对某个节点进行观察，如果这个目录节点中的存储数据进行修改，会通知设置观察的客户端。这个通知只有一次，如果需要再次通知的话，需要接到通知之后再设置一次观察。</li>
+</ul>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>下面的表格中列出了9种ZooKeeper的操作:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">create</td>
+<td>Creates a znode (the parent znode must already exist)</td>
+</tr>
+<tr>
+<td style="text-align:left">delete</td>
+<td>Deletes a znode (the znode must not have any children)</td>
+</tr>
+<tr>
+<td style="text-align:left">exists</td>
+<td>Tests whether a znode exists and retrieves its metadata</td>
+</tr>
+<tr>
+<td style="text-align:left">getACL, setACL</td>
+<td>Gets/sets the ACL for a znode</td>
+</tr>
+<tr>
+<td style="text-align:left">getChildren</td>
+<td>Gets a list of the children of a znode</td>
+</tr>
+<tr>
+<td style="text-align:left">getData, setData</td>
+<td>Gets/sets the data associated with a znode</td>
+</tr>
+<tr>
+<td style="text-align:left">sync</td>
+<td>Synchronizes a client’s view of a znode with ZooKeeper</td>
+</tr>
+</tbody>
+</table>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>ZooKeeper服务可以在两种模式下运行。在standalone模式下，我们可以运行一个单独的ZooKeeper服务器，我们可以在这种模式下进行基本功能的简单测试，但是这种模式没有办法体现ZooKeeper的高可用特性和快速恢复特性。在生产环境中，我们一般采用replicated（复制）模式安装在多台服务器上，组建一个叫做ensemble的集群。ZooKeeper在他的副本之间实现高可用性，并且只要ensemble集群中能够推举出主服务器，ZooKeeper的服务就可以一直不终断。例如，在一个5个节点的ensemble中，容忍有2个节点脱离集群，服务还是可用的。因为剩下的3个节点投票，可以产生超过集群半数的投票，来推选一台主服务器。而6个节点的ensemble中，也只能容忍2个节点的服务器死机。因为如果3个节点脱离集群，那么剩下的3个节点无论如何不能产生超过集群半数的投票来推选一个主服务器。所以，一般情况下ensemble中的服务器数量都是奇数。</p>
+<p>从概念上来看，ZooKeeper其实是很简单的。他所做的一切就是保证每一次对znode树的修改，都能够复制到ensemble的大多数服务器上。如果非主服务器脱离集群，那么至少有一台服务器上的副本保存了最新状态。剩下的其他的服务器上的副本，会很快更新这个最新的状态。</p>
+<p>为了实现这个简单而不平凡的设计思路，ZooKeeper使用了一个叫做Zab的协议。这个协议分为两阶段，并且不断的运行在ZooKeeper上：</p>
+<ul>
+<li><p>阶段 1：领导选举（Leader election）<br>Ensemble中的成员通过一个程序来选举出一个首领成员，我们叫做leader。其他的成员就叫做follower。在大多数（quorum）follower完成与leader状态同步时，这个阶段才结束。</p>
+</li>
+<li><p>阶段 2： 原子广播（Atomic broadcast）<br>所有的写入请求都会发送给leader，leader在广播给follower。当大多数的follower同意写入请求，leader才会将更新提交，客户端就会随之得到leader更新成功的消息。协议中的设计也是具有原子性的，所以写入操作只有成功和失败两个结果。</p>
+</li>
+</ul>
+<p>如果leader脱离了集群，剩下的节点将选举一个新的leader。如果之前的leader回到了集群中，那么将被视作一个follower。leader的选举很快，大概200ms就能够产生结果，所以不会影响执行效率。</p>
+<p>Ensemble中的所有节点都会在更新内存中的znode树的副本之前，先将更新数据写入到硬盘上。读操作可以请求任何一台ZooKeeper服务器，而且读取速度很快，因为读取是内存中的数据副本。</p>
+<h2 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h2><p>每一个对znode树的更新操作，都会被赋予一个全局唯一的ID，我们称之为zxid（ZooKeeper Transaction ID）。更新操作的ID按照发生的时间顺序升序排序。例如，z1大于z2，那么z1的操作就早于z2操作。<br>ZooKeeper在数据一致性上实现了如下几个方面：</p>
+<ul>
+<li>顺序一致性<br>从客户端提交的更新操作是按照先后循序排序的。例如，如果一个客户端将一个znode z赋值为a，然后又将z的值改变成b，那么在这个过程中不会有客户端在z的值变为b后，取到的值是a。</li>
+<li>原子性<br>更新操作的结果不是失败就是成功。即，如果更新操作失败，其他的客户端是不会知道的。</li>
+<li>系统视图唯一性<br>无论客户端连接到哪个服务器，都将看见唯一的系统视图。如果客户端在同一个会话中去连接一个新的服务器，那么他所看见的视图的状态不会比之前服务器上看见的更旧。当ensemble中的一个服务器宕机，客户端去尝试连接另外一台服务器时，如果这台服务器的状态旧于之前宕机的服务器，那么服务器将不会接受客户端的连接请求，直到服务器的状态赶上之前宕机的服务器为止。</li>
+<li>持久性<br>一旦更新操作成功，数据将被持久化到服务器上，并且不能撤销。所以服务器宕机重启，也不会影响数据。</li>
+<li>时效性<br>系统视图的状态更新的延迟时间是有一个上限的，最多不过几十秒。如果服务器的状态落后于其他服务器太多，ZooKeeper会宁可关闭这个服务器上的服务，强制客户端去连接一个状态更新的服务器。</li>
+</ul>
+<p>从执行效率上考虑，读操作的目标是内存中的缓存数据，并且读操作不会参与到写操作的全局排序中。这就会引起客户端在读取ZooKeeper的状态时产生不一致。例如，A客户端将znode z的值由a改变成a’，然后通知客户端B去读取z的值，但是B读取到的值是aa，而不是修改后的a’​​ 。为了阻止这种情况出现，B在读取z的值之前，需要调用sync方法。sync方法会强制B连接的服务器状态与leader的状态同步，这样B在读取z的值就是A重新更改过的值了。</p>
+<h2 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h2><p>ZooKeeper的客户端中，配置了一个ensemble服务器列表。当启动时，首先去尝试连接其中一个服务器。如果尝试连接失败，那么会继续尝试连接下一个服务器，直到连接成功或者全部尝试连接失败。<br>一旦连接成功，服务器就会为客户端创建一个会话（session）。session的过期时间由创建会话的客户端应用来设定，如果在这个时间期间，服务器没有收到客户端的任何请求，那么session将被视为过期，并且这个session不能被重新创建，而创建的ephemeral znode将随着session过期被删除掉。在会话长期存在的情况下，session的过期事件是比较少见的，但是应用程序如何处理好这个事件是很重要的。<br>在长时间的空闲情况下，客户端会不断的发送ping请求来保持session。（ZooKeeper的客户端开发工具的liberay实现了自动发送ping请求，所以我们不必去考虑如何维持session）ping请求的间隔被设置成足够短，以便能够及时发现服务器失败（由读操作的超时时长来设置），并且能够及时的在session过期前连接到其他服务器上。<br>容错连接到其他服务器上，是由ZooKeeper客户端自动完成的。重要的是在连接到其他服务器上后，之前的session以及epemeral节点还保持可用状态。<br>在容错的过程中，应用将收到与服务断开连接和连接的通知。Watch模式的通知在断开链接时，是不会发送断开连接事件给客户端的，断开连接事件是在重新连接成功后发送给客户端的。如果在重新连接到其他节点时，应用尝试一个操作，这个操作是一定会失败的。对于这一点的处理，是一个ZooKeeper应用的重点。</p>
+<h2 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h2><p>在ZooKeeper中有一些时间的参数。tick是ZooKeeper的基础时间单位，用来定义ensemble中服务器上运行的程序的时间表。其他时间相关的配置都是以tick为单位的，或者以tick的值为最大值或者最小值。例如，session的过期时间在2 ticks到20 ticks之间，那么你再设置时选择的session过期时间必须在2和20之间的一个数。<br>通常情况1 tick等于2秒。那么就是说session的过期时间的设置范围在4秒到40秒之间。在session过期时间的设置上有一些考虑。过期时间太短会造成加快物理失败的监测频率。在组成员关系的例子中，session的过期时间与从组中移除失败的成员花费的时间相等。如果设置过低的session过期时间，那么网络延迟就有可能造成非预期的session过期。这种情况下，就会出现在短时间内一台机器不断的离开组，然后又从新加入组中。<br>如果应用需要创建比较复杂的临时状态，那么就需要较长的session过期时间，因为重构花费的时间比较长。有一些情况下，需要在session的生命周期内重启，而且要保证重启完后session不过期（例如，应用维护和升级的情况）。服务器会给每一个session一个ID和密码，如果在连接创建时，ZooKeeper验证通过，那么session将被恢复使用（只要session没过期就行）。所以应用程序可以实现一个优雅的关机动作，在重启之前，将session的ID和密码存储在一个稳定的地方。重启之后，通过ID和密码恢复session。+</p>
+<p>这仅仅是在一些特殊的情况下，我们需要使用这个特性来使用比较长的session过期时间。大多数情况下，我们还是要考虑当出现非预期的异常失败时，如何处理session过期，或者仅需要优雅的关闭应用，在session过期前不用重启应用。<br>通常情况也越大规模的ensemble，就需要越长的session过期时间。Connetction Timeout、Read Timeout和Ping Periods都由一个以服务器数量为参数的函数计算得到，当ensemble的规模扩大，这些值需要逐渐减小。如果为了解决经常失去连接而需要增加timeout的时长，建议你先监控一下ZooKeeper的metrics，再去调整。</p>
+<h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><p>ZooKeeper对象在他的生命周期内会有不同的状态，我们通过getState()来获得当前的状态。</p>
+<p>状态是一个枚举类型的数据。新构建的ZooKeeper对象在尝试连接ZooKeeper服务时的状态是CONNECTING，一旦与服务建立了连接那么状态就变成了CONNECTED。<br><img src="https://holynull.gitbooks.io/zookeeper/content/assets/00063.jpeg" alt="zookeeper-state"><br>客户端可以通过注册一个观察者对象来接收ZooKeeper对象状态的迁移。当通过CONNECTED状态后，观察者将接收到一个WatchedEvent事件，他的属性KeeperState的值是SyncConnected。</p>
+<p>ZooKeeper实例会与服务连接断开或者重新连接，状态会在CONNECTING和CONNECTED之间转换。如果连接断开，watcher会收到一个断开连接事件。请注意，这两个状态都是ZooKeeper实例自己初始化的，并且在断开连接后会自动进行重连接。</p>
+<p>如果调用了close()或者session过期，ZooKeeper实例会转换为第三个状态CLOSED，此时在接受事件的KeeperState属性值为Expired。一旦ZooKeeper的状态变为CLOSED，说明实例已经不可用（可以通过isAlive()来判断），并且不能再被使用。如果要重新建立连接，就需要重新构建一个ZooKeeper实例。</p>
+<hr>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><blockquote>
+<p>参考资料：<br><a href="https://zh.wikipedia.org/wiki/Apache_ZooKeeper" target="_blank" rel="external">Wikipedia-ApacheZookeeper</a><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-zookeeper/" target="_blank" rel="external">分布式服务框架 Zookeeper – 管理分布式环境中的数据</a><br> <a href="https://www.gitbook.com/book/holynull/zookeeper/details" target="_blank" rel="external">ZooKeeper深入浅出</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/02/how to design Twitter/" rel="next" title="【001】如何设计Twitter？">
+                <i class="fa fa-chevron-left"></i> 【001】如何设计Twitter？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单机模式"><span class="nav-number">2.1.</span> <span class="nav-text">单机模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群模式"><span class="nav-number">2.2.</span> <span class="nav-text">集群模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现原理"><span class="nav-number">3.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型"><span class="nav-number">3.1.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作"><span class="nav-number">3.2.</span> <span class="nav-text">操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">3.3.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据一致性"><span class="nav-number">3.4.</span> <span class="nav-text">数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话"><span class="nav-number">3.5.</span> <span class="nav-text">会话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间"><span class="nav-number">3.6.</span> <span class="nav-text">时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#状态"><span class="nav-number">3.7.</span> <span class="nav-text">状态</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实战"><span class="nav-number">4.</span> <span class="nav-text">实战</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
