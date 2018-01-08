@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/1377574-b0de2f14feb4d41f.png">
 <meta property="og:image" content="http://harlon.org/img/1377574-f8a941f6cf12d249.png">
-<meta property="og:updated_time" content="2017-11-03T10:22:56.811Z">
+<meta property="og:updated_time" content="2017-12-08T08:57:12.662Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker实践">
 <meta name="twitter:description" content="DockerDocker是Go语言开发的一个基于容器的虚拟化技术，基于Linux内核的cgroup，namespace，以及AUFS类的Union FS等技术，属于操作系统层面的虚拟化技术。我们经常所称的docker实际上docker engine，docker engine是一个C/S架构，客户端通过CLI（命令解析工具）与Server同行，他们之间的通讯接口是基于REST API定制的。">
@@ -188,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -238,7 +238,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -302,7 +302,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-01T11:01:23+08:00">
                 2017-11-01
@@ -323,7 +323,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -386,7 +386,10 @@
 <h2 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker ps</div></pre></td></tr></table></figure>
 <h2 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker exec zookeeper -it /bin/bash</div></pre></td></tr></table></figure>
 <p>-t 选项让Docker分配一个伪终端并绑定到容器的标准输入上，-i 则让容器的标准输入保持打开。</p>
-<h1 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h1><p>列出本地所有镜像：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker images</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="Docker镜像"><a href="#Docker镜像" class="headerlink" title="Docker镜像"></a>Docker镜像</h1><h2 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h2><p>列出本地所有镜像：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker images</div></pre></td></tr></table></figure></p>
+<h1 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h1><p>Dockerfile<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> Set the base image</div><div class="line">FROM ubuntu</div><div class="line"></div><div class="line"><span class="meta">#</span> Dockerfile author / maintainer </div><div class="line">MAINTAINER Name &lt;email.id@here&gt; </div><div class="line"></div><div class="line"><span class="meta">#</span> Update application repository list and install the Redis server. </div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y redis-server</div><div class="line"></div><div class="line"><span class="meta">#</span> Expose default port</div><div class="line">EXPOSE 6379</div><div class="line"></div><div class="line"><span class="meta">#</span> Set the default command</div><div class="line">ENTRYPOINT ["/usr/bin/redis-server"]</div></pre></td></tr></table></figure></p>
+<p>创建docker镜像：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker bulid -t redis-server</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>参考资料：<br><a href="https://www.gitbook.com/book/yeasy/docker_practice/details" target="_blank" rel="external">Docker — 从入门到实践</a><br><a href="http://www.010lm.com/roll/2016/0326/1382516.html" target="_blank" rel="external">关于Docker你不知道的事-Docker Machine</a></p>
 </blockquote>
@@ -424,8 +427,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/01/Linux Command/" rel="prev" title="Linux命令记录">
-                Linux命令记录 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/01/Linux Command/" rel="prev" title="Linux命令">
+                Linux命令 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -480,10 +483,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Übersicht
           </li>
         </ul>
       
@@ -503,8 +506,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -515,7 +518,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -526,7 +529,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -560,7 +563,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Machine"><span class="nav-number">2.</span> <span class="nav-text">Docker Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器操作"><span class="nav-number">3.</span> <span class="nav-text">容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建"><span class="nav-number">3.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">3.2.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看"><span class="nav-number">3.3.</span> <span class="nav-text">查看</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行命令"><span class="nav-number">3.4.</span> <span class="nav-text">执行命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#镜像操作"><span class="nav-number">4.</span> <span class="nav-text">镜像操作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Machine"><span class="nav-number">2.</span> <span class="nav-text">Docker Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器操作"><span class="nav-number">3.</span> <span class="nav-text">容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建"><span class="nav-number">3.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">3.2.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看"><span class="nav-number">3.3.</span> <span class="nav-text">查看</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行命令"><span class="nav-number">3.4.</span> <span class="nav-text">执行命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker镜像"><span class="nav-number">4.</span> <span class="nav-text">Docker镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像操作"><span class="nav-number">4.1.</span> <span class="nav-text">镜像操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建镜像"><span class="nav-number">5.</span> <span class="nav-text">创建镜像</span></a></li></ol></div>
             
 
           </div>
@@ -580,7 +583,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -590,7 +593,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
