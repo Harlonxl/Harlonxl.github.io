@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://harlon.org/img/dog.png">
 <meta property="og:image" content="http://harlon.org/img/dog-process.png">
 <meta property="og:image" content="http://harlon.org/img/vdi_create.png">
-<meta property="og:updated_time" content="2018-01-15T11:25:15.442Z">
+<meta property="og:updated_time" content="2018-01-15T14:35:59.249Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sheepdog之dog源码解析">
 <meta name="twitter:description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。">
@@ -369,7 +369,7 @@
         <h1 id="Sheepdog简介"><a href="#Sheepdog简介" class="headerlink" title="Sheepdog简介"></a>Sheepdog简介</h1><p>Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。<br><a id="more"></a><br>其架构图如图所示：</p>
 <p><img src="/img/sheepdog.jpg" alt="Sheepdog"></p>
 <hr>
-<h1 id="dog"><a href="#dog" class="headerlink" title="dog"></a>dog</h1><p>Sheepdog的dog处理输入命令，将一系列命令转换为相应的操作发送到sheep<br><img src="/img/dog.png" alt="Sheepdog"><br>虚拟机通过相应的模块提交创建虚拟块设备的请求，Sheepdog通过一致性哈希算法，类似于Ceph组织整个集群，不同的虚拟机可以配置不同的Sheepdog，这样可以消除单台服务器的瓶颈，但是也会带来一致性开销比较大的问题。getway、dog和sheep都是属于sheepdog的模块，getway将请求转发到相应的机器进行处理，dog接受到相应的请求，比如创建VDI设备等，解析相应的命令，转换为一系列的操作，通过一个sock进行本地通信，发送到sheep端处理。</p>
+<h1 id="dog"><a href="#dog" class="headerlink" title="dog"></a>dog</h1><p>Sheepdog的dog处理输入命令，将一系列命令转换为相应的操作发送到sheep<br><img src="/img/dog.png" alt="Sheepdog"><br>虚拟机通过相应的模块提交创建虚拟块设备的请求，Sheepdog通过一致性哈希算法，类似于Ceph组织整个集群，不同的虚拟机可以配置不同的Sheepdog，这样可以消除单台服务器的瓶颈，但是也会带来一致性开销比较大的问题。getway、dog和sheep都是属于sheepdog的模块，getway将请求转发到相应的机器进行处理。dog是Sheepdog中的命令行工具，用于处理用户输入的一些列命令，通过sock本地通信文件提交到getway进行处理。</p>
 <h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">sheepdog</div><div class="line">│···</div><div class="line">└─── dog</div><div class="line">      │farm</div><div class="line">      │benchmark.c Dog的benchmark</div><div class="line">      │cluster.c Sheepdog集群命令处理文件</div><div class="line">      │common.c 通用函数模块</div><div class="line">      │dog.c 程序初始化和入口文件</div><div class="line">      │nfs.c NFS文件系统相关命令</div><div class="line">      │node.c 节点命令处理文件</div><div class="line">      │trace.c 跟踪及调试文件</div><div class="line">      │treeview.c 查看跟踪及调试文件</div><div class="line">      │upgrade.c 更新操作</div><div class="line">      │vdi.c 块设备命令处理文件</div><div class="line">      │dog.h dog操作头文件</div><div class="line">      │treeview.h vid树头文件</div><div class="line">│···</div></pre></td></tr></table></figure>
 <hr>
 <h2 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h2><p><img src="/img/dog-process.png" alt="主流程"></p>
