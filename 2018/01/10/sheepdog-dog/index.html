@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sheepdog之dog源码解析">
+<meta property="og:url" content="http://harlon.org/2018/01/10/sheepdog-dog/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/sheepdog.jpg">
+<meta property="og:image" content="http://harlon.org/img/dog-process.png">
+<meta property="og:image" content="http://harlon.org/img/vdi_create.png">
+<meta property="og:updated_time" content="2018-01-15T10:04:45.268Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sheepdog之dog源码解析">
+<meta name="twitter:description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。">
+<meta name="twitter:image" content="http://harlon.org/img/sheepdog.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/01/10/sheepdog-dog/"/>
+
+
+
+
+
+  <title>Sheepdog之dog源码解析 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/01/10/sheepdog-dog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Sheepdog之dog源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-10T16:24:23+08:00">
+                2018-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index">
+                    <span itemprop="name">Technology</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Sheepdog简介"><a href="#Sheepdog简介" class="headerlink" title="Sheepdog简介"></a>Sheepdog简介</h1><p>Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。<br><a id="more"></a><br>其架构图如图所示：</p>
+<p><img src="/img/sheepdog.jpg" alt="Sheepdog"></p>
+<hr>
+<h1 id="dog"><a href="#dog" class="headerlink" title="dog"></a>dog</h1><h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">sheepdog</div><div class="line">│···</div><div class="line">└─── dog</div><div class="line">      │farm</div><div class="line">      │benchmark.c Dog的benchmark</div><div class="line">      │cluster.c Sheepdog集群命令处理文件</div><div class="line">      │common.c 通用函数模块</div><div class="line">      │dog.c 程序初始化和入口文件</div><div class="line">      │nfs.c NFS文件系统相关命令</div><div class="line">      │node.c 节点命令处理文件</div><div class="line">      │trace.c 跟踪及调试文件</div><div class="line">      │treeview.c 查看跟踪及调试文件</div><div class="line">      │upgrade.c 更新操作</div><div class="line">      │vdi.c 块设备命令处理文件</div><div class="line">      │dog.h dog操作头文件</div><div class="line">      │treeview.h vid树头文件</div><div class="line">│···</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h2><p><img src="/img/dog-process.png" alt="主流程"></p>
+<hr>
+<h2 id="vdi命令"><a href="#vdi命令" class="headerlink" title="vdi命令"></a>vdi命令</h2><ul>
+<li>check：检查并修复镜像的一致性</li>
+<li>create：创建一个镜像</li>
+<li>snapshot：创建一个快照</li>
+<li>clone：克隆一个镜像</li>
+<li>delete：删除一个镜像</li>
+<li>rollback：回滚到一个快照</li>
+<li>list：列出所有镜像</li>
+<li>tree：以树的格式显示镜像</li>
+<li>graph：以graphviz dot的格式显示镜像</li>
+<li>object：显示镜像的对象信息</li>
+<li>track：在镜像中显示对象的历史信息</li>
+<li>setattr：设置VDI属性</li>
+<li>getattr：获取VDI属性</li>
+<li>resize：改变镜像的大小</li>
+<li>read：从镜像中读取信息</li>
+<li>write：从镜像中写入信息</li>
+<li>backup：在两个快照之间创建增量备份并输出到STDOUT</li>
+<li>restore：从STDIN提供的备份恢复快照映像</li>
+<li>alter-copy：这是vdi的冗余等级</li>
+<li>lock：列出或解锁vdi设备</li>
+</ul>
+<hr>
+<h2 id="cluster命令"><a href="#cluster命令" class="headerlink" title="cluster命令"></a>cluster命令</h2><ul>
+<li>info：显示集群的信息</li>
+<li>format：创建一个Sheepdog存储</li>
+<li>shutdown：停止Sheepdoog</li>
+<li>snapshot：创建集群的快照</li>
+<li>recover：恢复集群</li>
+<li>reweight：重新调整集群</li>
+<li>check：检查并修复Sheepdog集群</li>
+<li>alter-copy：设置集群的冗余等级</li>
+</ul>
+<hr>
+<h2 id="node命令"><a href="#node命令" class="headerlink" title="node命令"></a>node命令</h2><ul>
+<li>kill：杀死某个节点</li>
+<li>list：列出所有节点</li>
+<li>info：显示每个节点的信息</li>
+<li>recovery：显示恢复信息或设置/获取节点的恢复速度限制</li>
+<li>md：磁盘的有关操作</li>
+<li>stat：显示节点的stat信息</li>
+<li>log：显示或设置节点的日志等级</li>
+<li>vnodes：设置一个新的节点</li>
+<li>format：初始化节点的存储格式</li>
+</ul>
+<hr>
+<h2 id="关键结构体"><a href="#关键结构体" class="headerlink" title="关键结构体"></a>关键结构体</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Sheepdog命令结构体</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">command</span> &#123;</span></div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *name; <span class="comment">// 名称</span></div><div class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">subcommand</span> *<span class="title">sub</span>;</span> <span class="comment">// 子命令</span></div><div class="line">	<span class="keyword">int</span> (*parser)(<span class="keyword">int</span>, <span class="keyword">const</span> <span class="keyword">char</span> *); <span class="comment">// 执行函数</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">// Sheepdog子命令结构体</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">subcommand</span> &#123;</span></div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *name; <span class="comment">// 名称</span></div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *arg; <span class="comment">// 参数</span></div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *opts; <span class="comment">// 选项</span></div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *desc; <span class="comment">// 描述</span></div><div class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">subcommand</span> *<span class="title">sub</span>;</span> <span class="comment">// 子命令集</span></div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> flags; <span class="comment">// 子命令标志位</span></div><div class="line">	<span class="keyword">int</span> (*fn)(<span class="keyword">int</span>, <span class="keyword">char</span> **); <span class="comment">// 执行函数</span></div><div class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">sd_option</span> *<span class="title">options</span>;</span> <span class="comment">// 命令选项信息</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//</span></div></pre></td></tr></table></figure>
+<hr>
+<h2 id="VDI创建"><a href="#VDI创建" class="headerlink" title="VDI创建"></a>VDI创建</h2><p>VDI的创建过程是在vdi_create()函数中，这个函数的原型如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">vdi_create</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>VDI设备创建的命令为 dog <vdiname> <size>，整个执行过程如下：<br><img src="/img/vdi_create.png" alt="主流程"><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SD_DEFAULT_BLOCK_SIZE_SHIFT 22</span></div><div class="line">object_size = (UINT32_C(<span class="number">1</span>) &lt;&lt; vdi_cmd_data.block_size_shift</div></pre></td></tr></table></figure></size></vdiname></p>
+<p>Sheepdog中对象默认大小为1左移22位，十进制为4194304，即4M<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> OLD_MAX_DATA_OBJS (1ULL &lt;&lt; 20)</span></div><div class="line">old_max_total_size = object_size * OLD_MAX_DATA_OBJS;</div></pre></td></tr></table></figure></p>
+<p>Sheepdog中VDI设备默认的最大容量为1左移20位再乘以对象大小，为4T，如果创建大容量的VDI设备，  可以添加-y选项，或者设置更大的对象块大小<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_DATA_OBJS (1ULL &lt;&lt; 32)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SD_OLD_MAX_VDI_SIZE (SD_DATA_OBJ_SIZE * OLD_MAX_DATA_OBJS)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SD_MAX_VDI_SIZE (SD_DATA_OBJ_SIZE * MAX_DATA_OBJS)</span></div></pre></td></tr></table></figure></p>
+<p>SD_MAX_VDI_SIZE定义的是Sheepdog支持的VDI设备的最大容量，为16PB</p>
+<hr>
+<h1 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h1><p><em>此处主要用于补充源码中未接触到的知识点。</em></p>
+<h2 id="likely-amp-unlikely"><a href="#likely-amp-unlikely" class="headerlink" title="likely() &amp; unlikely()"></a>likely() &amp; unlikely()</h2><p>Sheepdog中函数分配内存时判断指针是否为空使用了unlikely函数。<br>likely()和unlikely()函数的混定义如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> likely(x)       __builtin_expect(!!(x), 1)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> unlikely(x)     __builtin_expect(!!(x), 0)</span></div></pre></td></tr></table></figure></p>
+<p>使用了__builtin_expect函数，其好处是告诉编译器很有可能会发生的时，从而将很有可能发生的事顺序编译，从而避免jmp指令跳转造成CPU指令顺序混乱，从而影响CPU指令执行效率。</p>
+<hr>
+<h2 id="get-opt-amp-amp-getopt-long"><a href="#get-opt-amp-amp-getopt-long" class="headerlink" title="get_opt() &amp;&amp; getopt_long()"></a>get_opt() &amp;&amp; getopt_long()</h2><p>Linux中，对程序参数进行处理的函数。<br>函数原型：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],  </span></span></div><div class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring)</span></span>;  </div><div class="line">           </div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;getopt.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],  </span></span></div><div class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring,  </span></span></div><div class="line"><span class="function"><span class="params">           <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;  </div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long_only</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],  </span></span></div><div class="line"><span class="function"><span class="params">           <span class="keyword">const</span> <span class="keyword">char</span> *optstring,  </span></span></div><div class="line"><span class="function"><span class="params">           <span class="keyword">const</span> struct option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><p>epoll是Linux为了处理大批量句柄，从内核2.5.4之后引进的新特性。在Linux网络编程中，很长的时间都在使用select来做事件触发。相比于select，epoll最大的好处在于它不会随着监听fd数目的增长而降低效率。因为在内核中的select实现中，它是采用轮询来处理的，轮询的fd数目越多，自然耗时越多。</p>
+<blockquote>
+<p>参考资料：<br><a href="http://peterylh.blog.163.com/blog/static/12033201221594937257/" target="_blank" rel="external">sheepdog(牧羊犬)：一种EBS的开源实现  </a><br><a href="http://blog.csdn.net/wendowswd/article/details/78493346" target="_blank" rel="external">分布式系统sheepdog之dog执行流程</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/20/python/" rel="next" title="python笔记">
+                <i class="fa fa-chevron-left"></i> python笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sheepdog简介"><span class="nav-number">1.</span> <span class="nav-text">Sheepdog简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dog"><span class="nav-number">2.</span> <span class="nav-text">dog</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码结构"><span class="nav-number">2.1.</span> <span class="nav-text">源码结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行流程"><span class="nav-number">2.2.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vdi命令"><span class="nav-number">2.3.</span> <span class="nav-text">vdi命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cluster命令"><span class="nav-number">2.4.</span> <span class="nav-text">cluster命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node命令"><span class="nav-number">2.5.</span> <span class="nav-text">node命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键结构体"><span class="nav-number">2.6.</span> <span class="nav-text">关键结构体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VDI创建"><span class="nav-number">2.7.</span> <span class="nav-text">VDI创建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#补充："><span class="nav-number">3.</span> <span class="nav-text">补充：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#likely-amp-unlikely"><span class="nav-number">3.1.</span> <span class="nav-text">likely() & unlikely()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get-opt-amp-amp-getopt-long"><span class="nav-number">3.2.</span> <span class="nav-text">get_opt() && getopt_long()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll"><span class="nav-number">3.3.</span> <span class="nav-text">epoll</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
