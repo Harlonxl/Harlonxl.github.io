@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/zookeeper-tree.png">
 <meta property="og:image" content="https://holynull.gitbooks.io/zookeeper/content/assets/00063.jpeg">
-<meta property="og:updated_time" content="2017-11-14T06:13:13.076Z">
+<meta property="og:updated_time" content="2018-01-25T12:41:55.382Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper入门到实战">
 <meta name="twitter:description" content="Apache Zookeeper是Apache的一个软件项目，主要为大型分布式系统提供协调服务，例如分布式配置、同步服务和命名注册等。">
@@ -375,7 +375,7 @@
 <li>clientPort：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。</li>
 </ul>
 <p>完成上述配置之后，通过bin下面的zkServer.sh脚本启动Zookeeper。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./zkServer.sh start</div></pre></td></tr></table></figure></p>
-<h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><p>Zookeeper不仅可以单机提供服务，同时也支持多机组成集群来提供服务。<br>Zookeeper集群配置非常简单，就是在其配置项中添加几个配置项：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">initLimit=10</div><div class="line">syncLimit=5</div><div class="line">server.1=192.168.58.129:2888:3888</div><div class="line">server.2=192.168.58.130:2888:3888</div><div class="line">server.3=192.168.58.131:2888:3888</div></pre></td></tr></table></figure></p>
+<h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><p>Zookeeper不仅可以单机提供服务，同时也支持多机组成集群来提供服务。<br>Zookeeper集群配置非常简单，就是在其配置项中添加几个配置项：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">initLimit=5</div><div class="line">syncLimit=2</div><div class="line">server.1=192.168.58.129:2888:3888</div><div class="line">server.2=192.168.58.130:2888:3888</div><div class="line">server.3=192.168.58.131:2888:3888</div></pre></td></tr></table></figure></p>
 <ul>
 <li>initLimit：这个配置项是用来配置 Zookeeper 接受客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 10 个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5*2000=10 秒。</li>
 <li>syncLimit：这个配置项标识 Leader 与 Follower 之间发送消息，请求和应答时间长度，最长不能超过多少个 tickTime 的时间长度，总的时间长度就是 2*2000=4 秒。</li>
@@ -439,7 +439,7 @@
 <ul>
 <li><p>阶段 1：领导选举（Leader election）<br>Ensemble中的成员通过一个程序来选举出一个首领成员，我们叫做leader。其他的成员就叫做follower。在大多数（quorum）follower完成与leader状态同步时，这个阶段才结束。</p>
 </li>
-<li><p>阶段 2： 原子广播（Atomic broadcast）<br>所有的写入请求都会发送给leader，leader在广播给follower。当大多数的follower同意写入请求，leader才会将更新提交，客户端就会随之得到leader更新成功的消息。协议中的设计也是具有原子性的，所以写入操作只有成功和失败两个结果。</p>
+<li><p>阶段 2： 原子广播（Atomic broadcast）<br>所有的写入请求都会发送给leader，leader再广播给follower。当大多数的follower同意写入请求，leader才会将更新提交，客户端就会随之得到leader更新成功的消息。协议中的设计也是具有原子性的，所以写入操作只有成功和失败两个结果。</p>
 </li>
 </ul>
 <p>如果leader脱离了集群，剩下的节点将选举一个新的leader。如果之前的leader回到了集群中，那么将被视作一个follower。leader的选举很快，大概200ms就能够产生结果，所以不会影响执行效率。</p>
