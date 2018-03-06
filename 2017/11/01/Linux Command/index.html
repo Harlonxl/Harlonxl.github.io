@@ -82,14 +82,14 @@
 <meta name="description" content="记录工作学习中经常使用的Linux命令。">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux命令">
+<meta property="og:title" content="每日一个Linux命令">
 <meta property="og:url" content="http://harlon.org/2017/11/01/Linux Command/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="记录工作学习中经常使用的Linux命令。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-20T02:22:02.565Z">
+<meta property="og:updated_time" content="2018-03-06T14:16:15.505Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux命令">
+<meta name="twitter:title" content="每日一个Linux命令">
 <meta name="twitter:description" content="记录工作学习中经常使用的Linux命令。">
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>Linux命令 | Harlon's BLOG</title>
+  <title>每日一个Linux命令 | Harlon's BLOG</title>
   
 
 
@@ -186,7 +186,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -236,7 +236,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux命令</h1>
+          <h1 class="post-title" itemprop="name headline">每日一个Linux命令</h1>
         
 
         <div class="post-meta">
@@ -300,7 +300,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-01T16:30:23+08:00">
                 2017-11-01
@@ -321,7 +321,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -363,19 +363,14 @@
 
       
         <p>记录工作学习中经常使用的Linux命令。<br><a id="more"></a></p>
-<h1 id="Curl"><a href="#Curl" class="headerlink" title="Curl"></a>Curl</h1><h2 id="DESCRIPTION"><a href="#DESCRIPTION" class="headerlink" title="DESCRIPTION"></a>DESCRIPTION</h2><p>linux curl是一个利用URL规则在命令行下工作的文件传输工具。它支持文件的上传和下载，所以是综合传输工具，但按传统，习惯称Curl为下载工具。</p>
-<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><ol>
-<li><p>查看网页源码</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl harlon.org</div></pre></td></tr></table></figure>
-<p> curl命令后面直接加网址，就可以看到网页源码，如果需要把这个网页保存下来，可以使用“-o”参数。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -o [文件名] harlon.org</div></pre></td></tr></table></figure>
-</li>
-<li><p>自动跳转<br> 有些网页时自动跳转的，使用“-L”参数，curl会跳转到新的网址。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L www.sina.com</div></pre></td></tr></table></figure>
-<p> 上述命令会跳转到www.sina.com.cn。</p>
-</li>
-</ol>
-<hr>
+<h1 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h1><h2 id="DESCRIPTION"><a href="#DESCRIPTION" class="headerlink" title="DESCRIPTION"></a>DESCRIPTION</h2><p>linux curl是一个利用URL规则在命令行下工作的文件传输工具。它支持文件的上传和下载，所以是综合传输工具，但按传统，习惯称Curl为下载工具。</p>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><h3 id="1-查看网页源码"><a href="#1-查看网页源码" class="headerlink" title="1.查看网页源码"></a>1.查看网页源码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl harlon.org</div></pre></td></tr></table></figure>
+<pre><code>curl命令后面直接加网址，就可以看到网页源码，如果需要把这个网页保存下来，可以使用“-o”参数。
+</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -o [文件名] harlon.org</div></pre></td></tr></table></figure>
+<h3 id="2-自动跳转"><a href="#2-自动跳转" class="headerlink" title="2.自动跳转"></a>2.自动跳转</h3><pre><code>有些网页时自动跳转的，使用“-L”参数，curl会跳转到新的网址。
+</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -L www.sina.com</div></pre></td></tr></table></figure>
+<pre><code>上述命令会跳转到www.sina.com.cn。
+</code></pre><hr>
 <h1 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h1><h2 id="DESCRIPTION-1"><a href="#DESCRIPTION-1" class="headerlink" title="DESCRIPTION"></a>DESCRIPTION</h2><p>tar命令可以为Linux的文件和目录创建档案，进行压缩、解压缩、打包、解打包等操作。</p>
 <h2 id="Usage-1"><a href="#Usage-1" class="headerlink" title="Usage"></a>Usage</h2><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
 <li>-c 建立新的压缩文件</li>
@@ -402,7 +397,45 @@
 <h3 id="zip"><a href="#zip" class="headerlink" title=".zip"></a>.zip</h3><p>解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">unzip Filename.zip</div></pre></td></tr></table></figure></p>
 <p>压缩：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zip Filename.zip Filename</div></pre></td></tr></table></figure></p>
 <hr>
-
+<h1 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h1><h2 id="DESCRIPTION-2"><a href="#DESCRIPTION-2" class="headerlink" title="DESCRIPTION"></a>DESCRIPTION</h2><p>Linux系统中grep命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并按照匹配的行打印出来。</p>
+<h2 id="Usage-2"><a href="#Usage-2" class="headerlink" title="Usage"></a>Usage</h2><h3 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>-c 只输出匹配行的计数</li>
+<li>-i 不区分大小写</li>
+<li>-h 查询多文件时不显示文件名</li>
+<li>-l 查询多文件时只输出包含匹配字符的文件名</li>
+<li>-n 显示匹配行及行号</li>
+<li>-s 不显示不存在或无匹配文本的错误信息</li>
+<li>-v 显示不包含匹配文本的所有行</li>
+<li>-f 指定规则文件，其内容含有一个或多个规则样式，让grep查找符合规则条件的文件内容，格式为每行一个规则样式</li>
+<li>-o 仅输出匹配部分</li>
+<li>-E 将样式为延伸的普通表示法来使用</li>
+</ul>
+<h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><ul>
+<li>\ 忽略正则表达式中特殊字符的原有含义</li>
+<li>^ 匹配正则表达式的开始行</li>
+<li>$ 匹配正则表达式的结束行</li>
+<li>\&lt; 从匹配正则表达式的行开始</li>
+<li>> 到匹配正则表达式的行结束</li>
+<li>[] 单个字符，如[A]即A符合要求</li>
+<li>[ - ] 范围，如[A-Z]，即A、B、C一直到Z都符合要求</li>
+<li>. 匹配一个非换行符的字符</li>
+<li>* 匹配零个或多个字符</li>
+<li>.* 匹配任何字符</li>
+<li>x{m\} 重复字符x，m次，如：’o{5}‘匹配包含5个o的行</li>
+<li>x{m,\}  #重复字符x,至少m次，如：’o{5,}‘匹配至少有5个o的行</li>
+<li>x{m,n\}  #重复字符x，至少m次，不多于n次，如：’o{5,10}‘匹配5-10个o的行</li>
+</ul>
+<h3 id="1-查找指定进程"><a href="#1-查找指定进程" class="headerlink" title="1.查找指定进程"></a>1.查找指定进程</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps -ef | grep python</div><div class="line">root       755     1  0 Feb28 ?        00:00:59 /usr/bin/python -Es /usr/sbin/tuned -l -P</div><div class="line">root     28862 26485  0 21:41 pts/0    00:00:00 grep --color=auto python</div></pre></td></tr></table></figure>
+<h3 id="2-查找指定进程个数"><a href="#2-查找指定进程个数" class="headerlink" title="2.查找指定进程个数"></a>2.查找指定进程个数</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps -ef | grep -c python</div><div class="line">2</div></pre></td></tr></table></figure>
+<h3 id="3-从文件中读取关键词进行搜索"><a href="#3-从文件中读取关键词进行搜索" class="headerlink" title="3.从文件中读取关键词进行搜索"></a>3.从文件中读取关键词进行搜索</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# cat test.txt</div><div class="line">hnlinux</div><div class="line">ubuntu</div><div class="line">ubuntu linux</div><div class="line">redhat</div><div class="line">Redhat</div><div class="line">linuxmint</div><div class="line">[root@harlon ~]# cat test2.txt</div><div class="line">linux</div><div class="line">redhat</div><div class="line">[root@harlon ~]# cat test.txt | grep -f test2.txt</div><div class="line">hnlinux</div><div class="line">ubuntu linux</div><div class="line">Redhat</div><div class="line">linuxmint</div></pre></td></tr></table></figure>
+<h3 id="4-从文件中查找关键词"><a href="#4-从文件中查找关键词" class="headerlink" title="4.从文件中查找关键词"></a>4.从文件中查找关键词</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# cat test.txt</div><div class="line">linux</div><div class="line">ubuntu</div><div class="line">ubuntu linux</div><div class="line">redhat</div><div class="line">Redhat</div><div class="line">linuxmint</div><div class="line">[root@harlon ~]# grep linux test.txt</div><div class="line">linux</div><div class="line">ubuntu linux</div><div class="line">linuxmint</div><div class="line">[root@harlon ~]# grep -n linux test.txt</div><div class="line">1:linux</div><div class="line">3:ubuntu linux</div><div class="line">6:linuxmint</div></pre></td></tr></table></figure>
+<h3 id="5-grep不显示本身进程"><a href="#5-grep不显示本身进程" class="headerlink" title="5.grep不显示本身进程"></a>5.grep不显示本身进程</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps aux | grep ssh | grep -v grep</div><div class="line">root       757  0.0  0.2 105996  4116 ?        Ss   Feb28   0:00 /usr/sbin/sshd -D</div><div class="line">root     26450  0.0  0.3 146596  6112 ?        Ss   18:57   0:00 sshd: root@pts/0</div><div class="line">root     27132  0.0  0.3 146216  5652 ?        Ss   20:37   0:00 sshd: root@pts/1</div></pre></td></tr></table></figure>
+<h3 id="6-找出已u开头的行内容"><a href="#6-找出已u开头的行内容" class="headerlink" title="6.找出已u开头的行内容"></a>6.找出已u开头的行内容</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# grep ^u test.txt </div><div class="line">ubuntu</div><div class="line">ubuntu linux</div></pre></td></tr></table></figure>
+<h3 id="7-输出非u开头的行内容"><a href="#7-输出非u开头的行内容" class="headerlink" title="7.输出非u开头的行内容"></a>7.输出非u开头的行内容</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# grep ^[^u] test.txt </div><div class="line">linux</div><div class="line">redhat</div><div class="line">Redhat</div><div class="line">linuxmint</div></pre></td></tr></table></figure>
+<h3 id="8-匹配IP地址"><a href="#8-匹配IP地址" class="headerlink" title="8.匹配IP地址"></a>8.匹配IP地址</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# grep "[0-9]\&#123;1,3\&#125;\.[0-9]\&#123;1,3\&#125;\.[0-9]\&#123;1,3\&#125;" /etc/hosts</div><div class="line">127.0.0.1 localhost</div></pre></td></tr></table></figure>
+<h3 id="9-包含un或者nu"><a href="#9-包含un或者nu" class="headerlink" title="9.包含un或者nu"></a>9.包含un或者nu</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# grep -E "un|nu" test.txt </div><div class="line">linux</div><div class="line">ubuntu</div><div class="line">ubuntu linux</div><div class="line">linuxmint</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h1>
       
     </div>
     
@@ -498,10 +531,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -522,7 +555,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">8</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -533,7 +566,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -544,7 +577,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -578,7 +611,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Curl"><span class="nav-number">1.</span> <span class="nav-text">Curl</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION"><span class="nav-number">1.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number">1.2.</span> <span class="nav-text">Usage</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tar"><span class="nav-number">2.</span> <span class="nav-text">tar</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-1"><span class="nav-number">2.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-1"><span class="nav-number">2.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gz"><span class="nav-number">2.2.3.</span> <span class="nav-text">.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz-amp-tgz"><span class="nav-number">2.2.4.</span> <span class="nav-text">.tar.gz & .tgz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz2"><span class="nav-number">2.2.5.</span> <span class="nav-text">.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-bz2"><span class="nav-number">2.2.6.</span> <span class="nav-text">.tar.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz"><span class="nav-number">2.2.7.</span> <span class="nav-text">.bz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz"><span class="nav-number">2.2.8.</span> <span class="nav-text">.tar.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip"><span class="nav-number">2.2.9.</span> <span class="nav-text">.zip</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#curl"><span class="nav-number">1.</span> <span class="nav-text">curl</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION"><span class="nav-number">1.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number">1.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查看网页源码"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.查看网页源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动跳转"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.自动跳转</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tar"><span class="nav-number">2.</span> <span class="nav-text">tar</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-1"><span class="nav-number">2.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-1"><span class="nav-number">2.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gz"><span class="nav-number">2.2.3.</span> <span class="nav-text">.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz-amp-tgz"><span class="nav-number">2.2.4.</span> <span class="nav-text">.tar.gz & .tgz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz2"><span class="nav-number">2.2.5.</span> <span class="nav-text">.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-bz2"><span class="nav-number">2.2.6.</span> <span class="nav-text">.tar.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz"><span class="nav-number">2.2.7.</span> <span class="nav-text">.bz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz"><span class="nav-number">2.2.8.</span> <span class="nav-text">.tar.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip"><span class="nav-number">2.2.9.</span> <span class="nav-text">.zip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#grep"><span class="nav-number">3.</span> <span class="nav-text">grep</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-2"><span class="nav-number">3.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-2"><span class="nav-number">3.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则表达式"><span class="nav-number">3.2.2.</span> <span class="nav-text">正则表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查找指定进程"><span class="nav-number">3.2.3.</span> <span class="nav-text">1.查找指定进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查找指定进程个数"><span class="nav-number">3.2.4.</span> <span class="nav-text">2.查找指定进程个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-从文件中读取关键词进行搜索"><span class="nav-number">3.2.5.</span> <span class="nav-text">3.从文件中读取关键词进行搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-从文件中查找关键词"><span class="nav-number">3.2.6.</span> <span class="nav-text">4.从文件中查找关键词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-grep不显示本身进程"><span class="nav-number">3.2.7.</span> <span class="nav-text">5.grep不显示本身进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-找出已u开头的行内容"><span class="nav-number">3.2.8.</span> <span class="nav-text">6.找出已u开头的行内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-输出非u开头的行内容"><span class="nav-number">3.2.9.</span> <span class="nav-text">7.输出非u开头的行内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-匹配IP地址"><span class="nav-number">3.2.10.</span> <span class="nav-text">8.匹配IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-包含un或者nu"><span class="nav-number">3.2.11.</span> <span class="nav-text">9.包含un或者nu</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ps"><span class="nav-number">4.</span> <span class="nav-text">ps</span></a></li></ol></div>
             
 
           </div>
@@ -608,7 +641,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 

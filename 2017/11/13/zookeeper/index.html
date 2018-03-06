@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/zookeeper-tree.png">
 <meta property="og:image" content="https://holynull.gitbooks.io/zookeeper/content/assets/00063.jpeg">
-<meta property="og:updated_time" content="2018-01-25T12:41:55.382Z">
+<meta property="og:updated_time" content="2018-01-31T12:09:58.589Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper入门到实战">
 <meta name="twitter:description" content="Apache Zookeeper是Apache的一个软件项目，主要为大型分布式系统提供协调服务，例如分布式配置、同步服务和命名注册等。">
@@ -188,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -238,7 +238,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -302,7 +302,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-13T16:42:26+08:00">
                 2017-11-13
@@ -323,7 +323,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -366,6 +366,7 @@
       
         <p>Apache Zookeeper是Apache的一个软件项目，主要为大型分布式系统提供协调服务，例如分布式配置、同步服务和命名注册等。<br><a id="more"></a></p>
 <h1 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h1><p>Zookeeper定位是一个分布式系统的管理者的角度，因为大多数大数据分布式系统的Logo都是动物的标志，Zookeeper顾名思义动物园管理者，在Zookeeper的论文中也提到Zookeeper是一个用于协调分布式系统应用的服务，它在集群中类似一个大脑的地位，其所维护的信息具有高可用性的特点。</p>
+<hr>
 <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h2><p>下载安装包，进行解压<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget http://apache.forsale.plus/zookeeper/zookeeper-3.4.11/zookeeper-3.4.11.tar.gz</div><div class="line">tar zxvf zookeeper-3.4.11.tar.gz</div></pre></td></tr></table></figure></p>
 <p>修改配置文档，在Zookeeper的conf目录下，这个目录下有zoo_sample.cfg，将其更名为zoo.cfg<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mv zoo_sample.cfg zoo.cfg</div></pre></td></tr></table></figure></p>
 <p>配置文件信息如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tickTime=2000</div><div class="line">dataDir=/tmp/zookeeper</div><div class="line">clientPort=2181</div></pre></td></tr></table></figure></p>
@@ -375,6 +376,7 @@
 <li>clientPort：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。</li>
 </ul>
 <p>完成上述配置之后，通过bin下面的zkServer.sh脚本启动Zookeeper。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./zkServer.sh start</div></pre></td></tr></table></figure></p>
+<hr>
 <h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><p>Zookeeper不仅可以单机提供服务，同时也支持多机组成集群来提供服务。<br>Zookeeper集群配置非常简单，就是在其配置项中添加几个配置项：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">initLimit=5</div><div class="line">syncLimit=2</div><div class="line">server.1=192.168.58.129:2888:3888</div><div class="line">server.2=192.168.58.130:2888:3888</div><div class="line">server.3=192.168.58.131:2888:3888</div></pre></td></tr></table></figure></p>
 <ul>
 <li>initLimit：这个配置项是用来配置 Zookeeper 接受客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 10 个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5*2000=10 秒。</li>
@@ -394,6 +396,7 @@
 <li>znode序号：如果创建znode时，需要排序标志的话，Zookeeper会自动进行排序。如果我们请求创建一个znode，指定命名为/a/b-，那么ZooKeeper会为我们创建一个名字为/a/b-3的znode。我们再请求创建一个名字为/a/b-的znode，ZooKeeper会为我们创建一个名字/a/b-5的znode。ZooKeeper给我们指定的序号是不断增长的。API中的create()的返回结果就是znode的实际名字。</li>
 <li>观察模式：客户端可以设置对某个节点进行观察，如果这个目录节点中的存储数据进行修改，会通知设置观察的客户端。这个通知只有一次，如果需要再次通知的话，需要接到通知之后再设置一次观察。</li>
 </ul>
+<hr>
 <h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>下面的表格中列出了9种ZooKeeper的操作:</p>
 <table>
 <thead>
@@ -433,6 +436,7 @@
 </tr>
 </tbody>
 </table>
+<hr>
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>ZooKeeper服务可以在两种模式下运行。在standalone模式下，我们可以运行一个单独的ZooKeeper服务器，我们可以在这种模式下进行基本功能的简单测试，但是这种模式没有办法体现ZooKeeper的高可用特性和快速恢复特性。在生产环境中，我们一般采用replicated（复制）模式安装在多台服务器上，组建一个叫做ensemble的集群。ZooKeeper在他的副本之间实现高可用性，并且只要ensemble集群中能够推举出主服务器，ZooKeeper的服务就可以一直不终断。例如，在一个5个节点的ensemble中，容忍有2个节点脱离集群，服务还是可用的。因为剩下的3个节点投票，可以产生超过集群半数的投票，来推选一台主服务器。而6个节点的ensemble中，也只能容忍2个节点的服务器死机。因为如果3个节点脱离集群，那么剩下的3个节点无论如何不能产生超过集群半数的投票来推选一个主服务器。所以，一般情况下ensemble中的服务器数量都是奇数。</p>
 <p>从概念上来看，ZooKeeper其实是很简单的。他所做的一切就是保证每一次对znode树的修改，都能够复制到ensemble的大多数服务器上。如果非主服务器脱离集群，那么至少有一台服务器上的副本保存了最新状态。剩下的其他的服务器上的副本，会很快更新这个最新的状态。</p>
 <p>为了实现这个简单而不平凡的设计思路，ZooKeeper使用了一个叫做Zab的协议。这个协议分为两阶段，并且不断的运行在ZooKeeper上：</p>
@@ -444,6 +448,7 @@
 </ul>
 <p>如果leader脱离了集群，剩下的节点将选举一个新的leader。如果之前的leader回到了集群中，那么将被视作一个follower。leader的选举很快，大概200ms就能够产生结果，所以不会影响执行效率。</p>
 <p>Ensemble中的所有节点都会在更新内存中的znode树的副本之前，先将更新数据写入到硬盘上。读操作可以请求任何一台ZooKeeper服务器，而且读取速度很快，因为读取是内存中的数据副本。</p>
+<hr>
 <h2 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h2><p>每一个对znode树的更新操作，都会被赋予一个全局唯一的ID，我们称之为zxid（ZooKeeper Transaction ID）。更新操作的ID按照发生的时间顺序升序排序。例如，z1大于z2，那么z1的操作就早于z2操作。<br>ZooKeeper在数据一致性上实现了如下几个方面：</p>
 <ul>
 <li>顺序一致性<br>从客户端提交的更新操作是按照先后循序排序的。例如，如果一个客户端将一个znode z赋值为a，然后又将z的值改变成b，那么在这个过程中不会有客户端在z的值变为b后，取到的值是a。</li>
@@ -453,16 +458,24 @@
 <li>时效性<br>系统视图的状态更新的延迟时间是有一个上限的，最多不过几十秒。如果服务器的状态落后于其他服务器太多，ZooKeeper会宁可关闭这个服务器上的服务，强制客户端去连接一个状态更新的服务器。</li>
 </ul>
 <p>从执行效率上考虑，读操作的目标是内存中的缓存数据，并且读操作不会参与到写操作的全局排序中。这就会引起客户端在读取ZooKeeper的状态时产生不一致。例如，A客户端将znode z的值由a改变成a’，然后通知客户端B去读取z的值，但是B读取到的值是aa，而不是修改后的a’​​ 。为了阻止这种情况出现，B在读取z的值之前，需要调用sync方法。sync方法会强制B连接的服务器状态与leader的状态同步，这样B在读取z的值就是A重新更改过的值了。</p>
+<hr>
 <h2 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h2><p>ZooKeeper的客户端中，配置了一个ensemble服务器列表。当启动时，首先去尝试连接其中一个服务器。如果尝试连接失败，那么会继续尝试连接下一个服务器，直到连接成功或者全部尝试连接失败。<br>一旦连接成功，服务器就会为客户端创建一个会话（session）。session的过期时间由创建会话的客户端应用来设定，如果在这个时间期间，服务器没有收到客户端的任何请求，那么session将被视为过期，并且这个session不能被重新创建，而创建的ephemeral znode将随着session过期被删除掉。在会话长期存在的情况下，session的过期事件是比较少见的，但是应用程序如何处理好这个事件是很重要的。<br>在长时间的空闲情况下，客户端会不断的发送ping请求来保持session。（ZooKeeper的客户端开发工具的liberay实现了自动发送ping请求，所以我们不必去考虑如何维持session）ping请求的间隔被设置成足够短，以便能够及时发现服务器失败（由读操作的超时时长来设置），并且能够及时的在session过期前连接到其他服务器上。<br>容错连接到其他服务器上，是由ZooKeeper客户端自动完成的。重要的是在连接到其他服务器上后，之前的session以及epemeral节点还保持可用状态。<br>在容错的过程中，应用将收到与服务断开连接和连接的通知。Watch模式的通知在断开链接时，是不会发送断开连接事件给客户端的，断开连接事件是在重新连接成功后发送给客户端的。如果在重新连接到其他节点时，应用尝试一个操作，这个操作是一定会失败的。对于这一点的处理，是一个ZooKeeper应用的重点。</p>
+<hr>
 <h2 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h2><p>在ZooKeeper中有一些时间的参数。tick是ZooKeeper的基础时间单位，用来定义ensemble中服务器上运行的程序的时间表。其他时间相关的配置都是以tick为单位的，或者以tick的值为最大值或者最小值。例如，session的过期时间在2 ticks到20 ticks之间，那么你再设置时选择的session过期时间必须在2和20之间的一个数。<br>通常情况1 tick等于2秒。那么就是说session的过期时间的设置范围在4秒到40秒之间。在session过期时间的设置上有一些考虑。过期时间太短会造成加快物理失败的监测频率。在组成员关系的例子中，session的过期时间与从组中移除失败的成员花费的时间相等。如果设置过低的session过期时间，那么网络延迟就有可能造成非预期的session过期。这种情况下，就会出现在短时间内一台机器不断的离开组，然后又从新加入组中。<br>如果应用需要创建比较复杂的临时状态，那么就需要较长的session过期时间，因为重构花费的时间比较长。有一些情况下，需要在session的生命周期内重启，而且要保证重启完后session不过期（例如，应用维护和升级的情况）。服务器会给每一个session一个ID和密码，如果在连接创建时，ZooKeeper验证通过，那么session将被恢复使用（只要session没过期就行）。所以应用程序可以实现一个优雅的关机动作，在重启之前，将session的ID和密码存储在一个稳定的地方。重启之后，通过ID和密码恢复session。+</p>
 <p>这仅仅是在一些特殊的情况下，我们需要使用这个特性来使用比较长的session过期时间。大多数情况下，我们还是要考虑当出现非预期的异常失败时，如何处理session过期，或者仅需要优雅的关闭应用，在session过期前不用重启应用。<br>通常情况也越大规模的ensemble，就需要越长的session过期时间。Connetction Timeout、Read Timeout和Ping Periods都由一个以服务器数量为参数的函数计算得到，当ensemble的规模扩大，这些值需要逐渐减小。如果为了解决经常失去连接而需要增加timeout的时长，建议你先监控一下ZooKeeper的metrics，再去调整。</p>
+<hr>
 <h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><p>ZooKeeper对象在他的生命周期内会有不同的状态，我们通过getState()来获得当前的状态。</p>
 <p>状态是一个枚举类型的数据。新构建的ZooKeeper对象在尝试连接ZooKeeper服务时的状态是CONNECTING，一旦与服务建立了连接那么状态就变成了CONNECTED。<br><img src="https://holynull.gitbooks.io/zookeeper/content/assets/00063.jpeg" alt="zookeeper-state"><br>客户端可以通过注册一个观察者对象来接收ZooKeeper对象状态的迁移。当通过CONNECTED状态后，观察者将接收到一个WatchedEvent事件，他的属性KeeperState的值是SyncConnected。</p>
 <p>ZooKeeper实例会与服务连接断开或者重新连接，状态会在CONNECTING和CONNECTED之间转换。如果连接断开，watcher会收到一个断开连接事件。请注意，这两个状态都是ZooKeeper实例自己初始化的，并且在断开连接后会自动进行重连接。</p>
 <p>如果调用了close()或者session过期，ZooKeeper实例会转换为第三个状态CLOSED，此时在接受事件的KeeperState属性值为Expired。一旦ZooKeeper的状态变为CLOSED，说明实例已经不可用（可以通过isAlive()来判断），并且不能再被使用。如果要重新建立连接，就需要重新构建一个ZooKeeper实例。</p>
 <hr>
 <h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><blockquote>
-<p>参考资料：<br><a href="https://zh.wikipedia.org/wiki/Apache_ZooKeeper" target="_blank" rel="external">Wikipedia-ApacheZookeeper</a><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-zookeeper/" target="_blank" rel="external">分布式服务框架 Zookeeper – 管理分布式环境中的数据</a><br> <a href="https://www.gitbook.com/book/holynull/zookeeper/details" target="_blank" rel="external">ZooKeeper深入浅出</a></p>
+<p>以Zookeeper C API为例，介绍如何使用Zookeeper</p>
+</blockquote>
+<p>先贴好代码，日后说明。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;zookeeper/zookeeper.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">char</span> *hosts = <span class="string">"192.168.58.129:2181"</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">char</span> *root_path = <span class="string">"/"</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int32_t</span> timeout = <span class="number">30000</span>;</div><div class="line"></div><div class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> connected = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="keyword">pthread_mutex_t</span> lock = PTHREAD_MUTEX_INITIALIZER;</div><div class="line"><span class="keyword">pthread_cond_t</span> cond = PTHREAD_COND_INITIALIZER;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">signal_to_connect</span><span class="params">()</span> </span>&#123;</div><div class="line">	pthread_mutex_lock(&amp;lock);</div><div class="line">	connected = <span class="number">1</span>;</div><div class="line">	pthread_cond_signal(&amp;cond);</div><div class="line">	pthread_mutex_unlock(&amp;lock);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">zk_event_callback</span><span class="params">(<span class="keyword">zhandle_t</span> *zh, <span class="keyword">int</span> type, <span class="keyword">int</span> state, <span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">void</span> *watcherCtx)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (type == ZOO_SESSION_EVENT &amp;&amp; state == ZOO_CONNECTED_STATE) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"connect to zookeeper successfully!\ntype: %d, state: %d\n"</span>, type, state);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (type == ZOO_CREATED_EVENT &amp;&amp; state == ZOO_CONNECTED_STATE) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"create znode: %s\ntype: %d, state: %d\n"</span>, path, type, state);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span>* context = (<span class="keyword">const</span> <span class="keyword">char</span> *)watcherCtx;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"function: %s\n"</span>, context);</div><div class="line">	context = <span class="literal">NULL</span>;</div><div class="line">	signal_to_connect();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">zhandle_t</span> *init_zhandle() &#123;</div><div class="line">	<span class="keyword">char</span> *h = <span class="built_in">malloc</span>(<span class="built_in">strlen</span>(hosts)+<span class="built_in">strlen</span>(root_path)+<span class="number">1</span>); <span class="comment">// 1 for '\0'</span></div><div class="line">	<span class="built_in">strcpy</span>(h, hosts);</div><div class="line">	<span class="built_in">strcat</span>(h, root_path);</div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *str = __FUNCTION__;</div><div class="line">	<span class="keyword">return</span> zookeeper_init(h, zk_event_callback, timeout, <span class="number">0</span>, (<span class="keyword">void</span> *)str, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">wait_to_connect</span><span class="params">()</span> </span>&#123;</div><div class="line">	pthread_mutex_lock(&amp;lock);</div><div class="line">		<span class="keyword">while</span> (!connected) &#123;</div><div class="line">			pthread_cond_wait(&amp;cond, &amp;lock);</div><div class="line">		&#125;</div><div class="line">	pthread_mutex_unlock(&amp;lock);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">close_zhandle</span><span class="params">(<span class="keyword">zhandle_t</span> *handle)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> res = zookeeper_close(handle);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"res: %s\n"</span>, zerror(res));</div><div class="line"></div><div class="line">	handle = <span class="literal">NULL</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">exists</span><span class="params">(<span class="keyword">zhandle_t</span> *handle, <span class="keyword">const</span> <span class="keyword">char</span> *path)</span> </span>&#123;</div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *str = __FUNCTION__;</div><div class="line">	zoo_set_context(handle, (<span class="keyword">void</span> *)str);</div><div class="line"></div><div class="line">	<span class="keyword">int</span> res = zoo_exists(handle, path, <span class="number">1</span>, <span class="literal">NULL</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"res: %s\n"</span>, zerror(res));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">create</span><span class="params">(<span class="keyword">zhandle_t</span> *handle, <span class="keyword">const</span> <span class="keyword">char</span> *path)</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span> buffer[<span class="number">64</span>] = &#123;<span class="number">0</span>&#125;;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> res = zoo_create(handle, path, <span class="literal">NULL</span>, <span class="number">-1</span>, &amp;ZOO_OPEN_ACL_UNSAFE, ZOO_EPHEMERAL, buffer, <span class="keyword">sizeof</span>(buffer));</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"res: %s\n"</span>, zerror(res));</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"new path: %s\n"</span>, buffer);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv)</span> </span>&#123;</div><div class="line">	<span class="keyword">zhandle_t</span> *handle = init_zhandle();</div><div class="line">	assert(handle != <span class="literal">NULL</span>);</div><div class="line">	wait_to_connect();</div><div class="line"></div><div class="line">	exists(handle, <span class="string">"/member"</span>);</div><div class="line">	create(handle, <span class="string">"/member"</span>);</div><div class="line"></div><div class="line">	close_zhandle(handle);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@753: Client environment:zookeeper.version=zookeeper C client 3.4.11</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@757: Client environment:host.name=server2</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@764: Client environment:os.name=Linux</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@765: Client environment:os.arch=3.10.0-514.el7.x86_64</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@766: Client environment:os.version=#1 SMP Tue Nov 22 16:42:41 UTC 2016</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@774: Client environment:user.name=root</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@782: Client environment:user.home=/root</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@log_env@794: Client environment:user.dir=/root/zookeeper</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4ec20740):ZOO_INFO@zookeeper_init@827: Initiating client connection, host=192.168.58.129:2181/ sessionTimeout=30000 watcher=0x400c6b sessionId=0 sessionPasswd=&lt;null&gt; context=0x40110d flags=0</div><div class="line">2018-01-31 20:11:06,882:7832(0x7fdb4dd00700):ZOO_INFO@check_events@1764: initiated connection to server [192.168.58.129:2181]</div><div class="line">2018-01-31 20:11:06,897:7832(0x7fdb4dd00700):ZOO_INFO@check_events@1811: session establishment complete on server [192.168.58.129:2181], sessionId=0x10001934c15000c, negotiated timeout=30000</div><div class="line">connect to zookeeper successfully!</div><div class="line">type: -1, state: 3</div><div class="line">function: init_zhandle</div><div class="line">res: no node</div><div class="line">res: ok</div><div class="line">new path: /member</div><div class="line">create znode: /member</div><div class="line">type: 1, state: 3</div><div class="line">function: exists</div><div class="line">2018-01-31 20:11:06,905:7832(0x7fdb4ec20740):ZOO_INFO@zookeeper_close@2564: Closing zookeeper sessionId=0x10001934c15000c to [192.168.58.129:2181]</div><div class="line"></div><div class="line">res: ok</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>参考资料：<br><a href="https://zh.wikipedia.org/wiki/Apache_ZooKeeper" target="_blank" rel="external">Wikipedia-ApacheZookeeper</a><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-zookeeper/" target="_blank" rel="external">分布式服务框架 Zookeeper – 管理分布式环境中的数据</a><br> <a href="https://www.gitbook.com/book/holynull/zookeeper/details" target="_blank" rel="external">ZooKeeper深入浅出</a><br> <a href="http://izualzhy.cn/c/cpp/2016/10/02/zookeeper-c-api-introduction" target="_blank" rel="external">zookeeper C API介绍</a><br><a href="http://www.cnblogs.com/haippy/archive/2013/02/21/2920280.html" target="_blank" rel="external">Zookeeper C API 指南</a></p>
 </blockquote>
 
       
@@ -498,8 +511,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/20/python/" rel="prev" title="python笔记">
-                python笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/20/python/" rel="prev" title="python入门到精通">
+                python入门到精通 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -554,10 +567,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -578,7 +591,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">8</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -589,7 +602,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -600,7 +613,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -664,7 +677,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
