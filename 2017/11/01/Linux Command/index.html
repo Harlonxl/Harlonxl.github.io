@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="记录工作学习中经常使用的Linux命令。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-06T14:16:15.505Z">
+<meta property="og:updated_time" content="2018-03-08T15:19:38.236Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="每日一个Linux命令">
 <meta name="twitter:description" content="记录工作学习中经常使用的Linux命令。">
@@ -186,7 +186,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Accueil
           </a>
         </li>
       
@@ -300,7 +300,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-01T16:30:23+08:00">
                 2017-11-01
@@ -435,7 +435,99 @@
 <h3 id="8-匹配IP地址"><a href="#8-匹配IP地址" class="headerlink" title="8.匹配IP地址"></a>8.匹配IP地址</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# grep "[0-9]\&#123;1,3\&#125;\.[0-9]\&#123;1,3\&#125;\.[0-9]\&#123;1,3\&#125;" /etc/hosts</div><div class="line">127.0.0.1 localhost</div></pre></td></tr></table></figure>
 <h3 id="9-包含un或者nu"><a href="#9-包含un或者nu" class="headerlink" title="9.包含un或者nu"></a>9.包含un或者nu</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# grep -E "un|nu" test.txt </div><div class="line">linux</div><div class="line">ubuntu</div><div class="line">ubuntu linux</div><div class="line">linuxmint</div></pre></td></tr></table></figure>
 <hr>
-<h1 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h1>
+<h1 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h1><h2 id="DESCRIPTION-3"><a href="#DESCRIPTION-3" class="headerlink" title="DESCRIPTION"></a>DESCRIPTION</h2><p>linux中ps命令是process start的缩写，ps命令用来列出系统中当前运行的那些进程。ps命令列出的是当前那些进程的快照，就是执行ps命令的那个时刻的那些进程，如果想要动态的显示进程信息，就可以使用top命令。</p>
+<h2 id="Usage-3"><a href="#Usage-3" class="headerlink" title="Usage"></a>Usage</h2><h3 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>-a 　显示所有终端机下执行的程序，除了阶段作业领导者之外</li>
+<li>a 　显示现行终端机下的所有程序，包括其他用户的程序</li>
+<li>-A 　显示所有程序。</li>
+<li>-c 　显示CLS和PRI栏位。</li>
+<li>c 　列出程序时，显示每个程序真正的指令名称，而不包含路径，参数或常驻服务的标示。</li>
+<li>-C &lt;指令名称&gt; 　指定执行指令的名称，并列出该指令的程序的状况。</li>
+<li>-d 　显示所有程序，但不包括阶段作业领导者的程序。</li>
+<li>-e 　此参数的效果和指定”A”参数相同。</li>
+<li>e 　列出程序时，显示每个程序所使用的环境变量。</li>
+<li>-f 　显示UID,PPIP,C与STIME栏位。</li>
+<li>\f 　用ASCII字符显示树状结构，表达程序间的相互关系。</li>
+<li>-g&lt;群组名称&gt; 　此参数的效果和指定”-G”参数相同，当亦能使用阶段作业领导者的名称来指定。</li>
+<li>g 　显示现行终端机下的所有程序，包括群组领导者的程序。</li>
+<li>-G &lt;群组识别码&gt; 　列出属于该群组的程序的状况，也可使用群组名称来指定。</li>
+<li>h 　不显示标题列。</li>
+<li>-H 　显示树状结构，表示程序间的相互关系。</li>
+<li>-j或j 　采用工作控制的格式显示程序状况。</li>
+<li>-l或l 　采用详细的格式来显示程序状况。</li>
+<li>L 　列出栏位的相关信息。</li>
+<li>-m或m 　显示所有的执行绪。</li>
+<li>n 　以数字来表示USER和WCHAN栏位。</li>
+<li>-N 　显示所有的程序，除了执行ps指令终端机下的程序之外。</li>
+<li>-p &lt;程序识别码&gt; 　指定程序识别码，并列出该程序的状况。</li>
+<li>p &lt;程序识别码&gt; 　此参数的效果和指定”-p”参数相同，只在列表格式方面稍有差异。</li>
+<li>r 　只列出现行终端机正在执行中的程序。</li>
+<li>-s &lt;阶段作业&gt; 　指定阶段作业的程序识别码，并列出隶属该阶段作业的程序的状况。</li>
+<li>s 　采用程序信号的格式显示程序状况。</li>
+<li>S 　列出程序时，包括已中断的子程序资料。</li>
+<li>-t &lt;终端机编号&gt; 　指定终端机编号，并列出属于该终端机的程序的状况。</li>
+<li>t &lt;终端机编号&gt; 　此参数的效果和指定”-t”参数相同，只在列表格式方面稍有差异。</li>
+<li>-T 　显示现行终端机下的所有程序。</li>
+<li>-u &lt;用户识别码&gt; 　此参数的效果和指定”-U”参数相同。</li>
+<li>u 　以用户为主的格式来显示程序状况。</li>
+<li>-U &lt;用户识别码&gt; 　列出属于该用户的程序的状况，也可使用用户名称来指定。</li>
+<li>U &lt;用户名称&gt; 　列出属于该用户的程序的状况。</li>
+<li>v 　采用虚拟内存的格式显示程序状况。</li>
+<li>-V或V 　显示版本信息。</li>
+<li>-w或w 　采用宽阔的格式来显示程序状况。</li>
+<li>x 　显示所有程序，不以终端机来区分。</li>
+<li>X 　采用旧式的Linux i386登陆格式显示程序状况。</li>
+<li>-y 　配合参数”-l”使用时，不显示F(flag)栏位，并以RSS栏位取代ADDR栏位　。</li>
+<li>-&lt;程序识别码&gt; 　此参数的效果和指定”p”参数相同。</li>
+<li>--cols &lt;每列字符数&gt; 　设置每列的最大字符数。</li>
+<li>--columns &lt;每列字符数&gt; 　此参数的效果和指定”–cols”参数相同。</li>
+<li>--cumulative 　此参数的效果和指定”S”参数相同。</li>
+<li>--deselect 　此参数的效果和指定”-N”参数相同。</li>
+<li>--forest 　此参数的效果和指定”f”参数相同。</li>
+<li>--headers 　重复显示标题列。</li>
+<li>--help 　在线帮助。</li>
+<li>--info 　显示排错信息。</li>
+<li>--lines &lt;显示列数&gt; 　设置显示画面的列数。</li>
+<li>--no-headers 　此参数的效果和指定”h”参数相同，只在列表格式方面稍有差异。</li>
+<li>--group &lt;群组名称&gt; 　此参数的效果和指定”-G”参数相同。</li>
+<li>--Group &lt;群组识别码&gt; 　此参数的效果和指定”-G”参数相同。</li>
+<li>--pid &lt;程序识别码&gt; 　此参数的效果和指定”-p”参数相同。</li>
+<li>--rows &lt;显示列数&gt; 　此参数的效果和指定”–lines”参数相同。</li>
+<li>--sid &lt;阶段作业&gt; 　此参数的效果和指定”-s”参数相同。</li>
+<li>--tty &lt;终端机编号&gt; 　此参数的效果和指定”-t”参数相同。</li>
+<li>--user &lt;用户名称&gt; 　此参数的效果和指定”-U”参数相同。</li>
+<li>--User &lt;用户识别码&gt; 　此参数的效果和指定”-U”参数相同。</li>
+<li>--version 　此参数的效果和指定”-V”参数相同。</li>
+<li><p>--widty &lt;每列字符数&gt; 　此参数的效果和指定”-cols”参数相同。</p>
+<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><blockquote>
+<p>USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</p>
+</blockquote>
+</li>
+<li><p>USER：进程拥有者</p>
+</li>
+<li>PID：pid</li>
+<li>%CPU：占用的 CPU 百分比</li>
+<li>%MEM：占用的内存百分比</li>
+<li>VSZ ：占用虚拟内存量</li>
+<li>RSS ：该 process 占用的固定的内存量</li>
+<li>TTY ：该 process 是在那个终端机上面运作，若与终端机无关，则显示?，另外， tty1-tty6 是本机上面的登入者程序，若为 pts/0 等等的，则表示为由网络连接进主机的程序</li>
+<li>STAT：该程序目前的状态，主要的状态有：<ul>
+<li>R ：该程序目前正在运作，或者是可被运作</li>
+<li>S ：该程序目前正在睡眠当中 (可说是 idle 状态啦！)，但可被某些讯号 (signal) 唤醒。</li>
+<li>T ：该程序目前正在侦测或者是停止了</li>
+<li>Z ：该程序应该已经终止，但是其父程序却无法正常的终止他，造成 zombie (疆尸) 程序的状态</li>
+</ul>
+</li>
+<li>START：该 process 被触发启动的时间</li>
+<li>TIME ：该 process 实际使用 CPU 运作的时间</li>
+<li>COMMAND：该程序的实际指令为何</li>
+</ul>
+<h3 id="1-列出所有进程信息"><a href="#1-列出所有进程信息" class="headerlink" title="1.列出所有进程信息"></a>1.列出所有进程信息</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps -A</div><div class="line">  PID TTY          TIME CMD</div><div class="line">    1 ?        00:00:03 systemd</div><div class="line">    2 ?        00:00:00 kthreadd</div><div class="line">    3 ?        00:00:08 ksoftirqd/0</div><div class="line">    5 ?        00:00:00 kworker/0:0H</div><div class="line">    6 ?        00:00:00 kworker/u2:0</div><div class="line">    7 ?        00:00:00 migration/0</div><div class="line">    8 ?        00:00:00 rcu_bh</div><div class="line">    9 ?        00:00:55 rcu_sched</div><div class="line">   10 ?        00:00:02 watchdog/0</div><div class="line">...</div></pre></td></tr></table></figure>
+<h3 id="2-显示指定用户信息"><a href="#2-显示指定用户信息" class="headerlink" title="2.显示指定用户信息"></a>2.显示指定用户信息</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps -u root</div><div class="line">  PID TTY          TIME CMD</div><div class="line">    1 ?        00:00:03 systemd</div><div class="line">    2 ?        00:00:00 kthreadd</div><div class="line">    3 ?        00:00:08 ksoftirqd/0</div><div class="line">    5 ?        00:00:00 kworker/0:0H</div><div class="line">    6 ?        00:00:00 kworker/u2:0</div><div class="line">    7 ?        00:00:00 migration/0</div><div class="line">    8 ?        00:00:00 rcu_bh</div><div class="line">    9 ?        00:00:55 rcu_sched</div><div class="line">   10 ?        00:00:02 watchdog/0</div><div class="line">...</div></pre></td></tr></table></figure>
+<h3 id="3-显示所有进程，连同命令行"><a href="#3-显示所有进程，连同命令行" class="headerlink" title="3.显示所有进程，连同命令行"></a>3.显示所有进程，连同命令行</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps -ef</div><div class="line">UID        PID  PPID  C STIME TTY          TIME CMD</div><div class="line">root         1     0  0 Feb28 ?        00:00:03 /usr/lib/systemd/systemd --switched-root --system --deserialize 21</div><div class="line">root         2     0  0 Feb28 ?        00:00:00 [kthreadd]</div><div class="line">root         3     2  0 Feb28 ?        00:00:08 [ksoftirqd/0]</div><div class="line">root         5     2  0 Feb28 ?        00:00:00 [kworker/0:0H]</div><div class="line">root         6     2  0 Feb28 ?        00:00:00 [kworker/u2:0]</div><div class="line">root         7     2  0 Feb28 ?        00:00:00 [migration/0]</div><div class="line">root         8     2  0 Feb28 ?        00:00:00 [rcu_bh]</div><div class="line">root         9     2  0 Feb28 ?        00:00:55 [rcu_sched]</div><div class="line">root        10     2  0 Feb28 ?        00:00:02 [watchdog/0]</div><div class="line">...</div></pre></td></tr></table></figure>
+<h3 id="4-ps-与grep-组合使用，查找特定进程"><a href="#4-ps-与grep-组合使用，查找特定进程" class="headerlink" title="4.ps 与grep 组合使用，查找特定进程"></a>4.ps 与grep 组合使用，查找特定进程</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps -ef | grep sshd</div><div class="line">root      2088     1  0 Feb28 ?        00:00:00 /usr/sbin/sshd -D</div><div class="line">root     29855  2088  0 21:38 ?        00:00:00 sshd: root@pts/0</div><div class="line">root     30254 29857  0 23:02 pts/0    00:00:00 grep --color=auto sshd</div></pre></td></tr></table></figure>
+<h3 id="5-将与这次登入的-PID-与相关信息列示出来"><a href="#5-将与这次登入的-PID-与相关信息列示出来" class="headerlink" title="5.将与这次登入的 PID 与相关信息列示出来"></a>5.将与这次登入的 PID 与相关信息列示出来</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps -l</div><div class="line">F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD</div><div class="line">4 S     0 29857 29855  0  80   0 - 28845 wait   pts/0    00:00:00 bash</div><div class="line">0 S     0 30023     1  0  80   0 - 341798 futex_ pts/0   00:00:07 java</div><div class="line">0 S     0 30104     1  0  80   0 - 270795 futex_ pts/0   00:00:12 java</div><div class="line">0 S     0 30105     1  0  80   0 - 236115 futex_ pts/0   00:00:05 java</div><div class="line">0 R     0 30255 29857  0  80   0 - 37232 -      pts/0    00:00:00 ps</div></pre></td></tr></table></figure>
+<h3 id="6-列出目前所有的正在内存中的程序"><a href="#6-列出目前所有的正在内存中的程序" class="headerlink" title="6.列出目前所有的正在内存中的程序"></a>6.列出目前所有的正在内存中的程序</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root@harlon ~]# ps aux</div><div class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</div><div class="line">root         1  0.0  0.1  43208  3544 ?        Ss   Feb28   0:03 /usr/lib/systemd/systemd --switched-root --system --deserialize 21</div><div class="line">root         2  0.0  0.0      0     0 ?        S    Feb28   0:00 [kthreadd]</div><div class="line">root         3  0.0  0.0      0     0 ?        S    Feb28   0:08 [ksoftirqd/0]</div><div class="line">root         5  0.0  0.0      0     0 ?        S&lt;   Feb28   0:00 [kworker/0:0H]</div><div class="line">root         6  0.0  0.0      0     0 ?        S    Feb28   0:00 [kworker/u2:0]</div><div class="line">root         7  0.0  0.0      0     0 ?        S    Feb28   0:00 [migration/0]</div><div class="line">root         8  0.0  0.0      0     0 ?        S    Feb28   0:00 [rcu_bh]</div><div class="line">root         9  0.0  0.0      0     0 ?        R    Feb28   0:55 [rcu_sched]</div><div class="line">root        10  0.0  0.0      0     0 ?        S    Feb28   0:02 [watchdog/0]</div><div class="line">root        12  0.0  0.0      0     0 ?        S    Feb28   0:00 [kdevtmpfs]</div><div class="line">root        13  0.0  0.0      0     0 ?        S&lt;   Feb28   0:00 [netns]</div><div class="line">root        14  0.0  0.0      0     0 ?        S    Feb28   0:00 [khungtaskd]</div><div class="line">root        15  0.0  0.0      0     0 ?        S&lt;   Feb28   0:00 [writeback]</div><div class="line">...</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -531,10 +623,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Table Des Matières
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Ensemble
           </li>
         </ul>
       
@@ -554,8 +646,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">articles</span>
                 </a>
               </div>
             
@@ -611,7 +703,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#curl"><span class="nav-number">1.</span> <span class="nav-text">curl</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION"><span class="nav-number">1.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number">1.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查看网页源码"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.查看网页源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动跳转"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.自动跳转</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tar"><span class="nav-number">2.</span> <span class="nav-text">tar</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-1"><span class="nav-number">2.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-1"><span class="nav-number">2.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gz"><span class="nav-number">2.2.3.</span> <span class="nav-text">.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz-amp-tgz"><span class="nav-number">2.2.4.</span> <span class="nav-text">.tar.gz & .tgz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz2"><span class="nav-number">2.2.5.</span> <span class="nav-text">.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-bz2"><span class="nav-number">2.2.6.</span> <span class="nav-text">.tar.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz"><span class="nav-number">2.2.7.</span> <span class="nav-text">.bz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz"><span class="nav-number">2.2.8.</span> <span class="nav-text">.tar.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip"><span class="nav-number">2.2.9.</span> <span class="nav-text">.zip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#grep"><span class="nav-number">3.</span> <span class="nav-text">grep</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-2"><span class="nav-number">3.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-2"><span class="nav-number">3.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则表达式"><span class="nav-number">3.2.2.</span> <span class="nav-text">正则表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查找指定进程"><span class="nav-number">3.2.3.</span> <span class="nav-text">1.查找指定进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查找指定进程个数"><span class="nav-number">3.2.4.</span> <span class="nav-text">2.查找指定进程个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-从文件中读取关键词进行搜索"><span class="nav-number">3.2.5.</span> <span class="nav-text">3.从文件中读取关键词进行搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-从文件中查找关键词"><span class="nav-number">3.2.6.</span> <span class="nav-text">4.从文件中查找关键词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-grep不显示本身进程"><span class="nav-number">3.2.7.</span> <span class="nav-text">5.grep不显示本身进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-找出已u开头的行内容"><span class="nav-number">3.2.8.</span> <span class="nav-text">6.找出已u开头的行内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-输出非u开头的行内容"><span class="nav-number">3.2.9.</span> <span class="nav-text">7.输出非u开头的行内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-匹配IP地址"><span class="nav-number">3.2.10.</span> <span class="nav-text">8.匹配IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-包含un或者nu"><span class="nav-number">3.2.11.</span> <span class="nav-text">9.包含un或者nu</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ps"><span class="nav-number">4.</span> <span class="nav-text">ps</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#curl"><span class="nav-number">1.</span> <span class="nav-text">curl</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION"><span class="nav-number">1.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number">1.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查看网页源码"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.查看网页源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动跳转"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.自动跳转</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tar"><span class="nav-number">2.</span> <span class="nav-text">tar</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-1"><span class="nav-number">2.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-1"><span class="nav-number">2.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gz"><span class="nav-number">2.2.3.</span> <span class="nav-text">.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz-amp-tgz"><span class="nav-number">2.2.4.</span> <span class="nav-text">.tar.gz & .tgz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz2"><span class="nav-number">2.2.5.</span> <span class="nav-text">.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-bz2"><span class="nav-number">2.2.6.</span> <span class="nav-text">.tar.bz2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bz"><span class="nav-number">2.2.7.</span> <span class="nav-text">.bz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-gz"><span class="nav-number">2.2.8.</span> <span class="nav-text">.tar.gz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip"><span class="nav-number">2.2.9.</span> <span class="nav-text">.zip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#grep"><span class="nav-number">3.</span> <span class="nav-text">grep</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-2"><span class="nav-number">3.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-2"><span class="nav-number">3.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则表达式"><span class="nav-number">3.2.2.</span> <span class="nav-text">正则表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查找指定进程"><span class="nav-number">3.2.3.</span> <span class="nav-text">1.查找指定进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查找指定进程个数"><span class="nav-number">3.2.4.</span> <span class="nav-text">2.查找指定进程个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-从文件中读取关键词进行搜索"><span class="nav-number">3.2.5.</span> <span class="nav-text">3.从文件中读取关键词进行搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-从文件中查找关键词"><span class="nav-number">3.2.6.</span> <span class="nav-text">4.从文件中查找关键词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-grep不显示本身进程"><span class="nav-number">3.2.7.</span> <span class="nav-text">5.grep不显示本身进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-找出已u开头的行内容"><span class="nav-number">3.2.8.</span> <span class="nav-text">6.找出已u开头的行内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-输出非u开头的行内容"><span class="nav-number">3.2.9.</span> <span class="nav-text">7.输出非u开头的行内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-匹配IP地址"><span class="nav-number">3.2.10.</span> <span class="nav-text">8.匹配IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-包含un或者nu"><span class="nav-number">3.2.11.</span> <span class="nav-text">9.包含un或者nu</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ps"><span class="nav-number">4.</span> <span class="nav-text">ps</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DESCRIPTION-3"><span class="nav-number">4.1.</span> <span class="nav-text">DESCRIPTION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage-3"><span class="nav-number">4.2.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数-2"><span class="nav-number">4.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出格式"><span class="nav-number">4.2.2.</span> <span class="nav-text">输出格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-列出所有进程信息"><span class="nav-number">4.2.3.</span> <span class="nav-text">1.列出所有进程信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-显示指定用户信息"><span class="nav-number">4.2.4.</span> <span class="nav-text">2.显示指定用户信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-显示所有进程，连同命令行"><span class="nav-number">4.2.5.</span> <span class="nav-text">3.显示所有进程，连同命令行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-ps-与grep-组合使用，查找特定进程"><span class="nav-number">4.2.6.</span> <span class="nav-text">4.ps 与grep 组合使用，查找特定进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-将与这次登入的-PID-与相关信息列示出来"><span class="nav-number">4.2.7.</span> <span class="nav-text">5.将与这次登入的 PID 与相关信息列示出来</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-列出目前所有的正在内存中的程序"><span class="nav-number">4.2.8.</span> <span class="nav-text">6.列出目前所有的正在内存中的程序</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -649,7 +741,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iSCSI高可用性研究">
+<meta property="og:url" content="http://harlon.org/2018/03/12/iscsi-hig-available/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/iscsi.png">
+<meta property="og:updated_time" content="2018-03-12T08:33:38.375Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iSCSI高可用性研究">
+<meta name="twitter:description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
+<meta name="twitter:image" content="http://harlon.org/img/iscsi.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/03/12/iscsi-hig-available/"/>
+
+
+
+
+
+  <title>iSCSI高可用性研究 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Accueil
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/12/iscsi-hig-available/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iSCSI高可用性研究</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-12T16:24:23+08:00">
+                2018-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index">
+                    <span itemprop="name">Technology</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br><img src="/img/iscsi.png" alt="iSCSI"></p>
+<hr>
+<h1 id="多路径"><a href="#多路径" class="headerlink" title="多路径"></a>多路径</h1><p>MPIO和MC/S都是通过利用Initiator和Target端建立多条实体存取通道，通过轮询的存取方式，避免单一实体通道中断时，连带导致存取中断；也可以起到传输的均衡，避免传输负荷集中在单一实体通道上，但两种</p>
+<h2 id="多重路径-MPIO"><a href="#多重路径-MPIO" class="headerlink" title="多重路径 MPIO"></a>多重路径 MPIO</h2><p>MPIO允许一个iSCSI Initiator通过多个Session连如同一个iSCSI Target设备，以便利用多网卡或iSCSI HBA启用负载平衡与故障失效切换机制。</p>
+<h2 id="多重链接-MC-S"><a href="#多重链接-MC-S" class="headerlink" title="多重链接 MC/S"></a>多重链接 MC/S</h2><p>MC/S可允许在同一个Session中，在iSCSI Initiator与iSCSI Target间建立多个TCP/IP连接，同样也能让用户利用多张网卡或iSCSI HBA启用负载平衡与故障失效切换机制。<br>MPIO是在更高的网络堆栈层上运行（即在iSCSI层上的SCSI指令层），且多条存取路径间的负载平衡机制，是针对1个指定的独立逻辑驱动器(LUN)运作；而MC/S则是iSCSI中所定义的方法，是在iSCSI层上运作，具有更好的传输验证能力(Error Recovery Levels)，另外MC/S的负载平衡是“同时”针对所有的逻辑驱动器运作，这点也与MPIO不同。</p>
+<h2 id="实现多路径存取的3种方式"><a href="#实现多路径存取的3种方式" class="headerlink" title="实现多路径存取的3种方式"></a>实现多路径存取的3种方式</h2><p>iSCSI的底层是IP与以太网，理论上可直接从网卡实施，利用Port Trunking/Teaming/Link Aggregation的方式，将主机上的多张网卡捆绑在1个IP下，再连接到iSCSI存储设备上，搭配iSCSI存储设备传输埠上的对应设定，从而实现实体多路径连接。但问题在于，不是所有网卡都能支持这种方式。<br>另外也有一些厂家提供SAN管理的软件，可以建立多路径存取环境，但是大部分只支持特定厂家型号的iSCSI设备。<br>我们也可以跳过网卡这一层，也不需要使用路径管理软件，直接利用iSCSI Initiator软件配合iSCSI设备建立多路径存储，但不管是MPIO还是MC/S，都必须要满足一定条件：</p>
+<ul>
+<li>iSCSI Initiator端需有多张网卡或网络端口连接到Target端</li>
+<li>iSCSI Initiator软件需支持MPIO或MC/S</li>
+<li>iSCSI Target设备需支持MPIO或MC/S</li>
+</ul>
+<p>其中第一项是基本条件，主机若是没有2个以上的网络端口可用，自然也谈不上多路径存取，不过目前多数服务器都内建了至少2组网络端口，这点通常不会成为太大问题。<br>第2项条件则视不同环境而定，目前各主要操作系统厂商提供的iSCSI Initiator软件中，目前以Windows的支持较为齐全，如微软的iSCSI Initiator 2.06版以后就能支持MPIO与MC/S;Linux环境同样也能支持MPIO。<br>而就第3点来说，目前MPIO远比MC/S普及，大多数iSCSI存储设备都能支持MPIO。但能支持MC/S的产品就少了许多，在软件式的iSCSI Target方面，目前能支持的也不多，如微软的iSCSI Target、Sun的Solaris iSCSI Target都不支持。</p>
+<hr>
+<h1 id="虚拟IP实现高可用"><a href="#虚拟IP实现高可用" class="headerlink" title="虚拟IP实现高可用"></a>虚拟IP实现高可用</h1><p>多路径实现高可用特定是指网络环境异常下，iSCSI存取可通过多条通道。但是在分布式环境中，系统的故障不仅仅出现在网络中，很有可能会是系统故障或者磁盘故障，引起系统宕机，无法对外提供服务，即Taget端完全失去功能，这个场景下多路径无法实现高可用性，这时候就需要虚拟IP。</p>
+<h2 id="虚拟IP"><a href="#虚拟IP" class="headerlink" title="虚拟IP"></a>虚拟IP</h2><p>不论用何种方式进行上网，都必须要有一个唯一的IP地址，事实上IP是硬件地址的一种抽象，简单的来说，MAC就是物理地址，IP就是逻辑地址。<br>虚拟IP就是非分配给真实主机的IP，也就是说对外提供服务器的主机除了有一个真实IP外还有一个虚IP，使用这两个IP的任何一个都可以连接到主机。</p>
+<h2 id="虚拟IP原理"><a href="#虚拟IP原理" class="headerlink" title="虚拟IP原理"></a>虚拟IP原理</h2><p>ARP是地址解析协议，它的作用很简单，将一个IP地址转换为MAC地址，然后给传输层使用。每台主机中都有一个ARP高速缓存，存储同一个网络内的IP地址与MAC地址的对应关 系，以太网中的主机发送数据时会先从这个缓存中查询目标IP对应的MAC地址，会向这个MAC地址发送数据。操作系统会自动维护这个缓存。在Linux下可以使用arp命令操作ARP高速缓存。当备用主机得知主机无法对外提供服务时，他会将自己的ARP缓存发送出去，这样外界访问虚拟IP的时候，备用主机会变成主服务器，完成了主从机器的切换。</p>
+<h2 id="IP漂移"><a href="#IP漂移" class="headerlink" title="IP漂移"></a>IP漂移</h2><p>上述VIP切换过程就称为IP漂移</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试机有三台机器，分别是：</p>
+<ul>
+<li>server1: 192.168.74.128</li>
+<li>server2: 192.168.74.129</li>
+<li>server3: 192.168.74.130</li>
+</ul>
+<p>在server2和server3设置虚拟IP：192.168.74.140，具体步骤如下：<br>执行ifconfig命令，查看网卡<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ifconfig</div><div class="line">ens33: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</div><div class="line">        inet 192.168.74.129  netmask 255.255.255.0  broadcast 192.168.74.255</div><div class="line">        inet6 fe80::5cc6:76f6:7c44:c4e8  prefixlen 64  scopeid 0x20&lt;link&gt;</div><div class="line">        ether 00:0c:29:e6:98:77  txqueuelen 1000  (Ethernet)</div><div class="line">        RX packets 825  bytes 82937 (80.9 KiB)</div><div class="line">        RX errors 0  dropped 0  overruns 0  frame 0</div><div class="line">        TX packets 578  bytes 72714 (71.0 KiB)</div><div class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</div></pre></td></tr></table></figure></p>
+<p>添加虚拟IP：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ifconfig ens33:1 192.168.74.140 netmask 255.255.255.0 up</div><div class="line">[root@localhost ~]# ifconfig</div><div class="line">ens33: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</div><div class="line">        inet 192.168.74.129  netmask 255.255.255.0  broadcast 192.168.74.255</div><div class="line">        inet6 fe80::5cc6:76f6:7c44:c4e8  prefixlen 64  scopeid 0x20&lt;link&gt;</div><div class="line">        ether 00:0c:29:e6:98:77  txqueuelen 1000  (Ethernet)</div><div class="line">        RX packets 825  bytes 82937 (80.9 KiB)</div><div class="line">        RX errors 0  dropped 0  overruns 0  frame 0</div><div class="line">        TX packets 578  bytes 72714 (71.0 KiB)</div><div class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</div><div class="line"></div><div class="line">ens33:1: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</div><div class="line">        inet 192.168.74.140  netmask 255.255.255.0  broadcast 192.168.74.255</div><div class="line">        ether 00:0c:29:e6:98:77  txqueuelen 1000  (Ethernet)</div></pre></td></tr></table></figure></p>
+<p>server1上实现一个脚本，不停的ping这个虚拟ip，整个测试的过程是，首先server2设置虚拟ip，启动server1不停的ping这个虚拟ip，然后将server2的虚拟ip关闭，从server3上启动虚拟ip，并向路由器发送arp包，查看是否可以ping通。<br>server1的脚本如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> shlex</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line">cmd = <span class="string">"ping -c 1 192.168.74.140"</span></div><div class="line">args = shlex.split(cmd)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ping_server</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">		time.sleep(<span class="number">1</span>)</div><div class="line">		subprocess.check_call(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</div><div class="line">		<span class="keyword">print</span> <span class="string">"The server is up!"</span></div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">	ping_server();</div><div class="line"><span class="keyword">except</span> subprocess.CalledProcessError:</div><div class="line">	<span class="keyword">print</span> <span class="string">"The server is down!"</span></div><div class="line">	<span class="keyword">print</span> <span class="string">"Ping the server again after 10 seconds!"</span></div><div class="line">	time.sleep(<span class="number">10</span>)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		ping_server();</div><div class="line">	<span class="keyword">except</span> subprocess.CalledProcessError:</div><div class="line">		<span class="keyword">print</span> <span class="string">"The server is down!"</span></div></pre></td></tr></table></figure></p>
+<p>server2关闭虚拟ip：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]#  ifconfig ens33:1 192.168.74.140 netmask 255.255.255.0 down</div></pre></td></tr></table></figure></p>
+<p>server3开启虚拟ip，并广播arp包：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]#  ifconfig ens33:1 192.168.74.140 netmask 255.255.255.0 up</div><div class="line">[root@localhost vip]# arping -I ens33 -s 192.168.74.140 -b -c 1 192.168.74.0</div></pre></td></tr></table></figure></p>
+<p>测试结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[root@localhost vip]# python python_ping.py </div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is down!</div><div class="line">Ping the server again after 10 seconds!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div></pre></td></tr></table></figure></p>
+<p>结论：从结果可以看到，server2出现故障，server3可以接管server2，同时server3自身的实际ip是不会受到影响的，这就是ip漂移。</p>
+<blockquote>
+<p>参考资料：<br><a href="http://blog.51cto.com/candon123/294578" target="_blank" rel="external">深入了解iSCSI的2种多路径访问机制</a><br><a href="http://www.cnblogs.com/duanxz/p/5217415.html" target="_blank" rel="external">IP地址漂移的实现与原理</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/31/README/" rel="next" title="18年继续奋斗">
+                <i class="fa fa-chevron-left"></i> 18年继续奋斗
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">articles</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iSCSI"><span class="nav-number">1.</span> <span class="nav-text">iSCSI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多路径"><span class="nav-number">2.</span> <span class="nav-text">多路径</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多重路径-MPIO"><span class="nav-number">2.1.</span> <span class="nav-text">多重路径 MPIO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多重链接-MC-S"><span class="nav-number">2.2.</span> <span class="nav-text">多重链接 MC/S</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现多路径存取的3种方式"><span class="nav-number">2.3.</span> <span class="nav-text">实现多路径存取的3种方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟IP实现高可用"><span class="nav-number">3.</span> <span class="nav-text">虚拟IP实现高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟IP"><span class="nav-number">3.1.</span> <span class="nav-text">虚拟IP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟IP原理"><span class="nav-number">3.2.</span> <span class="nav-text">虚拟IP原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP漂移"><span class="nav-number">3.3.</span> <span class="nav-text">IP漂移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.4.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
