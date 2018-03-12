@@ -87,7 +87,7 @@
 <meta property="og:description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/iscsi.png">
-<meta property="og:updated_time" content="2018-03-12T08:33:38.375Z">
+<meta property="og:updated_time" content="2018-03-12T08:36:14.605Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iSCSI高可用性研究">
 <meta name="twitter:description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
@@ -187,7 +187,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Startseite
           </a>
         </li>
       
@@ -237,7 +237,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -301,7 +301,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-12T16:24:23+08:00">
                 2018-03-12
@@ -322,7 +322,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -363,7 +363,7 @@
       
 
       
-        <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br><img src="/img/iscsi.png" alt="iSCSI"></p>
+        <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br><a id="more"></a><br><img src="/img/iscsi.png" alt="iSCSI"></p>
 <hr>
 <h1 id="多路径"><a href="#多路径" class="headerlink" title="多路径"></a>多路径</h1><p>MPIO和MC/S都是通过利用Initiator和Target端建立多条实体存取通道，通过轮询的存取方式，避免单一实体通道中断时，连带导致存取中断；也可以起到传输的均衡，避免传输负荷集中在单一实体通道上，但两种</p>
 <h2 id="多重路径-MPIO"><a href="#多重路径-MPIO" class="headerlink" title="多重路径 MPIO"></a>多重路径 MPIO</h2><p>MPIO允许一个iSCSI Initiator通过多个Session连如同一个iSCSI Target设备，以便利用多网卡或iSCSI HBA启用负载平衡与故障失效切换机制。</p>
@@ -482,10 +482,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table Des Matières
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Ensemble
+            Übersicht
           </li>
         </ul>
       
@@ -506,7 +506,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">9</span>
-                  <span class="site-state-item-name">articles</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -517,7 +517,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -528,7 +528,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -592,7 +592,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -600,7 +600,7 @@
 
 
 
-  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 

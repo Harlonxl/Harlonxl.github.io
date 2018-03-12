@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Startseite
           </a>
         </li>
       
@@ -232,7 +232,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -298,7 +298,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-12T16:24:23+08:00">
                 2018-03-12
@@ -319,7 +319,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -361,42 +361,14 @@
 
       
         
-          
-            <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br><img src="/img/iscsi.png" alt="iSCSI"></p>
-<hr>
-<h1 id="多路径"><a href="#多路径" class="headerlink" title="多路径"></a>多路径</h1><p>MPIO和MC/S都是通过利用Initiator和Target端建立多条实体存取通道，通过轮询的存取方式，避免单一实体通道中断时，连带导致存取中断；也可以起到传输的均衡，避免传输负荷集中在单一实体通道上，但两种</p>
-<h2 id="多重路径-MPIO"><a href="#多重路径-MPIO" class="headerlink" title="多重路径 MPIO"></a>多重路径 MPIO</h2><p>MPIO允许一个iSCSI Initiator通过多个Session连如同一个iSCSI Target设备，以便利用多网卡或iSCSI HBA启用负载平衡与故障失效切换机制。</p>
-<h2 id="多重链接-MC-S"><a href="#多重链接-MC-S" class="headerlink" title="多重链接 MC/S"></a>多重链接 MC/S</h2><p>MC/S可允许在同一个Session中，在iSCSI Initiator与iSCSI Target间建立多个TCP/IP连接，同样也能让用户利用多张网卡或iSCSI HBA启用负载平衡与故障失效切换机制。<br>MPIO是在更高的网络堆栈层上运行（即在iSCSI层上的SCSI指令层），且多条存取路径间的负载平衡机制，是针对1个指定的独立逻辑驱动器(LUN)运作；而MC/S则是iSCSI中所定义的方法，是在iSCSI层上运作，具有更好的传输验证能力(Error Recovery Levels)，另外MC/S的负载平衡是“同时”针对所有的逻辑驱动器运作，这点也与MPIO不同。</p>
-<h2 id="实现多路径存取的3种方式"><a href="#实现多路径存取的3种方式" class="headerlink" title="实现多路径存取的3种方式"></a>实现多路径存取的3种方式</h2><p>iSCSI的底层是IP与以太网，理论上可直接从网卡实施，利用Port Trunking/Teaming/Link Aggregation的方式，将主机上的多张网卡捆绑在1个IP下，再连接到iSCSI存储设备上，搭配iSCSI存储设备传输埠上的对应设定，从而实现实体多路径连接。但问题在于，不是所有网卡都能支持这种方式。<br>另外也有一些厂家提供SAN管理的软件，可以建立多路径存取环境，但是大部分只支持特定厂家型号的iSCSI设备。<br>我们也可以跳过网卡这一层，也不需要使用路径管理软件，直接利用iSCSI Initiator软件配合iSCSI设备建立多路径存储，但不管是MPIO还是MC/S，都必须要满足一定条件：</p>
-<ul>
-<li>iSCSI Initiator端需有多张网卡或网络端口连接到Target端</li>
-<li>iSCSI Initiator软件需支持MPIO或MC/S</li>
-<li>iSCSI Target设备需支持MPIO或MC/S</li>
-</ul>
-<p>其中第一项是基本条件，主机若是没有2个以上的网络端口可用，自然也谈不上多路径存取，不过目前多数服务器都内建了至少2组网络端口，这点通常不会成为太大问题。<br>第2项条件则视不同环境而定，目前各主要操作系统厂商提供的iSCSI Initiator软件中，目前以Windows的支持较为齐全，如微软的iSCSI Initiator 2.06版以后就能支持MPIO与MC/S;Linux环境同样也能支持MPIO。<br>而就第3点来说，目前MPIO远比MC/S普及，大多数iSCSI存储设备都能支持MPIO。但能支持MC/S的产品就少了许多，在软件式的iSCSI Target方面，目前能支持的也不多，如微软的iSCSI Target、Sun的Solaris iSCSI Target都不支持。</p>
-<hr>
-<h1 id="虚拟IP实现高可用"><a href="#虚拟IP实现高可用" class="headerlink" title="虚拟IP实现高可用"></a>虚拟IP实现高可用</h1><p>多路径实现高可用特定是指网络环境异常下，iSCSI存取可通过多条通道。但是在分布式环境中，系统的故障不仅仅出现在网络中，很有可能会是系统故障或者磁盘故障，引起系统宕机，无法对外提供服务，即Taget端完全失去功能，这个场景下多路径无法实现高可用性，这时候就需要虚拟IP。</p>
-<h2 id="虚拟IP"><a href="#虚拟IP" class="headerlink" title="虚拟IP"></a>虚拟IP</h2><p>不论用何种方式进行上网，都必须要有一个唯一的IP地址，事实上IP是硬件地址的一种抽象，简单的来说，MAC就是物理地址，IP就是逻辑地址。<br>虚拟IP就是非分配给真实主机的IP，也就是说对外提供服务器的主机除了有一个真实IP外还有一个虚IP，使用这两个IP的任何一个都可以连接到主机。</p>
-<h2 id="虚拟IP原理"><a href="#虚拟IP原理" class="headerlink" title="虚拟IP原理"></a>虚拟IP原理</h2><p>ARP是地址解析协议，它的作用很简单，将一个IP地址转换为MAC地址，然后给传输层使用。每台主机中都有一个ARP高速缓存，存储同一个网络内的IP地址与MAC地址的对应关 系，以太网中的主机发送数据时会先从这个缓存中查询目标IP对应的MAC地址，会向这个MAC地址发送数据。操作系统会自动维护这个缓存。在Linux下可以使用arp命令操作ARP高速缓存。当备用主机得知主机无法对外提供服务时，他会将自己的ARP缓存发送出去，这样外界访问虚拟IP的时候，备用主机会变成主服务器，完成了主从机器的切换。</p>
-<h2 id="IP漂移"><a href="#IP漂移" class="headerlink" title="IP漂移"></a>IP漂移</h2><p>上述VIP切换过程就称为IP漂移</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试机有三台机器，分别是：</p>
-<ul>
-<li>server1: 192.168.74.128</li>
-<li>server2: 192.168.74.129</li>
-<li>server3: 192.168.74.130</li>
-</ul>
-<p>在server2和server3设置虚拟IP：192.168.74.140，具体步骤如下：<br>执行ifconfig命令，查看网卡<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ifconfig</div><div class="line">ens33: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</div><div class="line">        inet 192.168.74.129  netmask 255.255.255.0  broadcast 192.168.74.255</div><div class="line">        inet6 fe80::5cc6:76f6:7c44:c4e8  prefixlen 64  scopeid 0x20&lt;link&gt;</div><div class="line">        ether 00:0c:29:e6:98:77  txqueuelen 1000  (Ethernet)</div><div class="line">        RX packets 825  bytes 82937 (80.9 KiB)</div><div class="line">        RX errors 0  dropped 0  overruns 0  frame 0</div><div class="line">        TX packets 578  bytes 72714 (71.0 KiB)</div><div class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</div></pre></td></tr></table></figure></p>
-<p>添加虚拟IP：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ifconfig ens33:1 192.168.74.140 netmask 255.255.255.0 up</div><div class="line">[root@localhost ~]# ifconfig</div><div class="line">ens33: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</div><div class="line">        inet 192.168.74.129  netmask 255.255.255.0  broadcast 192.168.74.255</div><div class="line">        inet6 fe80::5cc6:76f6:7c44:c4e8  prefixlen 64  scopeid 0x20&lt;link&gt;</div><div class="line">        ether 00:0c:29:e6:98:77  txqueuelen 1000  (Ethernet)</div><div class="line">        RX packets 825  bytes 82937 (80.9 KiB)</div><div class="line">        RX errors 0  dropped 0  overruns 0  frame 0</div><div class="line">        TX packets 578  bytes 72714 (71.0 KiB)</div><div class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</div><div class="line"></div><div class="line">ens33:1: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</div><div class="line">        inet 192.168.74.140  netmask 255.255.255.0  broadcast 192.168.74.255</div><div class="line">        ether 00:0c:29:e6:98:77  txqueuelen 1000  (Ethernet)</div></pre></td></tr></table></figure></p>
-<p>server1上实现一个脚本，不停的ping这个虚拟ip，整个测试的过程是，首先server2设置虚拟ip，启动server1不停的ping这个虚拟ip，然后将server2的虚拟ip关闭，从server3上启动虚拟ip，并向路由器发送arp包，查看是否可以ping通。<br>server1的脚本如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> shlex</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line">cmd = <span class="string">"ping -c 1 192.168.74.140"</span></div><div class="line">args = shlex.split(cmd)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ping_server</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">		time.sleep(<span class="number">1</span>)</div><div class="line">		subprocess.check_call(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</div><div class="line">		<span class="keyword">print</span> <span class="string">"The server is up!"</span></div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">	ping_server();</div><div class="line"><span class="keyword">except</span> subprocess.CalledProcessError:</div><div class="line">	<span class="keyword">print</span> <span class="string">"The server is down!"</span></div><div class="line">	<span class="keyword">print</span> <span class="string">"Ping the server again after 10 seconds!"</span></div><div class="line">	time.sleep(<span class="number">10</span>)</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		ping_server();</div><div class="line">	<span class="keyword">except</span> subprocess.CalledProcessError:</div><div class="line">		<span class="keyword">print</span> <span class="string">"The server is down!"</span></div></pre></td></tr></table></figure></p>
-<p>server2关闭虚拟ip：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]#  ifconfig ens33:1 192.168.74.140 netmask 255.255.255.0 down</div></pre></td></tr></table></figure></p>
-<p>server3开启虚拟ip，并广播arp包：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]#  ifconfig ens33:1 192.168.74.140 netmask 255.255.255.0 up</div><div class="line">[root@localhost vip]# arping -I ens33 -s 192.168.74.140 -b -c 1 192.168.74.0</div></pre></td></tr></table></figure></p>
-<p>测试结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[root@localhost vip]# python python_ping.py </div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is down!</div><div class="line">Ping the server again after 10 seconds!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div><div class="line">The server is up!</div></pre></td></tr></table></figure></p>
-<p>结论：从结果可以看到，server2出现故障，server3可以接管server2，同时server3自身的实际ip是不会受到影响的，这就是ip漂移。</p>
-<blockquote>
-<p>参考资料：<br><a href="http://blog.51cto.com/candon123/294578" target="_blank" rel="external">深入了解iSCSI的2种多路径访问机制</a><br><a href="http://www.cnblogs.com/duanxz/p/5217415.html" target="_blank" rel="external">IP地址漂移的实现与原理</a></p>
-</blockquote>
-
-          
+          <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/12/iscsi-hig-available/#more" rel="contents">
+              Weiterlesen &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -472,7 +444,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-31T18:39:49+08:00">
                 2018-01-31
@@ -591,7 +563,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-10T16:24:23+08:00">
                 2018-01-10
@@ -612,7 +584,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -658,7 +630,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/01/10/sheepdog-dog/#more" rel="contents">
-              Lire la suite &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -737,7 +709,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-20T10:19:18+08:00">
                 2017-11-20
@@ -758,7 +730,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -804,7 +776,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/11/20/python/#more" rel="contents">
-              Lire la suite &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -883,7 +855,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-13T16:42:26+08:00">
                 2017-11-13
@@ -904,7 +876,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -950,7 +922,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/11/13/zookeeper/#more" rel="contents">
-              Lire la suite &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1029,7 +1001,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-02T16:30:23+08:00">
                 2017-11-02
@@ -1050,7 +1022,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1096,7 +1068,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/11/02/how to design Twitter/#more" rel="contents">
-              Lire la suite &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1175,7 +1147,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-02T15:30:23+08:00">
                 2017-11-02
@@ -1196,7 +1168,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1242,7 +1214,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/11/02/system design/#more" rel="contents">
-              Lire la suite &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1321,7 +1293,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-01T16:30:23+08:00">
                 2017-11-01
@@ -1342,7 +1314,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1388,7 +1360,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/11/01/Linux Command/#more" rel="contents">
-              Lire la suite &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1467,7 +1439,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-01T11:01:23+08:00">
                 2017-11-01
@@ -1488,7 +1460,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1534,7 +1506,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/11/01/docker/#more" rel="contents">
-              Lire la suite &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1618,7 +1590,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">9</span>
-                  <span class="site-state-item-name">articles</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -1629,7 +1601,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -1640,7 +1612,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -1688,7 +1660,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -1696,7 +1668,7 @@
 
 
 
-  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
