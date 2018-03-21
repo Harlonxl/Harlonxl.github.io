@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="有关C++ STL模板知识点的整理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ STL模板">
+<meta property="og:url" content="http://harlon.org/2018/03/21/cplusplusstl/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="有关C++ STL模板知识点的整理。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-21T08:52:58.223Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++ STL模板">
+<meta name="twitter:description" content="有关C++ STL模板知识点的整理。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/03/21/cplusplusstl/"/>
+
+
+
+
+
+  <title>C++ STL模板 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/21/cplusplusstl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++ STL模板</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-21T10:10:23+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index">
+                    <span itemprop="name">Technology</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>有关C++ STL模板知识点的整理。<br><a id="more"></a></p>
+<h1 id="STL容器"><a href="#STL容器" class="headerlink" title="STL容器"></a>STL容器</h1><ul>
+<li>顺序容器<ul>
+<li>vector：尾端插入元素有较高性能，动态数组实现；</li>
+<li>deque：首尾插入元素都有较高性能，动态数据实现；</li>
+<li>list：可以常数时间在任何地方插入元素，链表实现；</li>
+</ul>
+</li>
+<li>关联容器<ul>
+<li>set：不同元素的集合，平衡二叉树实现，检索时间是O(long(N))</li>
+<li>multiset：同上，可以包含相同元数据；</li>
+<li>map：同set，但存放的是键值对</li>
+<li>mutimap：同上，键可以重复</li>
+</ul>
+</li>
+<li>容器适配器：stack，queue，priority_queue</li>
+</ul>
+<hr>
+<h1 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h1><h2 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h2><p>将一个元素置于一个动态数组中加以管理，可以随机存取元素。在数组尾部添加或删除元素非常快速，但是在中部或头部插入或删除元素比较耗时。</p>
+<h2 id="方法："><a href="#方法：" class="headerlink" title="方法："></a>方法：</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">push_back</td>
+<td style="text-align:left">在数组的最后添加一个数据, 示例： c.push_back(5);</td>
+</tr>
+<tr>
+<td style="text-align:center">pop_back</td>
+<td style="text-align:left">去掉数组的最后一个数据, 示例：c.pop_back();</td>
+</tr>
+<tr>
+<td style="text-align:center">at</td>
+<td style="text-align:left">得到编号位置的数据， 示例： int d = c.at(0);</td>
+</tr>
+<tr>
+<td style="text-align:center">begin</td>
+<td style="text-align:left">得到数组头的指针, 示例： vector<int>::iterator it = c.begin();</int></td>
+</tr>
+<tr>
+<td style="text-align:center">end</td>
+<td style="text-align:left">得到数组的最后一个单元+1的指针, 示例： vector<int>::iterator it = c.end();</int></td>
+</tr>
+<tr>
+<td style="text-align:center">front</td>
+<td style="text-align:left">得到数组头的引用, 示例： int first = c.front();</td>
+</tr>
+<tr>
+<td style="text-align:center">back</td>
+<td style="text-align:left">得到数组的最后一个单元的引用, 示例： int last = c.back();</td>
+</tr>
+<tr>
+<td style="text-align:center">max_size</td>
+<td style="text-align:left">得到vector最大可以是多大</td>
+</tr>
+<tr>
+<td style="text-align:center">capacity</td>
+<td style="text-align:left">当前vector分配的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">size</td>
+<td style="text-align:left">当前使用数据的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">resize</td>
+<td style="text-align:left">改变当前使用数据的大小，如果它比当前使用的大，则填充默认值</td>
+</tr>
+<tr>
+<td style="text-align:center">reserve</td>
+<td style="text-align:left">改变当前vecotr所分配空间的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">erase</td>
+<td style="text-align:left">删除指针指向的数据项</td>
+</tr>
+<tr>
+<td style="text-align:center">clear</td>
+<td style="text-align:left">清空当前的vector</td>
+</tr>
+<tr>
+<td style="text-align:center">rbegin</td>
+<td style="text-align:left">将vector反转后的开始指针返回(其实就是原来的end-1)</td>
+</tr>
+<tr>
+<td style="text-align:center">rend</td>
+<td style="text-align:left">将vector反转后的结束指针返回(其实就是原来的begin-1)</td>
+</tr>
+<tr>
+<td style="text-align:center">empty</td>
+<td style="text-align:left">判断vector是否为空</td>
+</tr>
+<tr>
+<td style="text-align:center">swap</td>
+<td style="text-align:left">与另一个vector交换数据</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用示例："><a href="#使用示例：" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">VectorTest</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Test</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// 初始化</span></div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v1;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v2(<span class="number">10</span>, <span class="number">6</span>);</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v3(v2.begin(), v2.end());</div><div class="line">        print(v1);</div><div class="line">        print(v2);</div><div class="line">        print(v3);</div><div class="line">        <span class="comment">// 插入数据</span></div><div class="line">        v1.push_back(<span class="number">1</span>);</div><div class="line">        v1.push_back(<span class="number">2</span>);</div><div class="line">        v1.insert(v1.begin(), <span class="number">3</span>);</div><div class="line">        v1.insert(v1.begin()+<span class="number">1</span>, v2.begin(), v2.end());</div><div class="line">        print(v1);</div><div class="line">        <span class="comment">// 赋值函数</span></div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"capacity:"</span> &lt;&lt; v2.capacity() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        v2.assign(<span class="number">8</span>, <span class="number">1</span>);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"capacity:"</span> &lt;&lt; v2.capacity() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        print(v2);</div><div class="line">        <span class="comment">// 引用函数</span></div><div class="line">        <span class="built_in">cout</span> &lt;&lt; v3.front() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; v3.back() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        v3.at(<span class="number">4</span>) = <span class="number">5</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; v3.at(<span class="number">4</span>) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="comment">// 移出和删除</span></div><div class="line">        v1.pop_back();</div><div class="line">        v1.erase(v1.begin()+<span class="number">1</span>);</div><div class="line">        print(v1);</div><div class="line">        <span class="comment">// 大小</span></div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"capacity: "</span> &lt;&lt; v1.capacity() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"size: "</span> &lt;&lt; v1.size() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"max_size: "</span> &lt;&lt; v1.max_size() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        v1.clear();</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"after clear"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"capacity: "</span> &lt;&lt; v1.capacity() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"size: "</span> &lt;&lt; v1.size() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"max_size: "</span> &lt;&lt; v1.max_size() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="comment">// 强制清除v1内存</span></div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;().swap(v1);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"capacity: "</span> &lt;&lt; v1.capacity() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"size: "</span> &lt;&lt; v1.size() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"max_size: "</span> &lt;&lt; v1.max_size() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vi)</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it = vi.begin(); it != vi.end(); ++it)</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; *it &lt;&lt; <span class="string">" "</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">6 6 6 6 6 6 6 6 6 6</div><div class="line">6 6 6 6 6 6 6 6 6 6</div><div class="line">3 6 6 6 6 6 6 6 6 6 6 1 2</div><div class="line">capacity:10</div><div class="line">capacity:10</div><div class="line">1 1 1 1 1 1 1 1</div><div class="line">6</div><div class="line">6</div><div class="line">5</div><div class="line">3 6 6 6 6 6 6 6 6 6 1</div><div class="line">capacity: 13</div><div class="line">size: 11</div><div class="line">max_size: 1073741823</div><div class="line">after clear</div><div class="line">capacity: 13</div><div class="line">size: 0</div><div class="line">max_size: 1073741823</div><div class="line">capacity: 0</div><div class="line">size: 0</div><div class="line">max_size: 1073741823</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h1><h1 id="特点：-1"><a href="#特点：-1" class="headerlink" title="特点："></a>特点：</h1><p>“double-ended queue” 双端队列，可以随机存取。数组尾部或头部添加或删除元素非常快速，但在中部插入或删除元素比较费时。</p>
+<ul>
+<li>随机访问方便，即支持 [ ] 操作符和vector.at() ，但性能没有vector 好；</li>
+<li>可以在内部进行插入和删除操作，但性能不及list ；</li>
+<li>可以在两端进行push 、pop ；</li>
+<li>相对于verctor 占用更多的内存。</li>
+</ul>
+<h1 id="方法：-1"><a href="#方法：-1" class="headerlink" title="方法："></a>方法：</h1><p>相同于vector，新增了push_front和pop_front方法</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">push_front</td>
+<td style="text-align:left">在头部加入一个元素</td>
+</tr>
+<tr>
+<td style="text-align:center">pop_front</td>
+<td style="text-align:left">删除头部元素</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用示例：-1"><a href="#使用示例：-1" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DequeTest</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Test</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// 初始化</span></div><div class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; d1;</div><div class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; d2(<span class="number">20</span>, <span class="number">1</span>);</div><div class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; d3(d2);</div><div class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; d4(d3.begin(), d3.end());</div><div class="line"></div><div class="line">        print(d1);</div><div class="line">        print(d2);</div><div class="line">        print(d3);</div><div class="line">        print(d4);</div><div class="line"></div><div class="line">        <span class="comment">// 插入</span></div><div class="line">        d1.push_back(<span class="number">5</span>);</div><div class="line">        d1.push_back(<span class="number">7</span>);</div><div class="line">        d1.push_front(<span class="number">6</span>);</div><div class="line">        print(d1);</div><div class="line"></div><div class="line">        <span class="comment">// 查找</span></div><div class="line">        <span class="keyword">const</span> <span class="keyword">int</span> findnum = <span class="number">6</span>;</div><div class="line">        <span class="keyword">auto</span> pos = find(d1.begin(), d1.end(), findnum);</div><div class="line">        <span class="keyword">if</span> (pos != d1.end())</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"find %d success\n"</span>, findnum);</div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="built_in">printf</span>(<span class="string">"find failed\n"</span>);</div><div class="line"></div><div class="line">        <span class="comment">// 删除</span></div><div class="line">        d1.pop_back();</div><div class="line">        d1.pop_front();</div><div class="line">        print(d1);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">const</span> <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; di)</span> <span class="keyword">const</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt;::const_iterator cit = di.cbegin(); cit != di.cend(); ++cit)</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; *cit &lt;&lt; <span class="string">" "</span>;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</div><div class="line">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</div><div class="line">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</div><div class="line">6 5 7</div><div class="line">find 6 success</div><div class="line">5</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="list"><a href="#list" class="headerlink" title="list"></a>list</h1><h2 id="特点：-2"><a href="#特点：-2" class="headerlink" title="特点："></a>特点：</h2><p>双向链表，不提供随机存取（按顺序存储），在任何位置插入或删除动作都非常迅速。只能顺序访问（从前向后或者从后向前）。与前面两种容器类有一个明显的区别就是：它不支持随机访问。要访问表中某个下标处的项需要从表头或表尾处（接近该下标的一端）开始循环。而且缺少下标预算符：operator[]。</p>
+<h2 id="方法：-2"><a href="#方法：-2" class="headerlink" title="方法："></a>方法：</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">merge</td>
+<td style="text-align:left">合并两个list</td>
+</tr>
+<tr>
+<td style="text-align:center">remove_if</td>
+<td style="text-align:left">按条件删除元素</td>
+</tr>
+<tr>
+<td style="text-align:center">sort</td>
+<td style="text-align:left">给list排序</td>
+</tr>
+<tr>
+<td style="text-align:center">splice</td>
+<td style="text-align:left">合并两个list,源list的内容部分或全部元素删除，拼插入到目的list</td>
+</tr>
+<tr>
+<td style="text-align:center">unique</td>
+<td style="text-align:left">删除list中重复的元素</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用示例：-2"><a href="#使用示例：-2" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">class ListTest &#123;</div><div class="line">public:</div><div class="line">    void Test() &#123;</div><div class="line">        list&lt;int&gt; l1;</div><div class="line">        list&lt;int&gt; l2(5);</div><div class="line">        list&lt;int&gt; l3(2,3);</div><div class="line">        list&lt;int&gt; l4(l3.begin(), l3.end());</div><div class="line"></div><div class="line">        print(l1);</div><div class="line">        print(l2);</div><div class="line">        print(l3);</div><div class="line">        print(l4);</div><div class="line"></div><div class="line">        // 插入</div><div class="line">        l1.push_back(5);</div><div class="line">        l1.push_front(6);</div><div class="line">        l1.push_back(7);</div><div class="line"></div><div class="line">        print(l1);</div><div class="line"></div><div class="line">        // 累加算法</div><div class="line">        int result = accumulate(l1.begin(), l1.end(), 0);</div><div class="line">        cout &lt;&lt; "sum = " &lt;&lt; result &lt;&lt; endl;</div><div class="line"></div><div class="line">        // 求最大值</div><div class="line">        auto max_num = max_element(l1.begin(), l1.end());</div><div class="line">        cout &lt;&lt; "the maximum element in l1 is " &lt;&lt; *max_num &lt;&lt; endl;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    void print(const list&lt;int&gt; &amp;li) const &#123;</div><div class="line">        for (list&lt;int&gt;::const_iterator cit = li.cbegin(); cit != li.cend();</div><div class="line">                ++cit)</div><div class="line">            cout &lt;&lt; *cit &lt;&lt; " ";</div><div class="line">        cout &lt;&lt; endl;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">0 0 0 0 0</div><div class="line">3 3</div><div class="line">3 3</div><div class="line">6 5 7</div><div class="line">sum = 18</div><div class="line">the maximum element in l1 is 7</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="map"><a href="#map" class="headerlink" title="map"></a>map</h1><h2 id="特点：-3"><a href="#特点：-3" class="headerlink" title="特点："></a>特点：</h2><p>Map的元素是成对的键值/实值，内部的元素依据其值自动排序，Map内的相同数值的元素只能出现一次，map就是一个容器，里面装的就是若干个pair。每个pair的第一个元素，称为键（注意键的类型必须支持小于(&lt;)操作），第二个元素，称为值。对于普通的map，每个键都对应一个值。这样的看起来，键类似于数组的下标，而值类似于数组的值。map类定义了3种类型，分别为key_type、mapped_type以及vaule_type。他们分别表示了键的类型、值的类型，以及一个pair类型，pair的第一个元素是键，第二个元素是值。</p>
+<h2 id="方法：-3"><a href="#方法：-3" class="headerlink" title="方法："></a>方法：</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">at</td>
+<td style="text-align:left">取出对应键值的元素</td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:left">返回指定键值的元素个数，在map中只能是0或者1</td>
+</tr>
+<tr>
+<td style="text-align:center">find</td>
+<td style="text-align:left">如果k在m中的键值存在则返回相应的迭代器，否则返回超出来末端迭代器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用示例：-3"><a href="#使用示例：-3" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">class MapTest &#123;</div><div class="line">public:</div><div class="line">    void Test() &#123;</div><div class="line">        map&lt;string, int&gt; m1;</div><div class="line"></div><div class="line">        // 插入</div><div class="line">        m1["Peter"] = 1;</div><div class="line">        m1["Alice"] = 3;</div><div class="line">        m1.insert(map&lt;string, int&gt;::value_type("Bob", 2));</div><div class="line">        print(m1);</div><div class="line"></div><div class="line">        // 查找</div><div class="line">        auto it = m1.find("Bob");</div><div class="line">        if (it != m1.end())</div><div class="line">            cout &lt;&lt; "find success " &lt;&lt; endl;</div><div class="line">        else</div><div class="line">            cout &lt;&lt; "find failed" &lt;&lt; endl;</div><div class="line"></div><div class="line">        // 统计</div><div class="line">        int result = m1.count("Bob");</div><div class="line">        cout &lt;&lt; "result: " &lt;&lt; result &lt;&lt; endl;</div><div class="line"></div><div class="line">        // 删除</div><div class="line">        int ret = m1.erase("Bob");</div><div class="line">        if (ret)</div><div class="line">            cout &lt;&lt; "remove success" &lt;&lt; endl;</div><div class="line">        else</div><div class="line">            cout &lt;&lt; "can't find" &lt;&lt; endl;</div><div class="line">        auto iter = m1.erase(m1.begin());</div><div class="line">        print(m1);</div><div class="line"></div><div class="line"></div><div class="line">    &#125;</div><div class="line">    void print(const map&lt;string, int&gt; &amp;m) const &#123;</div><div class="line">        for (map&lt;string, int&gt;::const_iterator cit = m.cbegin(); cit != m.cend();</div><div class="line">                ++cit)</div><div class="line">            cout &lt;&lt; (*cit).first &lt;&lt; ":" &lt;&lt; (*cit).second &lt;&lt; endl;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Alice:3</div><div class="line">Bob:2</div><div class="line">Peter:1</div><div class="line">find success</div><div class="line">result: 1</div><div class="line">remove success</div><div class="line">Peter:1</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="set"><a href="#set" class="headerlink" title="set"></a>set</h1><h2 id="特点：-4"><a href="#特点：-4" class="headerlink" title="特点："></a>特点：</h2><p>set只有键，没有值，所以他的vaule_type不是pair类型，而是key_type类型。同样的，它也支持insert、find、count操作。map比较适合于储存键值对应的情况，而set适合于储存键，判断键在不在这个集合中，比如黑名单之类的。</p>
+<h2 id="方法：-4"><a href="#方法：-4" class="headerlink" title="方法："></a>方法：</h2><p>和map一样</p>
+<h2 id="使用示例：-4"><a href="#使用示例：-4" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">class SetTest &#123;</div><div class="line">public:</div><div class="line">    void Test() &#123;</div><div class="line">        // 初始化</div><div class="line">        set&lt;string&gt; s;</div><div class="line"></div><div class="line">        // 插入</div><div class="line">        s.insert("Peter");</div><div class="line">        s.insert("Bob");</div><div class="line">        pair&lt;set&lt;string&gt;::iterator,bool&gt; ret = s.insert("Peter");</div><div class="line">        if (ret.second)</div><div class="line">            cout &lt;&lt; "insert success" &lt;&lt; endl;</div><div class="line">        else</div><div class="line">            cout &lt;&lt; "the word exists" &lt;&lt; endl;</div><div class="line">        print(s);</div><div class="line"></div><div class="line">        // 查找</div><div class="line">        set&lt;string&gt;::iterator iter = s.find("Bob");</div><div class="line">        if (iter != s.end())</div><div class="line">            cout &lt;&lt; "find success" &lt;&lt; endl;</div><div class="line">        else</div><div class="line">            cout &lt;&lt; "failed find" &lt;&lt; endl;</div><div class="line"></div><div class="line">        // 统计</div><div class="line">        int result = s.count("Peter");</div><div class="line">        cout &lt;&lt; "result" &lt;&lt; result &lt;&lt; endl;</div><div class="line"></div><div class="line"></div><div class="line">    &#125;</div><div class="line">    void print(const set&lt;string&gt; &amp;s) const &#123;</div><div class="line">        for (set&lt;string&gt;::const_iterator cit = s.begin(); cit != s.end();</div><div class="line">                ++cit)</div><div class="line">            cout &lt;&lt; *cit &lt;&lt; " ";</div><div class="line">        cout &lt;&lt; endl;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">the word exists</div><div class="line">Bob Peter</div><div class="line">find success</div><div class="line">result1</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="multimap"><a href="#multimap" class="headerlink" title="multimap"></a>multimap</h1><p>使用方法同map</p>
+<hr>
+<h1 id="multiset"><a href="#multiset" class="headerlink" title="multiset"></a>multiset</h1><p>使用方法同set</p>
+<hr>
+<h1 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h1><h2 id="特点：-5"><a href="#特点：-5" class="headerlink" title="特点："></a>特点：</h2><p>可以使用三种顺序容器vector、deque（默认）中的任何一个作为stack的底层模型</p>
+<h2 id="方法：-5"><a href="#方法：-5" class="headerlink" title="方法："></a>方法：</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">empty</td>
+<td style="text-align:left">判断栈是否为空</td>
+</tr>
+<tr>
+<td style="text-align:center">pust</td>
+<td style="text-align:left">压入一个数据</td>
+</tr>
+<tr>
+<td style="text-align:center">pop</td>
+<td style="text-align:left">弹出一个数据</td>
+</tr>
+<tr>
+<td style="text-align:center">size</td>
+<td style="text-align:left">返回栈的长度</td>
+</tr>
+<tr>
+<td style="text-align:center">top</td>
+<td style="text-align:left">得到栈顶数据</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用示例：-5"><a href="#使用示例：-5" class="headerlink" title="使用示例："></a>使用示例：</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">StackTest</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Test</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// 初始化</span></div><div class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; sDeque;</div><div class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; sVector;</div><div class="line"></div><div class="line">        <span class="comment">// push</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>; ++i)</div><div class="line">            sDeque.push(i);</div><div class="line"></div><div class="line">        <span class="comment">// pop</span></div><div class="line">        <span class="keyword">while</span> (!sDeque.empty()) &#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; sDeque.top() &lt;&lt; <span class="string">" "</span>;</div><div class="line">            sDeque.pop();</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line"></div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">9 8 7 6 5 4 3 2 1 0</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h1><h2 id="特点：-6"><a href="#特点：-6" class="headerlink" title="特点："></a>特点：</h2><p>可以使用deque（默认）或vector作为底层容器</p>
+<h2 id="方法：-6"><a href="#方法：-6" class="headerlink" title="方法："></a>方法：</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">push</td>
+<td style="text-align:left">将一个元素输入放到队列</td>
+</tr>
+<tr>
+<td style="text-align:center">pop</td>
+<td style="text-align:left">取出一个元素</td>
+</tr>
+<tr>
+<td style="text-align:center">back</td>
+<td style="text-align:left">队尾元素</td>
+</tr>
+<tr>
+<td style="text-align:center">front</td>
+<td style="text-align:left">队头元素</td>
+</tr>
+<tr>
+<td style="text-align:center">size</td>
+<td style="text-align:left">队列长度</td>
+</tr>
+<tr>
+<td style="text-align:center">empty</td>
+<td style="text-align:left">判断队列是否为空</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用示例：-6"><a href="#使用示例：-6" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">class QueueTest &#123;</div><div class="line">public:</div><div class="line">    void Test() &#123;</div><div class="line">        queue&lt;int&gt; q;</div><div class="line">        queue&lt;int, vector&lt;int&gt;&gt; qVector;</div><div class="line"></div><div class="line">        // push</div><div class="line">        for (int i=0; i&lt;10; ++i)</div><div class="line">            q.push(i);</div><div class="line"></div><div class="line">        // back &amp; front</div><div class="line">        cout &lt;&lt; "back: " &lt;&lt; q.back() &lt;&lt; endl;</div><div class="line">        cout &lt;&lt; "front: " &lt;&lt; q.front() &lt;&lt; endl;</div><div class="line"></div><div class="line">        // pop</div><div class="line">        while (!q.empty()) &#123;</div><div class="line">            cout &lt;&lt; q.front() &lt;&lt; " ";</div><div class="line">            q.pop();</div><div class="line">        &#125;</div><div class="line">        cout &lt;&lt; endl;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">back: 9</div><div class="line">front: 0</div><div class="line">0 1 2 3 4 5 6 7 8 9</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="priority-queue"><a href="#priority-queue" class="headerlink" title="priority_queue"></a>priority_queue</h1><h2 id="特点：-7"><a href="#特点：-7" class="headerlink" title="特点："></a>特点：</h2><p>priority_queue也是一个队列，其元素按有序顺序排列。其不采用严格的 FIFO 顺序，给定时刻位于队头的元素正是有最高优先级的元素。如果两个元素有相同的优先级，那么它们在队列中的顺序就遵循FIFO语义。默认适配的底层容器是vector，也可以使用deque，list不能用，因为priority_queue要求能对元素随机访问以便进行排序。</p>
+<h2 id="方法：-7"><a href="#方法：-7" class="headerlink" title="方法："></a>方法：</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">push</td>
+<td style="text-align:left">将一个元素输入放到队列</td>
+</tr>
+<tr>
+<td style="text-align:center">pop</td>
+<td style="text-align:left">取出一个元素</td>
+</tr>
+<tr>
+<td style="text-align:center">top</td>
+<td style="text-align:left">取出优先级最大或最少的元素</td>
+</tr>
+<tr>
+<td style="text-align:center">empty</td>
+<td style="text-align:left">判断队列是否为空</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用示例：-7"><a href="#使用示例：-7" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">class PriorityQueueTest &#123;</div><div class="line">public:</div><div class="line">    struct cmp &#123;</div><div class="line">        bool operator() (int &amp;a, int &amp;b) &#123;</div><div class="line">            return a &gt; b;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    struct Node &#123;</div><div class="line">        bool operator&lt; (Node &amp;a, Node &amp;b) &#123;</div><div class="line">            if (a.priority == b.priority) return a.val &lt; b.val;</div><div class="line">            return a.priority &lt; b.priority;</div><div class="line">        &#125;</div><div class="line">        int priority;</div><div class="line">        int val;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    void Test() &#123;</div><div class="line">        priority_queue&lt;int&gt; maxHeap;</div><div class="line">        priority_queue&lt;int, deque&lt;int&gt;, cmp&gt; minHeap;</div><div class="line">        priority_queue&lt;Node&gt; NodeHeap;</div><div class="line"></div><div class="line">        // push</div><div class="line">        for (int i=0; i&lt;10; ++i) &#123;</div><div class="line">            maxHeap.push(i);</div><div class="line">            minHeap.push(i);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        // pop</div><div class="line">        while (!maxHeap.empty()) &#123;</div><div class="line">            cout &lt;&lt; maxHeap.top() &lt;&lt; " ";</div><div class="line">            maxHeap.pop();</div><div class="line">        &#125;</div><div class="line">        cout &lt;&lt; endl;</div><div class="line">        while (!minHeap.empty()) &#123;</div><div class="line">            cout &lt;&lt; minHeap.top() &lt;&lt; " ";</div><div class="line">            minHeap.pop();</div><div class="line">        &#125;</div><div class="line">        cout &lt;&lt; endl;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">9 8 7 6 5 4 3 2 1 0</div><div class="line">0 1 2 3 4 5 6 7 8 9</div></pre></td></tr></table></figure></p>
+<hr>
+<blockquote>
+<p>参考资料：<br><a href="https://www.tianmaying.com/tutorial/cpp-stl-introduction" target="_blank" rel="external">C++ STL简单介绍</a><br><a href="http://huqunxing.site/2016/09/22/C++STL%E8%AF%A6%E8%A7%A3%E4%B9%8B%E5%AE%B9%E5%99%A8/" target="_blank" rel="external">C++ STL详解之容器</a><br><a href="http://huqunxing.site/2016/09/30/C++STL%E8%AF%A6%E8%A7%A3%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8/" target="_blank" rel="external">C++ STL详解之适配器</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/12/README/" rel="next" title="18年继续奋斗">
+                <i class="fa fa-chevron-left"></i> 18年继续奋斗
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#STL容器"><span class="nav-number">1.</span> <span class="nav-text">STL容器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vector"><span class="nav-number">2.</span> <span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点："><span class="nav-number">2.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法："><span class="nav-number">2.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例："><span class="nav-number">2.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deque"><span class="nav-number">3.</span> <span class="nav-text">deque</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特点：-1"><span class="nav-number">4.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法：-1"><span class="nav-number">5.</span> <span class="nav-text">方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-1"><span class="nav-number">5.1.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#list"><span class="nav-number">6.</span> <span class="nav-text">list</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-2"><span class="nav-number">6.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-2"><span class="nav-number">6.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-2"><span class="nav-number">6.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map"><span class="nav-number">7.</span> <span class="nav-text">map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-3"><span class="nav-number">7.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-3"><span class="nav-number">7.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-3"><span class="nav-number">7.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#set"><span class="nav-number">8.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-4"><span class="nav-number">8.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-4"><span class="nav-number">8.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-4"><span class="nav-number">8.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multimap"><span class="nav-number">9.</span> <span class="nav-text">multimap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multiset"><span class="nav-number">10.</span> <span class="nav-text">multiset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stack"><span class="nav-number">11.</span> <span class="nav-text">stack</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-5"><span class="nav-number">11.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-5"><span class="nav-number">11.2.</span> <span class="nav-text">方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用示例：-5"><span class="nav-number">11.2.1.</span> <span class="nav-text">使用示例：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#queue"><span class="nav-number">12.</span> <span class="nav-text">queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-6"><span class="nav-number">12.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-6"><span class="nav-number">12.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-6"><span class="nav-number">12.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#priority-queue"><span class="nav-number">13.</span> <span class="nav-text">priority_queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-7"><span class="nav-number">13.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-7"><span class="nav-number">13.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-7"><span class="nav-number">13.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
