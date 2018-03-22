@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Linux," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。">
-<meta name="keywords" content="Linux">
+<meta name="description" content="找工作从来不是一蹴而就的，每一次是都失望与希望交杂。失败的时候觉得自己就是一个渣，成功的时候又觉得自己无所不能。经历了两次面试失败，真的觉得自己基础方面的东西很欠缺，又想起了那句伟人说过的话：基础为王。总之，还有五个月的时间，想真的拼一把，不管未来有什么样的结局，这也是这篇文章时间是8月份的缘故。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【000】系统设计的原则-4SE原则">
-<meta property="og:url" content="http://harlon.org/2017/11/02/system design/index.html">
+<meta property="og:title" content="面试知识点总结">
+<meta property="og:url" content="http://harlon.org/2018/08/30/interview/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。">
+<meta property="og:description" content="找工作从来不是一蹴而就的，每一次是都失望与希望交杂。失败的时候觉得自己就是一个渣，成功的时候又觉得自己无所不能。经历了两次面试失败，真的觉得自己基础方面的东西很欠缺，又想起了那句伟人说过的话：基础为王。总之，还有五个月的时间，想真的拼一把，不管未来有什么样的结局，这也是这篇文章时间是8月份的缘故。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-02T09:53:47.770Z">
+<meta property="og:updated_time" content="2018-03-22T09:40:52.714Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【000】系统设计的原则-4SE原则">
-<meta name="twitter:description" content="系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。">
+<meta name="twitter:title" content="面试知识点总结">
+<meta name="twitter:description" content="找工作从来不是一蹴而就的，每一次是都失望与希望交杂。失败的时候觉得自己就是一个渣，成功的时候又觉得自己无所不能。经历了两次面试失败，真的觉得自己基础方面的东西很欠缺，又想起了那句伟人说过的话：基础为王。总之，还有五个月的时间，想真的拼一把，不管未来有什么样的结局，这也是这篇文章时间是8月份的缘故。">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2017/11/02/system design/"/>
+  <link rel="canonical" href="http://harlon.org/2018/08/30/interview/"/>
 
 
 
 
 
-  <title>【000】系统设计的原则-4SE原则 | Harlon's BLOG</title>
+  <title>面试知识点总结 | Harlon's BLOG</title>
   
 
 
@@ -273,7 +272,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/11/02/system design/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/08/30/interview/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -290,7 +289,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【000】系统设计的原则-4SE原则</h1>
+          <h1 class="post-title" itemprop="name headline">面试知识点总结</h1>
         
 
         <div class="post-meta">
@@ -302,8 +301,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-02T15:30:23+08:00">
-                2017-11-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-30T17:01:23+08:00">
+                2018-08-30
               </time>
             
 
@@ -325,8 +324,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Design/" itemprop="url" rel="index">
-                    <span itemprop="name">Design</span>
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
                   </a>
                 </span>
 
@@ -362,13 +361,36 @@
       
 
       
-        <p>系统设计课程中，太阁冯沁原提出的SNAKE原则和九章算法东邪老师提出的4S原则都不能完全体现系统设计的真髓，SNAKE原则缺少了Storage（存储）部分的强调，4S原则缺少对系统参数的计算。在此我想总结两位前辈的经验，提炼出自己对于系统设计原则的理解：4SE原则。<br><a id="more"></a><br>设计一个可用的系统并不是一蹴而就的事情，而是随着整个业务逻辑的提升，系统的架构也会随之变化，所以在系统设计之前一定要明确系统设计的处于什么样的场景，需要多大的用户量，才能决定整个系统的架构，选择合适的存储系统。</p>
-<h1 id="Scenario"><a href="#Scenario" class="headerlink" title="Scenario"></a>Scenario</h1><p><strong>场景：</strong>首先明确系统设计所在的场景，具体要设计哪些功能，具有什么样的特性等等。<br><strong>关键词：</strong>功能</p>
-<h1 id="Suppose"><a href="#Suppose" class="headerlink" title="Suppose"></a>Suppose</h1><p><strong>假设：</strong>假设用户量，QPS，DAU（日活跃用户）等。<br><strong>关键词：</strong>QPS/DAU/PAU（高峰活跃用户）</p>
-<h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><p><strong>服务：</strong>将实现的整个系统拆分成小的服务和模块。<br><strong>关键词：</strong>SOA/Push/Pull</p>
-<h1 id="Storage"><a href="#Storage" class="headerlink" title="Storage"></a>Storage</h1><p><strong>存储：</strong>选择合适的存储系统。<br><strong>关键词</strong>SQL/NoSQL/File System</p>
-<h1 id="Evolve"><a href="#Evolve" class="headerlink" title="Evolve"></a>Evolve</h1><p><strong>扩展：</strong>解决可能会遇到的一些问题。<br><strong>关键词：</strong>雪崩问题/单点失败/多点失败</p>
-
+        <p>找工作从来不是一蹴而就的，每一次是都失望与希望交杂。失败的时候觉得自己就是一个渣，成功的时候又觉得自己无所不能。经历了两次面试失败，真的觉得自己基础方面的东西很欠缺，又想起了那句伟人说过的话：基础为王。总之，还有五个月的时间，想真的拼一把，不管未来有什么样的结局，这也是这篇文章时间是8月份的缘故。<br><a id="more"></a><br>这里主要是制定一个学习计划，然后每天把自己学习到的内容做一个总结输出，记录下来，方便以后进行复习。</p>
+<hr>
+<blockquote>
+<p>学习计划</p>
+<hr>
+<p>2018.3.22以前完成的任务：</p>
+<ul>
+<li>C++之STL详解</li>
+<li>C++之运算符重载详解</li>
+<li>C++之静态详解</li>
+<li>Unix环境高级编程 第8章 进程控制</li>
+</ul>
+<hr>
+<p>2018.3.23计划：</p>
+<ul>
+<li>数据结构之排序</li>
+<li>C++编程基础部分常见问题梳理</li>
+<li>Unix环境高级编程 第9章 进程关系</li>
+</ul>
+<hr>
+</blockquote>
+<hr>
+<h1 id="目录："><a href="#目录：" class="headerlink" title="目录："></a>目录：</h1><p><a href="#jump1">01.数据结构与算法</a><br><a href="#jump2">02.C/C++语言</a><br><a href="#jump3">03.操作系统</a><br><a href="#jump4">04.计算机网络</a><br><a href="#jump5">05.Linux内核</a><br><a href="#jump6">06.大数据框架</a><br><a href="#jump6">07.分布式存储</a></p>
+<h1 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a><span id="jump1">数据结构与算法</span></h1><h1 id="C-C-语言"><a href="#C-C-语言" class="headerlink" title="C/C++语言"></a><span id="jump2">C/C++语言</span></h1><h2 id="编程基础"><a href="#编程基础" class="headerlink" title="编程基础"></a>编程基础</h2><p>1、<a href="http://harlon.org/2018/03/21/cpluscplusstatic/">C++之静态详解</a></p>
+<hr>
+<h2 id="面向对象基础"><a href="#面向对象基础" class="headerlink" title="面向对象基础"></a>面向对象基础</h2><p>1、<a href="http://harlon.org/2018/03/21/cplusplusoperator/">C++之操作符重载</a></p>
+<hr>
+<h2 id="标准模板类"><a href="#标准模板类" class="headerlink" title="标准模板类"></a>标准模板类</h2><p>1、<a href="http://harlon.org/2018/03/21/cplusplusstl/">C++之STL详解</a></p>
+<hr>
+<h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a><span id="jump4">操作系统</span></h1><h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a><span id="jump5">计算机网络</span></h1><h1 id="Linux内核"><a href="#Linux内核" class="headerlink" title="Linux内核"></a><span id="jump6">Linux内核</span></h1><h1 id="大数据框架"><a href="#大数据框架" class="headerlink" title="大数据框架"></a><span id="jump7">大数据框架</span></h1><h1 id="分布式存储"><a href="#分布式存储" class="headerlink" title="分布式存储"></a><span id="jump8">分布式存储</span></h1>
       
     </div>
     
@@ -383,12 +405,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
-          
-        </div>
-      
 
       
       
@@ -398,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/01/Linux Command/" rel="next" title="每日一个Linux命令">
-                <i class="fa fa-chevron-left"></i> 每日一个Linux命令
+              <a href="/2018/03/22/datastructuresort/" rel="next" title="数据结构之排序算法">
+                <i class="fa fa-chevron-left"></i> 数据结构之排序算法
               </a>
             
           </div>
@@ -407,10 +423,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/11/02/how to design Twitter/" rel="prev" title="【001】如何设计Twitter？">
-                【001】如何设计Twitter？ <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -544,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Scenario"><span class="nav-number">1.</span> <span class="nav-text">Scenario</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Suppose"><span class="nav-number">2.</span> <span class="nav-text">Suppose</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service"><span class="nav-number">3.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Storage"><span class="nav-number">4.</span> <span class="nav-text">Storage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Evolve"><span class="nav-number">5.</span> <span class="nav-text">Evolve</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录："><span class="nav-number">1.</span> <span class="nav-text">目录：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据结构与算法"><span class="nav-number">2.</span> <span class="nav-text">数据结构与算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-C-语言"><span class="nav-number">3.</span> <span class="nav-text">C/C++语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编程基础"><span class="nav-number">3.1.</span> <span class="nav-text">编程基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象基础"><span class="nav-number">3.2.</span> <span class="nav-text">面向对象基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准模板类"><span class="nav-number">3.3.</span> <span class="nav-text">标准模板类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作系统"><span class="nav-number">4.</span> <span class="nav-text">操作系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络"><span class="nav-number">5.</span> <span class="nav-text">计算机网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux内核"><span class="nav-number">6.</span> <span class="nav-text">Linux内核</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#大数据框架"><span class="nav-number">7.</span> <span class="nav-text">大数据框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式存储"><span class="nav-number">8.</span> <span class="nav-text">分布式存储</span></a></li></ol></div>
             
 
           </div>
