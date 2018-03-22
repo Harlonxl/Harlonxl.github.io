@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。">
+<meta name="description" content="C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。看了很多牛人的博客之后，感觉自己对STL的理解还是比较浅显的，特此重新更新了一章，STL内部数据结构来说明STL中使用的数据结构。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++之STL详解">
 <meta property="og:url" content="http://harlon.org/2018/03/21/cplusplusstl/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。">
+<meta property="og:description" content="C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。看了很多牛人的博客之后，感觉自己对STL的理解还是比较浅显的，特此重新更新了一章，STL内部数据结构来说明STL中使用的数据结构。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-22T07:32:40.866Z">
+<meta property="og:updated_time" content="2018-03-22T09:07:52.222Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之STL详解">
-<meta name="twitter:description" content="C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。">
+<meta name="twitter:description" content="C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。看了很多牛人的博客之后，感觉自己对STL的理解还是比较浅显的，特此重新更新了一章，STL内部数据结构来说明STL中使用的数据结构。">
 
 
 
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -235,7 +235,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -299,7 +299,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-21T10:10:23+08:00">
                 2018-03-21
@@ -320,7 +320,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -361,7 +361,7 @@
       
 
       
-        <p>C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。<br><a id="more"></a></p>
+        <p>C++ STL模板包含了很多数据结构和算法，刷题中经常也会用到，本文介绍了STL里面的容器部分。看了很多牛人的博客之后，感觉自己对STL的理解还是比较浅显的，特此重新更新了一章，STL内部数据结构来说明STL中使用的数据结构。<br><a id="more"></a></p>
 <hr>
 <h1 id="STL容器"><a href="#STL容器" class="headerlink" title="STL容器"></a>STL容器</h1><ul>
 <li>顺序容器<ul>
@@ -666,7 +666,7 @@
 <h2 id="使用示例：-7"><a href="#使用示例：-7" class="headerlink" title="使用示例："></a>使用示例：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">class PriorityQueueTest &#123;</div><div class="line">public:</div><div class="line">    struct cmp &#123;</div><div class="line">        bool operator() (int &amp;a, int &amp;b) &#123;</div><div class="line">            return a &gt; b;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    struct Node &#123;</div><div class="line">        bool operator&lt; (Node &amp;a, Node &amp;b) &#123;</div><div class="line">            if (a.priority == b.priority) return a.val &lt; b.val;</div><div class="line">            return a.priority &lt; b.priority;</div><div class="line">        &#125;</div><div class="line">        int priority;</div><div class="line">        int val;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    void Test() &#123;</div><div class="line">        priority_queue&lt;int&gt; maxHeap;</div><div class="line">        priority_queue&lt;int, deque&lt;int&gt;, cmp&gt; minHeap;</div><div class="line">        priority_queue&lt;Node&gt; NodeHeap;</div><div class="line"></div><div class="line">        // push</div><div class="line">        for (int i=0; i&lt;10; ++i) &#123;</div><div class="line">            maxHeap.push(i);</div><div class="line">            minHeap.push(i);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        // pop</div><div class="line">        while (!maxHeap.empty()) &#123;</div><div class="line">            cout &lt;&lt; maxHeap.top() &lt;&lt; " ";</div><div class="line">            maxHeap.pop();</div><div class="line">        &#125;</div><div class="line">        cout &lt;&lt; endl;</div><div class="line">        while (!minHeap.empty()) &#123;</div><div class="line">            cout &lt;&lt; minHeap.top() &lt;&lt; " ";</div><div class="line">            minHeap.pop();</div><div class="line">        &#125;</div><div class="line">        cout &lt;&lt; endl;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">9 8 7 6 5 4 3 2 1 0</div><div class="line">0 1 2 3 4 5 6 7 8 9</div></pre></td></tr></table></figure></p>
 <hr>
-<blockquote>
+<h1 id="STL内部数据结构"><a href="#STL内部数据结构" class="headerlink" title="STL内部数据结构"></a>STL内部数据结构</h1><h2 id="迭代器是什么，怎么实现？"><a href="#迭代器是什么，怎么实现？" class="headerlink" title="迭代器是什么，怎么实现？"></a>迭代器是什么，怎么实现？</h2><h2 id="vector内部数据结构"><a href="#vector内部数据结构" class="headerlink" title="vector内部数据结构"></a>vector内部数据结构</h2><h3 id="如何实现？"><a href="#如何实现？" class="headerlink" title="如何实现？"></a>如何实现？</h3><h3 id="迭代器失效问题"><a href="#迭代器失效问题" class="headerlink" title="迭代器失效问题"></a>迭代器失效问题</h3><h2 id="list内部数据结构"><a href="#list内部数据结构" class="headerlink" title="list内部数据结构"></a>list内部数据结构</h2><h2 id="map内部数据结构"><a href="#map内部数据结构" class="headerlink" title="map内部数据结构"></a>map内部数据结构</h2><h2 id="set内部数据结构"><a href="#set内部数据结构" class="headerlink" title="set内部数据结构"></a>set内部数据结构</h2><h2 id="unsotedmap内部数据结构"><a href="#unsotedmap内部数据结构" class="headerlink" title="unsotedmap内部数据结构"></a>unsotedmap内部数据结构</h2><blockquote>
 <p>参考资料：<br><a href="https://www.tianmaying.com/tutorial/cpp-stl-introduction" target="_blank" rel="external">C++ STL简单介绍</a><br><a href="http://huqunxing.site/2016/09/22/C++STL%E8%AF%A6%E8%A7%A3%E4%B9%8B%E5%AE%B9%E5%99%A8/" target="_blank" rel="external">C++ STL详解之容器</a><br><a href="http://huqunxing.site/2016/09/30/C++STL%E8%AF%A6%E8%A7%A3%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8/" target="_blank" rel="external">C++ STL详解之适配器</a></p>
 </blockquote>
 
@@ -759,10 +759,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -782,8 +782,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -794,7 +794,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -805,7 +805,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -839,7 +839,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#STL容器"><span class="nav-number">1.</span> <span class="nav-text">STL容器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vector"><span class="nav-number">2.</span> <span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点："><span class="nav-number">2.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法："><span class="nav-number">2.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例："><span class="nav-number">2.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deque"><span class="nav-number">3.</span> <span class="nav-text">deque</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特点：-1"><span class="nav-number">4.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法：-1"><span class="nav-number">5.</span> <span class="nav-text">方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-1"><span class="nav-number">5.1.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#list"><span class="nav-number">6.</span> <span class="nav-text">list</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-2"><span class="nav-number">6.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-2"><span class="nav-number">6.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-2"><span class="nav-number">6.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map"><span class="nav-number">7.</span> <span class="nav-text">map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-3"><span class="nav-number">7.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-3"><span class="nav-number">7.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-3"><span class="nav-number">7.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#set"><span class="nav-number">8.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-4"><span class="nav-number">8.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-4"><span class="nav-number">8.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-4"><span class="nav-number">8.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multimap"><span class="nav-number">9.</span> <span class="nav-text">multimap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multiset"><span class="nav-number">10.</span> <span class="nav-text">multiset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stack"><span class="nav-number">11.</span> <span class="nav-text">stack</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-5"><span class="nav-number">11.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-5"><span class="nav-number">11.2.</span> <span class="nav-text">方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用示例：-5"><span class="nav-number">11.2.1.</span> <span class="nav-text">使用示例：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#queue"><span class="nav-number">12.</span> <span class="nav-text">queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-6"><span class="nav-number">12.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-6"><span class="nav-number">12.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-6"><span class="nav-number">12.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#priority-queue"><span class="nav-number">13.</span> <span class="nav-text">priority_queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-7"><span class="nav-number">13.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-7"><span class="nav-number">13.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-7"><span class="nav-number">13.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#STL容器"><span class="nav-number">1.</span> <span class="nav-text">STL容器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vector"><span class="nav-number">2.</span> <span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点："><span class="nav-number">2.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法："><span class="nav-number">2.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例："><span class="nav-number">2.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deque"><span class="nav-number">3.</span> <span class="nav-text">deque</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特点：-1"><span class="nav-number">4.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法：-1"><span class="nav-number">5.</span> <span class="nav-text">方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-1"><span class="nav-number">5.1.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#list"><span class="nav-number">6.</span> <span class="nav-text">list</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-2"><span class="nav-number">6.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-2"><span class="nav-number">6.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-2"><span class="nav-number">6.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map"><span class="nav-number">7.</span> <span class="nav-text">map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-3"><span class="nav-number">7.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-3"><span class="nav-number">7.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-3"><span class="nav-number">7.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#set"><span class="nav-number">8.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-4"><span class="nav-number">8.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-4"><span class="nav-number">8.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-4"><span class="nav-number">8.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multimap"><span class="nav-number">9.</span> <span class="nav-text">multimap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multiset"><span class="nav-number">10.</span> <span class="nav-text">multiset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stack"><span class="nav-number">11.</span> <span class="nav-text">stack</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-5"><span class="nav-number">11.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-5"><span class="nav-number">11.2.</span> <span class="nav-text">方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用示例：-5"><span class="nav-number">11.2.1.</span> <span class="nav-text">使用示例：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#queue"><span class="nav-number">12.</span> <span class="nav-text">queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-6"><span class="nav-number">12.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-6"><span class="nav-number">12.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-6"><span class="nav-number">12.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#priority-queue"><span class="nav-number">13.</span> <span class="nav-text">priority_queue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点：-7"><span class="nav-number">13.1.</span> <span class="nav-text">特点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法：-7"><span class="nav-number">13.2.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例：-7"><span class="nav-number">13.3.</span> <span class="nav-text">使用示例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STL内部数据结构"><span class="nav-number">14.</span> <span class="nav-text">STL内部数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代器是什么，怎么实现？"><span class="nav-number">14.1.</span> <span class="nav-text">迭代器是什么，怎么实现？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vector内部数据结构"><span class="nav-number">14.2.</span> <span class="nav-text">vector内部数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何实现？"><span class="nav-number">14.2.1.</span> <span class="nav-text">如何实现？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器失效问题"><span class="nav-number">14.2.2.</span> <span class="nav-text">迭代器失效问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list内部数据结构"><span class="nav-number">14.3.</span> <span class="nav-text">list内部数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map内部数据结构"><span class="nav-number">14.4.</span> <span class="nav-text">map内部数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set内部数据结构"><span class="nav-number">14.5.</span> <span class="nav-text">set内部数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unsotedmap内部数据结构"><span class="nav-number">14.6.</span> <span class="nav-text">unsotedmap内部数据结构</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -869,7 +869,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 

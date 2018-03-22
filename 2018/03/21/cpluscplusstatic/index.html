@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="C++中静态用于静态修饰的有静态局部变量，静态全局变量，静态成员变量，静态函数，静态成员函数等等，搞清楚这些之间的区别，不是一件很容易的事。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++之静态详解">
+<meta property="og:url" content="http://harlon.org/2018/03/21/cpluscplusstatic/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="C++中静态用于静态修饰的有静态局部变量，静态全局变量，静态成员变量，静态函数，静态成员函数等等，搞清楚这些之间的区别，不是一件很容易的事。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-22T08:53:46.168Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++之静态详解">
+<meta name="twitter:description" content="C++中静态用于静态修饰的有静态局部变量，静态全局变量，静态成员变量，静态函数，静态成员函数等等，搞清楚这些之间的区别，不是一件很容易的事。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/03/21/cpluscplusstatic/"/>
+
+
+
+
+
+  <title>C++之静态详解 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/21/cpluscplusstatic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++之静态详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-21T17:10:23+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>C++中静态用于静态修饰的有静态局部变量，静态全局变量，静态成员变量，静态函数，静态成员函数等等，搞清楚这些之间的区别，不是一件很容易的事。<br><a id="more"></a></p>
+<hr>
+<h1 id="static的作用"><a href="#static的作用" class="headerlink" title="static的作用"></a>static的作用</h1><p>static作为C和C++语句中的修饰符，可以修饰变量和函数，主要用于控制变量的存储方式和可见性。<br>在函数内部定义的变量，程序执行到它的定义的时，编译器为它在栈上分配空间，栈空间会随着函数调用结束而被释放。这样带来的问题是，有些变量需要保留它的值，或者我们希望能有一块地方存储我们希望不变的值，而不是每次都又栈来分配，这样也能提高一部分性能。<br>static因为是公共的，所以它在内存中只被存储一处，供所有对象使用。静态数据成员的值对每个对象都是一样，但它的值是可以更新的。只要对静态数据成员的值更新一次，保证所有对象存取更新后的相同的值，这样可以提高时间效率。</p>
+<hr>
+<h1 id="static的内部机制"><a href="#static的内部机制" class="headerlink" title="static的内部机制"></a>static的内部机制</h1><p>static修饰的数据成员实在数据段定义的，数据段同样也存放了全局变量，静态数据成员按定义出现的先后顺序依次初始化，注意静态成员嵌套时，要保证所嵌套的成员已经初始化了。消除时的顺序是初始化的反顺序。</p>
+<hr>
+<h1 id="全局变量和静态全局变量的区别"><a href="#全局变量和静态全局变量的区别" class="headerlink" title="全局变量和静态全局变量的区别"></a>全局变量和静态全局变量的区别</h1><p>先举个例子，有两个文件：main.cpp和test.cpp<br>main.cpp<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">extern</span> <span class="keyword">char</span> *msg;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, msg);</div><div class="line">    print();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>test.cpp<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">char</span> *msg = <span class="string">"hello static"</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, msg);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>函数运行之后输出两行hello static，如果将msg的声明改成static char *，则会出现msg未定义的错误。<br>不同点：这段程序可以看出这两者之间的区别，非静态的全局变量的作用域是整个程序，当一个源程序由多个源文件组成时，非静态的全局变量在各个源文件中都是有效的。而静态全局变量则限制了其作用域，即只在定义该变量的源文件内有效，在同一源程序的其它源文件中不能使用它。<br>相同点：全局变量和静态全局变量存储的位置是相同的。</p>
+<hr>
+<h1 id="普通局部变量和静态局部变量的区别"><a href="#普通局部变量和静态局部变量的区别" class="headerlink" title="普通局部变量和静态局部变量的区别"></a>普通局部变量和静态局部变量的区别</h1><p>静态局部变量和普通局部变量的存储方式不一样，静态局部变量被存放在数据段，而普通存储在栈中。静态局部变量只被初始化一次，下次调用根据上一次的值。</p>
+<hr>
+<h1 id="静态函数和普通函数的区别"><a href="#静态函数和普通函数的区别" class="headerlink" title="静态函数和普通函数的区别"></a>静态函数和普通函数的区别</h1><p>静态函数和普通函数的区别类似静态全局变量和全局静态变量的区别。静态函数的作用域仅限于在本文件中，只有在源文件中使用的函数应该声明为static函数。普通函数的作用是整个程序的源文件中。</p>
+<hr>
+<h1 id="静态数据成员"><a href="#静态数据成员" class="headerlink" title="静态数据成员"></a>静态数据成员</h1><p>C++中，类的内存存储空间被分为五部分：堆、栈、全局/静态存储区和常量存储区。静态数据成员是属于类的，而不是属于某个对象，因为其是是全局/静态存储区中分配的，只能存储一份，这也就决定了其不能指定属于某个对象。静态数据成员调用时，采用以下格式：<br>&lt;类名&gt;::&lt;静态数据成员名&gt;或&lt;类对象名&gt;.&lt;静态数据成员名&gt;<br>注意事项：</p>
+<blockquote>
+<p>静态数据成员和普通数据成员一样遵从public,protected,private访问规则；</p>
+</blockquote>
+<p>静态数据成员同全局变量相比，有两个优势：</p>
+<ul>
+<li>静态数据成员没有进入程序的全局名字空间，因此就不存在与其他全局变量名字起冲突的可能性；</li>
+<li>静态数据成员可以实现信息隐藏，静态数据成员可以是private的，对外不可见。</li>
+</ul>
+<hr>
+<h1 id="静态数据函数"><a href="#静态数据函数" class="headerlink" title="静态数据函数"></a>静态数据函数</h1><p>与静态数据成员一样，可以定义类的静态数据函数，它为类的全部服务而不是为某一个类的具体对象服务。静态成员函数由于不是与任何的对象相联系，因此它不具有this指针。从这个意义上讲，它无法访问属于类对象的非静态数据成员，也无法访问非静态成员函数，它只能调用其余的静态成员函数。类的静态成员函数调用采用如下格式：<br>&lt;类名&gt;::&lt;静态成员函数名&gt; (&lt;参数表&gt;)<br>有关静态成员函数，可以总结一下几点：</p>
+<ul>
+<li>在类体外的函数定义不能指定关键字static；</li>
+<li>静态成员之间可以互相访问，静态成员函数可以访问静态数据成员和静态成员函数</li>
+<li>非静态成员函数可以任意地访问静态成员函数和静态数据成员；</li>
+<li>静态成员函数不能访问非静态成员函数和非静态数据成员；</li>
+<li>由于没有this指针的额外开销，因此静态成员函数与类的全局函数相比速度上会有少许的增长；</li>
+</ul>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来说，面向过程的static关键字的作用有以下三点：</p>
+<ul>
+<li>隐藏作用域<br>当我们同时编译多个文件时，所有未加static前缀的全局变量和函数都具有全局可见性。如果加了static，就会对其它源文件隐藏。利用这一特性可以在不同的文件中定义同名函数和同名变量，而不必担心命名冲突。Static可以用作函数和变量的前缀，对于函数来讲，static的作用仅限于隐藏，而对于变量，static还有下面两个作用。</li>
+<li>保持变量内容持久化<br>存储在静态数据区的变量会在程序刚开始运行时就完成初始化，也是唯一的一次初始化。共有两种变量存储在静态存储区：全局变量和static变量，只不过和全局变量比起来，static可以控制变量的可见范围，说到底static还是用来隐藏的。</li>
+<li>默认初始化为0<br>其实全局变量也具备这一属性，因为全局变量也存储在静态数据区。在静态数据区，内存中所有的字节默认值都是0x00，某些时候这一特点可以减少程序员的工作量。比如初始化一个稀疏矩阵，我们可以一个一个地把所有元素都置0，然后把不是0的几个元素赋值。如果定义成静态的，就省去了一开始置0的操作。再比如要把一个字符数组当字符串来用，但又觉得每次在字符数组末尾加’\ 0’太麻烦。如果把字符串定义成静态的，就省去了这个麻烦，因为那里本来就是’\0’。<br>面向对象的static关键字修饰主要有数据成员和数据函数，作用如上所示。</li>
+</ul>
+<hr>
+<blockquote>
+<p>参考资料：<br><a href="http://blog.csdn.net/artechtor/article/details/2312766" target="_blank" rel="external">C++中Static作用和使用方法</a><br><a href="https://www.cnblogs.com/stoneJin/archive/2011/09/21/2183313.html" target="_blank" rel="external">static作用（修饰函数、局部变量、全局变量）</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/21/README/" rel="next" title="18年继续奋斗">
+                <i class="fa fa-chevron-left"></i> 18年继续奋斗
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/21/cplusplusoperator/" rel="prev" title="C++之运算符重载详解">
+                C++之运算符重载详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#static的作用"><span class="nav-number">1.</span> <span class="nav-text">static的作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#static的内部机制"><span class="nav-number">2.</span> <span class="nav-text">static的内部机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全局变量和静态全局变量的区别"><span class="nav-number">3.</span> <span class="nav-text">全局变量和静态全局变量的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#普通局部变量和静态局部变量的区别"><span class="nav-number">4.</span> <span class="nav-text">普通局部变量和静态局部变量的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#静态函数和普通函数的区别"><span class="nav-number">5.</span> <span class="nav-text">静态函数和普通函数的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#静态数据成员"><span class="nav-number">6.</span> <span class="nav-text">静态数据成员</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#静态数据函数"><span class="nav-number">7.</span> <span class="nav-text">静态数据函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.1.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
