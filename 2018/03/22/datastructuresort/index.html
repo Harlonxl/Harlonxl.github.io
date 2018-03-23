@@ -79,14 +79,26 @@
 
 
 
+<meta name="description" content="总结常用的排序算法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构之排序算法">
 <meta property="og:url" content="http://harlon.org/2018/03/22/datastructuresort/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="总结常用的排序算法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-22T09:13:20.865Z">
+<meta property="og:image" content="http://harlon.org/img/sort.png">
+<meta property="og:image" content="http://harlon.org/img/Insertion_sort.gif">
+<meta property="og:image" content="http://harlon.org/img/Bubble-sort.gif">
+<meta property="og:image" content="http://harlon.org/img/selection_sort.gif">
+<meta property="og:image" content="http://harlon.org/img/Merge-sort.gif">
+<meta property="og:image" content="http://harlon.org/img/shell_sort.gif">
+<meta property="og:image" content="http://harlon.org/img/quick_sort.gif">
+<meta property="og:image" content="http://harlon.org/img/heap_sort.gif">
+<meta property="og:updated_time" content="2018-03-23T10:08:56.541Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构之排序算法">
+<meta name="twitter:description" content="总结常用的排序算法。">
+<meta name="twitter:image" content="http://harlon.org/img/sort.png">
 
 
 
@@ -182,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -232,7 +244,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -296,7 +308,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-22T17:13:23+08:00">
                 2018-03-22
@@ -317,7 +329,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -358,7 +370,28 @@
       
 
       
-        
+        <p>总结常用的排序算法。<br><a id="more"></a></p>
+<h1 id="排序算法比较"><a href="#排序算法比较" class="headerlink" title="排序算法比较"></a>排序算法比较</h1><p><img src="/img/sort.png" alt="排序算法"></p>
+<blockquote>
+<p>tips：归并排序的空间辅助空间为O(n)<br>tips：希尔排序的平均时间复杂度为O(nlogn)</p>
+</blockquote>
+<hr>
+<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><p><img src="/img/Insertion_sort.gif" alt="插入排序"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">InsertSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (arr == <span class="literal">NULL</span> || n == <span class="number">0</span>) <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i)</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt; <span class="number">0</span>; --j)</div><div class="line">                <span class="keyword">if</span> (arr[j<span class="number">-1</span>] &gt; arr[j]) &#123;</div><div class="line">                    <span class="keyword">int</span> tmp = arr[j];</div><div class="line">                    arr[j] = arr[j<span class="number">-1</span>];</div><div class="line">                    arr[j<span class="number">-1</span>] = tmp;</div><div class="line">                &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p><img src="/img/Bubble-sort.gif" alt="冒泡排序"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">BubbleSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (arr == <span class="literal">NULL</span> || n == <span class="number">0</span>) <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">bool</span> flag = <span class="literal">true</span>;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n<span class="number">-1</span>; ++i)</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;n-i; ++j) &#123;</div><div class="line">                <span class="keyword">if</span> (arr[j<span class="number">-1</span>] &gt; arr[j]) &#123;</div><div class="line">                    swap(arr[j<span class="number">-1</span>], arr[j]);</div><div class="line">                    flag = <span class="literal">false</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (flag) <span class="keyword">break</span>;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p><img src="/img/selection_sort.gif" alt="选择排序"><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">void SelectSort(int arr[], int n) &#123;</div><div class="line">        if (arr == NULL || n == 0) return;</div><div class="line">        if (n == 1) return;</div><div class="line"></div><div class="line">        for (int i=0; i&lt;n-1; ++i)</div><div class="line">            for (int j=i+1; j&lt;n; ++j) &#123;</div><div class="line">                int min = i;</div><div class="line">                if (arr[j] &lt; arr[i])</div><div class="line">                    min = j;</div><div class="line">                if (min != i) swap(arr[i], arr[min]);</div><div class="line">            &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p><img src="/img/Merge-sort.gif" alt="归并排序"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">MergeSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (arr == <span class="literal">NULL</span> || n == <span class="number">0</span>) <span class="keyword">return</span>;</div><div class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    MergeSort(arr, <span class="number">0</span>, n<span class="number">-1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">MergeSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (start &gt;= end) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> mid = start + ((end - start) &gt;&gt; <span class="number">1</span>);</div><div class="line"></div><div class="line">    MergeSort(arr, start, mid);</div><div class="line">    MergeSort(arr, mid+<span class="number">1</span>, end);</div><div class="line"></div><div class="line">    Merge(arr, start, mid, end);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> lo, <span class="keyword">int</span> mi, <span class="keyword">int</span> hi)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> *tmp = <span class="keyword">new</span> <span class="keyword">int</span>[hi-lo+<span class="number">1</span>];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>, j=lo, k=mi+<span class="number">1</span>; (j &lt;= mi || k &lt;= hi); ) &#123;</div><div class="line">        <span class="keyword">if</span> ((j &lt;= mi) &amp;&amp; (! (k&lt;=hi) || (arr[j] &lt;= arr[k]))) tmp[i++] = arr[j++];</div><div class="line">        <span class="keyword">if</span> ((k &lt;= hi) &amp;&amp; (! (j&lt;=mi) || (arr[k] &lt; arr[j]))) tmp[i++] = arr[k++];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">memcpy</span>(&amp;arr[lo], tmp, (hi-lo+<span class="number">1</span>)*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div><div class="line">    <span class="keyword">delete</span>[] tmp;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h1><p><img src="/img/shell_sort.gif" alt="希尔排序"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ShellSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (arr == <span class="literal">NULL</span> || n == <span class="number">0</span>) <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> gap = n &gt;&gt; <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (gap &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=gap; i&lt;n; ++i)</div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j=i; j-gap&gt;=<span class="number">0</span>; j-=gap)</div><div class="line">                    <span class="keyword">if</span> (arr[j-gap] &gt; arr[j])</div><div class="line">                        swap(arr[j-gap], arr[j]);</div><div class="line"></div><div class="line">            gap &gt;&gt;= <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p><img src="/img/quick_sort.gif" alt="快速排序"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">QuickSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (arr == <span class="literal">NULL</span> || n == <span class="number">0</span>) <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        QuickSort(arr, <span class="number">0</span>, n<span class="number">-1</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">QuickSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (start &gt;= end) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> pivot = arr[start];</div><div class="line"></div><div class="line">        <span class="keyword">int</span> lo = start, hi = end;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (lo &lt; hi) &#123;</div><div class="line">            <span class="keyword">while</span> ((lo &lt; hi) &amp;&amp; arr[hi] &gt; pivot)</div><div class="line">                hi--;</div><div class="line">            arr[lo] = arr[hi];</div><div class="line">            <span class="keyword">while</span> ((lo &lt; hi) &amp;&amp; arr[lo] &lt;= pivot)</div><div class="line">                lo++;</div><div class="line">            arr[hi] = arr[lo];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        arr[lo] = pivot;</div><div class="line"></div><div class="line">        QuickSort(arr, start, lo);</div><div class="line">        QuickSort(arr, lo+<span class="number">1</span>, end);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><p><img src="/img/heap_sort.gif" alt="堆排序"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">HeapSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (arr == <span class="literal">NULL</span> || n == <span class="number">0</span>) <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=n/<span class="number">2</span><span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)</div><div class="line">            Heapify(arr, i, n);</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=n<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</div><div class="line">            swap(arr[i], arr[<span class="number">0</span>]);</div><div class="line">            Heapify(arr, <span class="number">0</span>, i);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Heapify</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> first, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> father = first;</div><div class="line">        <span class="keyword">int</span> lson = <span class="number">2</span>*father+<span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (lson &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> rson = lson+<span class="number">1</span>;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (rson &lt; end &amp;&amp; arr[lson] &lt; arr[rson]) lson++;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (arr[father] &gt;= arr[lson]) <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                swap(arr[father], arr[lson]);</div><div class="line">                father = lson;</div><div class="line">                lson = <span class="number">2</span>*father+<span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>参考资料：<br><a href="https://en.wikipedia.org/wiki/Insertion_sort" target="_blank" rel="external">Insertion sort</a><br><a href="https://en.wikipedia.org/wiki/Bubble_sort" target="_blank" rel="external">Bubble sort</a><br><a href="https://en.wikipedia.org/wiki/Selection_sort" target="_blank" rel="external">Selection sort</a><br><a href="https://en.wikipedia.org/wiki/Merge_sort" target="_blank" rel="external">Merge sort</a><br><a href="https://en.wikipedia.org/wiki/Shellsort" target="_blank" rel="external">Shellsort</a><br><a href="https://en.wikipedia.org/wiki/Heapsort" target="_blank" rel="external">Heapsort</a><br><a href="https://www.cnblogs.com/zyb428/p/5673738.html" target="_blank" rel="external">常见排序算法C++总结</a></p>
+</blockquote>
+
       
     </div>
     
@@ -382,8 +415,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/21/cpluscplusstatic/" rel="next" title="C++之静态详解">
-                <i class="fa fa-chevron-left"></i> C++之静态详解
+              <a href="/2018/03/21/cplusplusoperator/" rel="next" title="C++之运算符重载详解">
+                <i class="fa fa-chevron-left"></i> C++之运算符重载详解
               </a>
             
           </div>
@@ -392,8 +425,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
-                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/03/23/cpluscplusbase/" rel="prev" title="C++编程基础部分常见问题梳理">
+                C++编程基础部分常见问题梳理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -446,8 +479,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -462,8 +504,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -474,7 +516,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -485,7 +527,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -510,6 +552,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#排序算法比较"><span class="nav-number">1.</span> <span class="nav-text">排序算法比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插入排序"><span class="nav-number">2.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#冒泡排序"><span class="nav-number">3.</span> <span class="nav-text">冒泡排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选择排序"><span class="nav-number">4.</span> <span class="nav-text">选择排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归并排序"><span class="nav-number">5.</span> <span class="nav-text">归并排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#希尔排序"><span class="nav-number">6.</span> <span class="nav-text">希尔排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#快速排序"><span class="nav-number">7.</span> <span class="nav-text">快速排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#堆排序"><span class="nav-number">8.</span> <span class="nav-text">堆排序</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -533,7 +591,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
