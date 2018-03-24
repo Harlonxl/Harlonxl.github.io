@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="其实，要想说清楚类型转换并不是一件容易的事，类型转换可能会发生在每一个代码中，有时候是无知觉的，总的来说C++的类型转换分为隐式类型转换和显示类型转换。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++之类型转换详解">
+<meta property="og:url" content="http://harlon.org/2018/03/24/cpluscplustypeswitch/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="其实，要想说清楚类型转换并不是一件容易的事，类型转换可能会发生在每一个代码中，有时候是无知觉的，总的来说C++的类型转换分为隐式类型转换和显示类型转换。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/typeswitch.png">
+<meta property="og:updated_time" content="2018-03-24T08:48:20.222Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++之类型转换详解">
+<meta name="twitter:description" content="其实，要想说清楚类型转换并不是一件容易的事，类型转换可能会发生在每一个代码中，有时候是无知觉的，总的来说C++的类型转换分为隐式类型转换和显示类型转换。">
+<meta name="twitter:image" content="http://harlon.org/img/typeswitch.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/03/24/cpluscplustypeswitch/"/>
+
+
+
+
+
+  <title>C++之类型转换详解 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/24/cpluscplustypeswitch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++之类型转换详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-24T14:47:23+08:00">
+                2018-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>其实，要想说清楚类型转换并不是一件容易的事，类型转换可能会发生在每一个代码中，有时候是无知觉的，总的来说C++的类型转换分为隐式类型转换和显示类型转换。<br><a id="more"></a></p>
+<hr>
+<h1 id="C数据类型转换"><a href="#C数据类型转换" class="headerlink" title="C数据类型转换"></a>C数据类型转换</h1><h2 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h2><p>隐式类型转化是编译器默默地、隐式地、偷偷地进行的类型转换，这种转换不需要程序员干预，会自动发生。</p>
+<h3 id="赋值转换"><a href="#赋值转换" class="headerlink" title="赋值转换"></a>赋值转换</h3><p>将一种类型的数据赋值给另外一种类型的变量时会发生隐式类型转换，例如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> f = <span class="number">100</span>;</div></pre></td></tr></table></figure></p>
+<p>100是int类型的数据，需要先转换为float类型才能赋值给变量f，再如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> f = <span class="number">100.1</span>;</div><div class="line"><span class="keyword">int</span> n = f;</div></pre></td></tr></table></figure></p>
+<p>f是float类型的变量，需要先转换为int类型才能赋值给变量n。<br>在赋值运算中，赋值号两边的数据类型不同时，需要把右边表达式的类型转换为左边变量的类型，这可能会导致数据失真，或者精度降低；所以说，隐式类型转换并不一定是安全的。对于不安全的类型转换，编译器一般会给出警告，实验中发现GCC编译器并没有给出任何警告。</p>
+<h3 id="运算类型转换"><a href="#运算类型转换" class="headerlink" title="运算类型转换"></a>运算类型转换</h3><p>C语言规定,不同类型的数据需要转换成同一类型后才可进行计算,在整型、实型和字符型数据之间通过类型转换便可以进行混合运算(但不是所有类型之间都可以进行转换) ，转换的规则如下：</p>
+<ul>
+<li>转换按数据长度增加的方向进行，以保证数值不失真，或者精度不降低。例如，int 和 long 参与运算时，先把 int 类型的数据转成 long 类型后再进行运算；</li>
+<li>所有的浮点运算都是以双精度进行的，即使运算中只有 float 类型，也要先转换为 double 类型，才能进行运算；</li>
+<li>char 和 short 参与运算时，必须先转换成 int 类型。</li>
+</ul>
+<p><img src="/img/typeswitch.png" alt="类型转换"></p>
+<hr>
+<h2 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h2><p>自动类型转换是编译器默默地、隐式地进行的一种类型转换，不需要在代码中体现出来；强制类型转换是程序员明确提出的、需要通过特定格式的代码来指明的一种类型转换。换句话说，自动类型转换不需要程序员干预，强制类型转换必须有程序员干预。<br>强制类型转换的格式为：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(type_name) expression</div></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> sum = <span class="number">100</span>;</div><div class="line">        <span class="keyword">int</span> count = <span class="number">9</span>;</div><div class="line">        <span class="keyword">double</span> average;</div><div class="line">        average = (<span class="keyword">double</span>)sum / count;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"average is %lf\n"</span>, average);</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">average is 11.111111</div></pre></td></tr></table></figure></p>
+<p>注意：对于除法运算，如果除数和被除数都是整形，最后结果也是整形；()的优先级高于/<br>无论是隐式类型转换还是强制类型转换，都只是为了本次运算而进行的临时转换，转换的结果也会保存到临时的内存空间，不会改变数据本来的类型或者值。</p>
+<hr>
+<h1 id="C-数据类型转换"><a href="#C-数据类型转换" class="headerlink" title="C++数据类型转换"></a>C++数据类型转换</h1><h2 id="隐式类型转换-1"><a href="#隐式类型转换-1" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h2><p>C++包括C的隐式类型转换，除此之外，在C++中，将某种类型的对象拷贝到另一种不同类型的对象中时就会发生隐式转型。比如返回值（函数声明的返回值与代码块实际返回值不同的情况下），按值传递异型参数等情况均会发生隐式类型转换。<br>例如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span>&#125;; </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">    <span class="keyword">public</span>: B (A a) &#123;&#125;</div><div class="line">    <span class="keyword">public</span>: B (<span class="keyword">int</span> c, <span class="keyword">int</span> d = <span class="number">0</span>);</div><div class="line">    <span class="keyword">public</span>: <span class="function"><span class="keyword">operator</span> <span class="title">double</span><span class="params">()</span> <span class="keyword">const</span></span>; </div><div class="line">&#125;;</div><div class="line"></div><div class="line">A a;</div><div class="line">B b1 = a;</div><div class="line">B b2 = <span class="number">10</span>;</div><div class="line">B b3;</div><div class="line"><span class="keyword">double</span> d;</div><div class="line">d = <span class="number">10</span> + b3;</div></pre></td></tr></table></figure></p>
+<p>此外C++也不能在转换过程中进行连续的隐式类型转换，例如A可以隐式转换为B，B可以隐式转换为C，但A不能隐式转换为C。<br>可以通过关键字explict可以来规避可被单参调用的构造函数引起的隐式类型转换。上例中，如果声明 explicit B(A a)，b1=a就不会发生隐式类型转换，编译错误。</p>
+<hr>
+<h2 id="显示类型转换"><a href="#显示类型转换" class="headerlink" title="显示类型转换"></a>显示类型转换</h2><p>C++语言也支持C语言的类型强制类型转换，但这种转换可以在两种不同类型的对象的指针之间进行，这很可能是相当危险的事情。所以 C++ 提供四种转换操作符来细分显式类型转换。</p>
+<h3 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h3><ul>
+<li>1、常量指针被转化成非常量的指针，并且仍然指向原来的对象； </li>
+<li>2、常量引用被转换成非常量的引用，并且仍然指向原来的对象； </li>
+<li>3、const_cast一般用于修改指针。如const char *p形式;</li>
+<li>4、const_cast也可以去除对象的valatile属性。<br>例如：<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> a = <span class="number">5</span>;</div><div class="line">        <span class="keyword">const</span> <span class="keyword">int</span> *p = &amp;a;</div><div class="line">        <span class="comment">// *p = 6; // error</span></div><div class="line">        <span class="keyword">int</span> *p2 = <span class="keyword">const_cast</span>&lt;<span class="keyword">int</span>*&gt;(p);</div><div class="line">        *p2 = <span class="number">6</span>;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, a);</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意：对定义为常量的参数，使用const_cast会出现未定义的行为，如下所示：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">const</span> <span class="keyword">int</span> c_val = <span class="number">233</span>;  <span class="comment">//声明为常量类型</span></div><div class="line">    <span class="keyword">int</span> &amp;use_val = <span class="keyword">const_cast</span>&lt;<span class="keyword">int</span>&amp;&gt;(c_val); <span class="comment">//使用去const 引用</span></div><div class="line">    <span class="keyword">int</span> *ptr_val = <span class="keyword">const_cast</span>&lt;<span class="keyword">int</span>*&gt;(&amp;c_val);<span class="comment">//使用去const 指针</span></div><div class="line"></div><div class="line">    use_val = <span class="number">666</span>;  <span class="comment">//未定义行为</span></div><div class="line">    <span class="built_in">cout</span> &lt;&lt; c_val &lt;&lt; <span class="string">"\t"</span> &lt;&lt; use_val &lt;&lt; <span class="string">"\t"</span> &lt;&lt; *ptr_val &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    *ptr_val = <span class="number">110</span>; <span class="comment">//未定义行为</span></div><div class="line">    <span class="built_in">cout</span> &lt;&lt; c_val &lt;&lt; <span class="string">"\t"</span> &lt;&lt; use_val &lt;&lt; <span class="string">"\t"</span> &lt;&lt; *ptr_val &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>gcc下输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">233	666	666</div><div class="line">233	110	110</div></pre></td></tr></table></figure></p>
+<p>c_val、use_val和ptr_val的地址是一样的，但是c_val的值并没有发生改变，这点非常令人匪夷所思。</p>
+<h3 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h3><ul>
+<li>1、static_cast 作用和C语言风格强制转换的效果基本一样，由于没有运行时类型检查来保证转换的安全性，所以这类型的强制转换和C语言风格的强制转换都有安全隐患；</li>
+<li>2、用于类层次结构中基类（父类）和派生类（子类）之间指针或引用的转换。注意：进行上行转换（把派生类的指针或引用转换成基类表示）是安全的；进行下行转换（把基类指针或引用转换成派生类表示）时，由于没有动态类型检查，所以是不安全的。</li>
+<li>3、用于基本数据类型之间的转换，如把int转换成char，把int转换成enum。这种转换的安全性需要开发者来维护。</li>
+<li>4、static_cast不能转换掉原有类型的const、volatile、或者 __unaligned属性。(前两种可以使用const_cast 来去除)</li>
+<li>5、c++ 的任何的隐式转换都是使用 static_cast 来实现。<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 常规的使用方法 */</span></div><div class="line"><span class="keyword">float</span> f_pi=<span class="number">3.141592f</span></div><div class="line"><span class="keyword">int</span>   i_pi=<span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(f_pi); <span class="comment">/// i_pi 的值为 3</span></div><div class="line"></div><div class="line"><span class="comment">/* class 的上下行转换 */</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>&#123;</span></div><div class="line">    <span class="comment">// something</span></div><div class="line">&#125;;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sub</span>:</span><span class="keyword">public</span> Base&#123;</div><div class="line">    <span class="comment">// something</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//  上行 Sub -&gt; Base</span></div><div class="line"><span class="comment">//编译通过，安全</span></div><div class="line">Sub sub;</div><div class="line">Base *base_ptr = <span class="keyword">static_cast</span>&lt;Base*&gt;(&amp;sub);  </div><div class="line"></div><div class="line"><span class="comment">//  下行 Base -&gt; Sub</span></div><div class="line"><span class="comment">//编译通过，不安全</span></div><div class="line">Base base;</div><div class="line">Sub *sub_ptr = <span class="keyword">static_cast</span>&lt;Sub*&gt;(&amp;base);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h3><p>dynamic_cast运算符是强制类型转换，应该是这四种中最特殊的一个,因为他涉及到面向对象的多态性和程序运行时的状态,也与编译器的属性设置有关.所以不能完全使用C语言的强制转换替代,它也是最常有用的,最不可缺少的一种强制转换。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Parent"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">virFunction</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Children</span> :</span> <span class="keyword">public</span> Parent &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Children"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">virFunction</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    Children *child = <span class="keyword">new</span> Children;</div><div class="line">    child-&gt;print();</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Children -&gt; Parent "</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    Parent *parent1 = <span class="keyword">static_cast</span>&lt;Parent*&gt;(child);</div><div class="line">    <span class="keyword">if</span> (parent1 != <span class="literal">NULL</span>) parent1-&gt;print();</div><div class="line">    Parent *parent2 = (Parent*)child;</div><div class="line">    <span class="keyword">if</span> (parent2 != <span class="literal">NULL</span>) parent2-&gt;print();</div><div class="line">    Parent *parent3 = <span class="keyword">dynamic_cast</span>&lt;Parent*&gt;(child);</div><div class="line">    <span class="keyword">if</span> (parent3 != <span class="literal">NULL</span>) parent3-&gt;print();</div><div class="line"></div><div class="line">    Parent *parent = <span class="keyword">new</span> Parent;</div><div class="line">    parent-&gt;print();</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Children -&gt; Parent "</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    Children *child1 = <span class="keyword">static_cast</span>&lt;Children*&gt;(parent);</div><div class="line">    <span class="keyword">if</span> (child1 != <span class="literal">NULL</span>) child1-&gt;print();</div><div class="line">    Children *child2 = (Children*)parent;</div><div class="line">    <span class="keyword">if</span> (child2 != <span class="literal">NULL</span>) child2-&gt;print();</div><div class="line">    Children *child3 = <span class="keyword">reinterpret_cast</span>&lt;Children*&gt;(parent);</div><div class="line">    <span class="keyword">if</span> (child3 != <span class="literal">NULL</span>) child3-&gt;print();</div><div class="line">    Children *child4 = <span class="keyword">dynamic_cast</span>&lt;Children*&gt;(parent);</div><div class="line">    <span class="keyword">if</span> (child4 != <span class="literal">NULL</span>) child4-&gt;print();</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Children</div><div class="line">Children -&gt; Parent</div><div class="line">Parent</div><div class="line">Parent</div><div class="line">Parent</div><div class="line">Parent</div><div class="line">Parent -&gt; Children</div><div class="line">Children</div><div class="line">Children</div><div class="line">Children</div></pre></td></tr></table></figure></p>
+<ul>
+<li>从子类到父类的转换：static_cast和dynamic_cast都可以做到</li>
+<li>从父类到子类的转换：static_cast和dynamic_cast也都是成功的，但是static_cast返回了值，而dynamic_cast返回空指针，事实上，父类转换为子类是未定义的结果，而static_cast调用了子类的函数。reinterpret也可以进行类型转换，和static_cast输出是一样的。<br>结论：static_cast和reinterpret_cast运算符要么直接被编译器拒绝进行转换，要么就一定会得到相应的目标类型的值。 而dynamic_cast却会进行判别，确定源指针所指的内容，是否真的合适被目标指针接受。如果是否定的，那么dynamic_cast则会返回null。这是通过检查”运行期类型信息”（Runtime type information，RTTI）来判定的，它还受到编译器的影响，有些编译器需要设置开启才能让程序正确运行。<br>其次，进行dynamic_cast转换时，必须要提供虚函数，如果上例中没有虚函数，就会发生编译错误。</li>
+</ul>
+<h3 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h3><p>reinterpret_cast运算符是用来处理无关类型之间的转换；它会产生一个新的值，这个值会有与原始参数（expressoin）有完全相同的比特位。<br>IBM的C++指南告诉我们reinterpret_cast可以用在什么地方作为转换运算符：</p>
+<ul>
+<li>从指针类型到一个足够大的整数类型</li>
+<li>从整数类型或者枚举类型到指针类型</li>
+<li>从一个指向函数的指针到另一个不同类型的指向函数的指针</li>
+<li>从一个指向对象的指针到另一个不同类型的指向对象的指针</li>
+<li>从一个指向类函数成员的指针到另一个指向不同类型的函数成员的指针</li>
+<li>从一个指向类数据成员的指针到另一个指向不同类型的数据成员的指针<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdint.h&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> *ptr = <span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">233</span>);</div><div class="line">    <span class="keyword">uint64_t</span> ptr_addr = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">uint64_t</span>&gt;(ptr);</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"ptr 的地址: "</span> &lt;&lt; hex &lt;&lt; ptr &lt;&lt; <span class="built_in">endl</span></div><div class="line">        &lt;&lt; <span class="string">"ptr_addr 的值(hex): "</span> &lt;&lt; hex &lt;&lt; ptr_addr &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">delete</span> ptr;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ptr 的地址: 0x1dc2010</div><div class="line">ptr_addr 的值(hex): 1dc2010</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>参考资料：<br><a href="http://c.biancheng.net/cpp/html/24.html" target="_blank" rel="external">C语言数据类型转换</a><br><a href="http://www.cppblog.com/kesalin/archive/2012/10/28/type_cast.html" target="_blank" rel="external">[深入理解C++（一）]类型转换</a><br><a href="https://blog.csdn.net/ydar95/article/details/69822540" target="_blank" rel="external">c++ 四种强制类型转换介绍</a><br><a href="http://www.cnblogs.com/ider/archive/2011/08/01/cpp_cast_operator_part5.html" target="_blank" rel="external">C++标准转换运算符dynamic_cast</a><br><a href="http://www.cnblogs.com/ider/archive/2011/07/30/cpp_cast_operator_part3.html" target="_blank" rel="external">C++标准转换运算符reinterpret_cast</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/23/cpluscplusbase/" rel="next" title="C++编程基础部分常见问题梳理">
+                <i class="fa fa-chevron-left"></i> C++编程基础部分常见问题梳理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/24/datastructuretree/" rel="prev" title="数据结构之树遍历">
+                数据结构之树遍历 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C数据类型转换"><span class="nav-number">1.</span> <span class="nav-text">C数据类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#隐式类型转换"><span class="nav-number">1.1.</span> <span class="nav-text">隐式类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#赋值转换"><span class="nav-number">1.1.1.</span> <span class="nav-text">赋值转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运算类型转换"><span class="nav-number">1.1.2.</span> <span class="nav-text">运算类型转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强制类型转换"><span class="nav-number">1.2.</span> <span class="nav-text">强制类型转换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-数据类型转换"><span class="nav-number">2.</span> <span class="nav-text">C++数据类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#隐式类型转换-1"><span class="nav-number">2.1.</span> <span class="nav-text">隐式类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示类型转换"><span class="nav-number">2.2.</span> <span class="nav-text">显示类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#const-cast"><span class="nav-number">2.2.1.</span> <span class="nav-text">const_cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-cast"><span class="nav-number">2.2.2.</span> <span class="nav-text">static_cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamic-cast"><span class="nav-number">2.2.3.</span> <span class="nav-text">dynamic_cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reinterpret-cast"><span class="nav-number">2.2.4.</span> <span class="nav-text">reinterpret_cast</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

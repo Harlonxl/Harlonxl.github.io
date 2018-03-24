@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="树在数据结构中占有重要的地位，这篇文章主要总结二叉树的知识点以及二叉树的遍历。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构之树遍历">
+<meta property="og:url" content="http://harlon.org/2018/03/24/datastructuretree/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="树在数据结构中占有重要的地位，这篇文章主要总结二叉树的知识点以及二叉树的遍历。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/tree.png">
+<meta property="og:image" content="http://harlon.org/img/tree2.png">
+<meta property="og:updated_time" content="2018-03-24T13:52:32.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构之树遍历">
+<meta name="twitter:description" content="树在数据结构中占有重要的地位，这篇文章主要总结二叉树的知识点以及二叉树的遍历。">
+<meta name="twitter:image" content="http://harlon.org/img/tree.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/03/24/datastructuretree/"/>
+
+
+
+
+
+  <title>数据结构之树遍历 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/24/datastructuretree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构之树遍历</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-24T17:13:23+08:00">
+                2018-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>树在数据结构中占有重要的地位，这篇文章主要总结二叉树的知识点以及二叉树的遍历。<br><a id="more"></a></p>
+<h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p>我认为真正的理解树，还是有必要去学习一点概念。<br><img src="/img/tree.png" alt="树"></p>
+<ul>
+<li>结点：使用树结构存储的每一个数据元素都被称为“结点”。</li>
+<li>父节点、子节点和兄弟节点：对于图中的结点 A、B、C、D 来说，A 是 B、C、D 结点的父结点（也称为“双亲结点”），而 B、C、D 都是 A 结点的子结点（也称“孩子结点”）。对于 B、C、D 来说，它们都有相同的父结点，所以它们互为兄弟结点。</li>
+<li>根节点：每一个非空树都有且只有一个被称为根的结点。图中，结点A就是整棵树的根结点。<blockquote>
+<p>树根的判断依据为：如果一个结点没有父结点，那么这个结点就是整棵树的根结点。</p>
+</blockquote>
+</li>
+<li>叶子结点：如果结点没有任何子结点，那么此结点称为叶子结点（叶结点）。例如图中，结点 K、L、F、G、M、I、J 都是这棵树的叶子结点。</li>
+<li>子树：如图中，整棵树的根结点为结点 A，而如果单看结点 B、E、F、K、L 组成的部分来说，也是棵树，而且节点 B 为这棵树的根结点。所以称 B、E、F、K、L 这几个结点组成的树为整棵树的子树；同样，结点 E、K、L 构成的也是一棵子树，根结点为 E。<blockquote>
+<p>单个结点也是一棵树，只不过根结点就是它本身。图 1中，结点 K、L、F 等都是树，且都是整棵树的子树。</p>
+</blockquote>
+</li>
+<li>空树：如果集合本身为空，那么构成的树就被称为空树。空树中没有结点。</li>
+<li>度：对于一个结点，拥有的子树数（结点有多少分支）称为结点的度（Degree）。根结点 A 下分出了 3 个子树，所以，结点 A 的度为 3。<blockquote>
+<p>一棵树的度是树内各结点的度的最大值。</p>
+</blockquote>
+</li>
+<li>层次：从一棵树的树根开始，树根所在层为第一层，根的孩子结点所在的层为第二层，依次类推。<blockquote>
+<p>一棵树的深度（高度）是树中结点所在的最大的层次。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><ul>
+<li>二叉树：二叉树中各结点的度最多是 2，可以是 0，1，2。</li>
+<li>满二叉树：如果二叉树中除了叶子结点，每个结点的度都为 2，那么此二叉树为满二叉树。</li>
+<li>完全二叉树：如果二叉树除了最后一层外为满二叉树，最后一层的结点依次从左到右分布，此二叉树为完全二叉树。</li>
+</ul>
+<hr>
+<h1 id="二叉树性质"><a href="#二叉树性质" class="headerlink" title="二叉树性质"></a>二叉树性质</h1><ul>
+<li>1、二叉树中，第i层最多有2^(i-1)个节点</li>
+<li>2、如果二叉树的深度为K，那么此二叉树最有有2^K-1个节点</li>
+<li>3、一棵二叉树的叶子结点数为n0，度为2的结点数为n2，则n0 = n2 + 1。</li>
+<li>4、n 个结点的完全二叉树的深度为[log2n]+1，[]为向下取整。</li>
+<li>5、对于任意一个完全二叉树来说，将含有的结点按照层次从左到右依次标号，对于任意一个结点 i ，有以下几个结论：<ul>
+<li>当 i &gt; 1时，父亲结点为结点 [i / 2]</li>
+<li>如果 2*i &gt; n ，则结点 i 肯定没有左孩子（为叶子结点）；否则其左孩子是结点 2*i </li>
+<li>如果 2*i +1 &gt; n ，则结点 i 肯定没有右孩子；否则右孩子是结点 2*i +1</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="树的遍历方式"><a href="#树的遍历方式" class="headerlink" title="树的遍历方式"></a>树的遍历方式</h1><ul>
+<li>先序遍历：先访问根结点，再遍历左右子树。</li>
+<li>中序遍历：遍历左子树，之后访问根结点，然后遍历右子树。</li>
+<li>后续遍历：遍历完左右子树，再访问根结点。<br><img src="/img/tree2.png" alt="树"><br>先序遍历：<blockquote>
+<p>12455367</p>
+</blockquote>
+</li>
+</ul>
+<p>中序遍历：</p>
+<blockquote>
+<p>4251637</p>
+</blockquote>
+<p>后序遍历：</p>
+<blockquote>
+<p>4526731</p>
+</blockquote>
+<p>只要给出三种遍历的两种，这课二叉树也可以唯一确定的。</p>
+<hr>
+<h1 id="树的递归遍历"><a href="#树的递归遍历" class="headerlink" title="树的递归遍历"></a>树的递归遍历</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></div><div class="line">    Node *left;</div><div class="line">    Node *right;</div><div class="line">    <span class="keyword">int</span> val;</div><div class="line">    Node(<span class="keyword">int</span> val=<span class="number">0</span>) : val(val), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tree</span> &#123;</span></div><div class="line"><span class="keyword">private</span>:</div><div class="line">    Node *root;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    Tree() : root(<span class="literal">NULL</span>) &#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">insert</span><span class="params">(Node *node)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>) &#123;</div><div class="line">            root = node;</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Node *next = root;</div><div class="line">        Node *pre = <span class="literal">NULL</span>;</div><div class="line">        <span class="keyword">while</span> (next != <span class="literal">NULL</span>) &#123;</div><div class="line">            pre = next;</div><div class="line">            <span class="keyword">if</span> (node-&gt;val &lt; next-&gt;val) next = next-&gt;left;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(node-&gt;val &gt; next-&gt;val) next = next-&gt;right;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (next == <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (node-&gt;val &gt; pre-&gt;val) pre-&gt;right = node;</div><div class="line">            <span class="keyword">else</span> pre-&gt;left = node;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">PreOrderTraverse</span><span class="params">()</span> </span>&#123;</div><div class="line">        PreOrderTraverse(root);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">PreOrderTraverse</span><span class="params">(<span class="keyword">const</span> Node *node)</span> <span class="keyword">const</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (node == <span class="literal">NULL</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="built_in">cout</span> &lt;&lt; node-&gt;val &lt;&lt; <span class="string">" "</span>;</div><div class="line">        PreOrderTraverse(node-&gt;left);</div><div class="line">        PreOrderTraverse(node-&gt;right);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">InOrderTraverse</span><span class="params">()</span> </span>&#123;</div><div class="line">        InOrderTraverse(root);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">InOrderTraverse</span><span class="params">(<span class="keyword">const</span> Node *node)</span> <span class="keyword">const</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (node == <span class="literal">NULL</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        InOrderTraverse(node-&gt;left);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; node-&gt;val &lt;&lt; <span class="string">" "</span>;</div><div class="line">        InOrderTraverse(node-&gt;right);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">PostOrderTraverse</span><span class="params">()</span> </span>&#123;</div><div class="line">        PostOrderTraverse(root);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">PostOrderTraverse</span><span class="params">(<span class="keyword">const</span> Node *node)</span> <span class="keyword">const</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (node == <span class="literal">NULL</span>) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        PostOrderTraverse(node-&gt;left);</div><div class="line">        PostOrderTraverse(node-&gt;right);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; node-&gt;val &lt;&lt; <span class="string">" "</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    Tree tree;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n) &#123;</div><div class="line">       <span class="keyword">if</span> (tree.insert(<span class="keyword">new</span> Node(n))) &#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert success"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">       &#125; <span class="keyword">else</span> &#123;</div><div class="line">           <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert failed"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">        tree.PreOrderTraverse();</div><div class="line">        tree.InOrderTraverse();</div><div class="line">        tree.PostOrderTraverse();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="树的非递归遍历"><a href="#树的非递归遍历" class="headerlink" title="树的非递归遍历"></a>树的非递归遍历</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></div><div class="line">    Node *left;</div><div class="line">    Node *right;</div><div class="line">    <span class="keyword">int</span> val;</div><div class="line">    Node(<span class="keyword">int</span> val=<span class="number">0</span>) : val(val), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tree</span> &#123;</span></div><div class="line"><span class="keyword">private</span>:</div><div class="line">    Node *root;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    Tree() : root(<span class="literal">NULL</span>) &#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">insert</span><span class="params">(Node *node)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>) &#123;</div><div class="line">            root = node;</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Node *next = root;</div><div class="line">        Node *pre = <span class="literal">NULL</span>;</div><div class="line">        <span class="keyword">while</span> (next != <span class="literal">NULL</span>) &#123;</div><div class="line">            pre = next;</div><div class="line">            <span class="keyword">if</span> (node-&gt;val &lt; next-&gt;val) next = next-&gt;left;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(node-&gt;val &gt; next-&gt;val) next = next-&gt;right;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (next == <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (node-&gt;val &gt; pre-&gt;val) pre-&gt;right = node;</div><div class="line">            <span class="keyword">else</span> pre-&gt;left = node;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">PreOrderTraverse</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">stack</span>&lt;Node *&gt; sn;</div><div class="line">        sn.push(root);</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (!sn.empty()) &#123;</div><div class="line">            Node *cur = sn.top();</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; cur-&gt;val &lt;&lt; <span class="string">" "</span>;</div><div class="line">            sn.pop();</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (cur-&gt;right != <span class="literal">NULL</span>) sn.push(cur-&gt;right);</div><div class="line">            <span class="keyword">if</span> (cur-&gt;left != <span class="literal">NULL</span>) sn.push(cur-&gt;left);</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">InOrderTraverse</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">stack</span>&lt;Node*&gt; sn;</div><div class="line">        Node *next = root;</div><div class="line"></div><div class="line">        <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</div><div class="line">            <span class="keyword">while</span> (next != <span class="literal">NULL</span>) &#123;</div><div class="line">                sn.push(next);</div><div class="line">                next = next-&gt;left;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (sn.empty()) <span class="keyword">break</span>;</div><div class="line">            Node *cur = sn.top();</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; cur-&gt;val &lt;&lt; <span class="string">" "</span>;</div><div class="line">            sn.pop();</div><div class="line">            next = cur-&gt;right;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">PostOrderTraverse</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">stack</span>&lt;Node*&gt; sn;</div><div class="line">        sn.push(root);</div><div class="line">        Node *pre = <span class="literal">NULL</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (!sn.empty()) &#123;</div><div class="line">            Node *cur = sn.top();</div><div class="line">            <span class="keyword">if</span> ((cur-&gt;left == <span class="literal">NULL</span> &amp;&amp; cur-&gt;right == <span class="literal">NULL</span>) ||</div><div class="line">                    (pre != <span class="literal">NULL</span> &amp;&amp; ((pre == cur-&gt;left) || (pre == cur-&gt;right)))) &#123;</div><div class="line">                sn.pop();</div><div class="line">                <span class="built_in">cout</span> &lt;&lt; cur-&gt;val &lt;&lt; <span class="string">" "</span>;</div><div class="line">                pre = cur;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">if</span> (cur-&gt;right != <span class="literal">NULL</span>) sn.push(cur-&gt;right);</div><div class="line">                <span class="keyword">if</span> (cur-&gt;left != <span class="literal">NULL</span>) sn.push(cur-&gt;left);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    Tree tree;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n) &#123;</div><div class="line">       <span class="keyword">if</span> (tree.insert(<span class="keyword">new</span> Node(n))) &#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert success"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">       &#125; <span class="keyword">else</span> &#123;</div><div class="line">           <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert failed"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">        tree.PreOrderTraverse();</div><div class="line">        tree.InOrderTraverse();</div><div class="line">        tree.PostOrderTraverse();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="树的磁层遍历"><a href="#树的磁层遍历" class="headerlink" title="树的磁层遍历"></a>树的磁层遍历</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></div><div class="line">    Node *left;</div><div class="line">    Node *right;</div><div class="line">    <span class="keyword">int</span> val;</div><div class="line">    Node(<span class="keyword">int</span> val=<span class="number">0</span>) : val(val), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tree</span> &#123;</span></div><div class="line"><span class="keyword">private</span>:</div><div class="line">    Node *root;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    Tree() : root(<span class="literal">NULL</span>) &#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">insert</span><span class="params">(Node *node)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>) &#123;</div><div class="line">            root = node;</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Node *next = root;</div><div class="line">        Node *pre = <span class="literal">NULL</span>;</div><div class="line">        <span class="keyword">while</span> (next != <span class="literal">NULL</span>) &#123;</div><div class="line">            pre = next;</div><div class="line">            <span class="keyword">if</span> (node-&gt;val &lt; next-&gt;val) next = next-&gt;left;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(node-&gt;val &gt; next-&gt;val) next = next-&gt;right;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (next == <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (node-&gt;val &gt; pre-&gt;val) pre-&gt;right = node;</div><div class="line">            <span class="keyword">else</span> pre-&gt;left = node;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Traverse</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</div><div class="line">        <span class="built_in">queue</span>&lt;Node *&gt; qn;</div><div class="line">        qn.push(root);</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (!qn.empty()) &#123;</div><div class="line">            <span class="keyword">int</span> size = qn.size();</div><div class="line">            <span class="keyword">while</span> (size--) &#123;</div><div class="line">                Node *cur = qn.front();</div><div class="line">                qn.pop();</div><div class="line">                <span class="built_in">cout</span> &lt;&lt; cur-&gt;val &lt;&lt; <span class="string">" "</span>;</div><div class="line">                <span class="keyword">if</span> (cur-&gt;left != <span class="literal">NULL</span>) qn.push(cur-&gt;left);</div><div class="line">                <span class="keyword">if</span> (cur-&gt;right != <span class="literal">NULL</span>) qn.push(cur-&gt;right);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    Tree tree;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n) &#123;</div><div class="line">       <span class="keyword">if</span> (tree.insert(<span class="keyword">new</span> Node(n))) &#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert success"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">       &#125; <span class="keyword">else</span> &#123;</div><div class="line">           <span class="built_in">cout</span> &lt;&lt; <span class="string">"insert failed"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">       &#125;</div><div class="line">        tree.Traverse();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>参考资料：<br><a href="http://www.cnblogs.com/zhuyf87/archive/2012/11/01/2750105.html" target="_blank" rel="external">二叉树的定义、性质、存储</a><br><a href="https://en.wikipedia.org/wiki/Bubble_sort" target="_blank" rel="external">Bubble sort</a><br><a href="https://en.wikipedia.org/wiki/Selection_sort" target="_blank" rel="external">Selection sort</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/24/cpluscplustypeswitch/" rel="next" title="C++之类型转换详解">
+                <i class="fa fa-chevron-left"></i> C++之类型转换详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#树"><span class="nav-number">1.</span> <span class="nav-text">树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉树"><span class="nav-number">2.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉树性质"><span class="nav-number">3.</span> <span class="nav-text">二叉树性质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的遍历方式"><span class="nav-number">4.</span> <span class="nav-text">树的遍历方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的递归遍历"><span class="nav-number">5.</span> <span class="nav-text">树的递归遍历</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的非递归遍历"><span class="nav-number">6.</span> <span class="nav-text">树的非递归遍历</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的磁层遍历"><span class="nav-number">7.</span> <span class="nav-text">树的磁层遍历</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
