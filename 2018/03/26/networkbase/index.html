@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="计算机知识点整理，首先是计算机网络整体的体系结构，然后按照OSI相反的方向，即从应用层开始整理各个知识点，逐步击破。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络基础知识">
+<meta property="og:url" content="http://harlon.org/2018/03/26/networkbase/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="计算机知识点整理，首先是计算机网络整体的体系结构，然后按照OSI相反的方向，即从应用层开始整理各个知识点，逐步击破。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/593225/201512/593225-20151228140454010-1128568448.png">
+<meta property="og:image" content="http://img.blog.csdn.net/20131107163544468">
+<meta property="og:image" content="http://blog.chinaunix.net/attachment/201304/7/22312037_1365321234nnNc.png">
+<meta property="og:image" content="http://blog.chinaunix.net/attachment/201304/8/22312037_1365405910EROI.png">
+<meta property="og:image" content="http://blog.chinaunix.net/attachment/201304/9/22312037_1365503104wDR0.png">
+<meta property="og:image" content="http://blog.chinaunix.net/attachment/201304/10/22312037_13655617062cGr.png">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201210/23/1350996969_2313.jpg">
+<meta property="og:image" content="http://img.blog.csdn.net/20150718102804067">
+<meta property="og:image" content="http://img.blog.csdn.net/20150718102858936">
+<meta property="og:image" content="http://img.blog.csdn.net/20161117115417934">
+<meta property="og:image" content="http://img.blog.csdn.net/20150718103857667">
+<meta property="og:image" content="http://img.blog.csdn.net/20150718104424646">
+<meta property="og:image" content="http://img.blog.csdn.net/20170516161649348">
+<meta property="og:image" content="http://img.blog.csdn.net/20170516162438186">
+<meta property="og:updated_time" content="2018-03-26T14:34:12.098Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机网络基础知识">
+<meta name="twitter:description" content="计算机知识点整理，首先是计算机网络整体的体系结构，然后按照OSI相反的方向，即从应用层开始整理各个知识点，逐步击破。">
+<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/593225/201512/593225-20151228140454010-1128568448.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/03/26/networkbase/"/>
+
+
+
+
+
+  <title>计算机网络基础知识 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/26/networkbase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计算机网络基础知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-26T22:31:23+08:00">
+                2018-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>计算机知识点整理，首先是计算机网络整体的体系结构，然后按照OSI相反的方向，即从应用层开始整理各个知识点，逐步击破。<br><a id="more"></a></p>
+<hr>
+<h1 id="计算机网络基础"><a href="#计算机网络基础" class="headerlink" title="计算机网络基础"></a>计算机网络基础</h1><p><a href="#jump1">1.OSI和TCP/IP软件体系结构</a><br><a href="#jump2">2.五层协议总结</a><br><a href="#jump3">3.OSI七层作用</a><br><a href="#jump4">4.浏览器中输入www.xxxx.com后执行的过程</a><br><a href="#jump5">5.DNS递归查询和迭代查询的区别</a><br><a href="#jump6">6.DNS域名系统，简单描述其工作原理</a><br><a href="#jump7">7.什么是DHCP？</a><br><a href="#jump8">8.什么是NAT？</a><br><a href="#jump9">9.什么是HTTP？</a></p>
+<hr>
+<h1 id="1-OSI和TCP-IP软件体系结构"><a href="#1-OSI和TCP-IP软件体系结构" class="headerlink" title="1.OSI和TCP/IP软件体系结构"></a><span id="jump1">1.OSI和TCP/IP软件体系结构</span></h1><ul>
+<li>OSI：物理层、数据链路层、网络层、传输层、会话层、表示层、应用层</li>
+<li>TCP/IP：网络接口层、网际互联层、传输层、应用层</li>
+</ul>
+<hr>
+<h1 id="2-五层协议总结"><a href="#2-五层协议总结" class="headerlink" title="2.五层协议总结"></a><span id="jump2">2.五层协议总结</span></h1><ul>
+<li>物理层：RJ45（网线接口）、IEEE802.3（以太网协议）、IEEE802.11（无线局域网协议）</li>
+<li>物理层设备：集线器、中继器、网关</li>
+<li>数据链路层：PPP（点对点协议）、FR（帧中继协议）、HDCC（面向比特的同步协议）、VLAN（虚拟网络）、MAC</li>
+<li>数据链路层设备：网桥、交换机</li>
+<li>网络层：IP（网际协议地址）、ICMP（控制报文协议）、ARP（地址解析协议）、RARP（反向地址转换协议）、OSPF（开放式最短路径优先）、IPX（互联网分组交换协议）、RIP（路由信息协议）</li>
+<li>网络层设备：路由器</li>
+<li>传输层：TCP（传输控制协议）、UDP（用户数据报文）、SPX（序列分组交换协议）</li>
+<li>会话层：NFS、SQL、NETBIOS、RPC</li>
+<li>表示层：JPEG、MPEG、ASII</li>
+<li>应用层：FTP（文件传输协议）、DNS（域名解析协议）、Telnet（TCP/IP终端仿真协议）、SMTP（简单邮件传输协议）、HTTP（超文本传输协议）、NFS</li>
+</ul>
+<hr>
+<h1 id="3-OSI七层作用"><a href="#3-OSI七层作用" class="headerlink" title="3.OSI七层作用"></a><span id="jump3">3.OSI七层作用</span></h1><ul>
+<li>物理层：通过媒介传输比特，确定机械以及电气规范（比特Bit）</li>
+<li>数据链路层：将比特组装成帧和点到点的传输（帧Frame）</li>
+<li>网络层：负责数据包从源到宿的网际互联（包Packet）</li>
+<li>传输层：提供端对端的可靠报文传输和错误恢复（段Segment）</li>
+<li>会话层：建立、管理和终止会话（会话协议数据单元SPDU）</li>
+<li>表示层：对数据进行翻译、加密和压缩（表示数据单元PPDU）</li>
+<li>应用层：允许访问OSI环境的手段（应用协议数据单元APDU）</li>
+</ul>
+<hr>
+<h1 id="4-浏览器中输入www-xxxx-com后执行的过程"><a href="#4-浏览器中输入www-xxxx-com后执行的过程" class="headerlink" title="4.浏览器中输入www.xxxx.com后执行的过程"></a><span id="jump4">4.浏览器中输入www.xxxx.com后执行的过程</span></h1><ul>
+<li>首先客户端浏览器通过DNS解析到www.xxxx.com的IP地址，通过这个IP地址找到客户端到服务器的路径。客户端发起一个HTTP会话到这个IP，通过TCP封装数据包，传入网络层。</li>
+<li>在客户端的传输层，把HTTP会话请求分成报文段，添加源和目的端口，如服务器使用80端口监听客户端的请求，客户端由系统随机选择一个端口如5000，与服务器进行交换，服务器把相应的请求返回给客户端的5000端口。然后使用IP层的IP地址查找目的端。</li>
+<li>客户端的网络层不用关心应用层或者传输层的东西，主要做的是通过查找路由表确定如何到达服务器，期间可能经过多个路由器，这些都是由路由器来完成的工作，不作过多的描述，无非就是通过查找路由表决定通过那个路径到达服务器。</li>
+<li>客户端的链路层，包通过链路层发送到路由器，通过邻居协议查找给定IP地址的MAC地址，然后发送ARP请求查找目的地址，如果得到回应后就可以使用ARP的请求应答交换的IP数据包现在就可以传输了，然后发送IP数据包到达服务器的地址。</li>
+</ul>
+<hr>
+<h1 id="5-DNS递归查询和迭代查询的区别"><a href="#5-DNS递归查询和迭代查询的区别" class="headerlink" title="5.DNS递归查询和迭代查询的区别"></a><span id="jump5">5.DNS递归查询和迭代查询的区别</span></h1><ul>
+<li>递归查询：网络客户端同本地DNS服务器之间的查询，该模式下，DNS服务器接收到请求后，必须返回一个准确的结果。</li>
+<li>迭代查询：DNS 服务器会向客户机提供其他能够解析查询请求的DNS 服务器地址，当客户机发送查询请求时，DNS 服务器并不直接回复查询结果，而是告诉客户机另一台DNS 服务器地址，客户机再向这台DNS 服务器提交请求，依次循环直到返回查询的结果为止。</li>
+</ul>
+<hr>
+<h1 id="6-DNS域名系统，简单描述其工作原理"><a href="#6-DNS域名系统，简单描述其工作原理" class="headerlink" title="6.DNS域名系统，简单描述其工作原理"></a><span id="jump6">6.DNS域名系统，简单描述其工作原理</span></h1><ul>
+<li>当DNS客户机需要在程序中使用名称时，它会查询DNS服务器来解析该名称。客户机发送的每条查询信息包括三条信息：包括：指定的DNS域名，指定的查询类型，DNS域名的指定类别。基于UDP服务，端口53. 该应用一般不直接为用户使用，而是为其他应用服务，如HTTP，SMTP等在其中需要完成主机名到IP地址的转换。</li>
+</ul>
+<hr>
+<h1 id="8-什么是DHCP？"><a href="#8-什么是DHCP？" class="headerlink" title="8.什么是DHCP？"></a><span id="jump8">8.什么是DHCP？</span></h1><ul>
+<li>动态主机配置协议，使用UDP工作，主要有两个用途：给内部网络或网络服务供应商自动分配IP地址，给用户或者内部网络管理员作为对所有计算机作中央管理的手段。</li>
+</ul>
+<hr>
+<h1 id="9-什么是NAT？"><a href="#9-什么是NAT？" class="headerlink" title="9.什么是NAT？"></a><span id="jump9">9.什么是NAT？</span></h1><ul>
+<li>网络地址转换，通常用于将私有网络转换为共有网络，用于解决IP资源不够用的问题，内部通过公网IP池或端口实现多路复用。</li>
+</ul>
+<hr>
+<h1 id="10-什么是HTTP？"><a href="#10-什么是HTTP？" class="headerlink" title="10.什么是HTTP？"></a><span id="jump10">10.什么是HTTP？</span></h1><ul>
+<li>HTTP超文本传输协议，是一个属于应用层的面向对象的协议，由于其简捷、快速的方式，适用于分布式超媒体信息系统。</li>
+</ul>
+<hr>
+<h1 id="11-什么是HTTPS？"><a href="#11-什么是HTTPS？" class="headerlink" title="11.什么是HTTPS？"></a><span id="jump11">11.什么是HTTPS？</span></h1><ul>
+<li>HTTPS是以安全为目标的HTTP通道，简单讲是HTTP的安全版。即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。</li>
+</ul>
+<hr>
+<h1 id="12-常用的HTTP状态码？"><a href="#12-常用的HTTP状态码？" class="headerlink" title="12.常用的HTTP状态码？"></a><span id="jump12">12.常用的HTTP状态码？</span></h1><ul>
+<li>2开头：表示成功处理了请求的状态代码<ul>
+<li>200：（成功）  服务器已成功处理了请求。 通常，这表示服务器提供了请求的网页。 </li>
+<li>201：（已创建）  请求成功并且服务器创建了新的资源。 </li>
+<li>202：（已接受）  服务器已接受请求，但尚未处理。</li>
+<li>203：（非授权信息）  服务器已成功处理了请求，但返回的信息可能来自另一来源。</li>
+<li>204：（无内容）  服务器成功处理了请求，但没有返回任何内容。</li>
+<li>205：（重置内容） 服务器成功处理了请求，但没有返回任何内容。</li>
+<li>206：（部分内容）  服务器成功处理了部分 GET 请求。</li>
+</ul>
+</li>
+<li>3开头：表示要完成请求，需要进一步操作。 通常，这些状态代码用来重定向。<ul>
+<li>300：（多种选择）  针对请求，服务器可执行多种操作。 服务器可根据请求者 (user agent) 选择一项操作，或提供操作列表供请求者选择。 </li>
+<li>301：（永久移动）  请求的网页已永久移动到新位置。 服务器返回此响应（对 GET 或 HEAD 请求的响应）时，会自动将请求者转到新位置。</li>
+<li>302 ：（临时移动）  服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来进行以后的请求。</li>
+<li>303 ：（查看其他位置） 请求者应当对不同的位置使用单独的 GET 请求来检索响应时，服务器返回此代码。</li>
+<li>304：（未修改） 自从上次请求后，请求的网页未修改过。 服务器返回此响应时，不会返回网页内容。 </li>
+<li>305：（使用代理） 请求者只能使用代理访问请求的网页。 如果服务器返回此响应，还表示请求者应使用代理。 </li>
+<li>307：（临时重定向）  服务器目前从不同位置的网页响应请求，但请求者应继续使用原有位置来进行以后的请求。</li>
+</ul>
+</li>
+<li>4开头：这些状态代码表示请求可能出错，妨碍了服务器的处理。<ul>
+<li>400：（错误请求） 服务器不理解请求的语法。 </li>
+<li>401：（未授权） 请求要求身份验证。 对于需要登录的网页，服务器可能返回此响应。 </li>
+<li>403：（禁止） 服务器拒绝请求。</li>
+<li>404：（未找到） 服务器找不到请求的网页。</li>
+<li>405：（方法禁用） 禁用请求中指定的方法。 </li>
+<li>406：（不接受） 无法使用请求的内容特性响应请求的网页。 </li>
+<li>407：（需要代理授权） 此状态代码与 401（未授权）类似，但指定请求者应当授权使用代理。</li>
+<li>408：（请求超时）  服务器等候请求时发生超时。 </li>
+<li>409：（冲突）  服务器在完成请求时发生冲突。 服务器必须在响应中包含有关冲突的信息。 </li>
+<li>410：（已删除）  如果请求的资源已永久删除，服务器就会返回此响应。 </li>
+<li>411：（需要有效长度） 服务器不接受不含有效内容长度标头字段的请求。 </li>
+<li>412：（未满足前提条件） 服务器未满足请求者在请求中设置的其中一个前提条件。 </li>
+<li>413：（请求实体过大） 服务器无法处理请求，因为请求实体过大，超出服务器的处理能力。 </li>
+<li>414：（请求的 URI 过长） 请求的 URI（通常为网址）过长，服务器无法处理。 </li>
+<li>415： （不支持的媒体类型） 请求的格式不受请求页面的支持。 </li>
+<li>416：（请求范围不符合要求） 如果页面无法提供请求的范围，则服务器会返回此状态代码。 </li>
+<li>417：（未满足期望值） 服务器未满足”期望”请求标头字段的要求。</li>
+</ul>
+</li>
+<li>5开头：这些状态代码表示服务器在尝试处理请求时发生内部错误。 这些错误可能是服务器本身的错误，而不是请求出错。<ul>
+<li>500：（服务器内部错误）  服务器遇到错误，无法完成请求。 </li>
+<li>501：（尚未实施） 服务器不具备完成请求的功能。 例如，服务器无法识别请求方法时可能会返回此代码。 </li>
+<li>502：（错误网关） 服务器作为网关或代理，从上游服务器收到无效响应。 </li>
+<li>503：（服务不可用） 服务器目前无法使用（由于超载或停机维护）。 通常，这只是暂时状态。 </li>
+<li>504：（网关超时）  服务器作为网关或代理，但是没有及时从上游服务器收到请求。 </li>
+<li>505：（HTTP 版本不受支持） 服务器不支持请求中所用的 HTTP 协议版本。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="13-HTTP的报文结构"><a href="#13-HTTP的报文结构" class="headerlink" title="13.HTTP的报文结构"></a><span id="jump13">13.HTTP的报文结构</span></h1><p>HTTP报文分为两类：请求报文和响应报文</p>
+<ul>
+<li>请求报文：<br><img src="https://images2015.cnblogs.com/blog/593225/201512/593225-20151228140454010-1128568448.png" alt=""><ul>
+<li>请求行（request line)：请求行由请求方法字段、URL字段和HTTP协议版本字段，组成，它们用空格分隔，例如：GET /index.html  HTTP/1.1，HTTP协议的请求方法有GET、POST、HEAD、PUT、DELETE、OPTIONS、TRACE、CONNECT；</li>
+<li>消息头部（header)：请求头部由key/value键值对组成，每行一对，key和value用冒号”:”分隔，请求头部通知服务器有关于client端的请求信息，典型的请求头：<ul>
+<li>User-Agent：产生请求的浏览器类型；</li>
+<li>Accept：client端可识别的内容类型列表；</li>
+<li>Host：请求的主机名，允许多个域名同处一个ip地址，即虚拟主机。</li>
+</ul>
+</li>
+<li>空行：最后一个请求头之后是一个空行，发送回车符和换行符，通知服务器请求头结束；</li>
+<li>请求正文：请求数据不在GET方法中使用，而是在POST中使用。POST方法适用于需要client填写表单的场合，与请求数据相关的最常用的请求头是Content-Type 和Content-Length。</li>
+</ul>
+</li>
+<li>响应报文：<br><img src="http://img.blog.csdn.net/20131107163544468" alt=""><ul>
+<li>状态行：由3部分组成，分别为：协议版本，状态码，状态码描述，之间由空格分隔；</li>
+<li>响应头部：与请求头部类似，为响应报文添加了一些附加信息；</li>
+<li>空行：与请求报文类似；</li>
+<li>响应正文：响应的数据。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="14-TCP和UDP区别？"><a href="#14-TCP和UDP区别？" class="headerlink" title="14.TCP和UDP区别？"></a><span id="jump14">14.TCP和UDP区别？</span></h1><ul>
+<li>TCP是传输控制协议，提供的是面向连接、可靠的字节流服务。通信双方彼此交换数据前，必须先通过三次握手协议建立连接，之后才能传输数据。TCP提供超时重传，丢弃重复数据，检验数据，流量控制等功能，保证数据能从一端传到另一端。UDP是用户数据报协议，是一个简单的面向无连接的协议。UDP不提供可靠的服务。在数据数据前不用建立连接故而传输速度很快。UDP主要用户流媒体传输，IP电话等对数据可靠性要求不是很高的场合。</li>
+</ul>
+<hr>
+<h1 id="15-TCP报文格式"><a href="#15-TCP报文格式" class="headerlink" title="15.TCP报文格式"></a><span id="jump15">15.TCP报文格式</span></h1><p><img src="http://blog.chinaunix.net/attachment/201304/7/22312037_1365321234nnNc.png" alt=""></p>
+<ul>
+<li>序号：Seq序号，占32位，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记；</li>
+<li>确认序号：Ack序号，占32位，只有ACK标志位为1时，确认序号字段才有效，Ack=Seq+1；</li>
+<li>标志位：共6个，即URG、ACK、PSH、RST、SYN、FIN等，具体含义如下：<ul>
+<li>URG：紧急指针（urgent pointer）有效；</li>
+<li>ACK：确认序号有效；</li>
+<li>PSH：接收方应该尽快将这个报文交给应用层；</li>
+<li>RST：重置连接；</li>
+<li>SYN：发起一个新连接；</li>
+<li>FIN：释放一个连接。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="16-三次握手"><a href="#16-三次握手" class="headerlink" title="16.三次握手"></a><span id="jump16">16.三次握手</span></h1><p><img src="http://blog.chinaunix.net/attachment/201304/8/22312037_1365405910EROI.png" alt=""></p>
+<hr>
+<h1 id="17-四次挥手"><a href="#17-四次挥手" class="headerlink" title="17.四次挥手"></a><span id="jump17">17.四次挥手</span></h1><p><img src="http://blog.chinaunix.net/attachment/201304/9/22312037_1365503104wDR0.png" alt=""></p>
+<p>同时挥手时：<br><img src="http://blog.chinaunix.net/attachment/201304/10/22312037_13655617062cGr.png" alt=""></p>
+<hr>
+<h1 id="18-TCP的11种状态？"><a href="#18-TCP的11种状态？" class="headerlink" title="18.TCP的11种状态？"></a><span id="jump18">18.TCP的11种状态？</span></h1><p><img src="http://img.my.csdn.net/uploads/201210/23/1350996969_2313.jpg" alt=""></p>
+<ul>
+<li>CLOSED：初始状态，表示TCP连接是“关闭着的”或“未打开的”；</li>
+<li>LISTEN ：表示服务器端的某个SOCKET处于监听状态，可以接受客户端的连接；</li>
+<li>SYN_RCVD ：表示服务器接收到了来自客户端请求连接的SYN报文。在正常情况下，这个状态是服务器端的SOCKET在建立TCP连接时的三次握手会话过程中的一个中间状态；</li>
+<li>SYN_SENT ：这个状态与SYN_RCVD 状态相呼应，当客户端SOCKET执行connect()进行连接时，它首先发送SYN报文，然后随即进入到SYN_SENT 状态，并等待服务端的发送三次握手中的第2个报文；</li>
+<li>ESTABLISHED ：表示TCP连接已经成功建立；</li>
+<li>FIN_WAIT_1 ：其实FIN_WAIT_1 和FIN_WAIT_2 两种状态的真正含义都是表示等待对方的FIN报文。而这两种状态的区别是：FIN_WAIT_1状态实际上是当SOCKET在ESTABLISHED状态时，它想主动关闭连接，向对方发送了FIN报文，此时该SOCKET进入到FIN_WAIT_1 状态。而当对方回应ACK报文后，则进入到FIN_WAIT_2 状态。当然在实际的正常情况下，无论对方处于任何种情况下，都应该马上回应ACK报文，所以FIN_WAIT_1 状态一般是比较难见到的，而FIN_WAIT_2 状态有时仍可以用netstat看到。</li>
+<li>FIN_WAIT_2 ：上面已经解释了这种状态的由来，实际上FIN_WAIT_2状态下的SOCKET表示半连接，即有一方调用close()主动要求关闭连接。注意：FIN_WAIT_2 是没有超时的（不像TIME_WAIT 状态），这种状态下如果对方不关闭（不配合完成4次挥手过程），那这个 FIN_WAIT_2 状态将一直保持到系统重启，越来越多的FIN_WAIT_2 状态会导致内核crash。</li>
+<li>TIME_WAIT ：表示收到了对方的FIN报文，并发送出了ACK报文。 TIME_WAIT状态下的TCP连接会等待2*MSL（Max Segment Lifetime，最大分段生存期，指一个TCP报文在Internet上的最长生存时间。每个具体的TCP协议实现都必须选择一个确定的MSL值，RFC 1122建议是2分钟，但BSD传统实现采用了30秒，Linux可以cat /proc/sys/net/ipv4/tcp_fin_timeout看到本机的这个值），然后即可回到CLOSED 可用状态了。如果FIN_WAIT_1状态下，收到了对方同时带FIN标志和ACK标志的报文时，可以直接进入到TIME_WAIT状态，而无须经过FIN_WAIT_2状态。（这种情况应该就是四次挥手变成三次挥手的那种情况）。</li>
+<li>CLOSING ：这种状态在实际情况中应该很少见，属于一种比较罕见的例外状态。正常情况下，当一方发送FIN报文后，按理来说是应该先收到（或同时收到）对方的ACK报文，再收到对方的FIN报文。但是CLOSING 状态表示一方发送FIN报文后，并没有收到对方的ACK报文，反而却也收到了对方的FIN报文。什么情况下会出现此种情况呢？那就是当双方几乎在同时close()一个SOCKET的话，就出现了双方同时发送FIN报文的情况，这是就会出现CLOSING 状态，表示双方都正在关闭SOCKET连接。</li>
+<li>CLOSE_WAIT ：表示正在等待关闭。当对方close()一个SOCKET后发送FIN报文给自己，你的系统毫无疑问地将会回应一个ACK报文给对方，此时TCP连接则进入到CLOSE_WAIT状态。接下来呢，你需要检查自己是否还有数据要发送给对方，如果没有的话，那你也就可以close()这个SOCKET并发送FIN报文给对方，即关闭自己到对方这个方向的连接。有数据的话则看程序的策略，继续发送或丢弃。简单地说，当你处于CLOSE_WAIT 状态下，需要完成的事情是等待你去关闭连接。</li>
+<li>LAST_ACK ：当被动关闭的一方在发送FIN报文后，等待对方的ACK报文的时候，就处于LAST_ACK 状态。当收到对方的ACK报文后，也就可以进入到CLOSED 可用状态了。</li>
+</ul>
+<hr>
+<h1 id="19-TCP重传机制"><a href="#19-TCP重传机制" class="headerlink" title="19.TCP重传机制"></a><span id="jump19">19.TCP重传机制</span></h1><p>报文重传是TCP最基本的错误恢复功能，它的目的是防止报文丢失，TCP的重传机制分为：</p>
+<ul>
+<li>超时重传<br>超时重传机制用来保证TCP传输的可靠性。每次发送数据包时，发送的数据报都有seq号，接收端收到数据后，会回复ack进行确认，表示某一seq号数据已经收到。发送方在发送了某个seq包后，等待一段时间，如果没有收到对应的ack回复，就会认为报文丢失，会重传这个数据包。<br>决定报文是否有必要重传的主要机制是重传计时器（retransmission timer），它的主要功能是维护重传超时（RTO）值。当报文使用TCP传输时，重传计时器启动，收到ACK时计时器停止。报文发送至接收到ACK的时间称为往返时间（RTT）。对若干次时间取平均值，该值用于确定最终RTO值。在最终RTO值确定之前，确定每一次报文传输是否有丢包发生使用重传计时器。<br><img src="http://img.blog.csdn.net/20150718102804067" alt=""><br>当报文发送之后，但接收方尚未发送TCP ACK报文，发送方假设源报文丢失并将其重传。重传之后，RTO值加倍；如果在2倍RTO值到达之前还是没有收到ACK报文，就再次重传。如果仍然没有收到ACK，那么RTO值再次加倍。如此持续下去，每次重传RTO都翻倍，直到收到ACK报文或发送方达到配置的最大重传次数。最大重传次数取决于发送端操作系统的配置，默认情况下，windows最大重传为5次，linux为15次。</li>
+<li>快速重传<br>接受数据一方发现有数据包丢掉了（并不是所期望的值。这意味着报文在传送中丢失。接收端注意到报文乱序，并且在第三个报文中发送重复ACK）。就会发送重复ACK报文告诉发送端重传丢失的报文。 当重传主机从发送端接收到3个重复ACK时，它会假设此报文确实在传送中丢失，并且立即发送一个快速重传。一旦触发了快速重传，所有正在传输的其他报文都被放入队列中，直到快速重传报文发送为止。过程如下图所示：<br><img src="http://img.blog.csdn.net/20150718102858936" alt=""></li>
+</ul>
+<hr>
+<h1 id="20-TCP-IP的流量控制"><a href="#20-TCP-IP的流量控制" class="headerlink" title="20.TCP/IP的流量控制"></a><span id="jump20">20.TCP/IP的流量控制</span></h1><p><img src="http://img.blog.csdn.net/20161117115417934" alt=""><br>所谓流量控制就是让发送发送速率不要过快，让接收方来得及接收。利用滑动窗口机制就可以实施流量控制。原理这就是运用TCP报文段中的窗口大小字段来控制，发送方的发送窗口不可以大于接收方发回的窗口大小。<br>考虑一种特殊的情况，就是接收方若没有缓存足够使用，就会发送零窗口大小的报文，此时发送放将发送窗口设置为0，停止发送数据。之后接收方有足够的缓存，发送了非零窗口大小的报文，但是这个报文在中途丢失的，那么发送方的发送窗口就一直为零导致死锁。<br>解决这个问题，TCP为每一个连接设置一个持续计时器（persistence timer）。只要TCP的一方收到对方的零窗口通知，就启动该计时器，周期性的发送一个零窗口探测报文段。对方就在确认这个报文的时候给出现在的窗口大小（注意：TCP规定，即使设置为零窗口，也必须接收以下几种报文段：零窗口探测报文段、确认报文段和携带紧急数据的报文段）。</p>
+<hr>
+<h1 id="21-TCP-IP的拥塞控制"><a href="#21-TCP-IP的拥塞控制" class="headerlink" title="21.TCP/IP的拥塞控制"></a><span id="jump21">21.TCP/IP的拥塞控制</span></h1><p>流量控制是考虑的是端对端的情况，而没有考虑整个网络的通信情况。<br>拥塞控制是基于整个网络来考虑的，TCP引入拥塞控制的策略是：慢启动，避免拥塞，拥塞发生，快速恢复。拥塞控制实际上包括拥塞避免和拥塞控制，前者是一种预防措施，维持网络的高吞吐量、低延迟状态，避免进入拥塞；后者是一种“恢复”措施，使网络从拥塞中恢复过来，进入正常的运行状态。<br>拥塞发生的主要原因是网络是一种”尽力而为”的服务，当网络节点的缓存空间，链路带宽和处理能力不足时，就会丢弃掉不能服务的包，从而发生网络拥塞。如果没有拥塞控制，TCP检测到丢包就不停的重传，势必会加剧网络拥塞情况。下面分别来说明拥塞控制的四个策略：<br><img src="http://img.blog.csdn.net/20150718103857667" alt=""></p>
+<ul>
+<li>慢启动<br>TCP拥塞控制所使用的一种算法称为慢性启动，这种算法是基于这样的想法，它在开始时设置拥塞窗口大小（cwnd） 为一个最长段长度（MSS），每次接到一个确认时，窗口的大小就增加一个MSS值。窗口是慢速启动的，但是按指数规则增长。 当拥塞窗口中的字节达到慢速启动阈值（ssthresh）时，慢速启动阶段结束而下一个阶段开始。在大多数实现中，ssthresh值是65536个字节。</li>
+<li>拥塞避免：加法增加<br>以慢速启动算法开始，则拥塞窗口大小按指数规则增长，这样增长太快了。为了在拥塞发生之前避免拥塞，必须降低指数增长的速度。拥塞避免的主要思想是加法增大，也就是cwnd的值不再指数级往上升，开始加法增加。此时当窗口中所有的报文段都被确认时，cwnd的大小加1，cwnd的值就随着RTT开始线性增加，这样就可以避免增长过快导致网络拥塞，慢慢的增加调整到网络的最佳值。</li>
+<li>拥塞发生算法：乘性减少<br>TCP检测拥塞是否发生时通过TCP是否丢失报文来确定的，这又分为两种情况：<ul>
+<li>如果RTO超时，表示网络可能存在严重的拥塞，这种情况下，TCP做出强烈的反应；<ul>
+<li>1）设置阈值为cwnd的一半；</li>
+<li>2）重新设置cwnd为1；</li>
+<li>3）启动慢速启动阶段。</li>
+</ul>
+</li>
+<li>如果收到三个相同的ACK信号，表示某个包已丢失，此时网络拥塞不是很严重，这种情况下，TCP做出轻微的反应。<ul>
+<li>1）设置阈值为cwnd的一半；</li>
+<li>2）设置cwnd为阈值（有些实现是阈值加上3）；</li>
+<li>3）启动快速恢复阶段</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>快速恢复<br>快速重传和快速恢复算法一般同时使用，当收到三次重复的ACK时，<ul>
+<li>把ssthresh设置为cwnd的一半，把cwnd设置为ssthresh的值加3，然后重传丢失的报文段，加3的原因是因为收到3个重复的ACK，表明有3个“老”的数据包离开了网络；</li>
+<li>再收到重复的ACK时，拥塞窗口增加1；</li>
+<li>当收到新的数据包的ACK时，把cwnd设置为第一步中的ssthresh的值。原因是因为该ACK确认了新的数据，说明从重复ACK时的数据都已收到，该恢复过程已经结束，可以回到恢复之前的状态了，也即再次进入拥塞避免状态。注意，如果在此过程出现超时，则重新进入慢启动阶段。<br><img src="http://img.blog.csdn.net/20150718104424646" alt=""></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="22-HTTP的长连接和短连接"><a href="#22-HTTP的长连接和短连接" class="headerlink" title="22.HTTP的长连接和短连接"></a><span id="jump22">22.HTTP的长连接和短连接</span></h1><p>HTTP的长连接和短连接本质上是TCP长连接和短连接。</p>
+<ul>
+<li>短连接：浏览器和服务器每进行一次HTTP操作，就建立一次连接，任务结束就中断连接。</li>
+<li>当一个网页打开完成后，客户端和服务器之间用于传输HTTP数据的 TCP连接不会关闭，如果客户端再次访问这个服务器上的网页，会继续使用这一条已经建立的连接。Keep-Alive不会永久保持连接，它有一个保持时间，可以在不同的服务器软件（如Apache）中设定这个时间。实现长连接要客户端和服务端都支持长连接。</li>
+<li>TCP短连接：client向server发起连接请求，server接到请求，然后双方建立连接。client向server发送消息，server回应client，然后一次读写就完成了，这时候双方任何一个都可以发起close操作，不过一般都是client先发起 close操作.短连接一般只会在 client/server间传递一次读写操作。</li>
+<li>TCP长连接: client向server发起连接，server接受client连接，双方建立连接。client与server完成一次读写之后，它们之间的连接并不会主动关闭，后续的读写操作会继续使用这个连接。</li>
+</ul>
+<hr>
+<h1 id="23-详细解释一下IP协议的定义，在哪个层上面，主要有什么作用？"><a href="#23-详细解释一下IP协议的定义，在哪个层上面，主要有什么作用？" class="headerlink" title="23.详细解释一下IP协议的定义，在哪个层上面，主要有什么作用？"></a><span id="jump23">23.详细解释一下IP协议的定义，在哪个层上面，主要有什么作用？</span></h1><ul>
+<li>IP协议是网络层的协议，它是为了实现相互连接的计算机进行通信设计的协议，它实现了自动路由功能，即自动寻径功能。IP服务是不可靠的，无连接的。</li>
+</ul>
+<hr>
+<h1 id="24-IP报文格式"><a href="#24-IP报文格式" class="headerlink" title="24.IP报文格式"></a><span id="jump24">24.IP报文格式</span></h1><p><img src="http://img.blog.csdn.net/20170516161649348" alt=""></p>
+<ul>
+<li>版本：4个bit。表示使用的 IPv4协议；</li>
+<li>首部长度：4个bit。其中保存的是整个首部中的“32位字”的数量，即8个字节，这个字段正常的值为：5（假设“可选字段长度为0”）该字段最大值为：15（可选字段长度全满加上原有字段）；</li>
+<li>服务类型：8个bit。优先级（3位）和数据链路层的QoS机制有关，定义了8个服务级别。当Qos选择了某种服务模型后，优先级越高，字段越优先传输。D、T、R、C分别表示延时、吞吐量、可靠性，花费。当这些值都为1时，分别表示低延时、高吞吐量、高可靠性、低花费；</li>
+<li>总长度：16个bit。2^16 - 1 = 65535 字节，值首部和数据之和的长度，单位为字节，因此数据报的最大长度为65535字节（MTU最大传送单元）；</li>
+<li>标识字段：6个bit。唯一的标识主机发送的每一份数据报。接收方根据分片中的标识字段是否相同来判断这些分片是否是同一个数据报的分片，从而进行分片的重组。通常每发送一份报文它的值就会加1；</li>
+<li>标志字段：3个bit。用于标识数据报是否分片。第1位没有使用，第2位是不分段（DF）位。当DF位被设置为1时，表示路由器不能对数据包进行分段处理。如果数据包由于不能分段而未能被转发，那么路由器将丢弃该数据包并向源发送ICMP不可达。第3位是分段（MF）位。当路由器对数据包进行分段时，除了最后一个分段的MF位被设置为0外，其他的分段的MF位均设置为1，以便接收者直到收到MF位为0的分片为止；</li>
+<li>位偏移：13个bit。在接收方进行数据报重组时用来标识分片的顺序。用于指明分段起始点相对于报头起始点的偏移量。由于分段到达时可能错序，所以位偏移字段可以使接收者按照正确的顺序重组数据包；<br><img src="http://img.blog.csdn.net/20170516162438186" alt=""></li>
+<li>生存时间：8个bit。TTL域防止丢失的数据包在无休止的传播。该域包含一个8位整数，此数由产生数据包的主机设定。TTL值设置了数据报可以经过的最多的路由器数。TTL的初始值由源主机设置（通常为32或64），每经过一个处理它的路由器，TTL值减1。如果一台路由器将TTL减至0，它将丢弃该数据包并发送一个ICMP超时消息给数据包的源地址；</li>
+<li>协议字段：8个bit。用来标识是哪个协议向IP传送数据。ICMP为1，IGMP为2，TCP为6，UDP为17，GRE为47，ESP为50；</li>
+<li>首部校验和：根据IP首部计算的校验和码；</li>
+<li>源地址：数据向外发送，发送机器本身的IP地址，也称为逻辑地址；</li>
+<li>目的地址：数据发送的目的IP地址；</li>
+<li>Option选项：是数据报中的一个可变长的可选信息。</li>
+</ul>
+<hr>
+<h1 id="25-IPV4和IPV6"><a href="#25-IPV4和IPV6" class="headerlink" title="25.IPV4和IPV6"></a><span id="jump25">25.IPV4和IPV6</span></h1><ul>
+<li>IPV4：32位，主流协议</li>
+<li>IPV6：128位，主要解决IPV4地址匮乏而退出的，扩展了路由和寻址能力，增强的组播以及自动配置的支持。</li>
+</ul>
+<hr>
+<h1 id="26-IPV4网络分类"><a href="#26-IPV4网络分类" class="headerlink" title="26.IPV4网络分类"></a><span id="jump26">26.IPV4网络分类</span></h1><table>
+<thead>
+<tr>
+<th>分类</th>
+<th>网络号</th>
+<th>网络范围</th>
+<th>主机号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>8 第一位固定为0</td>
+<td>0-127</td>
+<td>24</td>
+</tr>
+<tr>
+<td>B</td>
+<td>16 前两位固定为10</td>
+<td>128.0-191.255</td>
+<td>16</td>
+</tr>
+<tr>
+<td>C</td>
+<td>24 前三位固定为110</td>
+<td>192.0.0-223.255.255</td>
+<td>8</td>
+</tr>
+<tr>
+<td>D</td>
+<td>前四位固定为 1110，后面为多播地址</td>
+</tr>
+<tr>
+<td>E</td>
+<td>前五位固定为 11110，后面保留为今后所用</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="27-网络号、主机号、子网、子网掩码的概念"><a href="#27-网络号、主机号、子网、子网掩码的概念" class="headerlink" title="27.网络号、主机号、子网、子网掩码的概念"></a><span id="jump27">27.网络号、主机号、子网、子网掩码的概念</span></h1><blockquote>
+<p>参考文献<br><a href="https://blog.csdn.net/u013408431/article/details/62442670?locationNum=10&amp;fps=1" target="_blank" rel="external">面试中常见的计算机网络的问题</a><br><a href="https://www.cnblogs.com/chris-cp/p/5082514.html" target="_blank" rel="external">HTTP的报文格式解析</a><br><a href="https://blog.csdn.net/sssnmnmjmf/article/details/68486261" target="_blank" rel="external">简述TCP的三次握手过程</a><br><a href="https://www.cnblogs.com/qingergege/p/6603488.html" target="_blank" rel="external">TCP的11种状态</a><br><a href="https://blog.csdn.net/kzq_qmi/article/details/46940463" target="_blank" rel="external">TCP详解(3)：重传、流量控制、拥塞控制</a><br><a href="https://www.cnblogs.com/redsmith/p/5461677.html" target="_blank" rel="external">TCP的流量控制</a><br><a href="https://blog.csdn.net/super_yc/article/details/72290931" target="_blank" rel="external">IP协议及IP数据包详解</a><br><a href="https://www.cnblogs.com/red-code/p/7132023.html" target="_blank" rel="external">IP协议详解</a><br><a href="https://blog.csdn.net/houdong/article/details/1505798" target="_blank" rel="external">IP协议</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/26/datastructureadvancedtree/" rel="next" title="数据结构之高级树">
+                <i class="fa fa-chevron-left"></i> 数据结构之高级树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络基础"><span class="nav-number">1.</span> <span class="nav-text">计算机网络基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-OSI和TCP-IP软件体系结构"><span class="nav-number">2.</span> <span class="nav-text">1.OSI和TCP/IP软件体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-五层协议总结"><span class="nav-number">3.</span> <span class="nav-text">2.五层协议总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-OSI七层作用"><span class="nav-number">4.</span> <span class="nav-text">3.OSI七层作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-浏览器中输入www-xxxx-com后执行的过程"><span class="nav-number">5.</span> <span class="nav-text">4.浏览器中输入www.xxxx.com后执行的过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-DNS递归查询和迭代查询的区别"><span class="nav-number">6.</span> <span class="nav-text">5.DNS递归查询和迭代查询的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-DNS域名系统，简单描述其工作原理"><span class="nav-number">7.</span> <span class="nav-text">6.DNS域名系统，简单描述其工作原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-什么是DHCP？"><span class="nav-number">8.</span> <span class="nav-text">8.什么是DHCP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-什么是NAT？"><span class="nav-number">9.</span> <span class="nav-text">9.什么是NAT？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-什么是HTTP？"><span class="nav-number">10.</span> <span class="nav-text">10.什么是HTTP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11-什么是HTTPS？"><span class="nav-number">11.</span> <span class="nav-text">11.什么是HTTPS？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12-常用的HTTP状态码？"><span class="nav-number">12.</span> <span class="nav-text">12.常用的HTTP状态码？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13-HTTP的报文结构"><span class="nav-number">13.</span> <span class="nav-text">13.HTTP的报文结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14-TCP和UDP区别？"><span class="nav-number">14.</span> <span class="nav-text">14.TCP和UDP区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15-TCP报文格式"><span class="nav-number">15.</span> <span class="nav-text">15.TCP报文格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16-三次握手"><span class="nav-number">16.</span> <span class="nav-text">16.三次握手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17-四次挥手"><span class="nav-number">17.</span> <span class="nav-text">17.四次挥手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#18-TCP的11种状态？"><span class="nav-number">18.</span> <span class="nav-text">18.TCP的11种状态？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#19-TCP重传机制"><span class="nav-number">19.</span> <span class="nav-text">19.TCP重传机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#20-TCP-IP的流量控制"><span class="nav-number">20.</span> <span class="nav-text">20.TCP/IP的流量控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#21-TCP-IP的拥塞控制"><span class="nav-number">21.</span> <span class="nav-text">21.TCP/IP的拥塞控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#22-HTTP的长连接和短连接"><span class="nav-number">22.</span> <span class="nav-text">22.HTTP的长连接和短连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#23-详细解释一下IP协议的定义，在哪个层上面，主要有什么作用？"><span class="nav-number">23.</span> <span class="nav-text">23.详细解释一下IP协议的定义，在哪个层上面，主要有什么作用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#24-IP报文格式"><span class="nav-number">24.</span> <span class="nav-text">24.IP报文格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#25-IPV4和IPV6"><span class="nav-number">25.</span> <span class="nav-text">25.IPV4和IPV6</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#26-IPV4网络分类"><span class="nav-number">26.</span> <span class="nav-text">26.IPV4网络分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#27-网络号、主机号、子网、子网掩码的概念"><span class="nav-number">27.</span> <span class="nav-text">27.网络号、主机号、子网、子网掩码的概念</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
