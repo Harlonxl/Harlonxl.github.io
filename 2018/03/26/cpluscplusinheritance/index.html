@@ -86,10 +86,19 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="面向对象的三大特性：封装、继承和多态，总结一下C++的继承以及注意事项。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-26T07:34:35.006Z">
+<meta property="og:image" content="http://harlon.org/2018/03/26/cpluscplusinheritance/img/inheritance_trace1.png">
+<meta property="og:image" content="http://harlon.org/img/inheritance_trace2.png">
+<meta property="og:image" content="http://harlon.org/img/inheritance_trace3.png">
+<meta property="og:image" content="http://harlon.org/img/inheritance_memory.png">
+<meta property="og:image" content="http://harlon.org/img/inheritance_trace4.png">
+<meta property="og:image" content="http://harlon.org/img/inheritance_trace5.png">
+<meta property="og:image" content="http://harlon.org/img/inheritance_trace6.png">
+<meta property="og:image" content="http://harlon.org/img/inheritance_memory2.png">
+<meta property="og:updated_time" content="2018-03-26T15:45:35.787Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之继承">
 <meta name="twitter:description" content="面向对象的三大特性：封装、继承和多态，总结一下C++的继承以及注意事项。">
+<meta name="twitter:image" content="http://harlon.org/2018/03/26/cpluscplusinheritance/img/inheritance_trace1.png">
 
 
 
@@ -185,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -235,7 +244,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -299,7 +308,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-26T10:59:23+08:00">
                 2018-03-26
@@ -320,7 +329,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -411,8 +420,17 @@
 <p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">A()</div><div class="line">B()</div><div class="line">A()</div><div class="line">C()</div><div class="line">D()</div><div class="line">~D()</div><div class="line">~C()</div><div class="line">~A()</div><div class="line">~B()</div><div class="line">~A()</div></pre></td></tr></table></figure></p>
 <p>菱形继承会产生二义性和数据冗余的问题，解决这个的办法是使用虚继承。<br>本来以为这部分的内容会比较简单，总结起来比较容易，没想到这部分的内容还是比较复杂的，先来看一个例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    A() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"A()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    ~A() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"~A()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> A &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    B() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"B()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    ~B() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"~B()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> A &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    C() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"C()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    ~C() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"~C()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> :</span> <span class="keyword">public</span> B, <span class="keyword">public</span> C &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    D() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"D()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    ~D() &#123;</div><div class="line">        <span class="built_in">cout</span>  &lt;&lt; <span class="string">"~D()"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    D d;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">A()</div><div class="line">B()</div><div class="line">C()</div><div class="line">D()</div><div class="line">~D()</div><div class="line">~C()</div><div class="line">~B()</div><div class="line">~A()</div></pre></td></tr></table></figure></p>
-<p>从运行结果来看，当虚继承的时候，D只保留了一份A的数据，具体是怎么实现的呢？这是通过虚类指针来实现的，下面我逐步用gdb调试的方式来揭开虚类指针的神秘面纱。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    C c;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="keyword">sizeof</span>(c) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>打印对象c占用4个字节，查看c的内存：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(gdb) p &amp;c</div><div class="line"><span class="meta">$</span>1 = (C *) 0x61ff1c</div><div class="line"></div><div class="line">(gdb) x /4xw 0x61ff1c</div><div class="line">0x61ff1c:	0x00405180	0x0061ff40	0x00226000	0x0061ff94</div></pre></td></tr></table></figure></p>
+<p>从运行结果来看，当虚继承的时候，D只保留了一份A的数据，具体是怎么实现的呢？这是通过虚类指针来实现的，下面我用逐步调试的方式来揭开虚类指针的神秘面纱。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    C c;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="keyword">sizeof</span>(c) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>打印对象c占用4个字节，查看c的内存：<br><img src="img/inheritance_trace1.png" alt=""><br>查看内存0xf5f7a8，发现其指向一块内存：<br><img src="/img/inheritance_trace2.png" alt=""><br>查看内存0x00e49b3c中的值：<br><img src="/img/inheritance_trace3.png" alt=""><br>其中低地址为0，高地址为4，这两个值的含义是：</p>
+<ul>
+<li>第一个指向类中虚类指针的偏移量；</li>
+<li>第二个指向的是类中虚继承的基类的偏移量，由于我们基类中没有任何成员，所以这个地址是4。<br>对象c的内存模型如下：<br><img src="/img/inheritance_memory.png" alt=""><br>自此我们也看到了虚表指针，再来看看对象d，这里就不详细说明过程了，只贴出图片。<blockquote>
+<p>sizeof(d) = 8</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/img/inheritance_trace4.png" alt=""><br><img src="/img/inheritance_trace5.png" alt=""><br><img src="/img/inheritance_trace6.png" alt=""></p>
+<p>因为d继承了两个基类，所有有两张虚类表，第一个里面的偏移量是0和8，第二是0和4，内存模型如下：<br><img src="/img/inheritance_memory2.png" alt=""><br>对于这部门内容举的例子不是很到位，多态会更详细说明这一点。</p>
 <hr>
 <h1 id="友元函数和static继承"><a href="#友元函数和static继承" class="headerlink" title="友元函数和static继承"></a>友元函数和static继承</h1><ul>
 <li>友元函数不能被子类继承，派生类的friend函数可以访问派生类本身的一切变量，包括从父类继承下来的protected域中的变量。但是对父类来说，他并不是friend的。</li>
@@ -511,10 +529,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Übersicht
           </li>
         </ul>
       
@@ -535,7 +553,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">23</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -546,7 +564,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -557,7 +575,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -621,7 +639,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
