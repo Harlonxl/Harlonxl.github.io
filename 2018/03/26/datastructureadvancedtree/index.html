@@ -88,7 +88,13 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/bitree.png">
 <meta property="og:image" content="http://harlon.org/img/huffm_tree.png">
-<meta property="og:updated_time" content="2018-03-26T11:29:18.357Z">
+<meta property="og:image" content="http://harlon.org/img/avl_tree_1.jpg">
+<meta property="og:image" content="http://harlon.org/img/avl_tree_2.jpg">
+<meta property="og:image" content="http://harlon.org/img/avl_tree_ll.jpg">
+<meta property="og:image" content="http://harlon.org/img/avl_tree_rr.jpg">
+<meta property="og:image" content="http://harlon.org/img/avl_tree_lr.jpg">
+<meta property="og:image" content="http://harlon.org/img/avl_tree_rl.jpg">
+<meta property="og:updated_time" content="2018-03-27T09:22:59.742Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构之高级树">
 <meta name="twitter:description" content="介绍数据结构中的平衡树、ACL树、B树、红黑树等高级树结构。">
@@ -188,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -238,7 +244,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -302,7 +308,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-26T15:31:23+08:00">
                 2018-03-26
@@ -323,7 +329,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -389,7 +395,7 @@
 <ul>
 <li>左子树和右子树的高度之差的绝对值不超过1；</li>
 <li>树中的每个左子树和右子树都是AVL树；</li>
-<li>每个节点都有一个平衡因子(balance factor),任一节点的平衡因子是-1,0,1。(每个节点的平衡因子等于左子树的高度减去右子树的高度 )   。<h1 id="基本术语和操作"><a href="#基本术语和操作" class="headerlink" title="基本术语和操作"></a>基本术语和操作</h1>有四种情况可能会导致AVL树失衡，分别为：<br>（1）LL：插入一个新节点到根节点的左子树（Left）的左子树（Left），导致根节点的平衡因子由1变为2；<br>（2）RR：插入一个新节点到根节点的右子树（Right）的右子树（Right），导致根节点的平衡因子由-1变为-2；<br>（3）LR：插入一个新节点到根节点的左子树（Left）的右子树（Right），导致根节点的平衡因子由1变为2；<br>（4）RL：插入一个新节点到根节点的右子树（Right）的左子树（Left），导致根节点的平衡因子由-1变为-2；<br>针对四种种情况可能导致的不平衡，可以通过旋转使之变平衡。有两种基本的旋转：<br>（1）左旋转：将根节点旋转到（根节点的）右孩子的左孩子位置；<br>（2）右旋转：将根节点旋转到（根节点的）左孩子的右孩子位置；<br>旋转方式一共有四种：左旋转，右旋转，左右旋转，右转旋转</li>
+<li>每个节点都有一个平衡因子(balance factor),任一节点的平衡因子是-1,0,1。(每个节点的平衡因子等于左子树的高度减去右子树的高度 )   。<h2 id="基本术语和操作"><a href="#基本术语和操作" class="headerlink" title="基本术语和操作"></a>基本术语和操作</h2>有四种情况可能会导致AVL树失衡，分别为：<br>（1）LL：插入一个新节点到根节点的左子树（Left）的左子树（Left），导致根节点的平衡因子由1变为2；<br>（2）RR：插入一个新节点到根节点的右子树（Right）的右子树（Right），导致根节点的平衡因子由-1变为-2；<br>（3）LR：插入一个新节点到根节点的左子树（Left）的右子树（Right），导致根节点的平衡因子由1变为2；<br>（4）RL：插入一个新节点到根节点的右子树（Right）的左子树（Left），导致根节点的平衡因子由-1变为-2；<br><img src="/img/avl_tree_1.jpg" alt=""><br><img src="/img/avl_tree_2.jpg" alt=""><br>针对四种种情况可能导致的不平衡，可以通过旋转使之变平衡。有两种基本的旋转：<br>（1）左旋转：将根节点旋转到（根节点的）右孩子的左孩子位置；<br>（2）右旋转：将根节点旋转到（根节点的）左孩子的右孩子位置；<br>旋转方式一共有四种：左旋转，右旋转，左右旋转，右转旋转<h2 id="LL左旋转"><a href="#LL左旋转" class="headerlink" title="LL左旋转"></a>LL左旋转</h2><img src="/img/avl_tree_ll.jpg" alt=""><h2 id="RR右旋转"><a href="#RR右旋转" class="headerlink" title="RR右旋转"></a>RR右旋转</h2><img src="/img/avl_tree_rr.jpg" alt=""><h2 id="LR左右旋转"><a href="#LR左右旋转" class="headerlink" title="LR左右旋转"></a>LR左右旋转</h2><img src="/img/avl_tree_lr.jpg" alt=""><h2 id="RL右左旋转"><a href="#RL右左旋转" class="headerlink" title="RL右左旋转"></a>RL右左旋转</h2><img src="/img/avl_tree_rl.jpg" alt=""></li>
 </ul>
 <hr>
 <h1 id="伸展树"><a href="#伸展树" class="headerlink" title="伸展树"></a>伸展树</h1><hr>
@@ -487,10 +493,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -511,7 +517,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">23</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -522,7 +528,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -533,7 +539,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -567,7 +573,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线索二叉树"><span class="nav-number">1.</span> <span class="nav-text">线索二叉树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#哈夫曼树"><span class="nav-number">2.</span> <span class="nav-text">哈夫曼树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是哈夫曼树？"><span class="nav-number">2.1.</span> <span class="nav-text">什么是哈夫曼树？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建哈夫曼树"><span class="nav-number">2.2.</span> <span class="nav-text">构建哈夫曼树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈夫曼树算法"><span class="nav-number">2.3.</span> <span class="nav-text">哈夫曼树算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈夫编码"><span class="nav-number">2.4.</span> <span class="nav-text">哈夫编码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AVL树"><span class="nav-number">3.</span> <span class="nav-text">AVL树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本术语和操作"><span class="nav-number">4.</span> <span class="nav-text">基本术语和操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#伸展树"><span class="nav-number">5.</span> <span class="nav-text">伸展树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#B树"><span class="nav-number">6.</span> <span class="nav-text">B树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树"><span class="nav-number">7.</span> <span class="nav-text">红黑树</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线索二叉树"><span class="nav-number">1.</span> <span class="nav-text">线索二叉树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#哈夫曼树"><span class="nav-number">2.</span> <span class="nav-text">哈夫曼树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是哈夫曼树？"><span class="nav-number">2.1.</span> <span class="nav-text">什么是哈夫曼树？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建哈夫曼树"><span class="nav-number">2.2.</span> <span class="nav-text">构建哈夫曼树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈夫曼树算法"><span class="nav-number">2.3.</span> <span class="nav-text">哈夫曼树算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈夫编码"><span class="nav-number">2.4.</span> <span class="nav-text">哈夫编码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AVL树"><span class="nav-number">3.</span> <span class="nav-text">AVL树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本术语和操作"><span class="nav-number">3.1.</span> <span class="nav-text">基本术语和操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LL左旋转"><span class="nav-number">3.2.</span> <span class="nav-text">LL左旋转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RR右旋转"><span class="nav-number">3.3.</span> <span class="nav-text">RR右旋转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LR左右旋转"><span class="nav-number">3.4.</span> <span class="nav-text">LR左右旋转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RL右左旋转"><span class="nav-number">3.5.</span> <span class="nav-text">RL右左旋转</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#伸展树"><span class="nav-number">4.</span> <span class="nav-text">伸展树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#B树"><span class="nav-number">5.</span> <span class="nav-text">B树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树"><span class="nav-number">6.</span> <span class="nav-text">红黑树</span></a></li></ol></div>
             
 
           </div>
@@ -597,7 +603,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
