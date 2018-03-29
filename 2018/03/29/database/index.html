@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。  绪论这里选用MySQL作为了解数据库的底层实现，这是因为MySQL是目前最常用的数据库，了解它的底层实现也基本上对目前大数据的数据库所用的技术会有一个大致的了解。数">
+<meta name="description" content="面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解MySQL底层实现">
 <meta property="og:url" content="http://harlon.org/2018/03/29/database/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。  绪论这里选用MySQL作为了解数据库的底层实现，这是因为MySQL是目前最常用的数据库，了解它的底层实现也基本上对目前大数据的数据库所用的技术会有一个大致的了解。数">
+<meta property="og:description" content="面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/bplustree.png">
 <meta property="og:image" content="http://harlon.org/img/feijuleiindex.png">
 <meta property="og:image" content="http://harlon.org/img/juleindex.png">
-<meta property="og:updated_time" content="2018-03-29T16:17:02.539Z">
+<meta property="og:updated_time" content="2018-03-29T16:25:10.137Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解MySQL底层实现">
-<meta name="twitter:description" content="面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。  绪论这里选用MySQL作为了解数据库的底层实现，这是因为MySQL是目前最常用的数据库，了解它的底层实现也基本上对目前大数据的数据库所用的技术会有一个大致的了解。数">
+<meta name="twitter:description" content="面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。">
 <meta name="twitter:image" content="http://harlon.org/img/bplustree.png">
 
 
@@ -189,7 +189,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -239,7 +239,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -303,7 +303,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-29T22:55:23+08:00">
                 2018-03-29
@@ -324,7 +324,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -365,7 +365,7 @@
       
 
       
-        <p>面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。</p>
+        <p>面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。<br><a id="more"></a></p>
 <hr>
 <h1 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h1><p>这里选用MySQL作为了解数据库的底层实现，这是因为MySQL是目前最常用的数据库，了解它的底层实现也基本上对目前大数据的数据库所用的技术会有一个大致的了解。数据库最主要的索引设计，了解数据库的索引设计基本上就对数据库有了大致的了解，其次对其事务的ACID操作实现原理做以分析，以及数据库中所用到的提高其性能的优化等等。</p>
 <hr>
@@ -509,10 +509,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -533,7 +533,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">26</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -544,7 +544,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -555,7 +555,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -619,7 +619,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
