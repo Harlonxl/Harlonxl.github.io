@@ -415,6 +415,201 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/29/database/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/29/database/" itemprop="url">深入理解MySQL底层实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-29T22:55:23+08:00">
+                2018-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>面试中一直被问到数据，由于自己在项目中平时接触到的数据库不多，所以对数据库的知识点不是特别了解，数据库说白了也就是数据的存储过程，这跟自己研究方向也息息相关，若是不清楚其原理真的有点说不过去，所以特此对数据库的底层实现加以归纳整理。</p>
+<hr>
+<h1 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h1><p>这里选用MySQL作为了解数据库的底层实现，这是因为MySQL是目前最常用的数据库，了解它的底层实现也基本上对目前大数据的数据库所用的技术会有一个大致的了解。数据库最主要的索引设计，了解数据库的索引设计基本上就对数据库有了大致的了解，其次对其事务的ACID操作实现原理做以分析，以及数据库中所用到的提高其性能的优化等等。</p>
+<hr>
+<h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><p>MySQL常用的存储引擎有InnoDB和MyISAM，其中MyISAM是MySQL的默认存储引擎。</p>
+<h2 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h2><p>InnoDB的存储文件有两个，后缀名分别是.frm和.idb，其中.frm是表的定义文件，而idb是数据文件。InnoDB中存在表锁和行锁，不过行锁是命中索引的情况下才会起作用的。<br>InnoDB支持事务，且支持四种隔离级别，即原子性（atomicity）、一致性（consistency）、隔离性（isolation）、持久性（durability）。</p>
+<ul>
+<li>原子性：一个事务（transaction）中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被恢复（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。</li>
+<li>一致性：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设规则，这包含资料的精确度、串联性以及后续数据库可以自发性地完成预定的工作。</li>
+<li>隔离性：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。</li>
+<li>持久性：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li>
+</ul>
+<hr>
+<h2 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h2><p>MyISAM的存储文件有三个，后缀名分别是.frm、.MYD、.MYI，其中.frm是表文件，.MYD是数据文件，.MYI是索引文件。<br>MyISAM只支持表锁，且不支持事务。MyISAM由于有单独的索引文件，在读取数据方面性能很高。</p>
+<hr>
+<h2 id="InnoDB和MyISAM的区别"><a href="#InnoDB和MyISAM的区别" class="headerlink" title="InnoDB和MyISAM的区别"></a>InnoDB和MyISAM的区别</h2><p>MyISAM强调的是性能，每次查询都具有原子性，其执行速度比InnoDB类型更快，但不提供事务支持。InnoDB：提供事务支持事务，外部键等高级数据库功能。 具有事务(commit)、回滚(rollback)和崩溃修复能力(crash recovery capabilities)的事务安全(transaction-safe (ACID compliant))型表。<br>MyISAM只支持表锁，用户在操作其表时，select、update、delete、insert语句都会自动给表加锁，如果加锁以后的表满足insert并发的情况下，可以在表的尾部插入新的数据。如果加锁以后的表满足insert并发的情况下，可以在表的尾部插入新的数据。</p>
+<hr>
+<h2 id="选择存储引擎的基本原则"><a href="#选择存储引擎的基本原则" class="headerlink" title="选择存储引擎的基本原则"></a>选择存储引擎的基本原则</h2><ul>
+<li>采用MyISAM<ul>
+<li>R/W &gt; 100:1 且update相对较少</li>
+<li>并发不高</li>
+<li>表数据量小</li>
+<li>硬件资源有限</li>
+</ul>
+</li>
+<li>采用InooDB引擎<ul>
+<li>R/W比较少，频繁更新大字段</li>
+<li>表数据量超过1000万，并发高</li>
+<li>安全性和可用性要求高</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="索引存储结构"><a href="#索引存储结构" class="headerlink" title="索引存储结构"></a>索引存储结构</h1><p>InnoDB和MyISAM都是用B+Tree来存储数据的。</p>
+<h2 id="磁盘的IO请求过程"><a href="#磁盘的IO请求过程" class="headerlink" title="磁盘的IO请求过程"></a>磁盘的IO请求过程</h2><p>磁盘可以从划分成柱面、磁道和扇区，每一个扇区是以512字节为单位的，磁盘要想确定一个数据的位置，首先传入数据的虚拟地址，控制器将这个虚拟地址转换为物理地址，每一个物理地址由&lt;柱面号，磁道号，扇区号&gt;唯一确定。<br>磁盘为了读取扇区号上的数据：</p>
+<ul>
+<li>首先必须找到柱面，即磁头需要移动对准相应磁道，这个过程叫做寻道，所耗费时间叫做寻道时间。</li>
+<li>然后目标扇区旋转到磁头下，即磁盘旋转将目标扇区旋转到磁头下，这个过程耗费的时间叫做旋转时间。</li>
+<li>之后读取数据，拷贝到内存中，这个过程耗费的时间叫做数据传输时间。<br>为了提高IO的效率，磁盘每次读取数据的时候，并不是严格按照一个扇区返回，而是采用预读策略，按照页为单位的，一般是4k。</li>
+</ul>
+<hr>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>建立索引的目的为了优化查找过程，有关这方面的数据结构可以参读：<a href="http://harlon.org/2018/03/26/datastructureadvancedtree/">数据结构之高级树</a><br>B-Tree作为索引结构，如果存储的数据量很大时会导致B-Tree的深度较大，增大查询的磁盘IO次数，从而影响到查询效率。<br>而在B+Tree中，所有数据记录节点都是按照值大小放在一层的叶子节点上，而非叶子节点上只存储key值信息，这样可以大大加大每个节点存储的key值数量，降低B+Tree的高度。<br>B+Tree相对B-Tree的基础有两大变化：</p>
+<ul>
+<li>数据是存在叶子节点上的</li>
+<li>数据节点之间是有指针指向的<br><img src="/img/bplustree.png" alt="B+Tree"><h2 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h2>InnoDB 是以 ID 为索引的数据存储。<br>采用 InnoDB 引擎的数据存储文件有两个，一个定义文件，一个是数据文件。<br>InnoDB 通过 B+Tree 结构对 ID 建索引，然后在叶子节点中存储记录。<br><img src="/img/feijuleiindex.png" alt="聚类索引"><h2 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h2>Myisam 引擎也是采用的 B+Tree 结构来作为索引结构。<br>由于 Myisam 中的索引和数据分别存放在不同的文件，所以在索引树中的叶子节点中存的数据是该索引对应的数据记录的地址，由于数据与索引不在一起，所以 Myisam 是非聚簇索引。<br><img src="/img/juleindex.png" alt="非聚类索引"><h2 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h2>所谓的索引覆盖就是索引包含查询的所有数据，就称为覆盖索引。覆盖索引是一种非常强大的工具，能大大提高查询性能。只需要读取索引而不用读取数据，有以下一些优点：</li>
+<li>索引项通常比记录要小，所以MySQL访问更少的数据；</li>
+<li>索引都按值的大小顺序存储，相对于随机访问记录，需要更少的I/O；</li>
+<li>大多数据引擎能更好的缓存索引。比如MyISAM只缓存索引。</li>
+<li>覆盖索引对于InnoDB表尤其有用，因为InnoDB使用聚集索引组织数据，如果二级索引中包含查询所需的数据，就不再需要在聚集索引中查找了。</li>
+</ul>
+<hr>
+<blockquote>
+<p>参考资料<br><a href="https://zh.wikipedia.org/wiki/ACID" target="_blank" rel="external">ACID</a><br><a href="https://blog.csdn.net/gitchat/article/details/78787837" target="_blank" rel="external">深入理解 MySQL 底层实现</a><br><a href="https://www.jianshu.com/p/a957b18ba40d" target="_blank" rel="external">MySQL存储引擎 MyISAM与InnoDB区别</a><br>[深入探讨MySQL索引底层实现])(<a href="https://blog.csdn.net/a724888/article/details/68936953" target="_blank" rel="external">https://blog.csdn.net/a724888/article/details/68936953</a>)<br><a href="http://www.cnblogs.com/zhoujinyi/p/3437475.html" target="_blank" rel="external">MySQL 四种事务隔离级的说明</a><br><a href="http://www.cnblogs.com/hustcat/archive/2009/10/28/1591648.html" target="_blank" rel="external">理解MySQL——索引与优化</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/29/bigdataarchitecture/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1570,152 +1765,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/24/datastructuretree/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Harlon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Harlon's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/24/datastructuretree/" itemprop="url">数据结构之树遍历</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-24T17:13:23+08:00">
-                2018-03-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">in</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index">
-                    <span itemprop="name">Notes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>树在数据结构中占有重要的地位，这篇文章主要总结二叉树的知识点以及二叉树的遍历。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/24/datastructuretree/#more" rel="contents">
-              Weiterlesen &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1766,7 +1815,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
