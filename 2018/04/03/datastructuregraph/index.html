@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="图在数据结构中表示的是多对多的关系，这部分内容总结了数据结构中常用的图算法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构之图算法">
+<meta property="og:url" content="http://harlon.org/2018/04/03/datastructuregraph/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="图在数据结构中表示的是多对多的关系，这部分内容总结了数据结构中常用的图算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/graph-list.png">
+<meta property="og:image" content="http://harlon.org/img/graph-orth-list.png">
+<meta property="og:image" content="http://harlon.org/img/graph-mutil-list.png">
+<meta property="og:image" content="http://harlon.org/img/prim.jpg">
+<meta property="og:image" content="http://harlon.org/img/Kruskal.jpg">
+<meta property="og:image" content="http://harlon.org/img/Dijkstra.gif">
+<meta property="og:updated_time" content="2018-04-03T14:52:14.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构之图算法">
+<meta name="twitter:description" content="图在数据结构中表示的是多对多的关系，这部分内容总结了数据结构中常用的图算法。">
+<meta name="twitter:image" content="http://harlon.org/img/graph-list.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/04/03/datastructuregraph/"/>
+
+
+
+
+
+  <title>数据结构之图算法 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/03/datastructuregraph/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构之图算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-03T16:50:23+08:00">
+                2018-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>图在数据结构中表示的是多对多的关系，这部分内容总结了数据结构中常用的图算法。<br><a id="more"></a></p>
+<hr>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ul>
+<li>有向图：之间只具有单向关系的顶点构成的图称为有向图。</li>
+<li>无向图：之间具有双向关系的顶点构成的图称为无向图。</li>
+<li>完全图 ：对于无向图来说，如果图中每个顶点都和除自身之外的所有顶点有关系，那么就称这样的无向图为完全图。</li>
+<li>入度：在有向图中，对于一个顶点 v 来说，箭头指向顶点 v 的弧的数目为该顶点的入度。</li>
+<li>出度：箭头远离顶点 v 的弧的数目为该顶点的出度。</li>
+<li>路径 ：在图中从一个顶点到另一个顶点所走过的多个顶点组成的序列，就称为“路径”。</li>
+<li>回路：在有向图中，路径是有向的。如果在路径中第一个顶点和最后一个顶点相同，此路径称为“回路”或“环”。 </li>
+<li>连通图：在无向图中，如果一个顶点到另一个顶点存在至少一条路径，称它们之间是连通的。 如果图中任意两个顶点之间都是连通的，则此图为连通图。</li>
+<li>生成树：对于连通图来说，如果对其进行遍历，遍历过程中经过的顶点和边其实质是一棵树，在这里称之为“生成树”。<blockquote>
+<p>由于连通图中，任意两顶点之间可能含有多条通路，所以一个连通图可能会对应多个生成树。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h1 id="图的表示方法"><a href="#图的表示方法" class="headerlink" title="图的表示方法"></a>图的表示方法</h1><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>在使用二维数组存储图中顶点之间的关系时，如果顶点之间存在边或弧，在相应位置用 1 表示，反之用 0 表示；如果使用二维数组存储网中顶点之间的关系，顶点之间如果有边或者弧的存在，在数组的相应位置存储其权值；反之用 0 表示。</p>
+<h2 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h2><p><img src="/img/graph-list.png" alt="邻接表"></p>
+<p><center>邻接表表示图</center></p>
+<h2 id="十字链表"><a href="#十字链表" class="headerlink" title="十字链表"></a>十字链表</h2><p><img src="/img/graph-orth-list.png" alt="十字链表"></p>
+<p><center>十字链表表示图</center></p>
+<h2 id="邻接多重表"><a href="#邻接多重表" class="headerlink" title="邻接多重表"></a>邻接多重表</h2><p><img src="/img/graph-mutil-list.png" alt="邻接多重表"></p>
+<p><center>邻接多重表表示图</center></p>
+<hr>
+<h1 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h1><p>图的广度优先搜索（BFS）类似于树的层次遍历：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> id;</div><div class="line">    <span class="built_in">vector</span>&lt;Node *&gt; neighbors;</div><div class="line"></div><div class="line">    Node(<span class="keyword">int</span> id) : id(id) &#123;&#125;</div><div class="line">    Node() &#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(Node *root)</span> </span>&#123;</div><div class="line">    <span class="built_in">queue</span>&lt;Node *&gt; q;</div><div class="line">    <span class="built_in">map</span>&lt;Node *, <span class="keyword">bool</span>&gt; visited;</div><div class="line">    q.push(root);</div><div class="line">    visited[root] = <span class="literal">true</span>;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (!q.empty()) &#123;</div><div class="line">        Node *node = q.front();</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; node-&gt;id &lt;&lt; <span class="string">" "</span>;</div><div class="line">        q.pop();</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;Node *&gt;::iterator it = node-&gt;neighbors.begin(); it != node-&gt;neighbors.end();</div><div class="line">            ++it) &#123;</div><div class="line">            <span class="keyword">if</span> (!visited.count(*it)) &#123;</div><div class="line">                visited[*it] = <span class="literal">true</span>;</div><div class="line">                q.push(*it);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="DFS"><a href="#DFS" class="headerlink" title="DFS"></a>DFS</h1><p>图的深度优先遍历（DFS）类似树的前序遍历：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(Node *root)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (visited.count(root)) <span class="keyword">return</span>;</div><div class="line">    visited[root] = <span class="literal">true</span>;</div><div class="line"></div><div class="line">    <span class="built_in">cout</span> &lt;&lt; root-&gt;id &lt;&lt; <span class="string">" "</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;Node *&gt;::iterator it = root-&gt;neighbors.begin(); it != root-&gt;neighbors.end();</div><div class="line">         ++it) &#123;</div><div class="line">        dfs(*it);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="最小生成树（MST）"><a href="#最小生成树（MST）" class="headerlink" title="最小生成树（MST）"></a>最小生成树（MST）</h1><h2 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h2><p>其基本思想是，寻找这样的边：满足“一个点在生成树中，一个点不在生成树中”的边中权值最小的一条边。将找到的边加入边集中，顶点加到顶点集中，当所有顶点都加入进来时，算法结束。<br><img src="/img/prim.jpg" alt="Prim算法"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> MaxVertex = <span class="number">100</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">EdgeType</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> lowcost;</div><div class="line">    <span class="keyword">int</span> adjvex;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Graph</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> arc[MaxVertex][MaxVertex];</div><div class="line">    <span class="keyword">int</span> vertexNum;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">MinEdge</span><span class="params">(EdgeType shortEdge[], <span class="keyword">int</span> vertenNum)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> minEdge = INT8_MAX;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;vertenNum; ++i) &#123;</div><div class="line">        <span class="keyword">if</span> (shortEdge[i].adjvex != <span class="number">0</span> &amp;&amp; minEdge &lt; shortEdge[i].lowcost) &#123;</div><div class="line">            minEdge = i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> minEdge;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Prim</span><span class="params">(Graph G)</span> </span>&#123;</div><div class="line">    EdgeType *shortEdge = <span class="keyword">new</span> EdgeType[G.vertexNum];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;G.vertexNum; ++i) &#123;</div><div class="line">        shortEdge[i].lowcost = G.arc[<span class="number">0</span>][i];</div><div class="line">        shortEdge[i].adjvex = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    shortEdge[<span class="number">0</span>].lowcost = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;G.vertexNum; ++i) &#123;</div><div class="line">        <span class="keyword">int</span> k = MinEdge(shortEdge, G.vertexNum);</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">'('</span> &lt;&lt; k &lt;&lt; <span class="string">')'</span> &lt;&lt; shortEdge[k].adjvex &lt;&lt; <span class="string">')'</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        shortEdge[k].lowcost = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;G.vertexNum; ++j) &#123;</div><div class="line">            <span class="keyword">if</span> (G.arc[k][j] &lt; shortEdge[j].lowcost) &#123;</div><div class="line">                shortEdge[j].lowcost = G.arc[k][j];</div><div class="line">                shortEdge[j].adjvex = k;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Prim算法的时间复杂度为O(n^2)，与图中的边数无关，适合求稠密图的最小生成树。</p>
+<hr>
+<h2 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h2><p>其基本思想是：每次从未标记的边中选取最小权值的边，如果该边的两个顶点位于两个不同的连通分量，则将该边加入最小生成树，合并两个连通分量，并标记该边。否则，位于同一个连通分量，则去掉该边（同样标记即可），避免造成回路。<br><img src="/img/Kruskal.jpg" alt="Prim算法"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> MaxVertex = <span class="number">10</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> MaxEdge = <span class="number">100</span>;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">EdgeType</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">    <span class="keyword">int</span> from, to;</div><div class="line">    <span class="keyword">int</span> weight;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">EdgeGraph</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">    <span class="keyword">int</span> vertex[MaxVertex];</div><div class="line">    EdgeType edge[MaxEdge];</div><div class="line">    <span class="keyword">int</span> vertexNum, edgeNum;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindRoot</span><span class="params">(<span class="keyword">int</span> parent[], <span class="keyword">int</span> v)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> t = v;</div><div class="line">    <span class="keyword">if</span> (parent[t]!=<span class="number">-1</span>) t = parent[t];</div><div class="line">    <span class="keyword">return</span> t;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Kruskal</span><span class="params">(EdgeGraph G)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> *parent = <span class="keyword">new</span> <span class="keyword">int</span>[G.vertexNum];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;G.vertexNum; ++i) &#123;</div><div class="line">        parent[i] = <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> num=<span class="number">0</span>, i=<span class="number">0</span>; i&lt;G.edgeNum; ++i) &#123;</div><div class="line">        <span class="keyword">int</span> v1 = FindRoot(parent, G.edge[i].from);</div><div class="line">        <span class="keyword">int</span> v2 = FindRoot(parent, G.edge[i].to);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (v1 != v2) &#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">'('</span> &lt;&lt; v1 &lt;&lt; <span class="string">','</span> &lt;&lt; v2 &lt;&lt; <span class="string">')'</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">            parent[v2] = v1;</div><div class="line">            num++;</div><div class="line">            <span class="keyword">if</span>(num == G.vertexNum<span class="number">-1</span>) <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h1><h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2><p><img src="/img/Dijkstra.gif" alt="Dijkstra算法"><br>Dijkstra算法使用贪心策略，每一次添加一条边就更新顶点的最短路径值，贪心策略为每次选取值最小的点。Dijkstra用来求一个点到其余各点的最短距离，也叫做“单源最短距离”。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> MaxNum = <span class="number">10</span>;</div><div class="line"></div><div class="line"><span class="keyword">int</span> A[MaxNum][MaxNum];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(<span class="keyword">int</span> v, <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> dist[MaxNum];</div><div class="line">    <span class="keyword">int</span> visited[MaxNum];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=n; ++i) &#123;</div><div class="line">        dist[i] = A[v][i];</div><div class="line">        visited[i] = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    visited[v] = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=n<span class="number">-1</span>; ++i) &#123;</div><div class="line">        <span class="keyword">int</span> minDis = INT8_MIN;</div><div class="line">        <span class="keyword">int</span> index;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=n; ++j) &#123;</div><div class="line">            <span class="keyword">if</span> (visited[j] == <span class="number">0</span> &amp;&amp; dist[j] &lt; minDis) &#123;</div><div class="line">                minDis = dist[j];</div><div class="line">                index = j;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        visited[index] = <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=n; ++j) &#123;</div><div class="line">            <span class="keyword">if</span> (dist[j] &gt; dist[index]+A[index][j]) &#123;</div><div class="line">                dist[j] = dist[index]+A[index][j];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="Floyd算法"><a href="#Floyd算法" class="headerlink" title="Floyd算法"></a>Floyd算法</h2><p>Floyd用来计算图中任意一点到其他点的最短路径。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> MaxNum = <span class="number">10</span>;</div><div class="line"></div><div class="line"><span class="keyword">int</span> A[MaxNum][MaxNum];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(<span class="keyword">int</span> v, <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;=n; ++k) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=n; ++i) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=n; ++j) &#123;</div><div class="line">                <span class="keyword">if</span> (A[j][j] &gt; A[i][k]+A[k][j]) &#123;</div><div class="line">                    A[i][j] = A[i][k]+A[k][j];</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>参考文献：<br><a href="https://blog.csdn.net/coder_oyang/article/details/48195405" target="_blank" rel="external">最小生成树-MST算法详解及代码实现</a><br><a href="https://blog.csdn.net/jiange_zh/article/details/50759796" target="_blank" rel="external">【每日算法】图算法（遍历&amp;MST&amp;最短路径&amp;拓扑排序）</a><br><a href="http://blog.51cto.com/ahalei/1387799" target="_blank" rel="external">【坐在马桶上看算法】算法7：Dijkstra最短路算法</a><br><a href="http://blog.51cto.com/ahalei/1383613" target="_blank" rel="external">【坐在马桶上看算法】算法6：只有五行的Floyd最短路算法</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/29/database/" rel="next" title="深入理解MySQL底层实现">
+                <i class="fa fa-chevron-left"></i> 深入理解MySQL底层实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图的表示方法"><span class="nav-number">2.</span> <span class="nav-text">图的表示方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-number">2.1.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接表"><span class="nav-number">2.2.</span> <span class="nav-text">邻接表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十字链表"><span class="nav-number">2.3.</span> <span class="nav-text">十字链表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接多重表"><span class="nav-number">2.4.</span> <span class="nav-text">邻接多重表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BFS"><span class="nav-number">3.</span> <span class="nav-text">BFS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DFS"><span class="nav-number">4.</span> <span class="nav-text">DFS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最小生成树（MST）"><span class="nav-number">5.</span> <span class="nav-text">最小生成树（MST）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prim算法"><span class="nav-number">5.1.</span> <span class="nav-text">Prim算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kruskal算法"><span class="nav-number">5.2.</span> <span class="nav-text">Kruskal算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最短路径"><span class="nav-number">6.</span> <span class="nav-text">最短路径</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dijkstra算法"><span class="nav-number">6.1.</span> <span class="nav-text">Dijkstra算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Floyd算法"><span class="nav-number">6.2.</span> <span class="nav-text">Floyd算法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
