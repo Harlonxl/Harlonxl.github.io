@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Linux," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,25 +79,19 @@
 
 
 
-<meta name="description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
-<meta name="keywords" content="Linux">
+<meta name="description" content="Motivation在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？  Defination定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【001】如何设计Twitter？">
-<meta property="og:url" content="http://harlon.org/2017/11/02/how to design Twitter/index.html">
+<meta property="og:title" content="模板方法模式">
+<meta property="og:url" content="http://harlon.org/2018/04/05/designpatterntemplatemethod/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
+<meta property="og:description" content="Motivation在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？  Defination定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/twitter.png">
-<meta property="og:image" content="http://harlon.org/img/architecture.png">
-<meta property="og:image" content="http://harlon.org/img/twitter_push.png">
-<meta property="og:image" content="http://harlon.org/img/twitter_pull.png">
-<meta property="og:image" content="http://harlon.org/img/twitter_pushandpull.png">
-<meta property="og:image" content="http://harlon.org/img/twitter_storage.png">
-<meta property="og:updated_time" content="2017-11-02T13:54:34.937Z">
+<meta property="og:image" content="http://harlon.org/img/templatemethod.png">
+<meta property="og:updated_time" content="2018-04-05T15:26:25.600Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【001】如何设计Twitter？">
-<meta name="twitter:description" content="系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。">
-<meta name="twitter:image" content="http://harlon.org/img/twitter.png">
+<meta name="twitter:title" content="模板方法模式">
+<meta name="twitter:description" content="Motivation在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？  Defination定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类">
+<meta name="twitter:image" content="http://harlon.org/img/templatemethod.png">
 
 
 
@@ -127,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2017/11/02/how to design Twitter/"/>
+  <link rel="canonical" href="http://harlon.org/2018/04/05/designpatterntemplatemethod/"/>
 
 
 
 
 
-  <title>【001】如何设计Twitter？ | Harlon's BLOG</title>
+  <title>模板方法模式 | Harlon's BLOG</title>
   
 
 
@@ -280,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/11/02/how to design Twitter/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/05/designpatterntemplatemethod/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -297,7 +291,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【001】如何设计Twitter？</h1>
+          <h1 class="post-title" itemprop="name headline">模板方法模式</h1>
         
 
         <div class="post-meta">
@@ -309,8 +303,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-02T16:30:23+08:00">
-                2017-11-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-05T23:00:23+08:00">
+                2018-04-05
               </time>
             
 
@@ -332,8 +326,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Design/" itemprop="url" rel="index">
-                    <span itemprop="name">Design</span>
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
                   </a>
                 </span>
 
@@ -369,68 +363,19 @@
       
 
       
-        <p>系统设计第一篇，如何设计Twitter？此问题同样也可以推广到如何设计Facebook、微博、微信朋友圈等。<br><a id="more"></a><br><img src="/img/twitter.png" alt="Twitter"></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>写这篇博文的目的很简单，陆续看了太阁和九章算法对Twitter的讲解后，对这个系统设计问题有了比较深入的理解，特此做一个记录，以后若遇到同类的设计问题，举一反三，融会贯通。<br>从系统设计<a href="http://harlon.org/2017/11/02/system%20design/">4SE</a>原则着手，开始设计Twitter。</p>
-<h1 id="Scenario"><a href="#Scenario" class="headerlink" title="Scenario"></a>Scenario</h1><p>Twitter的功能如下：</p>
-<ul>
-<li>注册/登录</li>
-<li>用户信息显示/修改</li>
-<li>加载图片/视频</li>
-<li>搜索</li>
-<li>发送/共享Tweet</li>
-<li>Timeline/News Feed</li>
-<li>关注/取消关注</li>
-</ul>
-<p>系统设计中，我们往往关注系统的核心功能，Twitter的核心功能可以总结如下：</p>
-<ul>
-<li>发送Tweet</li>
-<li>Timeline</li>
-<li>NewsFeed</li>
-<li>关注/取消关注</li>
-</ul>
+        <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。<br>如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？</p>
 <hr>
-<h1 id="Suppose"><a href="#Suppose" class="headerlink" title="Suppose"></a>Suppose</h1><p>这部分主要估计系统的QPS，根据QPS决定整个系统的架构。<br>首先假设Twitter的 DAU=150m+， 每天的Tweet数为400m（这部分不清楚可以直接问面试官）。<br>QPS = 150m * 60 / 86400 ~ 100k<br>Peak QPS = QPS * 3 ~ 300k<br>对于Twitter这种增长比较快的系统，考虑QPS可以适当的加2倍或者3倍。<br>基于以上的估算结果我们大致可以得出：<br>Read Timeline QPS = 300k<br>Write Timeline QPS = 5k</p>
+<h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类可以不改变(复用)一个算法的结构即可重定义(override 重写)该算法的某些特定步骤。</p>
 <hr>
-<h1 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h1><p>把Twitter的主要功能拆分成几个服务模块，Twitter系统的架构如下：<br><img src="/img/architecture.png" alt="Architecture"><br>Twitter架构内部实现可以分为Push和Pull模型。</p>
-<h2 id="Push"><a href="#Push" class="headerlink" title="Push"></a>Push</h2><p>Push模型的流程如下：<br><img src="/img/twitter_push.png" alt="Push"><br>Push模型中，用户发送一条Tweet后Tweet服务将这个Tweet插入到关注该用户的News Feed中，是一个主动服务的过程。<br>问题：Push模型存在的问题是Lady Gaga的风暴问题，如果某个用户被关注的人数太多，生成这些用户的News Feed会占用比较长的时间，可以缓解这个问题的一个办法是先通知在线的用户，再去处理离线用户的News Feed。</p>
-<h2 id="Pull"><a href="#Pull" class="headerlink" title="Pull"></a>Pull</h2><p>Pull模型的流程如下：<br><img src="/img/twitter_pull.png" alt="Pull"><br>Pull模型中，用户发送一条Tweet后立即存储在DB中，当用户需要自己的News Feed的时候，读取用户关注者的Tweet，然后根据时间戳合成该用户的News Feed，是一个用户主动请求的工程。<br>问题：上帝视角，如果某个用户关注非常多的其他用户，合并过程会比较慢。</p>
-<h2 id="Push-vs-Pull"><a href="#Push-vs-Pull" class="headerlink" title="Push vs. Pull"></a>Push vs. Pull</h2><p>Push和Pull模型各有各的问题，到底哪一个模型好呢？实际应用中Twitter和Facebook使用的是Pull模型，Instagram使用Pull和Push结合的模型，Pull模型相对于Push模型的好处有：逻辑比较简单，实现起来比较容易；上帝视角的问题较Lady Gaga的风暴问题来说出现的概率很低。<br>当然也可以将Push和Pull模型结合起来：<br><img src="/img/twitter_pushandpull.png" alt="Push and Pull"><br>问题：摇摆问题，比如邓超有100k的粉丝，发了一条比较作的微博，一下子掉了好几十万的粉丝，不发微博又涨了几十万粉丝，这样处于中间不停的摇摆，系统会切换来切换去，可以采取的一个策略是，对于大于100k的使用Pull模型，只有当粉丝掉到90k以下是才是用Push模型。设置一个缓冲地带，可以缓解摇摆问题带来的影响。</p>
+<h1 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h1><p><img src="/img/templatemethod.png" alt="模板方法"></p>
 <hr>
-<h1 id="Storage"><a href="#Storage" class="headerlink" title="Storage"></a>Storage</h1><p>不管什么样的系统，本质上都是用户对数据的读取，所以存储这部分的设计比较关键。一般来说我们选择的存储类型有以下三个：</p>
-<ul>
-<li>关系型数据库 SQL Database：用户信息 - MySQL</li>
-<li>非关系型数据库 NoSQL Database：社交图谱 - MongoDB</li>
-<li>文件系统 File System：图片、视频  - Amazon S3</li>
-</ul>
-<p><img src="/img/twitter_storage.png" alt="Storage"></p>
+<h1 id="Impletation"><a href="#Impletation" class="headerlink" title="Impletation"></a>Impletation</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="comment">// 类库</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Libary</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        step1();</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (step2()) &#123; <span class="comment">// 动态绑定</span></div><div class="line">            step3();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">3</span>; ++i) &#123;</div><div class="line">            step4(); <span class="comment">// 动态绑定</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">step1</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"step1"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">step3</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"step3"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">step2</span><span class="params">()</span> </span>= <span class="number">0</span>; <span class="comment">// 纯虚函数</span></div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">step4</span><span class="params">()</span> </span>= <span class="number">0</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// 应用开发人员</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span> :</span> <span class="keyword">public</span> Libary &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">step2</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">step4</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"step4"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    Libary *libary = <span class="keyword">new</span> Application;</div><div class="line">    libary-&gt;run();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
-<h1 id="Evolve"><a href="#Evolve" class="headerlink" title="Evolve"></a>Evolve</h1><h2 id="如何加速？"><a href="#如何加速？" class="headerlink" title="如何加速？"></a>如何加速？</h2><p>加速的第一个思路就是Cache，将所有的内容都放在内存中，加速访问。<br>仅仅Cache一周之内访问Twitter的用户，并只Cache最新的800条Tweet。<br>Assumption:</p>
-<ul>
-<li>Weekly active users: 300 million</li>
-<li>Average news feed size: 80 tweets</li>
-<li>Average timeline size: 500 tweets</li>
-<li>Tweet size: 200B</li>
-<li>Average follower : 20</li>
+<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><ul>
+<li>Template Method模式是一种非常基础性的设计模式，在面向对象系统中有着大量的应用。它用最简洁的机制（虚函数的多态性）为很多应用程序框架提供了灵活的扩展点，是代码复用方面的基本实现结构。</li>
+<li>除了可以灵活应对子步骤的变化外，“不要调用我，让我来调用你”的反向控制结构是Template Method的典型应用。</li>
+<li>在具体实现方面，被Template Method调用的虚方法可以具有实现，也可以没有任何实现（抽象方法、纯虚方法），但一般推荐将它们设置为protected方法。</li>
 </ul>
-<p>Momory need:</p>
-<ul>
-<li>Size of timeline = 300 million * 500 * 200 = 30T</li>
-<li>Size of news feed = 300 million * 80 * 200 = 4.8T</li>
-<li>Size of social graph = 300 million * 20 *  2 * 8 = 64G</li>
-</ul>
-<h2 id="如何节省空间？"><a href="#如何节省空间？" class="headerlink" title="如何节省空间？"></a>如何节省空间？</h2><p>将Tweet内容隔离出来，Timline只存Tweet的ID，这样可以去掉很多重复的Tweet。<br>Assumption:</p>
-<ul>
-<li>Tweet size: 20B = userID(8)+tweetID(8)+Indicators(4)</li>
-</ul>
-<p>Momory need:</p>
-<ul>
-<li>Size of timeline = 300 million * 500 * 20 = 3T</li>
-<li>Size of news feed = 300 million * 80 * 20 = 480G</li>
-</ul>
-<hr>
-<blockquote>
-<p>参考资料：<br>冯沁原：How to design Feed/Chat System<br>东邪：Introducing System Design &amp; News Feed System</p>
-</blockquote>
 
       
     </div>
@@ -446,12 +391,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
-          
-        </div>
-      
 
       
       
@@ -461,8 +400,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/02/system design/" rel="next" title="【000】系统设计的原则-4SE原则">
-                <i class="fa fa-chevron-left"></i> 【000】系统设计的原则-4SE原则
+              <a href="/2018/04/05/designpattern/" rel="next" title="什么是设计模式？">
+                <i class="fa fa-chevron-left"></i> 什么是设计模式？
               </a>
             
           </div>
@@ -471,8 +410,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/13/zookeeper/" rel="prev" title="Zookeeper入门到实战">
-                Zookeeper入门到实战 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -607,7 +546,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scenario"><span class="nav-number">2.</span> <span class="nav-text">Scenario</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Suppose"><span class="nav-number">3.</span> <span class="nav-text">Suppose</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service"><span class="nav-number">4.</span> <span class="nav-text">Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Push"><span class="nav-number">4.1.</span> <span class="nav-text">Push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pull"><span class="nav-number">4.2.</span> <span class="nav-text">Pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Push-vs-Pull"><span class="nav-number">4.3.</span> <span class="nav-text">Push vs. Pull</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Storage"><span class="nav-number">5.</span> <span class="nav-text">Storage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Evolve"><span class="nav-number">6.</span> <span class="nav-text">Evolve</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何加速？"><span class="nav-number">6.1.</span> <span class="nav-text">如何加速？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何节省空间？"><span class="nav-number">6.2.</span> <span class="nav-text">如何节省空间？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
             
 
           </div>

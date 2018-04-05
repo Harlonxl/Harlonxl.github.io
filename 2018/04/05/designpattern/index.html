@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是设计模式？“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。  深入理解面向对象向下：深入理解三大面向对象机制  封装：隐藏内部实现 继承：复用现有代码 多态：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是设计模式？">
+<meta property="og:url" content="http://harlon.org/2018/04/05/designpattern/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="什么是设计模式？“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。  深入理解面向对象向下：深入理解三大面向对象机制  封装：隐藏内部实现 继承：复用现有代码 多态：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-05T15:12:17.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="什么是设计模式？">
+<meta name="twitter:description" content="什么是设计模式？“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。  深入理解面向对象向下：深入理解三大面向对象机制  封装：隐藏内部实现 继承：复用现有代码 多态：">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/04/05/designpattern/"/>
+
+
+
+
+
+  <title>什么是设计模式？ | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/05/designpattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">什么是设计模式？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-05T21:00:23+08:00">
+                2018-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是设计模式？"><a href="#什么是设计模式？" class="headerlink" title="什么是设计模式？"></a>什么是设计模式？</h1><p>“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander<br>通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。</p>
+<hr>
+<h1 id="深入理解面向对象"><a href="#深入理解面向对象" class="headerlink" title="深入理解面向对象"></a>深入理解面向对象</h1><p>向下：深入理解三大面向对象机制</p>
+<ul>
+<li>封装：隐藏内部实现</li>
+<li>继承：复用现有代码</li>
+<li>多态：改写对象行为</li>
+</ul>
+<p>向上：深刻把握面向对象机制所带来的抽象意义，理解如何使用这些机制来表达现实世界，掌握什么是“好的面向对象设计”</p>
+<hr>
+<h1 id="复杂性"><a href="#复杂性" class="headerlink" title="复杂性"></a>复杂性</h1><p>软件设计领域的复杂性在于其变化，解决复杂性的两种思路：</p>
+<p>分解：</p>
+<ul>
+<li>人们面对复杂性有一个常见的做法：即分而治之，将大问题分解为多个小问题，将复杂问题分解为多个简单问题。</li>
+</ul>
+<p>抽象：</p>
+<ul>
+<li>更高层次来讲，人们处理复杂性有一个通用的技术，即抽象。由于不能掌握全部的复杂对象，我们选择忽视它的非本质细节，而去处理泛化和理想化了的对象模型。</li>
+</ul>
+<p>一个好的软件设计，要以<strong>复用</strong>为根本目标。</p>
+<hr>
+<h1 id="面向对象设计"><a href="#面向对象设计" class="headerlink" title="面向对象设计"></a>面向对象设计</h1><ul>
+<li>理解隔离变化<ul>
+<li>从宏观层面来看，面向对象的构建方式更能适应软件的变化，能将变化所带来的影响减为最小。</li>
+</ul>
+</li>
+<li>各司其职<ul>
+<li>从微观层面来看，面向对象的方式更强调各个类的“责任”</li>
+<li>由于需求变化导致的新增类型不应该影响原来类型的实现——是所谓各负其责</li>
+</ul>
+</li>
+<li>对象是什么？<ul>
+<li>从语言实现层面来看，对象封装了代码和数据。</li>
+<li>从规格层面讲，对象是一系列可被使用的公共接口。</li>
+<li>从概念层面讲，对象是某种拥有责任的抽象。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="面向对象设计原则"><a href="#面向对象设计原则" class="headerlink" title="面向对象设计原则"></a>面向对象设计原则</h1><h2 id="依赖倒置原则（DIP）"><a href="#依赖倒置原则（DIP）" class="headerlink" title="依赖倒置原则（DIP）"></a>依赖倒置原则（DIP）</h2><ul>
+<li>高层模块(稳定)不应该依赖于低层模块(变化)，二者都应该依赖于抽象(稳定) 。</li>
+<li>抽象(稳定)不应该依赖于实现细节(变化) ，实现细节应该依赖于抽象(稳定)。</li>
+</ul>
+<hr>
+<h2 id="开放封闭原则（OCP）"><a href="#开放封闭原则（OCP）" class="headerlink" title="开放封闭原则（OCP）"></a>开放封闭原则（OCP）</h2><ul>
+<li>对扩展开放，对更改封闭。</li>
+<li>类模块应该是可扩展的，但是不可修改。</li>
+</ul>
+<hr>
+<h2 id="单一职责原则（SRP）"><a href="#单一职责原则（SRP）" class="headerlink" title="单一职责原则（SRP）"></a>单一职责原则（SRP）</h2><ul>
+<li>一个类应该仅有一个引起它变化的原因。</li>
+<li>变化的方向隐含着类的责任。</li>
+</ul>
+<hr>
+<h2 id="替换原则（LSP）"><a href="#替换原则（LSP）" class="headerlink" title="替换原则（LSP）"></a>替换原则（LSP）</h2><ul>
+<li>子类必须能够替换它们的基类(IS-A)。</li>
+<li>继承表达类型抽象。</li>
+</ul>
+<hr>
+<h2 id="接口隔离原则（ISP）"><a href="#接口隔离原则（ISP）" class="headerlink" title="接口隔离原则（ISP）"></a>接口隔离原则（ISP）</h2><ul>
+<li>不应该强迫客户程序依赖它们不用的方法。</li>
+<li>接口应该小而完备。</li>
+</ul>
+<hr>
+<h2 id="优先使用对象组合，而不是类继承"><a href="#优先使用对象组合，而不是类继承" class="headerlink" title="优先使用对象组合，而不是类继承"></a>优先使用对象组合，而不是类继承</h2><ul>
+<li>类继承通常为“白箱复用”，对象组合通常为“黑箱复用”。</li>
+<li>继承在某种程度上破坏了封装性，子类父类耦合度高。</li>
+<li>而对象组合则只要求被组合的对象具有良好定义的接口，耦合度低。</li>
+</ul>
+<hr>
+<h2 id="封装变化点"><a href="#封装变化点" class="headerlink" title="封装变化点"></a>封装变化点</h2><ul>
+<li>使用封装来创建对象之间的分界层，让设计者可以在分界层的一侧进行修改，而不会对另一侧产生不良的影响，从而实现层次间的松耦合。</li>
+</ul>
+<hr>
+<h2 id="针对接口编程，而不是针对实现编程"><a href="#针对接口编程，而不是针对实现编程" class="headerlink" title="针对接口编程，而不是针对实现编程"></a>针对接口编程，而不是针对实现编程</h2><ul>
+<li>不将变量类型声明为某个特定的具体类，而是声明为某个接口。</li>
+<li>客户程序无需获知对象的具体类型，只需要知道对象所具有的接口。</li>
+<li>减少系统中各部分的依赖关系，从而实现“高内聚、松耦合”的类型设计方案。</li>
+</ul>
+<hr>
+<h1 id="模式分类"><a href="#模式分类" class="headerlink" title="模式分类"></a>模式分类</h1><ul>
+<li>从目的来看：<ul>
+<li>创建型（Creational）模式：将对象的部分创建工作延迟到子类或者其他对象，从而应对需求变化为对象创建时具体类型实现引来的冲击。</li>
+<li>结构型（Structural）模式：通过类继承或者对象组合获得更灵活的结构，从而应对需求变化为对象的结构带来的冲击。</li>
+<li>行为型（Behavioral）模式：通过类继承或者对象组合来划分类与对象间的职责，从而应对需求变化为多个交互的对象带来的冲击。</li>
+</ul>
+</li>
+<li>从范围来看：<ul>
+<li>类模式处理类与子类的静态关系。</li>
+<li>对象模式处理对象间的动态关系。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="重构获得模式"><a href="#重构获得模式" class="headerlink" title="重构获得模式"></a>重构获得模式</h1><ul>
+<li>面向对象设计模式是“好的面向对象设计”，所谓“好的面向对象设计”指是那些可以满足“应对变化，提高复用”的设计。</li>
+<li>现代软件设计的特征是“需求的频繁变化”。设计模式的要点是“寻找变化点，然后在变化点处应用设计模式，从而来更好地应对需求的变化”.“什么时候、什么地点应用设计模式”比“理解设计模式结构本身”更为重要。</li>
+<li>设计模式的应用不宜先入为主，一上来就使用设计模式是对设计模式的最大误用。没有一步到位的设计模式。敏捷软件开发实践提倡的“Refactoring to Patterns”是目前普遍公认的最好的使用设计模式的方法。</li>
+</ul>
+<hr>
+<h1 id="从封装分类"><a href="#从封装分类" class="headerlink" title="从封装分类"></a>从封装分类</h1><h2 id="组件协作模式"><a href="#组件协作模式" class="headerlink" title="组件协作模式"></a>组件协作模式</h2><ul>
+<li>现代软件专业分工之后的第一个结果是“框架与应用程序的划分”，“组件协作”模式通过晚期绑定，来实现框架与应用程序之间的松耦合，是二者之间协作时常用的模式。</li>
+<li>典型模式：<ul>
+<li>Template Method</li>
+<li>Observer / Event</li>
+<li>Strategy</li>
+</ul>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>参考资料<br>极客班设计模式-李建忠<br><a href="https://pan.baidu.com/s/10V-TML-qUicq-38RJFAgMw" target="_blank" rel="external">下载地址</a>  密码：9jyt<br>注意：请勿随意传播，注意版权。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/05/cpluscplusmemorypack/" rel="next" title="内存对齐策略">
+                <i class="fa fa-chevron-left"></i> 内存对齐策略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/05/designpatterntemplatemethod/" rel="prev" title="模板方法模式">
+                模板方法模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是设计模式？"><span class="nav-number">1.</span> <span class="nav-text">什么是设计模式？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解面向对象"><span class="nav-number">2.</span> <span class="nav-text">深入理解面向对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复杂性"><span class="nav-number">3.</span> <span class="nav-text">复杂性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象设计"><span class="nav-number">4.</span> <span class="nav-text">面向对象设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象设计原则"><span class="nav-number">5.</span> <span class="nav-text">面向对象设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖倒置原则（DIP）"><span class="nav-number">5.1.</span> <span class="nav-text">依赖倒置原则（DIP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开放封闭原则（OCP）"><span class="nav-number">5.2.</span> <span class="nav-text">开放封闭原则（OCP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单一职责原则（SRP）"><span class="nav-number">5.3.</span> <span class="nav-text">单一职责原则（SRP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替换原则（LSP）"><span class="nav-number">5.4.</span> <span class="nav-text">替换原则（LSP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口隔离原则（ISP）"><span class="nav-number">5.5.</span> <span class="nav-text">接口隔离原则（ISP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优先使用对象组合，而不是类继承"><span class="nav-number">5.6.</span> <span class="nav-text">优先使用对象组合，而不是类继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装变化点"><span class="nav-number">5.7.</span> <span class="nav-text">封装变化点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对接口编程，而不是针对实现编程"><span class="nav-number">5.8.</span> <span class="nav-text">针对接口编程，而不是针对实现编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模式分类"><span class="nav-number">6.</span> <span class="nav-text">模式分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重构获得模式"><span class="nav-number">7.</span> <span class="nav-text">重构获得模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从封装分类"><span class="nav-number">8.</span> <span class="nav-text">从封装分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件协作模式"><span class="nav-number">8.1.</span> <span class="nav-text">组件协作模式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
