@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="网络编程之TCP粘包问题，介绍粘包问题产生的原因以及解决办法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程之TCP粘包问题">
+<meta property="og:url" content="http://harlon.org/2018/04/08/networksocket2/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="网络编程之TCP粘包问题，介绍粘包问题产生的原因以及解决办法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/network2.png">
+<meta property="og:updated_time" content="2018-04-08T17:27:08.515Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络编程之TCP粘包问题">
+<meta name="twitter:description" content="网络编程之TCP粘包问题，介绍粘包问题产生的原因以及解决办法。">
+<meta name="twitter:image" content="http://harlon.org/img/network2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/04/08/networksocket2/"/>
+
+
+
+
+
+  <title>网络编程之TCP粘包问题 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/08/networksocket2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络编程之TCP粘包问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T17:15:23+08:00">
+                2018-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>网络编程之TCP粘包问题，介绍粘包问题产生的原因以及解决办法。<br><a id="more"></a></p>
+<hr>
+<h1 id="粘包问题产生的原因？"><a href="#粘包问题产生的原因？" class="headerlink" title="粘包问题产生的原因？"></a>粘包问题产生的原因？</h1><p>TCP是基于字节流传输的，只维护发送出去多少，确认了多少，没有维护消息与消息之间的边界，因而可能导致粘包问题。<br><img src="/img/network2.png" alt=""></p>
+<hr>
+<h1 id="粘包解决方案"><a href="#粘包解决方案" class="headerlink" title="粘包解决方案"></a>粘包解决方案</h1><p>粘包问题本质上要在应用层维护消息与消息的边界。</p>
+<ul>
+<li>定长包</li>
+<li>包尾\r\n（ftp）</li>
+<li>包头加上包头长度</li>
+<li>更负责的应用层协议</li>
+</ul>
+<hr>
+<h1 id="readn-和writen"><a href="#readn-和writen" class="headerlink" title="readn()和writen()"></a>readn()和writen()</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*server.c*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> &#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125;<span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> readn(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> n) &#123;</div><div class="line">	<span class="keyword">int</span> nleft = n;</div><div class="line">	<span class="keyword">int</span> nread;</div><div class="line">	<span class="keyword">char</span> *bufp = (<span class="keyword">char</span> *)buf;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (nleft &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">if</span>((nread = read(fd, bufp, nleft)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR)</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (nread == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> n - nleft;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		nleft -= nread;</div><div class="line">		bufp += nread;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> n;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> writen(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> n) &#123;</div><div class="line">	<span class="keyword">int</span> nleft = n;</div><div class="line">	<span class="keyword">int</span> nwrite;</div><div class="line">	<span class="keyword">char</span> *bufp = (<span class="keyword">char</span> *)buf;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (nleft &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">if</span>((nwrite = write(fd, buf, nleft)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR)</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (nwrite == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> n - nleft;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		nleft -= nwrite;</div><div class="line">		buf += nwrite;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> n;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">handler</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">	<span class="keyword">while</span> (waitpid(<span class="number">-1</span>, <span class="literal">NULL</span>, WNOHANG) &gt; <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="comment">// signal(SIGCHLD, SIG_IGN); // 避免僵尸进程</span></div><div class="line">	signal(SIGCHLD, handler);</div><div class="line">	<span class="keyword">int</span> sockfd;</div><div class="line">	<span class="keyword">if</span> ((sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"socket"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serveraddr</span>;</span></div><div class="line">	<span class="built_in">memset</span>(&amp;serveraddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serveraddr));</div><div class="line">	serveraddr.sin_family = AF_INET;</div><div class="line">	serveraddr.sin_port = htons(<span class="number">5534</span>);</div><div class="line">	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);</div><div class="line"></div><div class="line">	<span class="keyword">int</span> on = <span class="number">1</span>;</div><div class="line">	<span class="keyword">if</span> (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &amp;on, <span class="keyword">sizeof</span>(on)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"setsockopt"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (bind(sockfd, (struct sockaddr*)&amp;serveraddr, <span class="keyword">sizeof</span>(serveraddr)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"bind"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (listen(sockfd, SOMAXCONN) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"listen"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> conn;</div><div class="line">	<span class="keyword">pid_t</span> pid;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientaddr</span>;</span></div><div class="line">	<span class="keyword">int</span> clientaddrlen = <span class="keyword">sizeof</span>(clientaddr);</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">if</span> ((conn = accept(sockfd, (struct sockaddr*)&amp;clientaddr, &amp;clientaddrlen)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			ERR_EXIT(<span class="string">"accept"</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="built_in">printf</span>(<span class="string">"ip=%s, port=%d\n"</span>, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));</div><div class="line"></div><div class="line">		<span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</div><div class="line">			ERR_EXIT(<span class="string">"fork"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123; <span class="comment">// 子进程</span></div><div class="line">			close(sockfd);</div><div class="line">			<span class="keyword">while</span>(<span class="number">1</span>) &#123;</div><div class="line">				<span class="keyword">char</span> recvbuf[<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;</div><div class="line">				<span class="keyword">int</span> ret;</div><div class="line">				<span class="keyword">if</span> ((ret = readn(conn, recvbuf, <span class="number">10</span>)) &lt; <span class="number">0</span>) &#123;</div><div class="line">					ERR_EXIT(<span class="string">"readn"</span>);</div><div class="line">				&#125; <span class="keyword">else</span> <span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</div><div class="line">					<span class="built_in">printf</span>(<span class="string">"client close\n"</span>);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line">				<span class="built_in">fputs</span>(recvbuf, <span class="built_in">stdout</span>);</div><div class="line"></div><div class="line">				writen(conn, recvbuf, <span class="number">10</span>);</div><div class="line">				<span class="built_in">memset</span>(recvbuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(recvbuf));</div><div class="line">			&#125;</div><div class="line">			close(conn);</div><div class="line">			<span class="built_in">exit</span>(EXIT_SUCCESS);</div><div class="line">		&#125; <span class="keyword">else</span> &#123; <span class="comment">// 父进程</span></div><div class="line">			close(conn);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*client.c*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> &#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125; <span class="keyword">while</span>(<span class="number">0</span>) \</div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> readn(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> n) &#123;</div><div class="line">	<span class="keyword">int</span> nleft = n;</div><div class="line">	<span class="keyword">int</span> nread;</div><div class="line">	<span class="keyword">char</span> *bufp = (<span class="keyword">char</span> *)buf;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (nleft &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">if</span>((nread = read(fd, bufp, nleft)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR)</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (nread == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> n - nleft;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		nleft -= nread;</div><div class="line">		bufp += nread;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> n;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> writen(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> n) &#123;</div><div class="line">	<span class="keyword">int</span> nleft = n;</div><div class="line">	<span class="keyword">int</span> nwrite;</div><div class="line">	<span class="keyword">char</span> *bufp = (<span class="keyword">char</span> *)buf;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (nleft &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">if</span>((nwrite = write(fd, bufp, nleft)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR)</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (nwrite == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> n - nleft;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		nleft -= nwrite;</div><div class="line">		bufp += nwrite;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> n;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> sockfd;</div><div class="line">	<span class="keyword">if</span> ((sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"socket"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serveraddr</span>;</span></div><div class="line">	<span class="built_in">memset</span>(&amp;serveraddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serveraddr));</div><div class="line">	serveraddr.sin_family = AF_INET;</div><div class="line">	serveraddr.sin_port = htons(<span class="number">5534</span>);</div><div class="line">	serveraddr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>);</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (connect(sockfd, (struct sockaddr*)&amp;serveraddr, <span class="keyword">sizeof</span>(serveraddr)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"connect"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> sendbuf[<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;</div><div class="line">	<span class="keyword">char</span> recvbuf[<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (fgets(sendbuf, <span class="keyword">sizeof</span>(sendbuf), <span class="built_in">stdin</span>) != <span class="number">0</span>) &#123;</div><div class="line">		writen(sockfd, sendbuf, <span class="number">10</span>);</div><div class="line">		<span class="keyword">int</span> ret;</div><div class="line">		<span class="keyword">if</span> ((ret = readn(sockfd, recvbuf, <span class="number">10</span>)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			ERR_EXIT(<span class="string">"readn"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</div><div class="line">			<span class="built_in">printf</span>(<span class="string">"server close\n"</span>);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="built_in">fputs</span>(recvbuf, <span class="built_in">stdout</span>);</div><div class="line"></div><div class="line">		<span class="built_in">memset</span>(sendbuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(sendbuf));</div><div class="line">		<span class="built_in">memset</span>(recvbuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(recvbuf));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	close(sockfd);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/08/networksocketpratice/" rel="next" title="网络编程之socket实战">
+                <i class="fa fa-chevron-left"></i> 网络编程之socket实战
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#粘包问题产生的原因？"><span class="nav-number">1.</span> <span class="nav-text">粘包问题产生的原因？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#粘包解决方案"><span class="nav-number">2.</span> <span class="nav-text">粘包解决方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#readn-和writen"><span class="nav-number">3.</span> <span class="nav-text">readn()和writen()</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
