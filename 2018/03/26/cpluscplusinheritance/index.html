@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://harlon.org/img/inheritance_trace5.png">
 <meta property="og:image" content="http://harlon.org/img/inheritance_trace6.png">
 <meta property="og:image" content="http://harlon.org/img/inheritance_memory2.png">
-<meta property="og:updated_time" content="2018-03-26T15:48:06.051Z">
+<meta property="og:updated_time" content="2018-04-13T07:14:17.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之继承">
 <meta name="twitter:description" content="面向对象的三大特性：封装、继承和多态，总结一下C++的继承以及注意事项。">
@@ -194,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -244,7 +244,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -308,7 +308,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-26T10:59:23+08:00">
                 2018-03-26
@@ -329,7 +329,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -430,7 +430,7 @@
 </li>
 </ul>
 <p><img src="/img/inheritance_trace4.png" alt=""><br><img src="/img/inheritance_trace5.png" alt=""><br><img src="/img/inheritance_trace6.png" alt=""></p>
-<p>因为d继承了两个基类，所有有两张虚类表，第一个里面的偏移量是0和8，第二是0和4，内存模型如下：<br><img src="/img/inheritance_memory2.png" alt=""><br>对于这部门内容举的例子不是很到位，多态会更详细说明这一点。</p>
+<p>因为d继承了两个基类，所有有两张虚基类表(vbptr)，第一个里面的偏移量是0和8，第二是0和4，内存模型如下：<br><img src="/img/inheritance_memory2.png" alt=""><br>对于这部分内容举的例子不是很到位，多态会更详细说明这一点。</p>
 <hr>
 <h1 id="友元函数和static继承"><a href="#友元函数和static继承" class="headerlink" title="友元函数和static继承"></a>友元函数和static继承</h1><ul>
 <li>友元函数不能被子类继承，派生类的friend函数可以访问派生类本身的一切变量，包括从父类继承下来的protected域中的变量。但是对父类来说，他并不是friend的。</li>
@@ -529,10 +529,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -552,8 +552,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -564,7 +564,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -575,7 +575,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -639,7 +639,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
