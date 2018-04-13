@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="网络编程之IO模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程之IO模型">
+<meta property="og:url" content="http://harlon.org/2018/04/11/networksocket5/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="网络编程之IO模型">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/block_io.png">
+<meta property="og:image" content="http://harlon.org/img/noblock_io.png">
+<meta property="og:image" content="http://harlon.org/img/io_multi.png">
+<meta property="og:image" content="http://harlon.org/img/signal.png">
+<meta property="og:image" content="http://harlon.org/img/aio.png">
+<meta property="og:updated_time" content="2018-04-12T03:26:07.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络编程之IO模型">
+<meta name="twitter:description" content="网络编程之IO模型">
+<meta name="twitter:image" content="http://harlon.org/img/block_io.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/04/11/networksocket5/"/>
+
+
+
+
+
+  <title>网络编程之IO模型 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/11/networksocket5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络编程之IO模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-11T13:27:23+08:00">
+                2018-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>网络编程之IO模型<br><a id="more"></a></p>
+<hr>
+<h1 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h1><p><img src="/img/block_io.png" alt=""></p>
+<center>阻塞IO模型</center>
+
+<h1 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h1><p><img src="/img/noblock_io.png" alt=""></p>
+<center>非阻塞IO模型</center>
+
+<h1 id="IO复用（select、poll和epoll）"><a href="#IO复用（select、poll和epoll）" class="headerlink" title="IO复用（select、poll和epoll）"></a>IO复用（select、poll和epoll）</h1><p><img src="/img/io_multi.png" alt=""></p>
+<center>IO复用模型</center>
+
+<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> nfds, fd_set *readfs, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *<span class="built_in">set</span>)</span></span></div></pre></td></tr></table></figure>
+<p>用select管理IO，一旦其中的一个I/O或者多个IO发生我们感兴趣的事件，select返回事件发生的个数，并且返回哪些 I/O发生了事件，遍历这些事件，从而处理事件。<br>参数：</p>
+<ul>
+<li>nfds：读、写、异常中的最大文件描述符+1</li>
+<li>readfs：读集合</li>
+<li>writefs：写集合</li>
+<li>exceptfds：异常集合</li>
+<li>timeout：超时时间</li>
+</ul>
+<p>可读：</p>
+<ul>
+<li>套接口缓冲区有数据可读</li>
+<li>连接的读一半的关闭，即接受到FIN段，读操作将返回0</li>
+<li>如果是监听套接口，已完成连接队列不为空时</li>
+<li>套接口上发生了一个错误待处理，错误可以通过setsockopt指定SO_ERROR选项来获取</li>
+</ul>
+<p>可写：</p>
+<ul>
+<li>套接口发送缓存区有空间容纳数据</li>
+<li>连接的写一半关闭，即受到RST段之后，再次调用wirte操作</li>
+<li>套接口上发生一个错误待处理，错误可以通过getsockopt指定SO_ERROR选项来获取</li>
+</ul>
+<p>异常：</p>
+<ul>
+<li>套接字存在带外数据</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* client */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> &#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125; <span class="keyword">while</span>(<span class="number">0</span>) \</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">packet</span> &#123;</span></div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> buf[<span class="number">1024</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">echo_cli</span><span class="params">(<span class="keyword">int</span> sockfd)</span> </span>&#123;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">packet</span> <span class="title">send_packet</span>;</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">packet</span> <span class="title">recv_packet</span>;</span></div><div class="line"></div><div class="line">	<span class="keyword">int</span> stdinfd = fileno(<span class="built_in">stdin</span>);</div><div class="line">	<span class="keyword">int</span> maxfd;</div><div class="line">	fd_set rset;</div><div class="line">	<span class="keyword">if</span> (sockfd &gt; stdinfd) &#123;</div><div class="line">		maxfd = sockfd;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		maxfd = stdinfd;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> nread;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>(<span class="number">1</span>) &#123;</div><div class="line">		FD_SET(stdinfd, &amp;rset);</div><div class="line">		FD_SET(sockfd, &amp;rset);</div><div class="line"></div><div class="line">		nread = select(maxfd+<span class="number">1</span>, &amp;rset, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (nread &lt; <span class="number">0</span>) &#123;</div><div class="line">			ERR_EXIT(<span class="string">"select"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (nread == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">continue</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">int</span> n;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (FD_ISSET(stdinfd, &amp;rset)) &#123;</div><div class="line">			<span class="keyword">if</span> (fgets(send_packet.buf, <span class="keyword">sizeof</span>(send_packet.buf), <span class="built_in">stdin</span>) != <span class="number">0</span>) &#123;</div><div class="line">				n = <span class="built_in">strlen</span>(send_packet.buf);</div><div class="line">				send_packet.len = htonl(n);</div><div class="line">				write(sockfd, &amp;send_packet, <span class="number">4</span>+n);</div><div class="line"></div><div class="line">				<span class="built_in">memset</span>(&amp;send_packet, <span class="number">0</span>, <span class="keyword">sizeof</span>(send_packet));</div><div class="line">			&#125;</div><div class="line"></div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (FD_ISSET(sockfd, &amp;rset)) &#123;</div><div class="line">			<span class="keyword">int</span> ret;</div><div class="line">			<span class="keyword">if</span> ((ret = read(sockfd, &amp;recv_packet, <span class="number">4</span>+n)) &lt; <span class="number">0</span>) &#123;</div><div class="line">				ERR_EXIT(<span class="string">"readn"</span>);</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</div><div class="line">				<span class="built_in">printf</span>(<span class="string">"server close\n"</span>);</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="built_in">fputs</span>(recv_packet.buf, <span class="built_in">stdout</span>);</div><div class="line"></div><div class="line">			<span class="built_in">memset</span>(&amp;recv_packet, <span class="number">0</span>, <span class="keyword">sizeof</span>(recv_packet));</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	close(sockfd);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> sockfd;</div><div class="line">	<span class="keyword">if</span> ((sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"socket"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serveraddr</span>;</span></div><div class="line">	<span class="built_in">memset</span>(&amp;serveraddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serveraddr));</div><div class="line">	serveraddr.sin_family = AF_INET;</div><div class="line">	serveraddr.sin_port = htons(<span class="number">5534</span>);</div><div class="line">	serveraddr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>);</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (connect(sockfd, (struct sockaddr*)&amp;serveraddr, <span class="keyword">sizeof</span>(serveraddr)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"connect"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">addr</span>;</span></div><div class="line">	<span class="keyword">int</span> len = <span class="keyword">sizeof</span>(addr);</div><div class="line">	<span class="keyword">if</span> (getsockname(sockfd, (struct sockaddr*)&amp;addr, &amp;len) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"getsockname"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"ip=%s, port=%d\n"</span>, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">peeraddr</span>;</span></div><div class="line">	<span class="keyword">int</span> peerlen = <span class="keyword">sizeof</span>(peeraddr);</div><div class="line">	<span class="keyword">if</span> (getpeername(sockfd, (struct sockaddr*)&amp;peeraddr, &amp;peerlen) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"getsockname"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"ip=%s, port=%d\n"</span>, inet_ntoa(peeraddr.sin_addr), ntohs(peeraddr.sin_port));</div><div class="line"></div><div class="line">	echo_cli(sockfd);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*server.c*/</span></div></pre></td></tr></table></figure>
+<p>用select并发服务器，能达到的并发数，受两方面限制</p>
+<ul>
+<li>一个进程能打开的最大文件描述符限制，这可以通过调整内核参数</li>
+<li>select中的fd_set集合容量的限制（FD_SETSIZE），这需要重新编译内核</li>
+</ul>
+<hr>
+<h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd *fds, <span class="keyword">nfds_t</span> nfds, <span class="keyword">int</span> timeout)</span></span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> fd;</div><div class="line">    <span class="keyword">short</span> events;</div><div class="line">    <span class="keyword">short</span> reverts;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create1</span><span class="params">(<span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, <span class="keyword">int</span> fd, struct epoll_evect *event)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_evect *events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</div></pre></td></tr></table></figure>
+<p>epoll与select、poll区别</p>
+<ul>
+<li>相比于select与poll，epoll最大的好处在于它不会随着监听fd数目的增长而降低效率</li>
+<li>内核中的select与poll的实现采用轮询来处理的，轮询的fd数目越多，自然耗时越多</li>
+<li>epoll的实现是基于回调的，如果fd有期望的事件发生就通过回调函数将其加入epoll就绪队列中，也就是说它只关心“活跃”的fd，与fd数目无关</li>
+<li>内核/用户空间内存拷贝问题，如何让内核把fd消息通知给用户空间呢？在这个问题上select/poll采取了内存拷贝方法，而epoll采用了共享内存的的方式</li>
+<li>epoll不仅会告诉应用程序有I/O事件到来，还会告诉应用程序相关的信息，这些信息是引用程序填充的，因此根据这些信息应用程序就能直接定位到事件，而不必遍历整个fd集合</li>
+</ul>
+<p>EPOLLLT：水平触发的模式，完全靠kernel epoll驱动，应用程序只需要处理从epoll_wait返回的fds，这些fds我们认为他们处于就绪状态</p>
+<p>EPOLLET：边沿触发模式，此模式下，系统仅仅通知应用程序哪些fds变成了就绪状态，一旦fd变成就绪状态，epoll将不再关注这个fd的任何消息，（从epoll队列移除）直到应用程序通过读写触发EAGAIN状态，epoll认为这个fd又变为空闲状态，那么epoll又重新关注这个fd的状态变化（重新加入epoll队列）<br>随着epoll_wait的返回，队列中的fds是在减少的，所以在大并发的系统中，EPOLLET更有优势。但对程序员的要求也最高。</p>
+<h1 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h1><p><img src="/img/signal.png" alt=""></p>
+<center>信号驱动IO模型</center>
+
+<h1 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h1><p><img src="/img/aio.png" alt=""></p>
+<center>异步IO模型</center>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/10/networksocket3/" rel="next" title="网络编程之getsockname、getpeername、gethostbyname函数">
+                <i class="fa fa-chevron-left"></i> 网络编程之getsockname、getpeername、gethostbyname函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/11/networksocket4/" rel="prev" title="网络编程之TCP状态">
+                网络编程之TCP状态 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#阻塞IO"><span class="nav-number">1.</span> <span class="nav-text">阻塞IO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非阻塞IO"><span class="nav-number">2.</span> <span class="nav-text">非阻塞IO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IO复用（select、poll和epoll）"><span class="nav-number">3.</span> <span class="nav-text">IO复用（select、poll和epoll）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#select"><span class="nav-number">3.1.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poll"><span class="nav-number">3.2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll"><span class="nav-number">3.3.</span> <span class="nav-text">epoll</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号驱动IO"><span class="nav-number">4.</span> <span class="nav-text">信号驱动IO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步IO"><span class="nav-number">5.</span> <span class="nav-text">异步IO</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Hash函数及冲突">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hash函数及冲突">
+<meta property="og:url" content="http://harlon.org/2018/04/13/datastructurehash/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Hash函数及冲突">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-13T05:47:33.465Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hash函数及冲突">
+<meta name="twitter:description" content="Hash函数及冲突">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/04/13/datastructurehash/"/>
+
+
+
+
+
+  <title>Hash函数及冲突 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/13/datastructurehash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hash函数及冲突</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-13T10:26:23+08:00">
+                2018-04-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p> Hash函数及冲突<br><a id="more"></a></p>
+<hr>
+<h1 id="Hash表"><a href="#Hash表" class="headerlink" title="Hash表"></a>Hash表</h1><ul>
+<li>非Hash表：关键字在表中和它之间存在的位置不确定，查找的过程为定值一次和各个关键字进行比较，查找的效率取决于和给定值比较的次数。</li>
+<li>Hash表：关键字和表中的位置存在确定的关系。</li>
+<li>哈希函数：关键字在Hash表中的具体分布，取决于哈希函数。</li>
+</ul>
+<hr>
+<h1 id="装填因子"><a href="#装填因子" class="headerlink" title="装填因子"></a>装填因子</h1><p>装填因子 α = 填入哈希表中的元素个数/哈希表的长度<br>α越小，填入表中的元素较少，产生冲突的可能性就越少</p>
+<hr>
+<h1 id="Hash函数"><a href="#Hash函数" class="headerlink" title="Hash函数"></a>Hash函数</h1><h2 id="Hash函数设计原则"><a href="#Hash函数设计原则" class="headerlink" title="Hash函数设计原则"></a>Hash函数设计原则</h2><p>关键字经过Hash函数映射之后，应该尽可能覆盖整个Hash函数的空间，并且关键字映射至桶中的概率尽可能一致，总而言之，随机性强，规律性越弱的Hash函数越好。</p>
+<h2 id="除余法"><a href="#除余法" class="headerlink" title="除余法"></a>除余法</h2><p>hash(key) = key mod M<br>M取素数能降低冲突</p>
+<h2 id="MAD法"><a href="#MAD法" class="headerlink" title="MAD法"></a>MAD法</h2><p>hash(key) = (a*key + b) mod M</p>
+<h2 id="伪随机数法"><a href="#伪随机数法" class="headerlink" title="伪随机数法"></a>伪随机数法</h2><p>hash(key) = rand(key) mod M</p>
+<hr>
+<h1 id="Hash冲突解决办法"><a href="#Hash冲突解决办法" class="headerlink" title="Hash冲突解决办法"></a>Hash冲突解决办法</h1><h2 id="开放定制法"><a href="#开放定制法" class="headerlink" title="开放定制法"></a>开放定制法</h2><p>这种方法也称再散列法，其基本思想是：当关键字key的哈希地址p=H（key）出现冲突时，以p为基础，产生另一个哈希地址p1，如果p1仍然冲突，再以p为基础，产生另一个哈希地址p2，…，直到找出一个不冲突的哈希地址pi ，将相应元素存入其中。这种方法有一个通用的再散列函数形式：<br>Hi=（H()key)+di）% m   i=1，2，…，n<br>其中H（key）为哈希函数，m 为表长，di称为增量序列。增量序列的取值方式不同，相应的再散列方式也不同。主要有以下三种：</p>
+<h3 id="线性探测再散列"><a href="#线性探测再散列" class="headerlink" title="线性探测再散列"></a>线性探测再散列</h3><p>di i=1，2，3，…，m-1<br>这种方法的特点是：冲突发生时，顺序查看表中下一单元，直到找出一个空单元或查遍全表。</p>
+<h3 id="二次探测再散列"><a href="#二次探测再散列" class="headerlink" title="二次探测再散列"></a>二次探测再散列</h3><p>di = 1^2, -1^2, 2^2, -2^2, … , k^2, -k^2 (k&lt;=m/2)<br>这种方法的特点是：冲突发生时，在表的左右进行跳跃式探测，比较灵活。</p>
+<h3 id="伪随机探测再散列"><a href="#伪随机探测再散列" class="headerlink" title="伪随机探测再散列"></a>伪随机探测再散列</h3><p>di=伪随机数序列。</p>
+<hr>
+<h2 id="再哈希法"><a href="#再哈希法" class="headerlink" title="再哈希法"></a>再哈希法</h2><p>这种方法是同时构造多个不同的哈希函数：<br>Hi = RH1(key), i = 1, 2, …, k<br>当哈希地址Hi=RH1（key）发生冲突时，再计算Hi=RH2（key）……，直到冲突不再产生。这种方法不易产生聚集，但增加了计算时间。</p>
+<hr>
+<h2 id="链地址法"><a href="#链地址法" class="headerlink" title="链地址法"></a>链地址法</h2><p>这种方法的基本思想是将所有哈希地址为i的元素构成一个称为同义词链的单链表，并将单链表的头指针存在哈希表的第i个单元中，因而查找、插入和删除主要在同义词链中进行。链地址法适用于经常进行插入和删除的情况。</p>
+<hr>
+<h2 id="建立公共溢出区"><a href="#建立公共溢出区" class="headerlink" title="建立公共溢出区"></a>建立公共溢出区</h2><p>这种方法的基本思想是：将哈希表分为基本表和溢出表两部分，凡是和基本表发生冲突的元素，一律填入溢出表。且溢出表也可采用同样的哈希函数，易于实现，可理解为一种递归形势的散列表。</p>
+<hr>
+<h1 id="开放定址和封闭定址"><a href="#开放定址和封闭定址" class="headerlink" title="开放定址和封闭定址"></a>开放定址和封闭定址</h1><ul>
+<li><p>开放地址：哈希表的每一个桶单元都有可能存放关键字，故称之为开放定址，其散列地址仅限于散列表所覆盖的范围之内，称之为封闭散列。</p>
+<ul>
+<li>优点：<ul>
+<li>记录更容易进行序列化（serialize）操作；</li>
+<li>如果记录总数可以预知，可以创建完美哈希函数，此时处理数据的效率是非常高的。</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>存储记录的数目不能超过桶数组的长度，如果超过就需要扩容，而扩容会导致某次操作的时间成本飙升，这在实时或者交互式应用中可能会是一个严重的缺陷；</li>
+<li>使用探测序列，有可能其计算的时间成本过高，导致哈希表的处理性能降低；</li>
+<li>由于记录是存放在桶数组中的，而桶数组必然存在空槽，所以当记录本身尺寸（size）很大并且记录总数规模很大时，空槽占用的空间会导致明显的内存浪费；</li>
+<li>删除记录时，比较麻烦。比如需要删除记录a，记录b是在a之后插入桶数组的，但是和记录a有冲突，是通过探测序列再次跳转找到的地址，所以如果直接删除a，a的位置变为空槽，而空槽是查询记录失败的终止条件，这样会导致记录b在a的位置重新插入数据前不可见，所以不能直接删除a，而是设置删除标记。这就需要额外的空间和操作。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>封闭地址：哈希表的关键字发生冲突之后，采用另外的数据结构存放冲突的关键字，这样的散列称之为开放散列。</p>
+<ul>
+<li>优点：<ul>
+<li>对于记录总数频繁可变的情况，处理的比较好（也就是避免了动态调整的开销）；</li>
+<li>由于记录存储在结点中，而结点是动态分配，不会造成内存的浪费，所以尤其适合那种记录本身尺寸（size）很大的情况，因为此时指针的开销可以忽略不计了；</li>
+<li>删除记录时，比较方便，直接通过指针操作即可；</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>存储的记录是随机分布在内存中的，这样在查询记录时，相比结构紧凑的数据类型（比如数组），哈希表的跳转访问会带来额外的时间开销；</li>
+<li>如果所有的 key-value 对是可以提前预知，并之后不会发生变化时（即不允许插入和删除），可以人为创建一个不会产生冲突的完美哈希函数（perfect hash function），此时封闭散列的性能将远高于开放散列；</li>
+<li>由于使用指针，记录不容易进行序列化（serialize）操作。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>参考资料<br><a href="https://www.cnblogs.com/wuchaodzxx/p/7396599.html" target="_blank" rel="external">解决hash冲突的三个方法</a><br><a href="https://www.cnblogs.com/novalist/p/6396410.html" target="_blank" rel="external">hash冲突的四种办法</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/12/networksocket8/" rel="next" title="网络编程之UNIX域协议">
+                <i class="fa fa-chevron-left"></i> 网络编程之UNIX域协议
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash表"><span class="nav-number">1.</span> <span class="nav-text">Hash表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装填因子"><span class="nav-number">2.</span> <span class="nav-text">装填因子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash函数"><span class="nav-number">3.</span> <span class="nav-text">Hash函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash函数设计原则"><span class="nav-number">3.1.</span> <span class="nav-text">Hash函数设计原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#除余法"><span class="nav-number">3.2.</span> <span class="nav-text">除余法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MAD法"><span class="nav-number">3.3.</span> <span class="nav-text">MAD法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪随机数法"><span class="nav-number">3.4.</span> <span class="nav-text">伪随机数法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash冲突解决办法"><span class="nav-number">4.</span> <span class="nav-text">Hash冲突解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开放定制法"><span class="nav-number">4.1.</span> <span class="nav-text">开放定制法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性探测再散列"><span class="nav-number">4.1.1.</span> <span class="nav-text">线性探测再散列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二次探测再散列"><span class="nav-number">4.1.2.</span> <span class="nav-text">二次探测再散列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伪随机探测再散列"><span class="nav-number">4.1.3.</span> <span class="nav-text">伪随机探测再散列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再哈希法"><span class="nav-number">4.2.</span> <span class="nav-text">再哈希法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链地址法"><span class="nav-number">4.3.</span> <span class="nav-text">链地址法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立公共溢出区"><span class="nav-number">4.4.</span> <span class="nav-text">建立公共溢出区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开放定址和封闭定址"><span class="nav-number">5.</span> <span class="nav-text">开放定址和封闭定址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
