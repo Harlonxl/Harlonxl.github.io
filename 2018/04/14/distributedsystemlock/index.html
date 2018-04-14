@@ -79,20 +79,17 @@
 
 
 
-<meta name="description" content="网络编程之TCP状态">
+<meta name="description" content="分布式系统中，一致性一直是一个比较重要的话题，分布式经典的CAP理论指出，任何一个分布式系统都无法同时满足一致性（Consistency)、可用性（Availablity）和分区容错性（Partition tolerance），最多只能满足两项，这里我们讨论如何使用分布式锁来满足一致性。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络编程之TCP状态">
-<meta property="og:url" content="http://harlon.org/2018/04/11/networksocket4/index.html">
+<meta property="og:title" content="分布式锁以及三种实现方式">
+<meta property="og:url" content="http://harlon.org/2018/04/14/distributedsystemlock/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="网络编程之TCP状态">
+<meta property="og:description" content="分布式系统中，一致性一直是一个比较重要的话题，分布式经典的CAP理论指出，任何一个分布式系统都无法同时满足一致性（Consistency)、可用性（Availablity）和分区容错性（Partition tolerance），最多只能满足两项，这里我们讨论如何使用分布式锁来满足一致性。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/tcp_connect.png">
-<meta property="og:image" content="http://harlon.org/img/tcp_close.png">
-<meta property="og:updated_time" content="2018-04-11T06:04:33.454Z">
+<meta property="og:updated_time" content="2018-04-14T09:59:54.695Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="网络编程之TCP状态">
-<meta name="twitter:description" content="网络编程之TCP状态">
-<meta name="twitter:image" content="http://harlon.org/img/tcp_connect.png">
+<meta name="twitter:title" content="分布式锁以及三种实现方式">
+<meta name="twitter:description" content="分布式系统中，一致性一直是一个比较重要的话题，分布式经典的CAP理论指出，任何一个分布式系统都无法同时满足一致性（Consistency)、可用性（Availablity）和分区容错性（Partition tolerance），最多只能满足两项，这里我们讨论如何使用分布式锁来满足一致性。">
 
 
 
@@ -122,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2018/04/11/networksocket4/"/>
+  <link rel="canonical" href="http://harlon.org/2018/04/14/distributedsystemlock/"/>
 
 
 
 
 
-  <title>网络编程之TCP状态 | Harlon's BLOG</title>
+  <title>分布式锁以及三种实现方式 | Harlon's BLOG</title>
   
 
 
@@ -275,7 +272,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/11/networksocket4/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/14/distributedsystemlock/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -292,7 +289,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">网络编程之TCP状态</h1>
+          <h1 class="post-title" itemprop="name headline">分布式锁以及三种实现方式</h1>
         
 
         <div class="post-meta">
@@ -304,8 +301,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-11T13:27:23+08:00">
-                2018-04-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-14T16:17:23+08:00">
+                2018-04-14
               </time>
             
 
@@ -364,12 +361,50 @@
       
 
       
-        <p>网络编程之TCP状态<br><a id="more"></a></p>
+        <p>分布式系统中，一致性一直是一个比较重要的话题，分布式经典的CAP理论指出，任何一个分布式系统都无法同时满足一致性（Consistency)、可用性（Availablity）和分区容错性（Partition tolerance），最多只能满足两项，这里我们讨论如何使用分布式锁来满足一致性。<br><a id="more"></a></p>
 <hr>
-<h1 id="TCP状态"><a href="#TCP状态" class="headerlink" title="TCP状态"></a>TCP状态</h1><p><img src="/img/tcp_connect.png" alt=""></p>
-<p><center>TCP三次握手</center><br><img src="/img/tcp_close.png" alt=""></p>
-<p><center>TCP四次挥手</center></p>
-<h1 id="SIGPIPE信号"><a href="#SIGPIPE信号" class="headerlink" title="SIGPIPE信号"></a>SIGPIPE信号</h1><p>往一个已经接收FIN的套接字写时允许的，接收到FIN仅仅代表对方不再发送数据。<br>在收到RST段之后，如果再调用write就会产生SIGPIPE信号，对于这个信号的处理的处理我们通常忽略即可。<br>signal(SIGPIPE, SIG_IGN);</p>
+<h1 id="分布式锁具备条件"><a href="#分布式锁具备条件" class="headerlink" title="分布式锁具备条件"></a>分布式锁具备条件</h1><p>在分析分布式锁的实现之间，先来了解一下分布式锁应该具备哪些条件：</p>
+<blockquote>
+<p>1、在分布式系统环境下，一个方法在同一时间只能被一个机器的一个线程执行；<br>2、高可用的获取锁与释放锁；<br>3、高性能的获取锁与释放锁；<br>4、具备可重入特性；<br>5、具备锁失效机制，防止死锁；<br>6、具备非阻塞锁特性，即没有获取到锁将直接返回获取锁失败。</p>
+</blockquote>
+<hr>
+<h1 id="分布式锁的三种实现方式"><a href="#分布式锁的三种实现方式" class="headerlink" title="分布式锁的三种实现方式"></a>分布式锁的三种实现方式</h1><ul>
+<li>基于数据库实现分布式锁；</li>
+<li>基于缓存（Redis等）实现分布式缓存；</li>
+<li>基于Zookeeper实现分布式锁。</li>
+</ul>
+<hr>
+<h2 id="基于数据库的实现方式"><a href="#基于数据库的实现方式" class="headerlink" title="基于数据库的实现方式"></a>基于数据库的实现方式</h2><p>基于数据库实现方式的核心思想是：在数据库中创建一个表，表中包含方法名等字段，并在方法名字段上创建唯一索引，想要执行某个方法，就使用这个方法名向表中插入数据，成功插入则获取锁，执行完成后删除对应的行数据释放锁。</p>
+<ul>
+<li><p>创建一个表</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">DROP TABLE <span class="keyword">IF</span> EXISTS `method_lock`;</div><div class="line">CREATE TABLE `method_lock` (</div><div class="line">    `id` int(<span class="number">11</span>) unsigned NOT <span class="keyword">NULL</span> AUTO_INCREMENT,</div><div class="line">    `method_name` varchar(<span class="number">64</span>) NOT <span class="keyword">NULL</span>,</div><div class="line">    `desc` varchar(<span class="number">255</span>) NOT <span class="keyword">NULL</span>,</div><div class="line">    `update_time` timestamp NOT <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,</div><div class="line">    PRIMARY KEY(`id`),</div><div class="line">    UNIQUE KEY `uidx_method_name` (`method_name`) USING BTREE</div><div class="line">) ENGINE = InnoDB AUTO_INCREMENT=<span class="number">3</span> <span class="keyword">DEFAULT</span> CHARSET=utf8</div></pre></td></tr></table></figure>
+</li>
+<li><p>获取锁，往表中插入数据</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">INSERT INTO method_lock(method_name, desc) VALUES(<span class="string">'methodname'</span>, <span class="string">'测试methodname'</span>);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我们对method_name做了唯一性约束，当有多个请求同时提交到数据库时，数据库会保证只有一个才做可以成功，那么我们可以认为操作成功的那个县城获得该方法的锁，可以执行具体内容。</p>
+<ul>
+<li>释放锁，删除数据<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DELETE FROM method_lock WHERE method=<span class="string">'methodname'</span>;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意：<br>1、因为是基于数据库实现的，数据库的可用性和性能将直接影响分布式锁的可用性及性能，所以，数据库需要双机部署、数据同步、主备切换；<br>2、不具备可重入的特性，因为同一个线程在释放锁之前，行数据一直存在，无法再次成功插入数据，所以，需要在表中新增一列，用于记录当前获取到锁的机器和线程信息，在再次获取锁的时候，先查询表中机器和线程信息是否和当前机器和线程相同，若相同则直接获取锁；<br>3、没有锁失效机制，因为有可能出现成功插入数据后，服务器宕机了，对应的数据没有被删除，当服务恢复后一直获取不到锁，所以，需要在表中新增一列，用于记录失效时间，并且需要有定时任务清除这些失效的数据；<br>4、不具备阻塞锁特性，获取不到锁直接返回失败，所以需要优化获取逻辑，循环多次去获取；<br>5、在实施的过程中会遇到各种不同的问题，为了解决这些问题，实现方式将会越来越复杂；依赖数据库需要一定的资源开销，性能问题需要考虑。</p>
+<hr>
+<h1 id="基于Redis的实现方式"><a href="#基于Redis的实现方式" class="headerlink" title="基于Redis的实现方式"></a>基于Redis的实现方式</h1><p>1、使用Redis的原因：</p>
+<ul>
+<li>Redis有很高的性能</li>
+<li>Redis本身的语义对锁的获取和释放有很好的支持</li>
+</ul>
+<p>2、 Redis基本命令：<br>（1）SETNX<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SETNX key val: 当且仅当key不存在时，set一个key为val的字符串，返回<span class="number">1</span>；若key存在，则什么都不做，返回<span class="number">0</span>。</div></pre></td></tr></table></figure></p>
+<p>（2）expire<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expire key timeout：为key设置一个超时时间，单位为second，超过这个时间锁会自动释放，避免死锁。</div></pre></td></tr></table></figure></p>
+<p>（3）delete<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">delete key：删除key</div></pre></td></tr></table></figure></p>
+<p>3、实现思想：<br>（1）获取锁的时候使用SETNX加锁，并使用expire命令为锁添加一个超时时间，超过该时间则自动释放该锁，锁的value值为随机生成的UUID，通过此在释放锁的时候进行判断；<br>（2）获取锁的时候还设置一个获取的超时实践，若超过这个时间则放弃获取锁；<br>（3）释放锁的时候，通过UUID判断是不是该锁，若是该锁，则执行delete进行锁释放。</p>
+<hr>
+<h1 id="基于Zookeeper的实现方式"><a href="#基于Zookeeper的实现方式" class="headerlink" title="基于Zookeeper的实现方式"></a>基于Zookeeper的实现方式</h1><p>ZooKeeper是一个为分布式应用提供一致性服务的开源组件，它内部是一个分层的文件系统目录树结构，规定同一个目录下只能有一个唯一文件名。基于ZooKeeper实现分布式锁的步骤如下：<br>（1）创建一个目录mylock；<br>（2）线程A想获取锁就在mylock目录下创建临时顺序节点；<br>（3）获取mylock目录下所有的子节点，然后获取比自己小的兄弟节点，如果不存在，则说明当前线程顺序号最小，获得锁；<br>（4）线程B获取所有节点，判断自己不是最小节点，设置监听比自己次小的节点；<br>（5）线程A处理完，删除自己的节点，线程B监听到变更事件，判断自己是不是最小的节点，如果是则获得锁。<br>优点：具备高可用、可重入、阻塞锁特性，可解决失效死锁问题。<br>缺点：因为需要频繁的创建和删除节点，性能上不如Redis方式。</p>
+<hr>
+<blockquote>
+<p>参考资料：<br><a href="https://blog.csdn.net/xlgen157387/article/details/79036337" target="_blank" rel="external"> 分布式锁简单入门以及三种实现方式介绍</a><br><a href="https://www.cnblogs.com/suolu/p/6588902.html" target="_blank" rel="external">分布式锁的一点理解</a></p>
+</blockquote>
 
       
     </div>
@@ -394,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/11/networksocket5/" rel="next" title="网络编程之IO模型">
-                <i class="fa fa-chevron-left"></i> 网络编程之IO模型
+              <a href="/2018/04/14/operatorhighconcurrency/" rel="next" title="服务器高并发设计模式">
+                <i class="fa fa-chevron-left"></i> 服务器高并发设计模式
               </a>
             
           </div>
@@ -404,8 +439,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/11/networksocket6/" rel="prev" title="网络编程之shutdown函数与超时设置">
-                网络编程之shutdown函数与超时设置 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/14/distributedsystemconsistency/" rel="prev" title="分布式一致性算法综述">
+                分布式一致性算法综述 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -540,7 +575,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP状态"><span class="nav-number">1.</span> <span class="nav-text">TCP状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIGPIPE信号"><span class="nav-number">2.</span> <span class="nav-text">SIGPIPE信号</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式锁具备条件"><span class="nav-number">1.</span> <span class="nav-text">分布式锁具备条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式锁的三种实现方式"><span class="nav-number">2.</span> <span class="nav-text">分布式锁的三种实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于数据库的实现方式"><span class="nav-number">2.1.</span> <span class="nav-text">基于数据库的实现方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于Redis的实现方式"><span class="nav-number">3.</span> <span class="nav-text">基于Redis的实现方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于Zookeeper的实现方式"><span class="nav-number">4.</span> <span class="nav-text">基于Zookeeper的实现方式</span></a></li></ol></div>
             
 
           </div>

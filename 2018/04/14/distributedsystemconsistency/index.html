@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="网络编程之TCP状态">
+<meta name="description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络编程之TCP状态">
-<meta property="og:url" content="http://harlon.org/2018/04/11/networksocket4/index.html">
+<meta property="og:title" content="分布式一致性算法综述">
+<meta property="og:url" content="http://harlon.org/2018/04/14/distributedsystemconsistency/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="网络编程之TCP状态">
+<meta property="og:description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/tcp_connect.png">
-<meta property="og:image" content="http://harlon.org/img/tcp_close.png">
-<meta property="og:updated_time" content="2018-04-11T06:04:33.454Z">
+<meta property="og:image" content="http://harlon.org/img/basic-paxos-phases.png">
+<meta property="og:image" content="http://harlon.org/img/raft-leader-election.png">
+<meta property="og:updated_time" content="2018-04-14T13:28:54.999Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="网络编程之TCP状态">
-<meta name="twitter:description" content="网络编程之TCP状态">
-<meta name="twitter:image" content="http://harlon.org/img/tcp_connect.png">
+<meta name="twitter:title" content="分布式一致性算法综述">
+<meta name="twitter:description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
+<meta name="twitter:image" content="http://harlon.org/img/basic-paxos-phases.png">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2018/04/11/networksocket4/"/>
+  <link rel="canonical" href="http://harlon.org/2018/04/14/distributedsystemconsistency/"/>
 
 
 
 
 
-  <title>网络编程之TCP状态 | Harlon's BLOG</title>
+  <title>分布式一致性算法综述 | Harlon's BLOG</title>
   
 
 
@@ -275,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/11/networksocket4/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/14/distributedsystemconsistency/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -292,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">网络编程之TCP状态</h1>
+          <h1 class="post-title" itemprop="name headline">分布式一致性算法综述</h1>
         
 
         <div class="post-meta">
@@ -304,8 +304,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-11T13:27:23+08:00">
-                2018-04-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-14T17:38:23+08:00">
+                2018-04-14
               </time>
             
 
@@ -364,12 +364,39 @@
       
 
       
-        <p>网络编程之TCP状态<br><a id="more"></a></p>
+        <p>分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。<br><a id="more"></a></p>
 <hr>
-<h1 id="TCP状态"><a href="#TCP状态" class="headerlink" title="TCP状态"></a>TCP状态</h1><p><img src="/img/tcp_connect.png" alt=""></p>
-<p><center>TCP三次握手</center><br><img src="/img/tcp_close.png" alt=""></p>
-<p><center>TCP四次挥手</center></p>
-<h1 id="SIGPIPE信号"><a href="#SIGPIPE信号" class="headerlink" title="SIGPIPE信号"></a>SIGPIPE信号</h1><p>往一个已经接收FIN的套接字写时允许的，接收到FIN仅仅代表对方不再发送数据。<br>在收到RST段之后，如果再调用write就会产生SIGPIPE信号，对于这个信号的处理的处理我们通常忽略即可。<br>signal(SIGPIPE, SIG_IGN);</p>
+<h1 id="一致性问题"><a href="#一致性问题" class="headerlink" title="一致性问题"></a>一致性问题</h1><p>分布式系统产生一致性问题的原因可总结如下：</p>
+<ul>
+<li>网络不可靠</li>
+<li>主机不可靠</li>
+<li>主机之间的差异性（性能、时钟等）</li>
+</ul>
+<p>首先，网络可能导致我们发送的数据或者指令以乱序的方式到达，也可能会丢失数据，其次主机时不可靠的，可能会出现宕机，重启等，主机之间的差异性，包括主机的性能和时钟，这些都会导致分布式系统难于实现一致性，FLP不可能理论指出无法彻底解决一致性问题，在CAP中我们只能选择两项，大多数的分布式系统都选择了最终一致性，即若一致性来保证可用性和分区容错性。<br>在实际的生产环境中，一致性算法需要具备以下属性：</p>
+<ul>
+<li>安全性：即不管怎样都不能返回错误的结果；</li>
+<li>可用性：主要大部门的机器正常，就仍然可以正常工作；</li>
+<li>不依赖时间来确保一致,即系统是异步的；</li>
+<li>一般情况下,运行时间由大多数的机器决定,不会因为有少部分慢的机器而影响总体效率</li>
+</ul>
+<p>通俗来讲，一致性的问题可以分解为两个问题：<br>1、任何一次修改保证数据一致性<br>2、多次数据修改的一致性</p>
+<p>弱一致性：不要求每次修改的内容在修改后多副本的内容是一致的，对问题1的解决比较宽松，更多解决问题2，该类算法追求每次修改的高度并发性，减少多副本之间修改的关联性，以获得更好的并发性能。例如最终一致性，无所谓每次用户修改后的多副本的一致性及格过，只要求在单调的时间方向上，数据最终保持一致，如此获得了修改极大的并发性能。<br>强一致性：强调单次修改后结果的一致，需要保证了对问题1和问题2要求的实现，牺牲了并发性能。<br>一致性算法有：两阶段提交算法、分布式锁服务、Paxos算法和Raft算法。<br>两阶段提交参见这里<a href="">分布式事务</a><br>分布式锁服务参加这里<a href="http://harlon.org/2018/04/14/distributedsystemlock/">分布式锁以及三种实现方式</a><br>下面主要介绍Paxos算法和Raft一致性算法。</p>
+<hr>
+<h1 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h1><p>Paxos算法是一个会者简单，不会者觉得很难的算法，就连Lamport本文也不得不为Paxos先后做了三次解释。<br>查阅了很多资料，最后发现维基百科中对Paxos的解释最为准确和易懂，可见参考文件中。这里只是阐述算法的过程和原理，不再做深一步的证明和理解。<br>Paxos算法分为两个简单，分别是准备阶段（Prepare）和接受阶段（Accept），当Proposer接收到来自客户端的请求时，就会进入如下流程：<br><img src="/img/basic-paxos-phases.png" alt=""></p>
+<p><center>Paxos算法</center><br>只要Proposer经过多数派接受，该提案就会成为正式的决议。</p>
+<hr>
+<h1 id="Raft一致性算法"><a href="#Raft一致性算法" class="headerlink" title="Raft一致性算法"></a>Raft一致性算法</h1><p>Raft是Paxos的变体，不过Raft简化了Paxos，任何时间内，只有leader能够发起提案，这就涉及到leader选举问题。<br>Raft算法中有一下三个角色：</p>
+<ul>
+<li>1.Leader：负责 Client 交互 和 log 复制，同一时刻系统中最多存在一个；</li>
+<li>2.Follower：被动响应请求 RPC，从不主动发起请求 RPC；</li>
+<li>3.Candidate : 由Follower 向Leader转换的中间状态。</li>
+</ul>
+<p>Leader选举过程：<br>在极简的思维下，一个最小的 Raft 民主集群需要三个参与者（如下图：A、B、C），这样才可能投出多数票。初始状态 ABC 都是 Follower，然后发起选举这时有三种可能情形发生。下图中前二种都能选出 Leader，第三种则表明本轮投票无效（Split Votes），每方都投给了自己，结果没有任何一方获得多数票。之后每个参与方随机休息一阵（Election Timeout）重新发起投票直到一方获得多数票。这里的关键就是随机 timeout，最先从 timeout 中恢复发起投票的一方向还在 timeout 中的另外两方请求投票，这时它们就只能投给对方了，很快达成一致。<br><img src="/img/raft-leader-election.png" alt=""></p>
+<p>Raft 协议强依赖 Leader 节点的可用性来确保集群数据的一致性。数据的流向只能从 Leader 节点向 Follower 节点转移。当 Client 向集群 Leader 节点提交数据后，Leader 节点接收到的数据处于未提交状态（Uncommitted），接着 Leader 节点会并发向所有 Follower 节点复制数据并等待接收响应，确保至少集群中超过半数节点已接收到数据后再向 Client 确认数据已接收。一旦向 Client 发出数据接收 Ack 响应后，表明此时数据状态进入已提交（Committed），Leader 节点再向 Follower 节点发通知告知该数据状态已提交。<br>Leader的选举问题</p>
+<hr>
+<blockquote>
+<p>参考资料<br><a href="https://blog.csdn.net/lucky_greenegg/article/details/52644213" target="_blank" rel="external">分布式系统一致性问题和一致性算法</a><br><a href="https://draveness.me/consensus" target="_blank" rel="external">分布式一致性与共识算法</a><br><a href="https://zh.wikipedia.org/zh-cn/Paxos%E7%AE%97%E6%B3%95" target="_blank" rel="external">Paxos算法</a><br><a href="http://www.cnblogs.com/mindwind/p/5231986.html" target="_blank" rel="external">Raft 为什么是更易理解的分布式一致性算法</a><br><a href="https://blog.csdn.net/followMyInclinations/article/details/52870418" target="_blank" rel="external">分布式事务与一致性算法Paxos &amp; raft &amp; zab</a></p>
+</blockquote>
 
       
     </div>
@@ -394,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/11/networksocket5/" rel="next" title="网络编程之IO模型">
-                <i class="fa fa-chevron-left"></i> 网络编程之IO模型
+              <a href="/2018/04/14/distributedsystemlock/" rel="next" title="分布式锁以及三种实现方式">
+                <i class="fa fa-chevron-left"></i> 分布式锁以及三种实现方式
               </a>
             
           </div>
@@ -404,8 +431,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/11/networksocket6/" rel="prev" title="网络编程之shutdown函数与超时设置">
-                网络编程之shutdown函数与超时设置 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -540,7 +567,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP状态"><span class="nav-number">1.</span> <span class="nav-text">TCP状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIGPIPE信号"><span class="nav-number">2.</span> <span class="nav-text">SIGPIPE信号</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一致性问题"><span class="nav-number">1.</span> <span class="nav-text">一致性问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Paxos算法"><span class="nav-number">2.</span> <span class="nav-text">Paxos算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Raft一致性算法"><span class="nav-number">3.</span> <span class="nav-text">Raft一致性算法</span></a></li></ol></div>
             
 
           </div>
