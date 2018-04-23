@@ -79,19 +79,13 @@
 
 
 
-<meta name="description" content="网络编程之UDP与实战">
-<meta property="og:type" content="article">
-<meta property="og:title" content="网络编程之UDP与实战">
-<meta property="og:url" content="http://harlon.org/2018/04/11/networksocket7/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Harlon&#39;s BLOG">
+<meta property="og:url" content="http://harlon.org/categories/Notes/page/5/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="网络编程之UDP与实战">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/udp_program.png">
-<meta property="og:updated_time" content="2018-04-12T09:50:42.327Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="网络编程之UDP与实战">
-<meta name="twitter:description" content="网络编程之UDP与实战">
-<meta name="twitter:image" content="http://harlon.org/img/udp_program.png">
+<meta name="twitter:title" content="Harlon&#39;s BLOG">
 
 
 
@@ -121,13 +115,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2018/04/11/networksocket7/"/>
+  <link rel="canonical" href="http://harlon.org/categories/Notes/page/5/"/>
 
 
 
 
 
-  <title>网络编程之UDP与实战 | Harlon's BLOG</title>
+  <title>Kategorie: Notes | Harlon's BLOG</title>
   
 
 
@@ -146,7 +140,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -260,187 +254,87 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block category">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>Notes<small>Kategorie</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/11/networksocket7/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Harlon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Harlon's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2017/11/20/python/" itemprop="url">
+              
+                <span itemprop="name">python入门到精通</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">网络编程之UDP与实战</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-11T15:58:23+08:00">
-                2018-04-11
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2017-11-20T10:19:18+08:00"
+              content="2017-11-20" >
+          11-20
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">in</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index">
-                    <span itemprop="name">Notes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>网络编程之UDP与实战<br><a id="more"></a></p>
-<hr>
-<h1 id="UDP特点"><a href="#UDP特点" class="headerlink" title="UDP特点"></a>UDP特点</h1><ul>
-<li>无连接</li>
-<li>基于消息的数据传输服务</li>
-<li>不可靠</li>
-<li>一般情况下UDP更加高效</li>
-</ul>
-<hr>
-<h1 id="UDP编程模型"><a href="#UDP编程模型" class="headerlink" title="UDP编程模型"></a>UDP编程模型</h1><p><img src="/img/udp_program.png" alt=""></p>
-<hr>
-<h1 id="UDP编程注意点"><a href="#UDP编程注意点" class="headerlink" title="UDP编程注意点"></a>UDP编程注意点</h1><ul>
-<li>UDP报文可能会丢失、重复</li>
-<li>UDP报文可能会乱序</li>
-<li>UDP缺乏流量控制</li>
-<li>UDP协议数据报文截断</li>
-<li>recvfrom返回0，不代表连接关闭，因为udp是无连接的</li>
-<li>ICMP异步错误</li>
-<li>UDP connect</li>
-<li>UDP外出接口的确定</li>
-</ul>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/04/11/networksocket5/" rel="next" title="网络编程之IO模型">
-                <i class="fa fa-chevron-left"></i> 网络编程之IO模型
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/11/networksocket6/" rel="prev" title="网络编程之shutdown函数与超时设置">
-                网络编程之shutdown函数与超时设置 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
+      
+        
 
-    <div class="post-spread">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2017/11/01/Linux Command/" itemprop="url">
+              
+                <span itemprop="name">每日一个Linux命令</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2017-11-01T16:30:23+08:00"
+              content="2017-11-01" >
+          11-01
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
       
     </div>
+
   </div>
+  
+  
+  
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/categories/Notes/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/categories/Notes/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/Notes/page/4/">4</a><span class="page-number current">5</span>
+  </nav>
+
+
 
 
           </div>
@@ -448,10 +342,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -472,17 +362,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -544,22 +425,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UDP特点"><span class="nav-number">1.</span> <span class="nav-text">UDP特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UDP编程模型"><span class="nav-number">2.</span> <span class="nav-text">UDP编程模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UDP编程注意点"><span class="nav-number">3.</span> <span class="nav-text">UDP编程注意点</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -693,10 +558,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
-
-
 
   
 

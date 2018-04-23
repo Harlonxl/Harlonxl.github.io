@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对遇到的算法题进行分类，归纳整理，形成自己的解题思想。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法题目分类与总结">
+<meta property="og:url" content="http://harlon.org/2018/04/23/datastructuresummary/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="对遇到的算法题进行分类，归纳整理，形成自己的解题思想。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-23T12:23:04.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法题目分类与总结">
+<meta name="twitter:description" content="对遇到的算法题进行分类，归纳整理，形成自己的解题思想。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/04/23/datastructuresummary/"/>
+
+
+
+
+
+  <title>算法题目分类与总结 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/23/datastructuresummary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">算法题目分类与总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-23T19:29:23+08:00">
+                2018-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对遇到的算法题进行分类，归纳整理，形成自己的解题思想。<br><a id="more"></a></p>
+<h1 id="二分搜索"><a href="#二分搜索" class="headerlink" title="二分搜索"></a>二分搜索</h1><h2 id="经典二分查找问题"><a href="#经典二分查找问题" class="headerlink" title="经典二分查找问题"></a>经典二分查找问题</h2><p>题目描述：<a href="https://www.lintcode.com/zh-cn/problem/classical-binary-search/" target="_blank" rel="external">经典二分查找问题</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">findPosition</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;nums, <span class="keyword">int</span> target)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (nums.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> end = nums.size() - <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (target == nums[mid]) &#123;</div><div class="line">                <span class="keyword">return</span> mid;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (target &lt; nums[mid]) &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="二分查找（找到第一个）"><a href="#二分查找（找到第一个）" class="headerlink" title="二分查找（找到第一个）"></a>二分查找（找到第一个）</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;nums, <span class="keyword">int</span> target)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (nums.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> end = nums.size() - <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (target &gt; nums[mid]) &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (nums[start] == target) &#123;</div><div class="line">            <span class="keyword">return</span> start;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums[end] == target) &#123;</div><div class="line">            <span class="keyword">return</span> end;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="二分查找（找到最后一个）"><a href="#二分查找（找到最后一个）" class="headerlink" title="二分查找（找到最后一个）"></a>二分查找（找到最后一个）</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (nums.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> end = nums.size() - <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (target &lt; nums[mid]) &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (nums[end] == target) &#123;</div><div class="line">            <span class="keyword">return</span> end;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums[start] == target) &#123;</div><div class="line">            <span class="keyword">return</span> end;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="第一个错误的代码版本"><a href="#第一个错误的代码版本" class="headerlink" title="第一个错误的代码版本"></a>第一个错误的代码版本</h2><p>题目描述：<a href="https://www.lintcode.com/zh-cn/problem/first-bad-version/" target="_blank" rel="external">第一个错误的代码版本</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">findFirstBadVersion</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = <span class="number">1</span>;</div><div class="line">        <span class="keyword">int</span> end = n;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (SVNRepo::isBadVersion(mid)) &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (SVNRepo::isBadVersion(start)) &#123;</div><div class="line">            <span class="keyword">return</span> start;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (SVNRepo::isBadVersion(end)) &#123;</div><div class="line">            <span class="keyword">return</span> end;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="寻找旋转排序数组中的最小值"><a href="#寻找旋转排序数组中的最小值" class="headerlink" title="寻找旋转排序数组中的最小值"></a>寻找旋转排序数组中的最小值</h2><p>题目描述：<a href="https://www.lintcode.com/zh-cn/problem/find-minimum-in-rotated-sorted-array/" target="_blank" rel="external">寻找旋转排序数组中的最小值</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">findMin</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;nums)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (nums.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> end = nums.size()<span class="number">-1</span>;</div><div class="line">        <span class="keyword">int</span> target = nums[nums.size()<span class="number">-1</span>];</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (nums[mid] &gt;= target) &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (nums[start] &lt; nums[end]) &#123;</div><div class="line">            <span class="keyword">return</span> nums[start];</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> nums[end];</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="Search-a-2D-Matrix-II"><a href="#Search-a-2D-Matrix-II" class="headerlink" title="Search a 2D Matrix II"></a>Search a 2D Matrix II</h2><p>题目描述：<a href="https://www.lintcode.com/en/problem/search-a-2d-matrix-ii/" target="_blank" rel="external">Search a 2D Matrix II</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">searchMatrix</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; &amp;matrix, <span class="keyword">int</span> target)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (matrix.size() == <span class="number">0</span> || matrix[<span class="number">0</span>].size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> m = matrix.size()<span class="number">-1</span>;</div><div class="line">        <span class="keyword">int</span> n = matrix[<span class="number">0</span>].size()<span class="number">-1</span>;</div><div class="line">        <span class="keyword">int</span> j = n;</div><div class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (i &lt;=m &amp;&amp; j &gt;= <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (matrix[i][j] &lt; target) &#123;</div><div class="line">                ++i;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (matrix[i][j] &gt; target) &#123;</div><div class="line">                --j;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                ++count;</div><div class="line">                ++i;</div><div class="line">                --j;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> count;</div><div class="line">        </div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="Search-for-a-Range"><a href="#Search-for-a-Range" class="headerlink" title="Search for a Range"></a>Search for a Range</h2><p>题目描述：<a href="https://www.lintcode.com/en/problem/search-for-a-range/" target="_blank" rel="external">Search for a Range</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; searchRange(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> target) &#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; result;</div><div class="line">        <span class="keyword">if</span> (A.size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;);</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> end = A.size() - <span class="number">1</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (target &lt;= A[mid]) &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (A[start] == target) &#123;</div><div class="line">            result.push_back(start);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (A[end] == target) &#123;</div><div class="line">            start = end;</div><div class="line">            result.push_back(end);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=start; i&lt;A.size(); ++i) &#123;</div><div class="line">            <span class="keyword">if</span> (A[i] != target) &#123;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">            end = i;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        result.push_back(end);</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="寻找峰值"><a href="#寻找峰值" class="headerlink" title="寻找峰值"></a>寻找峰值</h2><p>题目描述：<a href="https://www.lintcode.com/zh-cn/problem/find-peak-element/" target="_blank" rel="external">寻找峰值</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">findPeak</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (A.size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> end = A.size() - <span class="number">1</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (A[mid] &lt; A[mid+<span class="number">1</span>]) &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (A[start] &gt; A[end]) &#123;</div><div class="line">            <span class="keyword">return</span> start;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> end;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="搜索旋转排序数组"><a href="#搜索旋转排序数组" class="headerlink" title="搜索旋转排序数组"></a>搜索旋转排序数组</h2><p>题目描述：<a href="https://www.lintcode.com/zh-cn/problem/search-in-rotated-sorted-array/" target="_blank" rel="external">搜索旋转排序数组</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">search</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> target)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (A.size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> end = A.size()<span class="number">-1</span>;</div><div class="line">        <span class="keyword">int</span> l = A[<span class="number">0</span>];</div><div class="line">        <span class="keyword">int</span> h = A[end];</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (A[mid] &lt; h) &#123;</div><div class="line">                <span class="keyword">if</span> (A[mid] &lt; target &amp;&amp; target &lt;= h) &#123;</div><div class="line">                    start = mid;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    end = mid;</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">if</span> (A[mid] &gt; target &amp;&amp; target &gt;= l) &#123;</div><div class="line">                    end = mid;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    start = mid;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (A[start] == target) &#123;</div><div class="line">            <span class="keyword">return</span> start;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (A[end] == target) &#123;</div><div class="line">            <span class="keyword">return</span> end;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="x的平方根"><a href="#x的平方根" class="headerlink" title="x的平方根"></a>x的平方根</h2><p>题目描述：<a href="https://www.lintcode.com/zh-cn/problem/sqrtx/" target="_blank" rel="external">x的平方根</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sqrt</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (x &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">        <span class="keyword">if</span> (x &lt;= <span class="number">1</span>) <span class="keyword">return</span> x;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = <span class="number">2</span>;</div><div class="line">        <span class="keyword">int</span> end = x;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (mid &gt; x / mid) &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (start * start == x) &#123;</div><div class="line">            <span class="keyword">return</span> start;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (end * end == x) &#123;</div><div class="line">            <span class="keyword">return</span> end;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> start;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="木材加工"><a href="#木材加工" class="headerlink" title="木材加工"></a>木材加工</h2><p>题目描述：<a href="https://www.lintcode.com/zh-cn/problem/wood-cut/" target="_blank" rel="external">木材加工</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxWood</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;L)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> max = L[<span class="number">0</span>];</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;L.size(); ++i) &#123;</div><div class="line">            <span class="keyword">if</span> (L[i] &gt; max) &#123;</div><div class="line">                max = L[i];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> max;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">woodCutCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;L, <span class="keyword">int</span> wood)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;L.size(); ++i) &#123;</div><div class="line">            count += <span class="keyword">int</span>(L[i]/wood);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> count;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">woodCut</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;L, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (L.size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = <span class="number">1</span>;</div><div class="line">        <span class="keyword">int</span> end = maxWood(L);</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (woodCutCount(L, mid) &lt; k) &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (woodCutCount(L, start) == k) &#123;</div><div class="line">            <span class="keyword">return</span> start;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (woodCutCount(L, end) == k) &#123;</div><div class="line">            <span class="keyword">return</span> end;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (woodCutCount(L, start) &lt; k) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> start;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="Copy-Books"><a href="#Copy-Books" class="headerlink" title="Copy Books"></a>Copy Books</h2><p>题目描述：<a href="https://www.lintcode.com/en/problem/copy-books/" target="_blank" rel="external">Copy Books</a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxPages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;pages)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> maxPage = INT32_MIN;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;pages.size(); ++i) &#123;</div><div class="line">            maxPage = max(maxPage, pages[i]);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> maxPage;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">countCopies</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;pages, <span class="keyword">int</span> limit)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</div><div class="line">        <span class="keyword">int</span> sum = pages[<span class="number">0</span>];</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;pages.size(); ++i) &#123;</div><div class="line">            <span class="keyword">if</span> (sum + pages[i] &gt; limit) &#123;</div><div class="line">                ++count;</div><div class="line">                sum = <span class="number">0</span>;</div><div class="line">            &#125;</div><div class="line">            sum += pages[i];</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> count;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">copyBooks</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;pages, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">        <span class="comment">// write your code here</span></div><div class="line">        <span class="keyword">if</span> (pages.size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> start = maxPages(pages);</div><div class="line">        <span class="keyword">int</span> sum = accumulate(pages.begin(), pages.end(), <span class="number">0</span>);</div><div class="line">        <span class="keyword">int</span> end = sum;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> (start + <span class="number">1</span> &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = start + (end - start) / <span class="number">2</span>;</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> (countCopies(pages, mid) &gt; k) &#123;</div><div class="line">                start = mid;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                end = mid;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (countCopies(pages, start) &lt;= k) &#123;</div><div class="line">            <span class="keyword">return</span> start;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> end;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/22/cpluscplustemplate/" rel="next" title="C++之模板与泛型编程">
+                <i class="fa fa-chevron-left"></i> C++之模板与泛型编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/23/cpluscplusinteligenceptr/" rel="prev" title="C++之智能指针">
+                C++之智能指针 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#二分搜索"><span class="nav-number">1.</span> <span class="nav-text">二分搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#经典二分查找问题"><span class="nav-number">1.1.</span> <span class="nav-text">经典二分查找问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分查找（找到第一个）"><span class="nav-number">1.2.</span> <span class="nav-text">二分查找（找到第一个）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分查找（找到最后一个）"><span class="nav-number">1.3.</span> <span class="nav-text">二分查找（找到最后一个）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个错误的代码版本"><span class="nav-number">1.4.</span> <span class="nav-text">第一个错误的代码版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻找旋转排序数组中的最小值"><span class="nav-number">1.5.</span> <span class="nav-text">寻找旋转排序数组中的最小值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Search-a-2D-Matrix-II"><span class="nav-number">1.6.</span> <span class="nav-text">Search a 2D Matrix II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Search-for-a-Range"><span class="nav-number">1.7.</span> <span class="nav-text">Search for a Range</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻找峰值"><span class="nav-number">1.8.</span> <span class="nav-text">寻找峰值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索旋转排序数组"><span class="nav-number">1.9.</span> <span class="nav-text">搜索旋转排序数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x的平方根"><span class="nav-number">1.10.</span> <span class="nav-text">x的平方根</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#木材加工"><span class="nav-number">1.11.</span> <span class="nav-text">木材加工</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-Books"><span class="nav-number">1.12.</span> <span class="nav-text">Copy Books</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
