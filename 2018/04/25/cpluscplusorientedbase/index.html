@@ -79,20 +79,17 @@
 
 
 
-<meta name="description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
+<meta name="description" content="C++面向对象基础面试题收录。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分布式一致性算法综述">
-<meta property="og:url" content="http://harlon.org/2018/04/14/distributedsystemconsistency/index.html">
+<meta property="og:title" content="C++面向对象基础">
+<meta property="og:url" content="http://harlon.org/2018/04/25/cpluscplusorientedbase/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
+<meta property="og:description" content="C++面向对象基础面试题收录。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/basic-paxos-phases.png">
-<meta property="og:image" content="http://harlon.org/img/raft-leader-election.png">
-<meta property="og:updated_time" content="2018-04-14T13:28:54.999Z">
+<meta property="og:updated_time" content="2018-04-25T12:18:39.832Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分布式一致性算法综述">
-<meta name="twitter:description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
-<meta name="twitter:image" content="http://harlon.org/img/basic-paxos-phases.png">
+<meta name="twitter:title" content="C++面向对象基础">
+<meta name="twitter:description" content="C++面向对象基础面试题收录。">
 
 
 
@@ -122,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2018/04/14/distributedsystemconsistency/"/>
+  <link rel="canonical" href="http://harlon.org/2018/04/25/cpluscplusorientedbase/"/>
 
 
 
 
 
-  <title>分布式一致性算法综述 | Harlon's BLOG</title>
+  <title>C++面向对象基础 | Harlon's BLOG</title>
   
 
 
@@ -275,7 +272,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/14/distributedsystemconsistency/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/25/cpluscplusorientedbase/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -292,7 +289,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">分布式一致性算法综述</h1>
+          <h1 class="post-title" itemprop="name headline">C++面向对象基础</h1>
         
 
         <div class="post-meta">
@@ -304,8 +301,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-14T17:38:23+08:00">
-                2018-04-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-25T19:20:23+08:00">
+                2018-04-25
               </time>
             
 
@@ -364,38 +361,74 @@
       
 
       
-        <p>分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。<br><a id="more"></a></p>
+        <p>C++面向对象基础面试题收录。<br><a id="more"></a></p>
 <hr>
-<h1 id="一致性问题"><a href="#一致性问题" class="headerlink" title="一致性问题"></a>一致性问题</h1><p>分布式系统产生一致性问题的原因可总结如下：</p>
-<ul>
-<li>网络不可靠</li>
-<li>主机不可靠</li>
-<li>主机之间的差异性（性能、时钟等）</li>
+<h1 id="面向对象三大特性"><a href="#面向对象三大特性" class="headerlink" title="面向对象三大特性"></a>面向对象三大特性</h1><ul>
+<li>封装性：数据和方法封装在一起，能够避免外界干扰和不确定访问。</li>
+<li>继承性：让谋个类型的对象获得另一个类型的对象的属性和方法。</li>
+<li>多态性：是指一个类实例的相同方法在不同情形有不同表现形式（重载实现编译时动态，虚函数实现运行时多态）。</li>
 </ul>
-<p>首先，网络可能导致我们发送的数据或者指令以乱序的方式到达，也可能会丢失数据，其次主机时不可靠的，可能会出现宕机，重启等，主机之间的差异性，包括主机的性能和时钟，这些都会导致分布式系统难于实现一致性，FLP不可能理论指出无法彻底解决一致性问题，在CAP中我们只能选择两项，大多数的分布式系统都选择了最终一致性，即若一致性来保证可用性和分区容错性。<br>在实际的生产环境中，一致性算法需要具备以下属性：</p>
-<ul>
-<li>安全性：即不管怎样都不能返回错误的结果；</li>
-<li>可用性：主要大部门的机器正常，就仍然可以正常工作；</li>
-<li>不依赖时间来确保一致,即系统是异步的；</li>
-<li>一般情况下,运行时间由大多数的机器决定,不会因为有少部分慢的机器而影响总体效率</li>
-</ul>
-<p>通俗来讲，一致性的问题可以分解为两个问题：<br>1、任何一次修改保证数据一致性<br>2、多次数据修改的一致性</p>
-<p>弱一致性：不要求每次修改的内容在修改后多副本的内容是一致的，对问题1的解决比较宽松，更多解决问题2，该类算法追求每次修改的高度并发性，减少多副本之间修改的关联性，以获得更好的并发性能。例如最终一致性，无所谓每次用户修改后的多副本的一致性及格过，只要求在单调的时间方向上，数据最终保持一致，如此获得了修改极大的并发性能。<br>强一致性：强调单次修改后结果的一致，需要保证了对问题1和问题2要求的实现，牺牲了并发性能。<br>一致性算法有：两阶段提交算法、分布式锁服务、Paxos算法和Raft算法。<br>两阶段提交参见这里<a href="">分布式事务</a><br>分布式锁服务参加这里<a href="http://harlon.org/2018/04/14/distributedsystemlock/">分布式锁以及三种实现方式</a><br>下面主要介绍Paxos算法和Raft一致性算法。</p>
 <hr>
-<h1 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h1><p>Paxos算法是一个会者简单，不会者觉得很难的算法，就连Lamport本文也不得不为Paxos先后做了三次解释。<br>查阅了很多资料，最后发现维基百科中对Paxos的解释最为准确和易懂，可见参考文件中。这里只是阐述算法的过程和原理，不再做深一步的证明和理解。<br>Paxos算法分为两个简单，分别是准备阶段（Prepare）和接受阶段（Accept），当Proposer接收到来自客户端的请求时，就会进入如下流程：<br><img src="/img/basic-paxos-phases.png" alt=""></p>
-<p><center>Paxos算法</center><br>只要Proposer经过多数派接受，该提案就会成为正式的决议。</p>
+<h1 id="C语言实现面向对象编程"><a href="#C语言实现面向对象编程" class="headerlink" title="C语言实现面向对象编程"></a>C语言实现面向对象编程</h1><p>面向对象是一种编程思想，C++/Java原生的支持这种特性，但通过C语言也是可以实现面向对象编程的。在Linux内核中就有很多面向对象的方法，在面向对象中，主要特性有：封装、继承、多态。用C语言实现封装可以用struct来实现，对对象的基本操作进行抽象，形成基类，定义基本属性和操作方法，操作方法通过函数指针来实现，子类包含基类来实现继承，子类实现各自的操作函数体现多态特性。</p>
 <hr>
-<h1 id="Raft一致性算法"><a href="#Raft一致性算法" class="headerlink" title="Raft一致性算法"></a>Raft一致性算法</h1><p>Raft是Paxos的变体，不过Raft简化了Paxos，任何时间内，只有leader能够发起提案，这就涉及到leader选举问题。<br>Raft算法中有一下三个角色：</p>
-<ul>
-<li>1.Leader：负责 Client 交互 和 log 复制，同一时刻系统中最多存在一个；</li>
-<li>2.Follower：被动响应请求 RPC，从不主动发起请求 RPC；</li>
-<li>3.Candidate : 由Follower 向Leader转换的中间状态。</li>
+<h1 id="public-protected-private区别"><a href="#public-protected-private区别" class="headerlink" title="public/protected/private区别"></a>public/protected/private区别</h1><ul>
+<li>public的变量和函数在类的外部和内部都可以访问。</li>
+<li>protected的变量和函数只能在类的内部和其派生类中访问。</li>
+<li>private修饰的元素只能在类内访问。</li>
 </ul>
-<p>Leader选举过程：<br>在极简的思维下，一个最小的 Raft 民主集群需要三个参与者（如下图：A、B、C），这样才可能投出多数票。初始状态 ABC 都是 Follower，然后发起选举这时有三种可能情形发生。下图中前二种都能选出 Leader，第三种则表明本轮投票无效（Split Votes），每方都投给了自己，结果没有任何一方获得多数票。之后每个参与方随机休息一阵（Election Timeout）重新发起投票直到一方获得多数票。这里的关键就是随机 timeout，最先从 timeout 中恢复发起投票的一方向还在 timeout 中的另外两方请求投票，这时它们就只能投给对方了，很快达成一致。<br><img src="/img/raft-leader-election.png" alt=""></p>
-<p>Raft 协议强依赖 Leader 节点的可用性来确保集群数据的一致性。数据的流向只能从 Leader 节点向 Follower 节点转移。当 Client 向集群 Leader 节点提交数据后，Leader 节点接收到的数据处于未提交状态（Uncommitted），接着 Leader 节点会并发向所有 Follower 节点复制数据并等待接收响应，确保至少集群中超过半数节点已接收到数据后再向 Client 确认数据已接收。一旦向 Client 发出数据接收 Ack 响应后，表明此时数据状态进入已提交（Committed），Leader 节点再向 Follower 节点发通知告知该数据状态已提交。<br>Leader的选举问题</p>
+<hr>
+<h1 id="C-空类有哪些成员函数？"><a href="#C-空类有哪些成员函数？" class="headerlink" title="C++空类有哪些成员函数？"></a>C++空类有哪些成员函数？</h1><ul>
+<li>空类大小为1字节</li>
+<li>默认函数有：<ul>
+<li>构造函数</li>
+<li>析构函数</li>
+<li>拷贝构造函数</li>
+<li>拷贝赋值函数</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="构造函数是否为虚函数？析构函数呢？"><a href="#构造函数是否为虚函数？析构函数呢？" class="headerlink" title="构造函数是否为虚函数？析构函数呢？"></a>构造函数是否为虚函数？析构函数呢？</h1><ul>
+<li>构造函数：构造函数不能为虚函数，创建类对象时，首先会创建基类对象，调用基类的构造函数，如果构造函数是虚函数，要通过虚函数指针判断执行的是父类函数还是子类函数，而对象还没有创建，所以不存在虚函数指针。</li>
+<li>构造函数：构造函数可以是虚函数，而别一般都是虚函数，这样delete释放子类的时候，父类的析构函数才能被调用。</li>
+</ul>
+<hr>
+<h1 id="构造函数调用顺序，析构函数呢？"><a href="#构造函数调用顺序，析构函数呢？" class="headerlink" title="构造函数调用顺序，析构函数呢？"></a>构造函数调用顺序，析构函数呢？</h1><ul>
+<li>构造函数调用顺序：先调用基类，如果有多个基类，按照初始化顺序进行调用，之后调用组合类的构造函数，最后调用派生类的构造函数。</li>
+<li>析构函数：析构函数的调用顺序和构造函数刚好相反。</li>
+</ul>
+<hr>
+<h1 id="构造函数中深拷贝和浅拷贝的区别"><a href="#构造函数中深拷贝和浅拷贝的区别" class="headerlink" title="构造函数中深拷贝和浅拷贝的区别"></a>构造函数中深拷贝和浅拷贝的区别</h1><ul>
+<li>深拷贝：被拷贝对象在动态分配的存储空间事，需要动态申请另一块存储空间，然后逐个字节进行拷贝。</li>
+<li>浅拷贝：浅拷贝时仅仅拷贝指针字面值，如果原来对象的调用析构函数释放指针的数据，会出现空悬指针。</li>
+</ul>
+<hr>
+<h1 id="拷贝构造函数和赋值运算符的区别？"><a href="#拷贝构造函数和赋值运算符的区别？" class="headerlink" title="拷贝构造函数和赋值运算符的区别？"></a>拷贝构造函数和赋值运算符的区别？</h1><ul>
+<li>拷贝构造函数是函数，赋值运算符是运算符重载。</li>
+<li>拷贝构造函数会生成新的类，赋值运算符不能。</li>
+<li>拷贝构造函数直接构造一个新的类对象，所以在初始化对象前不需要检查源对象和新建对象是否相同；赋值运算符要检查源对象和被赋值对象是否相同，另外复制运算符中如果原来的对象有内存分配需要将原来的内存释放掉。</li>
+</ul>
+<hr>
+<h1 id="重载，覆盖和隐藏的区别"><a href="#重载，覆盖和隐藏的区别" class="headerlink" title="重载，覆盖和隐藏的区别"></a>重载，覆盖和隐藏的区别</h1><ul>
+<li>重载：在同一类内，具有相同函数名但形参列表不同的两个函数，当调用函数时根据传递的参数列表来确定具体调用哪个函数。</li>
+<li>覆盖：在子类中重新定义的函数，其函数名、参数列表和返回值和父类完全相同，只有函数体不同。子类对象会根据对象类型调用相应的函数。</li>
+<li>隐藏：子类屏蔽了与其同名的函数，只要名字相同就会发生隐藏，应该避免。</li>
+</ul>
+<hr>
+<h1 id="哪几种情况会用到初始化成员列表？"><a href="#哪几种情况会用到初始化成员列表？" class="headerlink" title="哪几种情况会用到初始化成员列表？"></a>哪几种情况会用到初始化成员列表？</h1><ul>
+<li>初始化一个const成员。</li>
+<li>初始化一个引用成员。</li>
+<li>调用一个基类的构造函数。</li>
+<li>调用一个数据成员对象的构造函数。</li>
+</ul>
+<hr>
+<h1 id="类模板和模板类"><a href="#类模板和模板类" class="headerlink" title="类模板和模板类"></a>类模板和模板类</h1><ul>
+<li>类模板：用于解决功能相同，数据类型不同的类重复定义的问题，使用template关键字和类型标识符T创建类模板。</li>
+<li>模板类：类模板根据具体的类型实例化的类，称之为模板类，编译器会为不同类型的类模板实例化不同的对象。</li>
+</ul>
 <hr>
 <blockquote>
-<p>参考资料<br><a href="https://blog.csdn.net/lucky_greenegg/article/details/52644213" target="_blank" rel="external">分布式系统一致性问题和一致性算法</a><br><a href="https://draveness.me/consensus" target="_blank" rel="external">分布式一致性与共识算法</a><br><a href="https://zh.wikipedia.org/zh-cn/Paxos%E7%AE%97%E6%B3%95" target="_blank" rel="external">Paxos算法</a><br><a href="http://www.cnblogs.com/mindwind/p/5231986.html" target="_blank" rel="external">Raft 为什么是更易理解的分布式一致性算法</a><br><a href="https://blog.csdn.net/followMyInclinations/article/details/52870418" target="_blank" rel="external">分布式事务与一致性算法Paxos &amp; raft &amp; zab</a></p>
+<p>参考资料：<br><a href="https://github.com/Harlonxl/Skill-Tree/blob/master/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80C%2B%2B.md#oop" target="_blank" rel="external">编程语言(C/C++)</a><br><a href="http://blog.chinaunix.net/uid-26921272-id-3360269.html" target="_blank" rel="external">c语言实现面向对象编程</a></p>
 </blockquote>
 
       
@@ -421,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/14/distributedsystemlock/" rel="next" title="分布式锁以及三种实现方式">
-                <i class="fa fa-chevron-left"></i> 分布式锁以及三种实现方式
+              <a href="/2018/04/24/cpluscplusnew/" rel="next" title="C++11/14新特性">
+                <i class="fa fa-chevron-left"></i> C++11/14新特性
               </a>
             
           </div>
@@ -431,8 +464,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/18/summary/" rel="prev" title="实习总结">
-                实习总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -567,7 +600,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一致性问题"><span class="nav-number">1.</span> <span class="nav-text">一致性问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Paxos算法"><span class="nav-number">2.</span> <span class="nav-text">Paxos算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Raft一致性算法"><span class="nav-number">3.</span> <span class="nav-text">Raft一致性算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象三大特性"><span class="nav-number">1.</span> <span class="nav-text">面向对象三大特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C语言实现面向对象编程"><span class="nav-number">2.</span> <span class="nav-text">C语言实现面向对象编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#public-protected-private区别"><span class="nav-number">3.</span> <span class="nav-text">public/protected/private区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-空类有哪些成员函数？"><span class="nav-number">4.</span> <span class="nav-text">C++空类有哪些成员函数？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数是否为虚函数？析构函数呢？"><span class="nav-number">5.</span> <span class="nav-text">构造函数是否为虚函数？析构函数呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数调用顺序，析构函数呢？"><span class="nav-number">6.</span> <span class="nav-text">构造函数调用顺序，析构函数呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数中深拷贝和浅拷贝的区别"><span class="nav-number">7.</span> <span class="nav-text">构造函数中深拷贝和浅拷贝的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拷贝构造函数和赋值运算符的区别？"><span class="nav-number">8.</span> <span class="nav-text">拷贝构造函数和赋值运算符的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重载，覆盖和隐藏的区别"><span class="nav-number">9.</span> <span class="nav-text">重载，覆盖和隐藏的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#哪几种情况会用到初始化成员列表？"><span class="nav-number">10.</span> <span class="nav-text">哪几种情况会用到初始化成员列表？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类模板和模板类"><span class="nav-number">11.</span> <span class="nav-text">类模板和模板类</span></a></li></ol></div>
             
 
           </div>
