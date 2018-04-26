@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Motivation在某些情况下我们可能会“过度地使用继承来扩展对象的功能”，由于继承为类型引入的静态特质，使得这种扩展方式缺乏灵活性；并且随着子类的增多（扩展功能的增多），各种子类的组合（扩展功能的组合）会导致更多子类的膨胀。如何使“对象功能的扩展”能够根据需要来动态地实现？同时避免“扩展功能的增多”带来的子类膨胀问题？从而使得任何“功能扩展变化”所导致的影响将为最低？  Defination动">
+<meta property="og:type" content="article">
+<meta property="og:title" content="观察者模式">
+<meta property="og:url" content="http://harlon.org/2018/04/26/designpatterndecorator/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Motivation在某些情况下我们可能会“过度地使用继承来扩展对象的功能”，由于继承为类型引入的静态特质，使得这种扩展方式缺乏灵活性；并且随着子类的增多（扩展功能的增多），各种子类的组合（扩展功能的组合）会导致更多子类的膨胀。如何使“对象功能的扩展”能够根据需要来动态地实现？同时避免“扩展功能的增多”带来的子类膨胀问题？从而使得任何“功能扩展变化”所导致的影响将为最低？  Defination动">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/decorator.png">
+<meta property="og:updated_time" content="2018-04-26T14:09:31.626Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="观察者模式">
+<meta name="twitter:description" content="Motivation在某些情况下我们可能会“过度地使用继承来扩展对象的功能”，由于继承为类型引入的静态特质，使得这种扩展方式缺乏灵活性；并且随着子类的增多（扩展功能的增多），各种子类的组合（扩展功能的组合）会导致更多子类的膨胀。如何使“对象功能的扩展”能够根据需要来动态地实现？同时避免“扩展功能的增多”带来的子类膨胀问题？从而使得任何“功能扩展变化”所导致的影响将为最低？  Defination动">
+<meta name="twitter:image" content="http://harlon.org/img/decorator.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/04/26/designpatterndecorator/"/>
+
+
+
+
+
+  <title>观察者模式 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/26/designpatterndecorator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">观察者模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-26T21:28:23+08:00">
+                2018-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在某些情况下我们可能会“过度地使用继承来扩展对象的功能”，由于继承为类型引入的静态特质，使得这种扩展方式缺乏灵活性；并且随着子类的增多（扩展功能的增多），各种子类的组合（扩展功能的组合）会导致更多子类的膨胀。<br>如何使“对象功能的扩展”能够根据需要来动态地实现？同时避免“扩展功能的增多”带来的子类膨胀问题？从而使得任何“功能扩展变化”所导致的影响将为最低？</p>
+<hr>
+<h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>动态（组合）地给一个对象增加一些额外的职责。就增加功能而言，Decorator模式比生成子类（继承）更为灵活（消除重复代码 &amp; 减少子类个数）。</p>
+<hr>
+<h1 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h1><p><img src="/img/decorator.png" alt=""></p>
+<hr>
+<h1 id="Impletation"><a href="#Impletation" class="headerlink" title="Impletation"></a>Impletation</h1><p>我们实现一个流功能，基本的有文件流、网络流、内存流，功能性的有加密流、Buffer流、加密Buffer流等。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//业务操作</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stream</span>&#123;</span></div><div class="line"><span class="keyword">public</span>：</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>=<span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>=<span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>=<span class="number">0</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">virtual</span> ~Stream()&#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//主体类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileStream</span>:</span> <span class="keyword">public</span> Stream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        <span class="comment">//读文件流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//定位文件流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>&#123;</div><div class="line">        <span class="comment">//写文件流</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NetworkStream</span> :</span><span class="keyword">public</span> Stream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        <span class="comment">//读网络流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//定位网络流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>&#123;</div><div class="line">        <span class="comment">//写网络流</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MemoryStream</span> :</span><span class="keyword">public</span> Stream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        <span class="comment">//读内存流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//定位内存流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>&#123;</div><div class="line">        <span class="comment">//写内存流</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//扩展操作</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CryptoFileStream</span> :</span><span class="keyword">public</span> FileStream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">       </div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        FileStream::Read(number);<span class="comment">//读文件流</span></div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        FileStream::Seek(position);<span class="comment">//定位文件流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(byte data)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        FileStream::Write(data);<span class="comment">//写文件流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CryptoNetworkStream</span> :</span> :<span class="keyword">public</span> NetworkStream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        </div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        NetworkStream::Read(number);<span class="comment">//读网络流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        NetworkStream::Seek(position);<span class="comment">//定位网络流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(byte data)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        NetworkStream::Write(data);<span class="comment">//写网络流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CryptoMemoryStream</span> :</span> <span class="keyword">public</span> MemoryStream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        </div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        MemoryStream::Read(number);<span class="comment">//读内存流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        MemoryStream::Seek(position);<span class="comment">//定位内存流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(byte data)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        MemoryStream::Write(data);<span class="comment">//写内存流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BufferedFileStream</span> :</span> <span class="keyword">public</span> FileStream&#123;</div><div class="line">    <span class="comment">//...</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BufferedNetworkStream</span> :</span> <span class="keyword">public</span> NetworkStream&#123;</div><div class="line">    <span class="comment">//...</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BufferedMemoryStream</span> :</span> <span class="keyword">public</span> MemoryStream&#123;</div><div class="line">    <span class="comment">//...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CryptoBufferedFileStream</span> :</span><span class="keyword">public</span> FileStream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        </div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        <span class="comment">//额外的缓冲操作...</span></div><div class="line">        FileStream::Read(number);<span class="comment">//读文件流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        <span class="comment">//额外的缓冲操作...</span></div><div class="line">        FileStream::Seek(position);<span class="comment">//定位文件流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        <span class="comment">//额外的缓冲操作...</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(byte data)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        <span class="comment">//额外的缓冲操作...</span></div><div class="line">        FileStream::Write(data);<span class="comment">//写文件流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        <span class="comment">//额外的缓冲操作...</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Process</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">//运行时装配</span></div><div class="line">    CryptoFileStream *fs1 = <span class="keyword">new</span> CryptoFileStream();</div><div class="line"></div><div class="line">    BufferedFileStream *fs2 = <span class="keyword">new</span> BufferedFileStream();</div><div class="line"></div><div class="line">    CryptoBufferedFileStream *fs3 =<span class="keyword">new</span> CryptoBufferedFileStream();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上述实现的代码，会引入一个问题，当需要添加新的功能流时，变化非常多，我们应该将每一个功能性流实现一个职责，而不是通过组合的方式实现不同流的功能，将这种静态组合变为动态组合。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//业务操作</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stream</span>&#123;</span></div><div class="line"><span class="keyword">public</span>：</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>=<span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>=<span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>=<span class="number">0</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">virtual</span> ~Stream()&#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//主体类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileStream</span>:</span> <span class="keyword">public</span> Stream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        <span class="comment">//读文件流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//定位文件流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>&#123;</div><div class="line">        <span class="comment">//写文件流</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NetworkStream</span> :</span><span class="keyword">public</span> Stream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        <span class="comment">//读网络流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//定位网络流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>&#123;</div><div class="line">        <span class="comment">//写网络流</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MemoryStream</span> :</span><span class="keyword">public</span> Stream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        <span class="comment">//读内存流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//定位内存流</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(<span class="keyword">char</span> data)</span></span>&#123;</div><div class="line">        <span class="comment">//写内存流</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line"></div><div class="line">DecoratorStream: <span class="keyword">public</span> Stream&#123;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    Stream* stream;<span class="comment">//...</span></div><div class="line">    </div><div class="line">    DecoratorStream(Stream * stm):stream(stm)&#123;</div><div class="line">    </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//扩展操作</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CryptoStream</span> :</span><span class="keyword">public</span> DecoratorStream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    CryptoStream(Stream *stream) : DecoratorStream(stream) &#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">char</span> <span class="title">Read</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">       </div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        FileStream::Read(number);<span class="comment">//读文件流</span></div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Seek</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        FileStream::Seek(position);<span class="comment">//定位文件流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Write</span><span class="params">(byte data)</span></span>&#123;</div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">        FileStream::Write(data);<span class="comment">//写文件流</span></div><div class="line">        <span class="comment">//额外的加密操作...</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BufferedFileStream</span> :</span> <span class="keyword">public</span> DecoratorStream&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    BufferedFileStream(Stream *stream) : DecoratorStream(stream) &#123;&#125;</div><div class="line">    <span class="comment">//...</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Process</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">//编译时装配</span></div><div class="line">    FileStream *fileStream = <span class="keyword">new</span> FileStream();</div><div class="line">    CryptoStream *c = <span class="keyword">new</span> cryptoStream(fileStream);</div><div class="line">    BufferedFileStream *b = <span class="keyword">new</span> BufferedFileStream(fileStream);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><ul>
+<li>通过采用组合而非继承的手法， Decorator模式实现了在运行时动态扩展对象功能的能力，而且可以根据需要扩展多个功能。避免了使用继承带来的“灵活性差”和“多子类衍生问题”。</li>
+<li>Decorator类在接口上表现为is-a Component的继承关系，即Decorator类继承了Component类所具有的接口。但在实现上又表现为has-a Component的组合关系，即Decorator类又使用了另外一个Component类。</li>
+<li>Decorator模式的目的并非解决“多子类衍生的多继承”问题，Decorator模式应用的要点在于解决“主体类在多个方向上的扩展功能”——是为“装饰”的含义。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/26/designpatternobserve/" rel="next" title="观察者模式">
+                <i class="fa fa-chevron-left"></i> 观察者模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/26/designpatternbridge/" rel="prev" title="桥模式">
+                桥模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
