@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="什么是设计模式？“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。  深入理解面向对象向下：深入理解三大面向对象机制  封装：隐藏内部实现 继承：复用现有代码 多态：">
+<meta name="description" content="什么是设计模式？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="什么是设计模式？">
 <meta property="og:url" content="http://harlon.org/2018/04/05/designpattern/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="什么是设计模式？“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。  深入理解面向对象向下：深入理解三大面向对象机制  封装：隐藏内部实现 继承：复用现有代码 多态：">
+<meta property="og:description" content="什么是设计模式？">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-28T13:21:01.485Z">
+<meta property="og:updated_time" content="2018-04-30T13:29:16.738Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="什么是设计模式？">
-<meta name="twitter:description" content="什么是设计模式？“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。  深入理解面向对象向下：深入理解三大面向对象机制  封装：隐藏内部实现 继承：复用现有代码 多态：">
+<meta name="twitter:description" content="什么是设计模式？">
 
 
 
@@ -361,7 +361,8 @@
       
 
       
-        <h1 id="什么是设计模式？"><a href="#什么是设计模式？" class="headerlink" title="什么是设计模式？"></a>什么是设计模式？</h1><p>“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander<br>通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。</p>
+        <p>什么是设计模式？<br><a id="more"></a></p>
+<h1 id="什么是设计模式？"><a href="#什么是设计模式？" class="headerlink" title="什么是设计模式？"></a>什么是设计模式？</h1><p>“每一个模式描述了一个在我们周围不断重复发生的问题，以及该问题的解决方案的核心。这样，你就能一次又一次地使用该方案而不必做重复劳动”。—— Christopher Alexander<br>通常所说的设计模式隐含地表示“面向对象设计模式”。但这并不意味“设计模式”就等于“面向对象设计模式”。</p>
 <hr>
 <h1 id="深入理解面向对象"><a href="#深入理解面向对象" class="headerlink" title="深入理解面向对象"></a>深入理解面向对象</h1><p>向下：深入理解三大面向对象机制</p>
 <ul>
@@ -500,6 +501,27 @@
 </li>
 </ul>
 <hr>
+<h2 id="接口隔离模式"><a href="#接口隔离模式" class="headerlink" title="接口隔离模式"></a>接口隔离模式</h2><ul>
+<li>在组件构建过程中，某些结构之间直接的依赖尝尝会带来很多问题、甚至根本无法实现。采用添加一层间接（稳定）接口，来隔离本来互相紧密关联的接口是一种常见的解决方案。</li>
+<li>典型模式：<ul>
+<li>Facade</li>
+<li>Proxy</li>
+<li>Adapter</li>
+<li>Mediator</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="状态变化模式"><a href="#状态变化模式" class="headerlink" title="状态变化模式"></a>状态变化模式</h2><ul>
+<li>在组件构建过程中，某些对象的状态经常面临变化，如何对这些变化进行有效的管理？同时又维持高层模块的稳定？“状态变化”模式为这一问题提供了一种解决方案。</li>
+<li>典型模式：<ul>
+<li>State</li>
+<li>Memento</li>
+</ul>
+</li>
+</ul>
+<hr>
+<hr>
 <blockquote>
 <p>参考资料<br>极客班设计模式-李建忠<br><a href="https://pan.baidu.com/s/10V-TML-qUicq-38RJFAgMw" target="_blank" rel="external">下载地址</a>  密码：9jyt<br>注意：请勿随意传播，注意版权。</p>
 </blockquote>
@@ -537,8 +559,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/05/designpatterntemplatemethod/" rel="prev" title="模板方法模式">
-                模板方法模式 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/05/designpatternstrategy/" rel="prev" title="策略模式">
+                策略模式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -616,7 +638,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -673,7 +695,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是设计模式？"><span class="nav-number">1.</span> <span class="nav-text">什么是设计模式？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解面向对象"><span class="nav-number">2.</span> <span class="nav-text">深入理解面向对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复杂性"><span class="nav-number">3.</span> <span class="nav-text">复杂性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象设计"><span class="nav-number">4.</span> <span class="nav-text">面向对象设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象设计原则"><span class="nav-number">5.</span> <span class="nav-text">面向对象设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖倒置原则（DIP）"><span class="nav-number">5.1.</span> <span class="nav-text">依赖倒置原则（DIP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开放封闭原则（OCP）"><span class="nav-number">5.2.</span> <span class="nav-text">开放封闭原则（OCP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单一职责原则（SRP）"><span class="nav-number">5.3.</span> <span class="nav-text">单一职责原则（SRP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替换原则（LSP）"><span class="nav-number">5.4.</span> <span class="nav-text">替换原则（LSP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口隔离原则（ISP）"><span class="nav-number">5.5.</span> <span class="nav-text">接口隔离原则（ISP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优先使用对象组合，而不是类继承"><span class="nav-number">5.6.</span> <span class="nav-text">优先使用对象组合，而不是类继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装变化点"><span class="nav-number">5.7.</span> <span class="nav-text">封装变化点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对接口编程，而不是针对实现编程"><span class="nav-number">5.8.</span> <span class="nav-text">针对接口编程，而不是针对实现编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模式分类"><span class="nav-number">6.</span> <span class="nav-text">模式分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重构获得模式"><span class="nav-number">7.</span> <span class="nav-text">重构获得模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从封装分类"><span class="nav-number">8.</span> <span class="nav-text">从封装分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件协作模式"><span class="nav-number">8.1.</span> <span class="nav-text">组件协作模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单一职责模式"><span class="nav-number">8.2.</span> <span class="nav-text">单一职责模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象创建模式"><span class="nav-number">8.3.</span> <span class="nav-text">对象创建模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象性能模式"><span class="nav-number">8.4.</span> <span class="nav-text">对象性能模式</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是设计模式？"><span class="nav-number">1.</span> <span class="nav-text">什么是设计模式？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解面向对象"><span class="nav-number">2.</span> <span class="nav-text">深入理解面向对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复杂性"><span class="nav-number">3.</span> <span class="nav-text">复杂性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象设计"><span class="nav-number">4.</span> <span class="nav-text">面向对象设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象设计原则"><span class="nav-number">5.</span> <span class="nav-text">面向对象设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖倒置原则（DIP）"><span class="nav-number">5.1.</span> <span class="nav-text">依赖倒置原则（DIP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开放封闭原则（OCP）"><span class="nav-number">5.2.</span> <span class="nav-text">开放封闭原则（OCP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单一职责原则（SRP）"><span class="nav-number">5.3.</span> <span class="nav-text">单一职责原则（SRP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替换原则（LSP）"><span class="nav-number">5.4.</span> <span class="nav-text">替换原则（LSP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口隔离原则（ISP）"><span class="nav-number">5.5.</span> <span class="nav-text">接口隔离原则（ISP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优先使用对象组合，而不是类继承"><span class="nav-number">5.6.</span> <span class="nav-text">优先使用对象组合，而不是类继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装变化点"><span class="nav-number">5.7.</span> <span class="nav-text">封装变化点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对接口编程，而不是针对实现编程"><span class="nav-number">5.8.</span> <span class="nav-text">针对接口编程，而不是针对实现编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模式分类"><span class="nav-number">6.</span> <span class="nav-text">模式分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重构获得模式"><span class="nav-number">7.</span> <span class="nav-text">重构获得模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从封装分类"><span class="nav-number">8.</span> <span class="nav-text">从封装分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件协作模式"><span class="nav-number">8.1.</span> <span class="nav-text">组件协作模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单一职责模式"><span class="nav-number">8.2.</span> <span class="nav-text">单一职责模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象创建模式"><span class="nav-number">8.3.</span> <span class="nav-text">对象创建模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象性能模式"><span class="nav-number">8.4.</span> <span class="nav-text">对象性能模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口隔离模式"><span class="nav-number">8.5.</span> <span class="nav-text">接口隔离模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#状态变化模式"><span class="nav-number">8.6.</span> <span class="nav-text">状态变化模式</span></a></li></ol></li></ol></div>
             
 
           </div>
