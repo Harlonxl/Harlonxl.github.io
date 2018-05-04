@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Motivation在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？  Defination定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类">
+<meta name="description" content="模板方法模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="模板方法模式">
 <meta property="og:url" content="http://harlon.org/2018/04/05/designpatterntemplatemethod/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="Motivation在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？  Defination定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类">
+<meta property="og:description" content="模板方法模式">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/templatemethod.png">
-<meta property="og:updated_time" content="2018-04-14T08:16:39.035Z">
+<meta property="og:updated_time" content="2018-05-04T13:33:34.087Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模板方法模式">
-<meta name="twitter:description" content="Motivation在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？  Defination定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类">
+<meta name="twitter:description" content="模板方法模式">
 <meta name="twitter:image" content="http://harlon.org/img/templatemethod.png">
 
 
@@ -187,7 +187,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Accueil
           </a>
         </li>
       
@@ -301,7 +301,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-05T23:00:23+08:00">
                 2018-04-05
@@ -363,7 +363,8 @@
       
 
       
-        <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。<br>如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？</p>
+        <p>模板方法模式<br><a id="more"></a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。<br>如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？</p>
 <hr>
 <h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类可以不改变(复用)一个算法的结构即可重定义(override 重写)该算法的某些特定步骤。</p>
 <hr>
@@ -466,10 +467,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Table Des Matières
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Ensemble
           </li>
         </ul>
       
@@ -489,8 +490,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-name">articles</span>
                 </a>
               </div>
             
@@ -584,7 +585,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
