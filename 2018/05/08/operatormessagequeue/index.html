@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/msg_kernel.png">
 <meta property="og:image" content="http://harlon.org/img/msg_msgget.png">
-<meta property="og:updated_time" content="2018-05-08T14:05:41.162Z">
+<meta property="og:updated_time" content="2018-05-09T12:54:31.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="System V 消息队列">
 <meta name="twitter:description" content="System V 消息队列的介绍与使用。">
@@ -108,7 +108,7 @@
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
-      author: 'Author'
+      author: 'Penulis'
     },
     algolia: {
       applicationID: '',
@@ -188,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Beranda
           </a>
         </li>
       
@@ -238,7 +238,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Arsip
           </a>
         </li>
       
@@ -302,7 +302,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Diposting di</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-08T20:27:23+08:00">
                 2018-05-08
@@ -323,7 +323,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">Di</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -437,6 +437,51 @@
 <h2 id="设置消息队列参数"><a href="#设置消息队列参数" class="headerlink" title="设置消息队列参数"></a>设置消息队列参数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span>	\</div><div class="line">	&#123;	\</div><div class="line">		perror(m);	\</div><div class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> msgid;</div><div class="line">	msgid = msgget(<span class="number">1234</span>, <span class="number">0</span>);</div><div class="line">	<span class="keyword">if</span> (msgid == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgget"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"msgget succ\n"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"msgid = %d\n"</span>, msgid);</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">msqid_ds</span> <span class="title">buf</span>;</span></div><div class="line">	<span class="keyword">if</span> (msgctl(msgid, IPC_STAT, &amp;buf) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgctl"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	buf.msg_perm.mode = <span class="number">0600</span>;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (msgctl(msgid, IPC_SET, &amp;buf) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgctl"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="删除消息队列"><a href="#删除消息队列" class="headerlink" title="删除消息队列"></a>删除消息队列</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span>	\</div><div class="line">	&#123;	\</div><div class="line">		perror(m);	\</div><div class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> msgid;</div><div class="line">	msgid = msgget(<span class="number">1234</span>, <span class="number">0</span>);</div><div class="line">	<span class="keyword">if</span> (msgid == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgget"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"msgget succ\n"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"msgid = %d\n"</span>, msgid);</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (msgctl(msgid, IPC_RMID, <span class="literal">NULL</span>) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgctl"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
+<h1 id="msgsnd函数"><a href="#msgsnd函数" class="headerlink" title="msgsnd函数"></a>msgsnd函数</h1><ul>
+<li>功能：把一条消息添加到消息队列中</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgsnd</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">const</span> <span class="keyword">void</span> *msgp, <span class="keyword">size_t</span> msgsz, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>msgid：由msgget函数返回的消息队列标识码。</li>
+<li>msgp：是一个指针，指针指向准备发送的消息。</li>
+<li>msgsz：是msgp执行的消息长度，这个长度不含保存消息类型的那个long int长整型。</li>
+<li>msgflag：控制着当前消息队列满或到达系统上限时将要发生的事情。</li>
+</ul>
+</li>
+<li>返回值：成功返回0，失败返回-1。<br>注意：</li>
+<li>msgflag=IPC_NOWAIT表示队列满不等待，返回EAGAIN错误。</li>
+<li>消息结构在两方面收到制约。首先，它必须小于系统规定的上限值；其次，它必须以一个long int长整数开始，接受者函数将利用这个长整数确定消息的类型 。</li>
+<li>消息结构参考形式如下：<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">msgbuf</span> &#123;</span></div><div class="line">    <span class="keyword">long</span> mtype;</div><div class="line">    <span class="keyword">char</span> mtext[<span class="number">1</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>向消息队列发送数据例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span>	\</div><div class="line">	&#123;	\</div><div class="line">		perror(m);	\</div><div class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">msgbuf</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">	<span class="keyword">long</span> mtype;</div><div class="line">	<span class="keyword">char</span> mtext[<span class="number">1</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (argc != <span class="number">3</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Usage: %s &lt;bytes&gt; &lt;type&gt;\n"</span>, argv[<span class="number">0</span>]);</div><div class="line">		<span class="built_in">exit</span>(<span class="number">-1</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> len = atoi(argv[<span class="number">1</span>]);</div><div class="line">	<span class="keyword">int</span> type = atoi(argv[<span class="number">2</span>]);</div><div class="line">	<span class="keyword">int</span> msgid;</div><div class="line">	msgid = msgget(<span class="number">1234</span>, <span class="number">0</span>);</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (msgid == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgget"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">msgbuf</span> *<span class="title">ptr</span>;</span></div><div class="line">	ptr = (struct msgbuf*) <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">long</span>) + len);</div><div class="line">	ptr-&gt;mtype = type;</div><div class="line">	<span class="keyword">if</span> (msgsnd(msgid, ptr, len, <span class="number">0</span>) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgsnd"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="msgrcv函数"><a href="#msgrcv函数" class="headerlink" title="msgrcv函数"></a>msgrcv函数</h1><ul>
+<li>功能：是从一个消息队列接收消息</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ssize_t</span> msgrcv(<span class="keyword">int</span> msgid, <span class="keyword">void</span> *msgp, <span class="keyword">size_t</span> msgsz, <span class="keyword">long</span> msgtype, <span class="keyword">int</span> msgflg);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>msgid：由msgget函数返回的消息队列标识码。</li>
+<li>msgp：是一个指针，指针执行准备接收的消息。</li>
+<li>msgsz：是msgp指向的消息长度，这个长度不含保存消息类型的那个long int长整型</li>
+<li>msgtype：它可以实现接受优先级的简单形式</li>
+<li>msgflg：控制着队列中没有相应类型的消息可供接受时将要发生的事</li>
+</ul>
+</li>
+<li>返回值：成功返回实际放到缓冲区里去的字符个数，失败返回-1<br>注意：</li>
+<li>msgtype = 0 返回队列第一条消息</li>
+<li>msgtype &gt; 0 返回队列第一条类型等于msgtype的消息</li>
+<li>msgtype &lt; 0 返回队列类型最小的小于等于msgtype绝对值的消息</li>
+<li>msgflg = IPC_NOWAIT，队列没有可读消息不等待，返回ENOMSG</li>
+<li>msgflag = MSG_NOERROR，消息大小超过msgsz时被截断</li>
+<li>msgtype &gt; 0 且 msgflag = MSG_EXCEPT，接受类型不等于msgtype的第一条消息</li>
+</ul>
+<hr>
+<h1 id="消息队列实现回射客户-服务器"><a href="#消息队列实现回射客户-服务器" class="headerlink" title="消息队列实现回射客户/服务器"></a>消息队列实现回射客户/服务器</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MSGMAX 8192</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span>	\</div><div class="line">	&#123;	\</div><div class="line">		perror(m);	\</div><div class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">msgbuf</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">	<span class="keyword">long</span> mtype;</div><div class="line">	<span class="keyword">char</span> mtext[<span class="number">1</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> flag = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> type = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> opt;</div><div class="line">	</div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</div><div class="line">		opt = getopt(argc, argv, <span class="string">"nt:"</span>);</div><div class="line">		<span class="keyword">if</span> (opt == <span class="string">'?'</span>) &#123;</div><div class="line">			<span class="built_in">exit</span>(<span class="number">-1</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (opt == <span class="number">-1</span>) &#123;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">switch</span> (opt) &#123;</div><div class="line">		<span class="keyword">case</span> <span class="string">'n'</span>:</div><div class="line">			flag |= IPC_NOWAIT;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> <span class="string">'t'</span>:</div><div class="line">			type = atoi(optarg);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> msgid = msgget(<span class="number">1234</span>, <span class="number">0</span>);</div><div class="line">	<span class="keyword">if</span> (msgid == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgget"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">msgbuf</span> *<span class="title">ptr</span>;</span></div><div class="line">	ptr = (struct msgbuf*) <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">long</span>) + MSGMAX);</div><div class="line">	ptr-&gt;mtype = type;</div><div class="line">	<span class="keyword">int</span> n = <span class="number">0</span>;</div><div class="line">	<span class="keyword">if</span> ((n = msgrcv(msgid, ptr, MSGMAX, type, flag)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"msgrcv"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"read %d bytes type=%ld\n"</span>, n, type);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -471,8 +516,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
-                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/09/cpluscplusstlcode/" rel="prev" title="C++之STL源码剖析">
+                C++之STL源码剖析 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -527,10 +572,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Daftar Isi
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Ikhtisar
           </li>
         </ul>
       
@@ -550,8 +595,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">75</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-name">posting</span>
                 </a>
               </div>
             
@@ -562,7 +607,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">kategori</span>
                 
               </div>
             
@@ -573,7 +618,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -607,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPC对象数据结构"><span class="nav-number">2.</span> <span class="nav-text">IPC对象数据结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列结构"><span class="nav-number">3.</span> <span class="nav-text">消息队列结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列在内核中的表示"><span class="nav-number">4.</span> <span class="nav-text">消息队列在内核中的表示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列函数"><span class="nav-number">5.</span> <span class="nav-text">消息队列函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#msgget函数"><span class="nav-number">6.</span> <span class="nav-text">msgget函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">6.1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建逻辑图"><span class="nav-number">6.2.</span> <span class="nav-text">创建逻辑图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#msgctl函数"><span class="nav-number">7.</span> <span class="nav-text">msgctl函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cmd参数"><span class="nav-number">7.1.</span> <span class="nav-text">cmd参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取消息队列参数"><span class="nav-number">7.2.</span> <span class="nav-text">获取消息队列参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置消息队列参数"><span class="nav-number">7.3.</span> <span class="nav-text">设置消息队列参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除消息队列"><span class="nav-number">7.4.</span> <span class="nav-text">删除消息队列</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IPC对象数据结构"><span class="nav-number">2.</span> <span class="nav-text">IPC对象数据结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列结构"><span class="nav-number">3.</span> <span class="nav-text">消息队列结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列在内核中的表示"><span class="nav-number">4.</span> <span class="nav-text">消息队列在内核中的表示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列函数"><span class="nav-number">5.</span> <span class="nav-text">消息队列函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#msgget函数"><span class="nav-number">6.</span> <span class="nav-text">msgget函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">6.1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建逻辑图"><span class="nav-number">6.2.</span> <span class="nav-text">创建逻辑图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#msgctl函数"><span class="nav-number">7.</span> <span class="nav-text">msgctl函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cmd参数"><span class="nav-number">7.1.</span> <span class="nav-text">cmd参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取消息队列参数"><span class="nav-number">7.2.</span> <span class="nav-text">获取消息队列参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置消息队列参数"><span class="nav-number">7.3.</span> <span class="nav-text">设置消息队列参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除消息队列"><span class="nav-number">7.4.</span> <span class="nav-text">删除消息队列</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#msgsnd函数"><span class="nav-number">8.</span> <span class="nav-text">msgsnd函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#msgrcv函数"><span class="nav-number">9.</span> <span class="nav-text">msgrcv函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列实现回射客户-服务器"><span class="nav-number">10.</span> <span class="nav-text">消息队列实现回射客户/服务器</span></a></li></ol></div>
             
 
           </div>
@@ -637,7 +682,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -645,7 +690,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Tema &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
