@@ -87,7 +87,7 @@
 <meta property="og:description" content="侯捷STL源码剖析笔记。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/stl-component.png">
-<meta property="og:updated_time" content="2018-05-09T10:29:07.658Z">
+<meta property="og:updated_time" content="2018-05-10T09:50:39.896Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之STL源码剖析">
 <meta name="twitter:description" content="侯捷STL源码剖析笔记。">
@@ -107,7 +107,7 @@
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
-      author: 'Penulis'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -187,7 +187,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Beranda
+            Startseite
           </a>
         </li>
       
@@ -237,7 +237,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Arsip
+            Archiv
           </a>
         </li>
       
@@ -301,7 +301,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Diposting di</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-09T18:23:23+08:00">
                 2018-05-09
@@ -322,7 +322,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Di</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -371,7 +371,7 @@
 <li>分配器（Allocators）</li>
 <li>算法（Algorithms）</li>
 <li>迭代器（Iterators）</li>
-<li>分配器（Allocator）</li>
+<li>适配器（Adapters）</li>
 <li>仿函数（Functors）<br><img src="/img/stl-component.png" alt=""><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> ia[<span class="number">6</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;;</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>, allocator&lt;<span class="keyword">int</span>&gt;&gt; vi(ia, ia+<span class="number">6</span>); <span class="comment">// container allocator</span></div><div class="line">    </div><div class="line">    <span class="built_in">cout</span> &lt;&lt; count_if(vi.begin(), vi.end(), notl(bind2nd(less&lt;<span class="keyword">int</span>&gt;(), <span class="number">40</span>))); <span class="comment">// algorithm, iterator, function adapter(negator), function adapter(binder), function object</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -414,8 +414,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
-                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/10/operatormemmory/" rel="prev" title="System V 共享内存">
+                System V 共享内存 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -470,10 +470,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Daftar Isi
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Ikhtisar
+            Übersicht
           </li>
         </ul>
       
@@ -493,8 +493,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">76</span>
-                  <span class="site-state-item-name">posting</span>
+                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -505,7 +505,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">kategori</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -516,7 +516,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -580,7 +580,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -588,7 +588,7 @@
 
 
 
-  <div class="theme-info">Tema &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
