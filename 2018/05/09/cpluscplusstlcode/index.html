@@ -87,7 +87,7 @@
 <meta property="og:description" content="侯捷STL源码剖析笔记。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/stl-component.png">
-<meta property="og:updated_time" content="2018-05-10T09:50:39.896Z">
+<meta property="og:updated_time" content="2018-05-14T10:29:28.716Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之STL源码剖析">
 <meta name="twitter:description" content="侯捷STL源码剖析笔记。">
@@ -376,7 +376,13 @@
 </li>
 </ul>
 <hr>
-<p># </p>
+<h1 id="OOP-amp-GP"><a href="#OOP-amp-GP" class="headerlink" title="OOP&amp;GP"></a>OOP&amp;GP</h1><ul>
+<li>面向对象：封装是基础，继承是手段，多态是目的。</li>
+<li>泛型编程：参数化类型是基础，模板是手段，通用是目的。</li>
+<li>面向对象的编程依赖运行时多态，泛型编程是编译时多态。</li>
+</ul>
+<hr>
+<h1 id="Allocators"><a href="#Allocators" class="headerlink" title="Allocators"></a>Allocators</h1><p>G4.9版本<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">allocator</span>:</span> <span class="keyword">public</span> __allocator_base&lt;_Tp&gt;</div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> _Tp&gt;</div><div class="line"> <span class="class"><span class="keyword">class</span> <span class="title">new_allocator</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">    ...</div><div class="line">    <span class="function">pointer <span class="title">allocate</span><span class="params">(size_type __n, <span class="keyword">const</span> <span class="keyword">void</span>* = <span class="number">0</span>)</span></span></div><div class="line"><span class="function">    </span>&#123; </div><div class="line">        <span class="keyword">if</span> (__n &gt; <span class="keyword">this</span>-&gt;max_size())</div><div class="line">            <span class="built_in">std</span>::__throw_bad_alloc();</div><div class="line">        <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;_Tp*&gt;(::<span class="keyword">operator</span> <span class="keyword">new</span>(__n * <span class="keyword">sizeof</span>(_Tp)));</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">void</span></div><div class="line">      deallocate(pointer __p, size_type)</div><div class="line">      &#123; ::<span class="function"><span class="keyword">operator</span> <span class="title">delete</span><span class="params">(__p)</span></span>; &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>参考资料：<br><a href="https://blog.csdn.net/lixungogogo/article/details/52196783" target="_blank" rel="external">C++泛型编程1——函数模板实例化，模板参数，重载及特化</a><br><a href="https://blog.csdn.net/lixungogogo/article/details/52201917" target="_blank" rel="external">C++泛型编程2——类模板，容器适配器，仿函数</a></p>
 </blockquote>
@@ -550,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#STL部件"><span class="nav-number">1.</span> <span class="nav-text">STL部件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#STL部件"><span class="nav-number">1.</span> <span class="nav-text">STL部件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOP-amp-GP"><span class="nav-number">2.</span> <span class="nav-text">OOP&GP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Allocators"><span class="nav-number">3.</span> <span class="nav-text">Allocators</span></a></li></ol></div>
             
 
           </div>
