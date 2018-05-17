@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="POSIX 消息队列的介绍与使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POSIX 消息队列">
+<meta property="og:url" content="http://harlon.org/2018/05/16/linuxposixmessagequeue/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="POSIX 消息队列的介绍与使用。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-17T13:00:01.743Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POSIX 消息队列">
+<meta name="twitter:description" content="POSIX 消息队列的介绍与使用。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/05/16/linuxposixmessagequeue/"/>
+
+
+
+
+
+  <title>POSIX 消息队列 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/16/linuxposixmessagequeue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">POSIX 消息队列</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-16T21:31:23+08:00">
+                2018-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>POSIX 消息队列的介绍与使用。<br><a id="more"></a></p>
+<hr>
+<h1 id="mq-open函数"><a href="#mq-open函数" class="headerlink" title="mq_open函数"></a>mq_open函数</h1><ul>
+<li>功能：用来创建和访问一个消息队列</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mqd_t</span> mq_open(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> oflag);</div><div class="line"><span class="keyword">mqd_t</span> mq_open(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> oflag, <span class="keyword">mode_t</span> mode, struct mq_attr *attr);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>name：某个消息队列的名字</li>
+<li>oflag：与open函数类似，可以是O_RDONLY、O_WRONLU、O_RDWR，还可以按位或上O_CREAT、O_EXCEL、O_NONBLOCK等。</li>
+<li>mode：如果flag指定了O_CREAT，需要设置mode</li>
+</ul>
+</li>
+<li>返回值：成功返回消息队列文件描述符；失败返回-1</li>
+</ul>
+<p>查看消息队列方式：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /dev/mqueue</div><div class="line">mount -t mqueue nont /dev/mqueue</div></pre></td></tr></table></figure></p>
+<p>POSIX IPC名字限定：</p>
+<ul>
+<li>必须以/打头，并且后续不能有其他/，形如/somename</li>
+<li>长度不能超过NAME_MAX</li>
+</ul>
+<hr>
+<h1 id="mq-close函数"><a href="#mq-close函数" class="headerlink" title="mq_close函数"></a>mq_close函数</h1><ul>
+<li>功能：关闭一个消息队列</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mqd_t</span> mq_close(<span class="keyword">mqd_t</span> mqdes);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>mqdes：消息队列描述符</li>
+</ul>
+</li>
+<li>返回值：成功返回0；失败返回-1</li>
+</ul>
+<hr>
+<h1 id="mq-unlink函数"><a href="#mq-unlink函数" class="headerlink" title="mq_unlink函数"></a>mq_unlink函数</h1><ul>
+<li>功能：删除消息队列</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mqd_t</span> mq_unlink(<span class="keyword">const</span> <span class="keyword">char</span> *name);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>name：消息队列的名字</li>
+</ul>
+</li>
+<li>返回值：成功返回0；失败返回-1</li>
+</ul>
+<hr>
+<h1 id="mq-getattr-mq-setattr函数"><a href="#mq-getattr-mq-setattr函数" class="headerlink" title="mq_getattr/mq_setattr函数"></a>mq_getattr/mq_setattr函数</h1><ul>
+<li>功能：获取/设置消息队列属性</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mqd_t</span> mq_getattr(<span class="keyword">mqd_t</span> mqdes, struct mq_attr *attr);</div><div class="line"><span class="keyword">mqd_t</span> mq_setattr(<span class="keyword">mqd_t</span> mqdes, struct mq_attr *newattr, struct mq_attr *oldattr);</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mq_attr</span> &#123;</span></div><div class="line">    <span class="keyword">long</span> mq_flags;       <span class="comment">/* Flags: 0 or O_NONBLOCK */</span></div><div class="line">    <span class="keyword">long</span> mq_maxmsg;      <span class="comment">/* Max. # of messages on queue */</span></div><div class="line">    <span class="keyword">long</span> mq_msgsize;     <span class="comment">/* Max. message size (bytes) */</span></div><div class="line">    <span class="keyword">long</span> mq_curmsgs;     <span class="comment">/* # of messages currently in queue */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>返回值：成功返回0；失败返回-1</p>
+</li>
+</ul>
+<hr>
+<h1 id="mq-send函数"><a href="#mq-send函数" class="headerlink" title="mq_send函数"></a>mq_send函数</h1><ul>
+<li>功能：发送消息</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mqd_t</span> mq_send(<span class="keyword">mqd_t</span> mqdes, <span class="keyword">const</span> <span class="keyword">char</span> *msg_ptr, <span class="keyword">size_t</span> msg_len, <span class="keyword">unsigned</span> msg_prio);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>mqdes：消息队列描述符</li>
+<li>msg_ptr：指向消息的指针</li>
+<li>msg_len：消息长度</li>
+<li>msg_prio：消息优先级</li>
+</ul>
+</li>
+<li>返回值：成功返回0；失败返回-1</li>
+</ul>
+<p>实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mqueue.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span> &#123;	\</div><div class="line">			perror(m);	\</div><div class="line">			<span class="built_in">exit</span>(EXIT_FAILURE);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">stu</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">	<span class="keyword">char</span> name[<span class="number">32</span>];</div><div class="line">	<span class="keyword">int</span> age;</div><div class="line">&#125; STU;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (argc != <span class="number">2</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Usage: %s &lt;prio&gt;\n"</span>, argv[<span class="number">0</span>]);</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">mqd_t</span> mqid;</div><div class="line">	mqid = mq_open(<span class="string">"/abc"</span>, O_WRONLY);</div><div class="line">	<span class="keyword">if</span> (mqid == (<span class="keyword">mqd_t</span>)<span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"mq_open"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	STU stu;</div><div class="line">	<span class="built_in">strcpy</span>(stu.name, <span class="string">"test"</span>);</div><div class="line">	stu.age = <span class="number">20</span>;</div><div class="line">	mq_send(mqid, (<span class="keyword">const</span> <span class="keyword">char</span>*)&amp;stu, <span class="keyword">sizeof</span>(stu), atoi(argv[<span class="number">1</span>]));</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="mq-receive函数"><a href="#mq-receive函数" class="headerlink" title="mq_receive函数"></a>mq_receive函数</h1><ul>
+<li>功能：接受消息</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ssize_t</span> mq_receive(<span class="keyword">mqd_t</span> mqdes, <span class="keyword">char</span> *msg_ptr, <span class="keyword">size_t</span> msq_len, <span class="keyword">unsigned</span> *msg_prio);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>mqdes：消息队列描述符</li>
+<li>msg_ptr：可接受消息的指针</li>
+<li>msg_len：消息长度</li>
+<li>msg_prop：返回接收到的消息优先级</li>
+</ul>
+</li>
+<li>返回值：成功返回接收到的消息字节数；失败返回-1</li>
+<li>注意：返回指定消息队列中最高优先级的最早消息</li>
+</ul>
+<p>实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mqueue.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span> &#123;	\</div><div class="line">			perror(m);	\</div><div class="line">			<span class="built_in">exit</span>(EXIT_FAILURE);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">stu</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">	<span class="keyword">char</span> name[<span class="number">32</span>];</div><div class="line">	<span class="keyword">int</span> age;</div><div class="line">&#125; STU;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">mqd_t</span> mqid;</div><div class="line">	mqid = mq_open(<span class="string">"/abc"</span>, O_RDONLY);</div><div class="line">	<span class="keyword">if</span> (mqid == (<span class="keyword">mqd_t</span>)<span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"mq_open"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	STU stu;</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> prio;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">mq_attr</span> <span class="title">attr</span>;</span></div><div class="line"></div><div class="line">	mq_getattr(mqid, &amp;attr);</div><div class="line">	<span class="keyword">if</span> (mq_receive(mqid, (<span class="keyword">char</span>*)&amp;stu, attr.mq_msgsize, &amp;prio) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"mq_receive"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"name=%s age=%d prio=%d\n"</span>, stu.name, stu.age, prio);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="mq-notify函数"><a href="#mq-notify函数" class="headerlink" title="mq_notify函数"></a>mq_notify函数</h1><ul>
+<li>功能：建立或者删除消息到达通知事件</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mqd_t</span> mq_notify(<span class="keyword">mqd_t</span> mqdes, <span class="keyword">const</span> struct sigevent *notification);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>mqdes：消息队列描述符</li>
+<li>notification：<ul>
+<li>非空表示当前消息到达且消息队列先前为空，那么将得到通知；</li>
+<li>NULL表示撤销已注册的通知</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值：成功返回0；失败返回-1</li>
+<li>通知方式：<ul>
+<li>产生一个信号</li>
+<li>创建一个线程执行一个指定的函数</li>
+</ul>
+</li>
+</ul>
+<p>结构体：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> sigval &#123;          <span class="comment">/* Data passed with notification */</span></div><div class="line">    <span class="keyword">int</span>     sival_int;         <span class="comment">/* Integer value */</span></div><div class="line">    <span class="keyword">void</span>   *sival_ptr;         <span class="comment">/* Pointer value */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sigevent</span> &#123;</span></div><div class="line">    <span class="keyword">int</span>          sigev_notify; <span class="comment">/* Notification method */</span></div><div class="line">    <span class="keyword">int</span>          sigev_signo;  <span class="comment">/* Notification signal */</span></div><div class="line">    <span class="keyword">union</span> sigval sigev_value;  <span class="comment">/* Data passed with</span></div><div class="line"><span class="comment">                                         notification */</span></div><div class="line">    <span class="keyword">void</span>       (*sigev_notify_function) (<span class="keyword">union</span> sigval);</div><div class="line">                            <span class="comment">/* Function used for thread</span></div><div class="line"><span class="comment">                               notification (SIGEV_THREAD) */</span></div><div class="line">     <span class="keyword">void</span>        *sigev_notify_attributes;</div><div class="line">                            <span class="comment">/* Attributes for notification thread</span></div><div class="line"><span class="comment">                               (SIGEV_THREAD) */</span></div><div class="line">     <span class="keyword">pid_t</span>        sigev_notify_thread_id;</div><div class="line">                            <span class="comment">/* ID of thread to signal (SIGEV_THREAD_ID) */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>注意：</p>
+<ul>
+<li>任何时刻只能有一个进程可以被注册接受某个给定队列的通知</li>
+<li>当有一个消息到达某个先前为空的队列，而且已有一个进程被注册为接受该队列的通知时，只有没有任何线程阻塞在该队列的mq_receive调用的前提下，通知才会发出</li>
+<li>当通知被发送给他的注册进程时，其注册被撤销。进程必须再次调用mq_notify以重新注册（如果需要的话），重新注册要放在消息队列读出消息之前而不是之后</li>
+</ul>
+<p>实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mqueue.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span> &#123;	\</div><div class="line">			perror(m);	\</div><div class="line">			<span class="built_in">exit</span>(EXIT_FAILURE);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">stu</span></span></div><div class="line"><span class="class">&#123;</span></div><div class="line">	<span class="keyword">char</span> name[<span class="number">32</span>];</div><div class="line">	<span class="keyword">int</span> age;</div><div class="line">&#125; STU;</div><div class="line"></div><div class="line"><span class="keyword">mqd_t</span> mqid;</div><div class="line"><span class="keyword">int</span> size;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sigevent</span> <span class="title">sigev</span>;</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">handle_sigusr1</span><span class="params">(<span class="keyword">int</span> sig)</span> </span>&#123;</div><div class="line">	mq_notify(mqid, &amp;sigev);</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> prio;</div><div class="line">	STU stu;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (mq_receive(mqid, (<span class="keyword">char</span>*)&amp;stu, size, &amp;prio) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"mq_receive"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"name=%s age=%d prio=%d\n"</span>, stu.name, stu.age, prio);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	mqid = mq_open(<span class="string">"/abc"</span>, O_RDONLY);</div><div class="line">	<span class="keyword">if</span> (mqid == (<span class="keyword">mqd_t</span>)<span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"mq_open"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">mq_attr</span> <span class="title">attr</span>;</span></div><div class="line">	mq_getattr(mqid, &amp;attr);</div><div class="line">	size = attr.mq_msgsize;</div><div class="line"></div><div class="line">	signal(SIGUSR1, handle_sigusr1);</div><div class="line"></div><div class="line">	sigev.sigev_notify = SIGEV_SIGNAL;</div><div class="line">	sigev.sigev_signo = SIGUSR1;</div><div class="line">	mq_notify(mqid, &amp;sigev);</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (;;) &#123;</div><div class="line">		pause();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/15/linuxsemaphore/" rel="next" title="System V 信号量">
+                <i class="fa fa-chevron-left"></i> System V 信号量
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/17/linuxposixmemory/" rel="prev" title="POSIX 共享内存">
+                POSIX 共享内存 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mq-open函数"><span class="nav-number">1.</span> <span class="nav-text">mq_open函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mq-close函数"><span class="nav-number">2.</span> <span class="nav-text">mq_close函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mq-unlink函数"><span class="nav-number">3.</span> <span class="nav-text">mq_unlink函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mq-getattr-mq-setattr函数"><span class="nav-number">4.</span> <span class="nav-text">mq_getattr/mq_setattr函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mq-send函数"><span class="nav-number">5.</span> <span class="nav-text">mq_send函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mq-receive函数"><span class="nav-number">6.</span> <span class="nav-text">mq_receive函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mq-notify函数"><span class="nav-number">7.</span> <span class="nav-text">mq_notify函数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
