@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux系统基本介绍。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机系统组成">
+<meta property="og:url" content="http://harlon.org/2018/05/17/linuxcomputersystem/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Linux系统基本介绍。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/linuxcomponent.png">
+<meta property="og:image" content="http://harlon.org/img/computer.png">
+<meta property="og:image" content="http://harlon.org/img/operator.png">
+<meta property="og:image" content="http://harlon.org/img/operator2.png">
+<meta property="og:image" content="http://harlon.org/img/processswitch.png">
+<meta property="og:image" content="http://harlon.org/img/operator_virtual_memory.png">
+<meta property="og:image" content="http://harlon.org/img/vfs.png">
+<meta property="og:updated_time" content="2018-05-17T13:45:26.245Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机系统组成">
+<meta name="twitter:description" content="Linux系统基本介绍。">
+<meta name="twitter:image" content="http://harlon.org/img/linuxcomponent.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/05/17/linuxcomputersystem/"/>
+
+
+
+
+
+  <title>计算机系统组成 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/17/linuxcomputersystem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计算机系统组成</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-17T21:07:23+08:00">
+                2018-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Linux系统基本介绍。<br><a id="more"></a></p>
+<hr>
+<h1 id="计算机组成原理"><a href="#计算机组成原理" class="headerlink" title="计算机组成原理"></a>计算机组成原理</h1><h2 id="计算机系统组成"><a href="#计算机系统组成" class="headerlink" title="计算机系统组成"></a>计算机系统组成</h2><ul>
+<li>计算机系统由软件硬件组成<br><img src="/img/linuxcomponent.png" alt=""><h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2></li>
+<li>贯穿整个系统的一组电子管道称为总线</li>
+<li>片内总线</li>
+<li>系统总线<ul>
+<li>数据总线DB</li>
+<li>地址总线CB</li>
+<li>控制总线CB</li>
+</ul>
+</li>
+<li>外部总线</li>
+</ul>
+<hr>
+<h2 id="I-O设备"><a href="#I-O设备" class="headerlink" title="I/O设备"></a>I/O设备</h2><ul>
+<li>I/O设备是系统与外界联系的通道</li>
+<li>键盘鼠标是输入设备</li>
+<li>显式器是输出设备</li>
+<li>磁盘既是输入设备也是输出设备</li>
+<li>输入输出是相对于内存来说的。</li>
+</ul>
+<hr>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ul>
+<li>内存是一个重要的部件，它是与CPU进行沟通的桥梁。它用来存放程序以及程序要处理的数据，磁盘中的程序要加载到内存才能运行。</li>
+</ul>
+<hr>
+<h2 id="处理器"><a href="#处理器" class="headerlink" title="处理器"></a>处理器</h2><ul>
+<li>中央处理器（CPU），简称处理器。</li>
+<li>CPU主要有运算器、控制器、寄存器构成</li>
+<li>取指</li>
+<li>译码</li>
+<li>执行</li>
+<li>写回</li>
+<li>跳转<br><img src="/img/computer.png" alt=""></li>
+</ul>
+<hr>
+<h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h1><h2 id="什么是操作系统？"><a href="#什么是操作系统？" class="headerlink" title="什么是操作系统？"></a>什么是操作系统？</h2><ul>
+<li>操作系统：有效地管理计算机系统中的资源，合理地管理计算机系统的工作流程，方便用户使用的程序的集合。</li>
+<li>资源<ul>
+<li>软件资源</li>
+<li>硬件资源</li>
+</ul>
+</li>
+<li>操作系统五大任务<ul>
+<li>文件管理</li>
+<li>处理器管理</li>
+<li>内存管理</li>
+<li>设备管理</li>
+<li>作业管理<br><img src="/img/operator.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="linux内核模块"><a href="#linux内核模块" class="headerlink" title="linux内核模块"></a>linux内核模块</h2><ul>
+<li>进程调度</li>
+<li>内存管理</li>
+<li>虚拟文件系统VFS</li>
+<li>网络接口</li>
+<li>进程间通信</li>
+</ul>
+<hr>
+<h2 id="操作系统管理硬件"><a href="#操作系统管理硬件" class="headerlink" title="操作系统管理硬件"></a>操作系统管理硬件</h2><ul>
+<li>防止硬件被失控的应用程序滥用</li>
+<li>向应用程序提供简单一致的机制来控制复杂而又通常大相径庭的低级硬件设备</li>
+</ul>
+<hr>
+<h2 id="操作系统三个基本抽象"><a href="#操作系统三个基本抽象" class="headerlink" title="操作系统三个基本抽象"></a>操作系统三个基本抽象</h2><ul>
+<li>操作系统通过三个基本抽象概念来实现这两个功能。（进程、虚拟存储器和文件）。文件是对I/O设备的抽象表示，虚拟存储器是对主存和磁盘I/O设备的抽象表示，进程则是对处理器、主存和I/O设备的抽象表示。<br><img src="/img/operator2.png" alt=""></li>
+</ul>
+<hr>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><ul>
+<li>进程是操作系统对正在运行的程序的一种抽象。一个系统可以运行多个进程，而每个进程好像在独占使用硬件。</li>
+</ul>
+<hr>
+<h2 id="进程上下文切换"><a href="#进程上下文切换" class="headerlink" title="进程上下文切换"></a>进程上下文切换</h2><p><img src="/img/processswitch.png" alt=""></p>
+<hr>
+<h2 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h2><ul>
+<li>虚拟存储器为每个进程提供了一个大的、一致的、私有的地址空间</li>
+<li>它将内存看成是存储在磁盘上的地址空间的高速缓存，在主存中只保存活动区域，并根据需要在主存与磁盘中来回交换数据</li>
+<li>为每个进程提供一致的地址空间，简化了存储管理</li>
+<li>保护每个进程的地址空间不被其他进程破坏<br><img src="/img/operator_virtual_memory.png" alt=""></li>
+</ul>
+<hr>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><ul>
+<li>文件是一系列的字节序列</li>
+<li>它向应用程序提供了一个统一的视角，来看待系统中各式各样的I/O设备。</li>
+</ul>
+<hr>
+<h2 id="虚拟文件系统VFS"><a href="#虚拟文件系统VFS" class="headerlink" title="虚拟文件系统VFS"></a>虚拟文件系统VFS</h2><ul>
+<li>虚拟文件系统是内核实现的一种架构，为用户空间提供统一的文件操作接口，即文件系统调用。它在内核内部为不同的真实文件系统提供一致的抽象接口</li>
+<li>用户通过系统用与内核中的虚拟文件系统交互，进而操作实际的文件系统和设备<br><img src="/img/vfs.png" alt=""></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/17/linuxposixmemory/" rel="next" title="POSIX 共享内存">
+                <i class="fa fa-chevron-left"></i> POSIX 共享内存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/21/linuxphread/" rel="prev" title="Linux 线程">
+                Linux 线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机组成原理"><span class="nav-number">1.</span> <span class="nav-text">计算机组成原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机系统组成"><span class="nav-number">1.1.</span> <span class="nav-text">计算机系统组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总线"><span class="nav-number">1.2.</span> <span class="nav-text">总线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O设备"><span class="nav-number">1.3.</span> <span class="nav-text">I/O设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存"><span class="nav-number">1.4.</span> <span class="nav-text">内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理器"><span class="nav-number">1.5.</span> <span class="nav-text">处理器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作系统"><span class="nav-number">2.</span> <span class="nav-text">操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是操作系统？"><span class="nav-number">2.1.</span> <span class="nav-text">什么是操作系统？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux内核模块"><span class="nav-number">2.2.</span> <span class="nav-text">linux内核模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统管理硬件"><span class="nav-number">2.3.</span> <span class="nav-text">操作系统管理硬件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统三个基本抽象"><span class="nav-number">2.4.</span> <span class="nav-text">操作系统三个基本抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程"><span class="nav-number">2.5.</span> <span class="nav-text">进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程上下文切换"><span class="nav-number">2.6.</span> <span class="nav-text">进程上下文切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟内存"><span class="nav-number">2.7.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件"><span class="nav-number">2.8.</span> <span class="nav-text">文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟文件系统VFS"><span class="nav-number">2.9.</span> <span class="nav-text">虚拟文件系统VFS</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

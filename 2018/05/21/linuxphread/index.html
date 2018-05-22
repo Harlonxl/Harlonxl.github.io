@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux 线程的介绍与使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 线程">
+<meta property="og:url" content="http://harlon.org/2018/05/21/linuxphread/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Linux 线程的介绍与使用。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/phread.png">
+<meta property="og:image" content="http://harlon.org/img/thread-1.png">
+<meta property="og:image" content="http://harlon.org/img/thead-2.png">
+<meta property="og:image" content="http://harlon.org/img/thread-3.png">
+<meta property="og:updated_time" content="2018-05-21T13:43:05.977Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 线程">
+<meta name="twitter:description" content="Linux 线程的介绍与使用。">
+<meta name="twitter:image" content="http://harlon.org/img/phread.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/05/21/linuxphread/"/>
+
+
+
+
+
+  <title>Linux 线程 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/21/linuxphread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux 线程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-21T18:46:23+08:00">
+                2018-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Linux 线程的介绍与使用。<br><a id="more"></a></p>
+<hr>
+<h1 id="什么是线程？"><a href="#什么是线程？" class="headerlink" title="什么是线程？"></a>什么是线程？</h1><ul>
+<li>在一个程序里的一个执行路线就叫做线程（thread）。更准确的定义是：线程是“一个进程内部的控制序列”。</li>
+<li>一切进程至少都有一个执行线程。</li>
+</ul>
+<hr>
+<h1 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h1><ul>
+<li>进程是资源分配与竞争的基本单位</li>
+<li>线程是程序执行的最小单位</li>
+<li>线程共享进程数据，但也有自己的一部分数据<ul>
+<li>线程ID</li>
+<li>一组寄存器：IP，PSW，堆栈指针</li>
+<li>栈</li>
+<li>errno</li>
+<li>信号状态</li>
+<li>优先级<br><img src="/img/phread.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="fork和创建新线程的区别"><a href="#fork和创建新线程的区别" class="headerlink" title="fork和创建新线程的区别"></a>fork和创建新线程的区别</h1><ul>
+<li>当一个进程执行一个fork调用的时候，会创建出进程的一个新拷贝，新进程将拥有它自己的变量和它自己的PID。这个新进程的运行时间是独立的，它在执行时几乎完全独立于创建它的进程。</li>
+<li>在进程里面创建一个新线程的时候，新的执行进程会拥有自己的堆栈（因此也就有自己的局部变量），但要与他的创建者共享全局变量、文件描述符、信号处理器和当前工作目录状态。</li>
+</ul>
+<hr>
+<h1 id="线程的优点"><a href="#线程的优点" class="headerlink" title="线程的优点"></a>线程的优点</h1><ul>
+<li>创建一个新线程的代价要比创建一个新进程小得多</li>
+<li>与进程之间的切换相比，线程之间的切换需要操作系统做的工作少得多</li>
+<li>线程占用的资源要比进程少得多</li>
+<li>能充分利用多处理器的可并行数量</li>
+<li>在等待慢速I/O操作结束的同时，程序可执行其他的计算任务</li>
+<li>计算密集型应用，为了能在多处理器系统上运行，将计算分解到多个线程中实现</li>
+<li>I/O密集型应用，为了提高系统，将I/O操作重叠。线程可以同时等待不同的I/O操作</li>
+</ul>
+<hr>
+<h1 id="线程的缺点"><a href="#线程的缺点" class="headerlink" title="线程的缺点"></a>线程的缺点</h1><ul>
+<li>性能损失<ul>
+<li>一个很少被外部事件阻塞的计算密集型线程往往无法与其他线程共享同一个处理器。如果计算密集型线程的数量比可用的处理器多，那么可能会有较大的性能损失，这里的性能损失指的是增加了额外的同步和调度开销，而可用的资源不变。</li>
+</ul>
+</li>
+<li>健壮性降低<ul>
+<li>编写多线程需要更全面更深入的考虑，在一个多线程程序里，因时间分配上的细微偏差或者因共享了不该共享的变量而造成不良的可能性是很大的，换句话说线程之间是缺乏保护的。</li>
+</ul>
+</li>
+<li>缺乏访问控制<ul>
+<li>进程是访问控制的基本粒度，在一个线程中调用某些OS函数会对整个进程造成影响。</li>
+</ul>
+</li>
+<li>编程难度提高<ul>
+<li>编写与调试一个多线程比单线程程序困难得多</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="线程调度竞争范围"><a href="#线程调度竞争范围" class="headerlink" title="线程调度竞争范围"></a>线程调度竞争范围</h1><ul>
+<li>操作系统提供了各个模型，用来调度应用程序创建的线程。这些模型时间的主要不同是：在竞争系统资源（特别是CPU时间）时，线程调度竞争范围（thread-scheduling contention scope）不一样</li>
+<li>进程竞争范围（Process contention scope）：各个线程在同一个进程竞争“被调度的CPU时间”（但不直接和其他进程中的线程竞争）。</li>
+<li>系统竞争范围（System contention scope）：线程直接和”系统范围“内的其他线程竞争。</li>
+</ul>
+<hr>
+<h1 id="线程模型"><a href="#线程模型" class="headerlink" title="线程模型"></a>线程模型</h1><h2 id="N-1用户线程模型"><a href="#N-1用户线程模型" class="headerlink" title="N:1用户线程模型"></a>N:1用户线程模型</h2><ul>
+<li>“线程实现”建立在“进程控制”机制之上，由用户空间的程序库来管理。OS内核完全不知道线程信息。这些线程成为用户空间线程。</li>
+<li>这些线程都工作在“进程竞争范围”<br><img src="/img/thread-1.png" alt=""></li>
+<li>在N:1线程模型中，内核不干涉线程的任何生命活动，也不干涉同一进程中的线程环境切换</li>
+<li>在N:1线程模型中，一个进程中的多个线程只能调度到一个CPU，这种约束限制了可用的并行总量。</li>
+<li>第二个缺点是如果某个线程执行了一个“阻塞式”操作（如read），那么，进程中的所有线程都会阻塞，直至那个操作结束。为此，一个线程的实现是为这些阻塞式函数提供包装器，用非阻塞版本替换这些系统调用，以清除这种限制。</li>
+</ul>
+<hr>
+<h2 id="1-1核心线程模型"><a href="#1-1核心线程模型" class="headerlink" title="1:1核心线程模型"></a>1:1核心线程模型</h2><ul>
+<li>在1:1核心线程模型中，应用程序创建的每一个线程都由一个核心线程直接管理。</li>
+<li>OS内核将每一个核心线程都调度到系统CPU上，因此，所有线程都工作在“系统竞争范围”。</li>
+<li>这种线程的创建于调度由内核完成，因为这种线程的系统开销比较大（但一般来说，比进程开销小）<br><img src="/img/thead-2.png" alt=""></li>
+</ul>
+<hr>
+<h2 id="N-M混合线程模型"><a href="#N-M混合线程模型" class="headerlink" title="N:M混合线程模型"></a>N:M混合线程模型</h2><ul>
+<li>N:M混合线程模式提供了两级控制，将用户线程映射为系统的可调度体以实现并行，这个可调度体称为轻量级进程（LWP：lightweight process），LWP再一一映射到核心线程。<br><img src="/img/thread-3.png" alt=""></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/17/linuxcomputersystem/" rel="next" title="计算机系统组成">
+                <i class="fa fa-chevron-left"></i> 计算机系统组成
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是线程？"><span class="nav-number">1.</span> <span class="nav-text">什么是线程？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程与线程"><span class="nav-number">2.</span> <span class="nav-text">进程与线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fork和创建新线程的区别"><span class="nav-number">3.</span> <span class="nav-text">fork和创建新线程的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的优点"><span class="nav-number">4.</span> <span class="nav-text">线程的优点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的缺点"><span class="nav-number">5.</span> <span class="nav-text">线程的缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程调度竞争范围"><span class="nav-number">6.</span> <span class="nav-text">线程调度竞争范围</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程模型"><span class="nav-number">7.</span> <span class="nav-text">线程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#N-1用户线程模型"><span class="nav-number">7.1.</span> <span class="nav-text">N:1用户线程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1核心线程模型"><span class="nav-number">7.2.</span> <span class="nav-text">1:1核心线程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#N-M混合线程模型"><span class="nav-number">7.3.</span> <span class="nav-text">N:M混合线程模型</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
