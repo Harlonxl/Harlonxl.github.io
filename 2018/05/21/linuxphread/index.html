@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="Linux 线程的介绍与使用。">
+<meta name="description" content="本文主要介绍Linux线程的概念以及线程的模型，并介绍基于POSIX线程的接口。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux 线程">
+<meta property="og:title" content="Linux 线程的概念和使用">
 <meta property="og:url" content="http://harlon.org/2018/05/21/linuxphread/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="Linux 线程的介绍与使用。">
+<meta property="og:description" content="本文主要介绍Linux线程的概念以及线程的模型，并介绍基于POSIX线程的接口。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/phread.png">
 <meta property="og:image" content="http://harlon.org/img/thread-1.png">
 <meta property="og:image" content="http://harlon.org/img/thead-2.png">
 <meta property="og:image" content="http://harlon.org/img/thread-3.png">
-<meta property="og:updated_time" content="2018-05-21T13:43:05.977Z">
+<meta property="og:updated_time" content="2018-05-22T08:57:24.748Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux 线程">
-<meta name="twitter:description" content="Linux 线程的介绍与使用。">
+<meta name="twitter:title" content="Linux 线程的概念和使用">
+<meta name="twitter:description" content="本文主要介绍Linux线程的概念以及线程的模型，并介绍基于POSIX线程的接口。">
 <meta name="twitter:image" content="http://harlon.org/img/phread.png">
 
 
@@ -130,7 +130,7 @@
 
 
 
-  <title>Linux 线程 | Harlon's BLOG</title>
+  <title>Linux 线程的概念和使用 | Harlon's BLOG</title>
   
 
 
@@ -294,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux 线程</h1>
+          <h1 class="post-title" itemprop="name headline">Linux 线程的概念和使用</h1>
         
 
         <div class="post-meta">
@@ -366,7 +366,7 @@
       
 
       
-        <p>Linux 线程的介绍与使用。<br><a id="more"></a></p>
+        <p>本文主要介绍Linux线程的概念以及线程的模型，并介绍基于POSIX线程的接口。<br><a id="more"></a></p>
 <hr>
 <h1 id="什么是线程？"><a href="#什么是线程？" class="headerlink" title="什么是线程？"></a>什么是线程？</h1><ul>
 <li>在一个程序里的一个执行路线就叫做线程（thread）。更准确的定义是：线程是“一个进程内部的控制序列”。</li>
@@ -444,6 +444,114 @@
 <h2 id="N-M混合线程模型"><a href="#N-M混合线程模型" class="headerlink" title="N:M混合线程模型"></a>N:M混合线程模型</h2><ul>
 <li>N:M混合线程模式提供了两级控制，将用户线程映射为系统的可调度体以实现并行，这个可调度体称为轻量级进程（LWP：lightweight process），LWP再一一映射到核心线程。<br><img src="/img/thread-3.png" alt=""></li>
 </ul>
+<hr>
+<h1 id="POSIX线程库"><a href="#POSIX线程库" class="headerlink" title="POSIX线程库"></a>POSIX线程库</h1><h2 id="pthread-create函数"><a href="#pthread-create函数" class="headerlink" title="pthread_create函数"></a>pthread_create函数</h2><ul>
+<li>功能：创建一个新的线程</li>
+<li><p>原型：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>thread：返回线程ID</li>
+<li>attr：设置线程的属性，attr为NULL表示使用默认属性</li>
+<li>start_routine：是个函数地址，线程启动后要执行的函数</li>
+<li>arg：传给线程启动函数的参数</li>
+</ul>
+</li>
+<li>返回值：成功返回0，失败返回错误码</li>
+</ul>
+<hr>
+<h2 id="pthread-join函数"><a href="#pthread-join函数" class="headerlink" title="pthread_join函数"></a>pthread_join函数</h2><ul>
+<li>功能：等待线程结束</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **retval)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>thread：线程ID</li>
+<li>retval：它指向一个指针，后者指向线程的返回值</li>
+</ul>
+</li>
+<li>参数：成功返回0，失败返回错误码</li>
+</ul>
+<hr>
+<h2 id="pthread-exit函数"><a href="#pthread-exit函数" class="headerlink" title="pthread_exit函数"></a>pthread_exit函数</h2><ul>
+<li>功能：线程终止</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *value_ptr)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>value_ptr：value_ptr不要指向一个局部变量。</li>
+</ul>
+</li>
+<li>返回值：无返回值，跟进程一样，线程结束的时候无法返回到它的调用者（自身）</li>
+</ul>
+<hr>
+<h2 id="pthread-self函数"><a href="#pthread-self函数" class="headerlink" title="pthread_self函数"></a>pthread_self函数</h2><ul>
+<li>功能：返回线程ID</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">pthread_t</span> pthread_self(<span class="keyword">void</span>);</div></pre></td></tr></table></figure>
+</li>
+<li><p>返回值：成功返回0</p>
+</li>
+</ul>
+<hr>
+<h2 id="pthread-cancel"><a href="#pthread-cancel" class="headerlink" title="pthread_cancel"></a>pthread_cancel</h2><ul>
+<li>功能：取消一个执行的线程</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cancel</span><span class="params">(<span class="keyword">pthread_t</span> thread)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>thread：线程ID</li>
+</ul>
+</li>
+<li>返回值：成功返回0；失败返回错误码</li>
+</ul>
+<hr>
+<h2 id="pthread-detach函数"><a href="#pthread-detach函数" class="headerlink" title="pthread_detach函数"></a>pthread_detach函数</h2><ul>
+<li>功能：将一个线程分离</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_detach</span><span class="params">(<span class="keyword">pthread_t</span> thread)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>thread：线程ID</li>
+</ul>
+</li>
+<li>返回值：成功返回0；失败返回错误码</li>
+</ul>
+<hr>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span> &#123;	\</div><div class="line">			perror(m);	\</div><div class="line">			<span class="built_in">exit</span>(EXIT_FAILURE);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread_routine</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;<span class="number">20</span>; ++i) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"B"</span>);</div><div class="line">		fflush(<span class="built_in">stdout</span>);</div><div class="line">		usleep(<span class="number">20</span>);</div><div class="line">		<span class="keyword">if</span> (i == <span class="number">3</span>) &#123;</div><div class="line">			pthread_exit(<span class="string">"ABC"</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">pthread_t</span> tid;</div><div class="line">	<span class="keyword">int</span> ret;</div><div class="line">	<span class="keyword">if</span> ((ret = pthread_create(&amp;tid, <span class="literal">NULL</span>, thread_routine, <span class="literal">NULL</span>)) != <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"pthread_create: %s\n"</span>, strerror(ret));</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> i;</div><div class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;<span class="number">20</span>; ++i) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"A"</span>);</div><div class="line">		fflush(<span class="built_in">stdout</span>);</div><div class="line">		usleep(<span class="number">20</span>);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">void</span> *value;</div><div class="line">	<span class="keyword">if</span> ((ret = pthread_join(tid, &amp;value)) != <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"pthread_join: %s\n"</span>, strerror(ret));</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">" msg = %s\n"</span>, (<span class="keyword">char</span> *)value);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="线程属性"><a href="#线程属性" class="headerlink" title="线程属性"></a>线程属性</h1><h2 id="初始化与销毁属性"><a href="#初始化与销毁属性" class="headerlink" title="初始化与销毁属性"></a>初始化与销毁属性</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_init</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_destroy</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取与设置分离属性"><a href="#获取与设置分离属性" class="headerlink" title="获取与设置分离属性"></a>获取与设置分离属性</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getdetachstate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> \*attr, <span class="keyword">int</span> \*detachstate)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setdetachstate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> detachstate)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取与设置栈大小"><a href="#获取与设置栈大小" class="headerlink" title="获取与设置栈大小"></a>获取与设置栈大小</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setstacksize</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">size_t</span> stacksize)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getstacksize</span><span class="params">(<span class="keyword">pthread_attr_t</span> \*attr, <span class="keyword">size_t</span> \*stacksize)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取与设置栈溢出保护区大小"><a href="#获取与设置栈溢出保护区大小" class="headerlink" title="获取与设置栈溢出保护区大小"></a>获取与设置栈溢出保护区大小</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setguardsize</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">size_t</span> guardsize)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getguardsize</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">size_t</span> *guardsize)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取与设置线程竞争范围"><a href="#获取与设置线程竞争范围" class="headerlink" title="获取与设置线程竞争范围"></a>获取与设置线程竞争范围</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setscope</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> scope)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getscope</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> *scope)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取与设置调度策略"><a href="#获取与设置调度策略" class="headerlink" title="获取与设置调度策略"></a>获取与设置调度策略</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setschedpolicy</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> policy)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getschedpolicy</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> *policy)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取与设置继承的调度策略"><a href="#获取与设置继承的调度策略" class="headerlink" title="获取与设置继承的调度策略"></a>获取与设置继承的调度策略</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setinheritsched</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> inheritsched)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getinheritsched</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">int</span> *inheritsched)</span></span>;</div></pre></td></tr></table></figure>
+<h2 id="获取与设置调度参数"><a href="#获取与设置调度参数" class="headerlink" title="获取与设置调度参数"></a>获取与设置调度参数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_setschedparam</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, <span class="keyword">const</span> struct sched_param *param)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_attr_getschedparam</span><span class="params">(<span class="keyword">pthread_attr_t</span> *attr, struct sched_param *param)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取与设置并发级别"><a href="#获取与设置并发级别" class="headerlink" title="获取与设置并发级别"></a>获取与设置并发级别</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setconcurrency</span><span class="params">(<span class="keyword">int</span> new_level)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_getconcurrency</span><span class="params">(<span class="keyword">void</span>)</span></span>;</div></pre></td></tr></table></figure>
+<ul>
+<li>仅在N:,线程模型中有效，设置并发级别，给内核一个提示：表示提供给定级别数量的核心线程来映射用户线程是有效的。</li>
+</ul>
+<hr>
+<h1 id="线程特定数据"><a href="#线程特定数据" class="headerlink" title="线程特定数据"></a>线程特定数据</h1><ul>
+<li>在单线程程序中，我们经常要用到全局变量以实现多个函数间共享数据</li>
+<li>在多线程环境下，由于数据空间是共享的，因此全局变量也为所有线程所共有</li>
+<li>但有时应用程序设计中有必要提供线程的私有的全局变量，仅在某个线程中有效，但却可以跨多个函数访问</li>
+<li>POSIX线程库通过维护一定的数据结构来解决这个问题，这些数据成为（Thread-sepcific Data，或TSD）<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">int pthread_key_create(pthread_key_t *key, void (*destructor)(void*));</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_key_delete</span><span class="params">(<span class="keyword">pthread_key_t</span> key)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">pthread_getspecific</span><span class="params">(<span class="keyword">pthread_key_t</span> key)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setspecific</span><span class="params">(<span class="keyword">pthread_key_t</span> key, <span class="keyword">const</span> <span class="keyword">void</span> *value)</span></span>;</div><div class="line"></div><div class="line">int pthread_once(pthread_once_t *once_control, void (*init_routine)(void));</div><div class="line"><span class="keyword">pthread_once_t</span> once_control = PTHREAD_ONCE_INIT;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m)	\</span></div><div class="line">	<span class="keyword">do</span> &#123;	\</div><div class="line">			perror(m);	\</div><div class="line">			<span class="built_in">exit</span>(EXIT_FAILURE);	\</div><div class="line">	&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tsd</span> &#123;</span></div><div class="line">	<span class="keyword">pthread_t</span> tid;</div><div class="line">	<span class="keyword">char</span> *str;</div><div class="line">&#125; <span class="keyword">tsd_t</span>;</div><div class="line"></div><div class="line"><span class="keyword">pthread_key_t</span> key_tsd;</div><div class="line"><span class="keyword">pthread_once_t</span> once_control = PTHREAD_ONCE_INIT;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">destroy_routine</span><span class="params">(<span class="keyword">void</span> *value)</span> </span>&#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"destroy\n"</span>);</div><div class="line">	<span class="built_in">free</span>(value);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">init_routine</span><span class="params">()</span> </span>&#123;</div><div class="line">	pthread_key_create(&amp;key_tsd, destroy_routine);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread_routine</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</div><div class="line">    pthread_once(&amp;once_control, init_routine);</div><div class="line">	<span class="keyword">tsd_t</span> *value = (<span class="keyword">tsd_t</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">tsd_t</span>));</div><div class="line">	</div><div class="line">	<span class="keyword">tsd_t</span> *value = (<span class="keyword">tsd_t</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">tsd_t</span>));</div><div class="line">	value-&gt;tid = pthread_self();</div><div class="line">	value-&gt;str = (<span class="keyword">char</span> *)arg;</div><div class="line">	pthread_setspecific(key_tsd, value);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"%s setspecific %p\n"</span>, (<span class="keyword">char</span> *)arg, value);</div><div class="line">	value = pthread_getspecific(key_tsd);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"tid=0x%x str=%s\n"</span>, value-&gt;tid, value-&gt;str);</div><div class="line">	sleep(<span class="number">2</span>);</div><div class="line">	value = pthread_getspecific(key_tsd);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"tid=0x%x str=%s\n"</span>, value-&gt;tid, value-&gt;str);</div><div class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="comment">// pthread_key_create(&amp;key_tsd, destroy_routine);</span></div><div class="line">	<span class="keyword">pthread_t</span> tid1;</div><div class="line">	<span class="keyword">pthread_t</span> tid2;</div><div class="line">	<span class="keyword">int</span> ret;</div><div class="line">	<span class="keyword">if</span> ((ret = pthread_create(&amp;tid1, <span class="literal">NULL</span>, thread_routine, <span class="string">"thread1"</span>)) != <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"pthread_create: %s\n"</span>, strerror(ret));</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> ((ret = pthread_create(&amp;tid2, <span class="literal">NULL</span>, thread_routine, <span class="string">"thread2"</span>)) != <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"pthread_create: %s\n"</span>, strerror(ret));</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	pthread_join(tid1, <span class="literal">NULL</span>);</div><div class="line">	pthread_join(tid1, <span class="literal">NULL</span>);</div><div class="line"></div><div class="line">	pthread_key_delete(key_tsd);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -478,8 +586,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
-                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/22/linuxposixsemphore&mutex/" rel="prev" title="POSIX 信号量与互斥锁">
+                POSIX 信号量与互斥锁 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -557,7 +665,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -614,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是线程？"><span class="nav-number">1.</span> <span class="nav-text">什么是线程？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程与线程"><span class="nav-number">2.</span> <span class="nav-text">进程与线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fork和创建新线程的区别"><span class="nav-number">3.</span> <span class="nav-text">fork和创建新线程的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的优点"><span class="nav-number">4.</span> <span class="nav-text">线程的优点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的缺点"><span class="nav-number">5.</span> <span class="nav-text">线程的缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程调度竞争范围"><span class="nav-number">6.</span> <span class="nav-text">线程调度竞争范围</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程模型"><span class="nav-number">7.</span> <span class="nav-text">线程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#N-1用户线程模型"><span class="nav-number">7.1.</span> <span class="nav-text">N:1用户线程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1核心线程模型"><span class="nav-number">7.2.</span> <span class="nav-text">1:1核心线程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#N-M混合线程模型"><span class="nav-number">7.3.</span> <span class="nav-text">N:M混合线程模型</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是线程？"><span class="nav-number">1.</span> <span class="nav-text">什么是线程？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程与线程"><span class="nav-number">2.</span> <span class="nav-text">进程与线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fork和创建新线程的区别"><span class="nav-number">3.</span> <span class="nav-text">fork和创建新线程的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的优点"><span class="nav-number">4.</span> <span class="nav-text">线程的优点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的缺点"><span class="nav-number">5.</span> <span class="nav-text">线程的缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程调度竞争范围"><span class="nav-number">6.</span> <span class="nav-text">线程调度竞争范围</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程模型"><span class="nav-number">7.</span> <span class="nav-text">线程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#N-1用户线程模型"><span class="nav-number">7.1.</span> <span class="nav-text">N:1用户线程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1核心线程模型"><span class="nav-number">7.2.</span> <span class="nav-text">1:1核心线程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#N-M混合线程模型"><span class="nav-number">7.3.</span> <span class="nav-text">N:M混合线程模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#POSIX线程库"><span class="nav-number">8.</span> <span class="nav-text">POSIX线程库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pthread-create函数"><span class="nav-number">8.1.</span> <span class="nav-text">pthread_create函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pthread-join函数"><span class="nav-number">8.2.</span> <span class="nav-text">pthread_join函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pthread-exit函数"><span class="nav-number">8.3.</span> <span class="nav-text">pthread_exit函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pthread-self函数"><span class="nav-number">8.4.</span> <span class="nav-text">pthread_self函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pthread-cancel"><span class="nav-number">8.5.</span> <span class="nav-text">pthread_cancel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pthread-detach函数"><span class="nav-number">8.6.</span> <span class="nav-text">pthread_detach函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number">8.7.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程属性"><span class="nav-number">9.</span> <span class="nav-text">线程属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化与销毁属性"><span class="nav-number">9.1.</span> <span class="nav-text">初始化与销毁属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置分离属性"><span class="nav-number">9.2.</span> <span class="nav-text">获取与设置分离属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置栈大小"><span class="nav-number">9.3.</span> <span class="nav-text">获取与设置栈大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置栈溢出保护区大小"><span class="nav-number">9.4.</span> <span class="nav-text">获取与设置栈溢出保护区大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置线程竞争范围"><span class="nav-number">9.5.</span> <span class="nav-text">获取与设置线程竞争范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置调度策略"><span class="nav-number">9.6.</span> <span class="nav-text">获取与设置调度策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置继承的调度策略"><span class="nav-number">9.7.</span> <span class="nav-text">获取与设置继承的调度策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置调度参数"><span class="nav-number">9.8.</span> <span class="nav-text">获取与设置调度参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取与设置并发级别"><span class="nav-number">9.9.</span> <span class="nav-text">获取与设置并发级别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程特定数据"><span class="nav-number">10.</span> <span class="nav-text">线程特定数据</span></a></li></ol></div>
             
 
           </div>

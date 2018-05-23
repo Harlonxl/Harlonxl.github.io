@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="线程池、进程池与内存池的概念介绍与实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池、进程池与内存池">
+<meta property="og:url" content="http://harlon.org/2018/05/22/operatorpool/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="线程池、进程池与内存池的概念介绍与实现。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T12:45:14.645Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线程池、进程池与内存池">
+<meta name="twitter:description" content="线程池、进程池与内存池的概念介绍与实现。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/05/22/operatorpool/"/>
+
+
+
+
+
+  <title>线程池、进程池与内存池 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/22/operatorpool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">线程池、进程池与内存池</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-22T19:13:23+08:00">
+                2018-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>线程池、进程池与内存池的概念介绍与实现。<br><a id="more"></a></p>
+<hr>
+<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
+<li>用于执行大量相对短暂的任务</li>
+<li>当任务增加的时候能够动态的增加线程池中线程的数量直到达到一个阈值</li>
+<li><p>当任务执行完毕的时候，能够动态的销毁线程池中的线程</p>
+</li>
+<li><p>该线程池的实现本质上也是生产者与消费模型的应用。生产者线程向任务队列中添加任务，一旦队列有任务到来，如果有等待线程就唤醒来执行任务，如果没有等待线程并且线程数没有达到阈值，就创建新线程来执行任务。</p>
+</li>
+<li><p>计算密集型任务：线程数 = CPU个数</p>
+</li>
+<li>I/O密集型任务：线程数 &gt; CPU个数</li>
+</ul>
+<hr>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>Makefile<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">CC=gcc</div><div class="line">CFLAGS=-Wall -g</div><div class="line">ALL=main</div><div class="line">OBJS=main.o threadpool.o condition.o</div><div class="line">.c.o:</div><div class="line"><span class="meta">	$</span>(CC) $(CFLAGS) -c $&lt;</div><div class="line"></div><div class="line">main:$(OBJS)</div><div class="line"><span class="meta">	$</span>(CC)  $(CFLAGS) $^ -o $@ -lpthread -lrt</div><div class="line"></div><div class="line">clean:</div><div class="line">	rm -rf $(ALL) *.o</div></pre></td></tr></table></figure></p>
+<p>condition.h<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> CONDITION_H</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> CONDITION_H</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">condition</span> &#123;</span></div><div class="line">	<span class="keyword">pthread_mutex_t</span> pmutex;</div><div class="line">	<span class="keyword">pthread_cond_t</span> pcond;</div><div class="line">&#125; <span class="keyword">condition_t</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_init</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_lock</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_unlock</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_wait</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_timedwait</span><span class="params">(<span class="keyword">condition_t</span> *cond, <span class="keyword">const</span> struct timespec *abstime)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_signal</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_broadcast</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_destroy</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span>;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* CONDITION_H */</span></span></div></pre></td></tr></table></figure></p>
+<p>condition.c<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"condition.h"</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_init</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">int</span> status;</div><div class="line">	<span class="keyword">if</span> ((status = pthread_mutex_init(&amp;cond-&gt;pmutex, <span class="literal">NULL</span>)))</div><div class="line">		<span class="keyword">return</span> status;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> ((status = pthread_cond_init(&amp;cond-&gt;pcond, <span class="literal">NULL</span>)))</div><div class="line">		<span class="keyword">return</span> status;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_lock</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">return</span> pthread_mutex_lock(&amp;cond-&gt;pmutex);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_unlock</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">return</span> pthread_mutex_unlock(&amp;cond-&gt;pmutex);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_wait</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">return</span> pthread_cond_wait(&amp;cond-&gt;pcond, &amp;cond-&gt;pmutex);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_timedwait</span><span class="params">(<span class="keyword">condition_t</span> *cond, <span class="keyword">const</span> struct timespec *abstime)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">return</span> pthread_cond_timedwait(&amp;cond-&gt;pcond, &amp;cond-&gt;pmutex, abstime);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_signal</span><span class="params">(<span class="keyword">condition_t</span> *cond)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">return</span> pthread_cond_signal(&amp;cond-&gt;pcond);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_broadcast</span><span class="params">(<span class="keyword">condition_t</span>* cond)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">return</span> pthread_cond_broadcast(&amp;cond-&gt;pcond);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">condition_destroy</span><span class="params">(<span class="keyword">condition_t</span>* cond)</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">	<span class="keyword">int</span> status;</div><div class="line">	<span class="keyword">if</span> ((status = pthread_mutex_destroy(&amp;cond-&gt;pmutex)))</div><div class="line">		<span class="keyword">return</span> status;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> ((status = pthread_cond_destroy(&amp;cond-&gt;pcond)))</div><div class="line">		<span class="keyword">return</span> status;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>threadpool.h<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> THREADPOOL_H</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> THREADPOOL_H</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"condition.h"</span></span></div><div class="line"></div><div class="line"><span class="comment">// 任务结构体，将任务放入队列由线程池中的线程来执行</span></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">task</span> &#123;</span></div><div class="line">	<span class="keyword">void</span> *(*run)(<span class="keyword">void</span> *arg); 	<span class="comment">// 任务回调函数</span></div><div class="line">	<span class="keyword">void</span> *arg;					<span class="comment">// 回调函数参数</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">task</span> *<span class="title">next</span>;</span></div><div class="line">&#125; <span class="keyword">task_t</span>;</div><div class="line"></div><div class="line"><span class="comment">// 线程池结构体</span></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">threadpool</span> &#123;</span></div><div class="line">	<span class="keyword">condition_t</span> ready;		<span class="comment">// 任务准备就绪或者线程池销毁通知</span></div><div class="line">	<span class="keyword">task_t</span> *first;			<span class="comment">// 任务队列头指针</span></div><div class="line">	<span class="keyword">task_t</span> *last; 			<span class="comment">// 任务队列尾指针</span></div><div class="line">	<span class="keyword">int</span> counter; 			<span class="comment">// 线程池中当前线程数</span></div><div class="line">	<span class="keyword">int</span> idle; 				<span class="comment">// 线程池中当前正在等待任务的线程数</span></div><div class="line">	<span class="keyword">int</span> max_threads; 		<span class="comment">// 线程池中最大允许的线程数</span></div><div class="line">	<span class="keyword">int</span> quit; 				<span class="comment">// 销毁线程池的时候置1</span></div><div class="line">&#125; <span class="keyword">threadpool_t</span>;</div><div class="line"></div><div class="line"><span class="comment">// 初始化线程池</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">threadpool_init</span><span class="params">(<span class="keyword">threadpool_t</span> *pool, <span class="keyword">int</span> threads)</span></span>;</div><div class="line"><span class="comment">// 往线程池中添加任务</span></div><div class="line">void threadpool_add_task(threadpool_t *pool, void *(*run)(void *arg), void *arg);</div><div class="line"><span class="comment">// 销毁线程池</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">threadpool_destroy</span><span class="params">(<span class="keyword">threadpool_t</span> *pool)</span></span>;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure></p>
+<p>threadpool.c<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"threadpool.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread_routine</span><span class="params">(<span class="keyword">void</span> *arg)</span> </span>&#123;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">abstime</span>;</span></div><div class="line">	<span class="keyword">int</span> timeout;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"thread 0x%0x is starting\n"</span>, (<span class="keyword">int</span>)pthread_self());</div><div class="line">	<span class="keyword">threadpool_t</span> *pool = (<span class="keyword">threadpool_t</span> *)arg;</div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</div><div class="line">		condition_lock(&amp;pool-&gt;ready);</div><div class="line">		timeout = <span class="number">0</span>;</div><div class="line">		pool-&gt;idle++;</div><div class="line">		<span class="comment">// 等待队列中有任务到来或者线程池销毁通知</span></div><div class="line">		<span class="keyword">while</span> (pool-&gt;first == <span class="literal">NULL</span> &amp;&amp; !pool-&gt;quit) &#123;</div><div class="line">			<span class="built_in">printf</span>(<span class="string">"thread 0x%0x is waiting\n"</span>, (<span class="keyword">int</span>)pthread_self());</div><div class="line">			clock_gettime(CLOCK_REALTIME, &amp;abstime);</div><div class="line">			abstime.tv_sec += <span class="number">2</span>;</div><div class="line">			<span class="keyword">int</span> status = condition_timedwait(&amp;pool-&gt;ready, &amp;abstime);</div><div class="line">			<span class="keyword">if</span> (status == ETIMEDOUT) &#123;</div><div class="line">				<span class="built_in">printf</span>(<span class="string">"thread 0x%0x is waiting time out\n"</span>, (<span class="keyword">int</span>)pthread_self());</div><div class="line">				timeout = <span class="number">-1</span>;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="comment">// 等待条件处于工作状态</span></div><div class="line">		pool-&gt;idle--;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (pool-&gt;first != <span class="literal">NULL</span>) &#123;</div><div class="line">			<span class="comment">// 从队头取出任务</span></div><div class="line">			<span class="keyword">task_t</span> *t = pool-&gt;first;</div><div class="line">			pool-&gt;first = t-&gt;next;</div><div class="line">			<span class="comment">// 执行任务需要一定的时间，所以要解锁，以便生产者进程能够往队列中添加任务</span></div><div class="line">			<span class="comment">// 其他消费者进程能够进入等待任务</span></div><div class="line">			condition_unlock(&amp;pool-&gt;ready);</div><div class="line">			t-&gt;run(t-&gt;arg);</div><div class="line">			<span class="built_in">free</span>(t);</div><div class="line">			condition_lock(&amp;pool-&gt;ready);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">// 如果等待到线程池销毁通知, 且任务都执行完毕了</span></div><div class="line">		<span class="keyword">if</span> (pool-&gt;quit &amp;&amp; pool-&gt;first == <span class="literal">NULL</span>) &#123;</div><div class="line">			pool-&gt;counter--;</div><div class="line">			<span class="keyword">if</span> (pool-&gt;counter == <span class="number">0</span>) &#123;</div><div class="line">				condition_signal(&amp;pool-&gt;ready);</div><div class="line">			&#125;</div><div class="line">			condition_unlock(&amp;pool-&gt;ready);</div><div class="line">			<span class="comment">// 跳出循环之前要记得解锁</span></div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="comment">// </span></div><div class="line">		<span class="keyword">if</span> (timeout == <span class="number">-1</span> &amp;&amp; pool-&gt;first == <span class="literal">NULL</span>) &#123;</div><div class="line">			pool-&gt;counter--;</div><div class="line">			condition_unlock(&amp;pool-&gt;ready);</div><div class="line">			<span class="comment">// 跳出循环之前要记得解锁</span></div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		condition_unlock(&amp;pool-&gt;ready);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"thread 0x%0x is exiting\n"</span>, (<span class="keyword">int</span>)pthread_self());</div><div class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 初始化线程池</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">threadpool_init</span><span class="params">(<span class="keyword">threadpool_t</span> *pool, <span class="keyword">int</span> threads)</span> </span>&#123;</div><div class="line">	<span class="comment">// 对线程池中各个字段进行初始化</span></div><div class="line">	condition_init(&amp;pool-&gt;ready);</div><div class="line">	pool-&gt;first = <span class="literal">NULL</span>;</div><div class="line">	pool-&gt;last = <span class="literal">NULL</span>;</div><div class="line">	pool-&gt;counter = <span class="number">0</span>;</div><div class="line">	pool-&gt;idle = <span class="number">0</span>;</div><div class="line">	pool-&gt;max_threads = threads;</div><div class="line">	pool-&gt;quit = <span class="number">0</span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="comment">// 往线程池中添加任务</span></div><div class="line">void threadpool_add_task(threadpool_t *pool, void *(*run)(void *arg), void *arg) &#123;</div><div class="line">	condition_lock(&amp;pool-&gt;ready);</div><div class="line">	<span class="comment">// 生成新任务</span></div><div class="line">	<span class="keyword">task_t</span> *newtask = (<span class="keyword">task_t</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">task_t</span>));</div><div class="line">	newtask-&gt;run = run;</div><div class="line">	newtask-&gt;arg = arg;</div><div class="line">	newtask-&gt;next = <span class="literal">NULL</span>;</div><div class="line">	<span class="comment">// 将任务添加到队列</span></div><div class="line">	<span class="keyword">if</span> (pool-&gt;first == <span class="literal">NULL</span>) &#123;</div><div class="line">		pool-&gt;first = newtask;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		pool-&gt;last-&gt;next = newtask;</div><div class="line">	&#125;</div><div class="line">	pool-&gt;last = newtask;</div><div class="line"></div><div class="line">	<span class="comment">// 如果有等待线程，则唤醒其中一个</span></div><div class="line">	<span class="keyword">if</span> (pool-&gt;idle &gt; <span class="number">0</span>) &#123;</div><div class="line">		condition_signal(&amp;pool-&gt;ready);</div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pool-&gt;counter &lt; pool-&gt;max_threads)&#123;</div><div class="line">		<span class="comment">// 没有等待线程，并且当前线程数不超过最大线程数</span></div><div class="line">		<span class="keyword">pthread_t</span> tid;</div><div class="line">		pthread_create(&amp;tid, <span class="literal">NULL</span>, thread_routine, pool);</div><div class="line">		pool-&gt;counter++;</div><div class="line">	&#125;</div><div class="line">	condition_unlock(&amp;pool-&gt;ready);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 销毁线程池</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">threadpool_destroy</span><span class="params">(<span class="keyword">threadpool_t</span> *pool)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (pool-&gt;quit) &#123;</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line">	condition_lock(&amp;pool-&gt;ready);</div><div class="line">	pool-&gt;quit = <span class="number">1</span>;</div><div class="line">	<span class="keyword">if</span> (pool-&gt;counter &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">if</span> (pool-&gt;idle &gt; <span class="number">0</span>) &#123;</div><div class="line">			condition_broadcast(&amp;pool-&gt;ready);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">// 处于执行任务状态的线程，不会收到广播</span></div><div class="line">		<span class="comment">// 线程池需要等待执行任务状态中的线程全部退出</span></div><div class="line">		<span class="keyword">while</span> (pool-&gt;counter &gt; <span class="number">0</span>) &#123;</div><div class="line">			condition_wait(&amp;pool-&gt;ready);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	condition_unlock(&amp;pool-&gt;ready);</div><div class="line">	condition_destroy(&amp;pool-&gt;ready);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="进程池"><a href="#进程池" class="headerlink" title="进程池"></a>进程池</h1><h1 id="内存池"><a href="#内存池" class="headerlink" title="内存池"></a>内存池</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/22/linuxposixcond/" rel="next" title="POSIX 条件变量">
+                <i class="fa fa-chevron-left"></i> POSIX 条件变量
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/30/interview/" rel="prev" title="面试知识点总结">
+                面试知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">86</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池"><span class="nav-number">1.</span> <span class="nav-text">线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程池"><span class="nav-number">2.</span> <span class="nav-text">进程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存池"><span class="nav-number">3.</span> <span class="nav-text">内存池</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
