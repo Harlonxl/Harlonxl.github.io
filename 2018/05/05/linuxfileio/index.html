@@ -86,10 +86,15 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="Linux 文件的概念，以及对文件I/O操作的接口。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T13:58:19.019Z">
+<meta property="og:image" content="http://harlon.org/img/fileshare_1.png">
+<meta property="og:image" content="http://harlon.org/img/fileshare_2.png">
+<meta property="og:image" content="http://harlon.org/img/fileshare_3.png">
+<meta property="og:image" content="http://harlon.org/img/file_dup.png">
+<meta property="og:updated_time" content="2018-05-25T14:02:28.426Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 文件与I&#x2F;O">
 <meta name="twitter:description" content="Linux 文件的概念，以及对文件I/O操作的接口。">
+<meta name="twitter:image" content="http://harlon.org/img/fileshare_1.png">
 
 
 
@@ -185,7 +190,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -235,7 +240,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -299,7 +304,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-05T22:06:23+08:00">
                 2018-05-05
@@ -320,7 +325,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -376,12 +381,13 @@
 <li>通常也称为不带缓冲的I/O</li>
 </ul>
 <hr>
-<ul>
-<li>文件描述符</li>
+<h1 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h1><ul>
 <li>对于Linux而言，所有对设备或文件的操作都是通过文件描述符进行的。</li>
 <li>当打开或者创建一个文件的时候，内核向进程返回一个文件描述符（非负整数）。后续对文件的操作只需通过该文件描述符，内核记录有关这个打开文件的信息。</li>
 <li>一个进程启动时，默认打开了3个文件，标准输入、标准输出、标准错误，对应文件描述符是0（STDIN_FILENO）、1（STDOUT_FILENO）、2（STDERR_FILENO）,这些常量定义在unistd.h头文件中。</li>
 </ul>
+<hr>
+<h1 id="文件共享"><a href="#文件共享" class="headerlink" title="文件共享"></a>文件共享</h1><p><img src="/img/fileshare_1.png" alt=""><br><img src="/img/fileshare_2.png" alt=""><br><img src="/img/fileshare_3.png" alt=""></p>
 <hr>
 <h1 id="文件描述符与文件指针转换"><a href="#文件描述符与文件指针转换" class="headerlink" title="文件描述符与文件指针转换"></a>文件描述符与文件指针转换</h1><ul>
 <li>fileno：将文件指针转换为文件描述符</li>
@@ -509,7 +515,7 @@
 </table>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> fd = open(<span class="string">"test"</span>, O_RDONLY | O_CREAT, <span class="number">0666</span>);</div><div class="line">	<span class="keyword">if</span> (fd == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"open"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
-<h1 id="close函数"><a href="#close函数" class="headerlink" title="close函数"></a>close函数</h1><ul>
+<h2 id="close函数"><a href="#close函数" class="headerlink" title="close函数"></a>close函数</h2><ul>
 <li>功能：释放打开的文件描述符 </li>
 <li><p>原型：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</div></pre></td></tr></table></figure>
@@ -522,7 +528,7 @@
 <li>返回值：如果出现错误，返回-1；调用成功返回0</li>
 </ul>
 <hr>
-<h1 id="create函数"><a href="#create函数" class="headerlink" title="create函数"></a>create函数</h1><ul>
+<h2 id="create函数"><a href="#create函数" class="headerlink" title="create函数"></a>create函数</h2><ul>
 <li>功能：为了维持与早期的UNIX系统的向后兼容性，Linux也提供可选的创建文件的系统调用，它称为creat()。</li>
 <li><p>原型：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int creat(const char *path, mode_t mode)；</div></pre></td></tr></table></figure>
@@ -536,6 +542,226 @@
 <li>返回值：打开成功，返回文件描述符；打开失败，返回－1</li>
 </ul>
 <hr>
+<h2 id="read函数"><a href="#read函数" class="headerlink" title="read函数"></a>read函数</h2><ul>
+<li>从文件中读取字节 </li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ssize_t</span> read(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数:</p>
+<ul>
+<li>fd ：想要读的文件的文件描述符</li>
+<li>buf ： 指向内存块的指针，从文件中读取来的字节放到这个内存块中</li>
+<li>count ： 从该文件复制到buf中的字节个数</li>
+</ul>
+</li>
+<li>返回值 如果出现错误，返回-1，读文件结束，返回0，否则返回从该文件复制到规定的缓冲区中的字节数</li>
+</ul>
+<hr>
+<h2 id="write函数"><a href="#write函数" class="headerlink" title="write函数"></a>write函数</h2><ul>
+<li>将数据写到一个文件中 </li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ssize_t</span> write(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>fd：要写入的文件的文件描述符</li>
+<li>buf： 指向内存块的指针，从这个内存块中读取数据写入到文件中</li>
+<li>count： 要写入文件的字节个数</li>
+</ul>
+</li>
+<li>返回值：如果出现错误，返回-1，如果写入成功，则返回写入到文件中的字节个数</li>
+</ul>
+<p>复制文件实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (argc != <span class="number">3</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Usage : %s &lt;sourcefilename&gt; &lt;targetfilename&gt;\n"</span>, argv[<span class="number">0</span>]);</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> infd;</div><div class="line">	<span class="keyword">int</span> outfd;</div><div class="line">	<span class="keyword">if</span> ((infd = open(argv[<span class="number">1</span>], O_RDONLY)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"open"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> ((outfd = open(argv[<span class="number">2</span>], O_WRONLY | O_CREAT | O_TRUNC, <span class="number">0644</span>)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"open"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> buf[<span class="number">1024</span>];</div><div class="line">	<span class="keyword">int</span> nready;</div><div class="line">	<span class="keyword">while</span> ((nready = read(infd, buf, <span class="keyword">sizeof</span>(buf))) &gt; <span class="number">0</span>) &#123;</div><div class="line">		write(outfd, buf, nready);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	close(infd);</div><div class="line">	close(outfd);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="lseek函数"><a href="#lseek函数" class="headerlink" title="lseek函数"></a>lseek函数</h2><ul>
+<li>功能说明：通过指定相对于开始位置、当前位置或末尾位置的字节数来重定位文件指针</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">off_t</span> lseek (<span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset, <span class="keyword">int</span> base);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>fd：文件描述符</li>
+<li>offset：需要的偏移量</li>
+<li>base：起始的位置</li>
+</ul>
+</li>
+<li>返回值：返回新的文件偏移值</li>
+</ul>
+<p>base取值：</p>
+<table>
+<thead>
+<tr>
+<th>base</th>
+<th>文件位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SEEK_SET</td>
+<td>从文件开始处计算偏移</td>
+</tr>
+<tr>
+<td>SEEK_CUR</td>
+<td>从当前文件的偏移值计算偏移</td>
+</tr>
+<tr>
+<td>SEEK_END</td>
+<td>从文件的结束处计算偏移</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="opendir函数"><a href="#opendir函数" class="headerlink" title="opendir函数"></a>opendir函数</h2><ul>
+<li>功能：打开一个目录</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function">DIR *<span class="title">opendir</span><span class="params">(<span class="keyword">char</span> *pathname)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>pathname：文件的路径名</li>
+</ul>
+</li>
+<li>返回值：打开成功，返回一个目录指针，打开失败，则返回0</li>
+</ul>
+<hr>
+<h2 id="readdir函数"><a href="#readdir函数" class="headerlink" title="readdir函数"></a>readdir函数</h2><ul>
+<li>功能：访问指定目录中下一个连接的细节</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function">struct  dirent*  <span class="title">readdir</span><span class="params">(DIR  *dirptr)</span></span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> &#123;</span></div><div class="line">	<span class="keyword">long</span> d_ino;                 <span class="comment">/* inode number */</span></div><div class="line">	<span class="keyword">off_t</span> d_off;                <span class="comment">/* offset to this dirent */</span></div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> d_reclen;    <span class="comment">/* length of this d_name */</span></div><div class="line">	<span class="keyword">char</span> d_name [NAME_MAX+<span class="number">1</span>];   <span class="comment">/* file name (null-terminated) */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>dirptr：目录指针</li>
+</ul>
+</li>
+<li>返回值：返回一个指向dirent结构的指针，它包含指定目录中下一个连接的细节；<br>  没有更多连接时，返回0</li>
+</ul>
+<p>简单版的ls.c<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	DIR *dir = opendir(<span class="string">"."</span>);</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">de</span>;</span></div><div class="line">	<span class="keyword">while</span> ((de = readdir(dir)) != <span class="literal">NULL</span>) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">strcmp</span>(de-&gt;d_name, <span class="string">"."</span>) == <span class="number">0</span> || <span class="built_in">strcmp</span>(de-&gt;d_name, <span class="string">".."</span>) == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">continue</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, de-&gt;d_name);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	closedir(dir);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="closedir函数"><a href="#closedir函数" class="headerlink" title="closedir函数"></a>closedir函数</h2><ul>
+<li>功能：关闭一个已经打开的目录</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">closedir</span> <span class="params">(DIR  *dirptr)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>dirptr：目录指针</li>
+</ul>
+</li>
+<li>返回值：调用成功返回0，失败返回-1</li>
+</ul>
+<hr>
+<h2 id="mkdir函数"><a href="#mkdir函数" class="headerlink" title="mkdir函数"></a>mkdir函数</h2><ul>
+<li>功能：用来创建新目录</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span>  <span class="title">mkdir</span><span class="params">(<span class="keyword">char</span> *pathname,<span class="keyword">mode_t</span> mode)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>pathname：文件的路径名</li>
+<li>mode：权限位</li>
+</ul>
+</li>
+<li>返回值：调用成功返回0，失败返回-1</li>
+</ul>
+<hr>
+<h2 id="rmdir函数"><a href="#rmdir函数" class="headerlink" title="rmdir函数"></a>rmdir函数</h2><ul>
+<li>功能说明：删除一个空目录</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span>  <span class="title">rmdir</span><span class="params">(<span class="keyword">char</span> *pathname)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>pathname：文件的路径名</li>
+</ul>
+</li>
+<li>返回值：调用成功返回0，失败返回-1</li>
+</ul>
+<hr>
+<h2 id="chmod函数"><a href="#chmod函数" class="headerlink" title="chmod函数"></a>chmod函数</h2><ul>
+<li>功能说明：改变文件的权限位</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span>  <span class="title">chmod</span> <span class="params">(<span class="keyword">char</span> *pathname, <span class="keyword">mode_t</span> mode)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span>  <span class="title">fchmod</span> <span class="params">(<span class="keyword">int</span>  fd, <span class="keyword">mode_t</span> mode)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>pathname：文件路径名</li>
+<li>mode：权限位</li>
+</ul>
+</li>
+<li>返回值：调用成功返回0，失败返回-1</li>
+</ul>
+<hr>
+<h2 id="chown函数"><a href="#chown函数" class="headerlink" title="chown函数"></a>chown函数</h2><ul>
+<li>功能：用来改变文件所有者的识别号(owner id)或者它的用户组识别号(group ID)</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span>  <span class="title">chown</span> <span class="params">(<span class="keyword">char</span> *pathname, <span class="keyword">uid_t</span> owner,<span class="keyword">gid_t</span> group)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span>  <span class="title">fchown</span> <span class="params">(<span class="keyword">int</span>  fd, <span class="keyword">uid_t</span> owner,<span class="keyword">gid_t</span> group)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>pathname：文件的路径名</li>
+<li>owner：所有者识别号</li>
+<li>group：用户组识别号</li>
+</ul>
+</li>
+<li>返回值：调用成功返回0，失败返回-1</li>
+</ul>
+<hr>
+<h2 id="stat函数"><a href="#stat函数" class="headerlink" title="stat函数"></a>stat函数</h2><p>功能：读取文件元数据<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstat</span><span class="params">(<span class="keyword">int</span> fd, struct stat *buf)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">lstat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span> &#123;</span></div><div class="line">	<span class="keyword">dev_t</span>     st_dev;     <span class="comment">/* ID of device containing file */</span></div><div class="line">	<span class="keyword">ino_t</span>     st_ino;     <span class="comment">/* inode number */</span></div><div class="line">	<span class="keyword">mode_t</span>    st_mode;    <span class="comment">/* protection */</span></div><div class="line">	<span class="keyword">nlink_t</span>   st_nlink;   <span class="comment">/* number of hard links */</span></div><div class="line">	<span class="keyword">uid_t</span>     st_uid;     <span class="comment">/* user ID of owner */</span></div><div class="line">	<span class="keyword">gid_t</span>     st_gid;     <span class="comment">/* group ID of owner */</span></div><div class="line">	<span class="keyword">dev_t</span>     st_rdev;    <span class="comment">/* device ID (if special file) */</span></div><div class="line">	<span class="keyword">off_t</span>     st_size;    <span class="comment">/* total size, in bytes */</span></div><div class="line">	<span class="keyword">blksize_t</span> st_blksize; <span class="comment">/* blocksize for file system I/O */</span></div><div class="line">	<span class="keyword">blkcnt_t</span>  st_blocks;  <span class="comment">/* number of 512B blocks allocated */</span></div><div class="line">	<span class="keyword">time_t</span>    st_atime;   <span class="comment">/* time of last access */</span></div><div class="line">	<span class="keyword">time_t</span>    st_mtime;   <span class="comment">/* time of last modification */</span></div><div class="line">	<span class="keyword">time_t</span>    st_ctime;   <span class="comment">/* time of last status change */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>查看文件属性：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAJOR(a) (int)((unsigned short)a &gt;&gt; 8)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MINOR(a) (int)((unsigned short)a &amp;&amp; 0xFF)</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">filetype</span><span class="params">(struct stat *buf)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">fileperm</span><span class="params">(struct stat *buf, <span class="keyword">char</span> *perm)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (argc != <span class="number">2</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Usage: %s file\n"</span>, argv[<span class="number">0</span>]);</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Filename: %s\n"</span>, argv[<span class="number">1</span>]);</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">sbuf</span>;</span></div><div class="line"></div><div class="line">	<span class="keyword">if</span> (stat(argv[<span class="number">1</span>], &amp;sbuf) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"stat"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"File number:major %d,minor %d inode %d\n"</span>, MAJOR(sbuf.st_dev), MINOR(sbuf.st_dev), (<span class="keyword">int</span>)sbuf.st_ino);</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (filetype(&amp;sbuf)) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Device number:major %d,minor %d\n"</span>, MAJOR(sbuf.st_rdev), MINOR(sbuf.st_rdev));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> perm[<span class="number">11</span>] = &#123;<span class="number">0</span>&#125;;</div><div class="line">	fileperm(&amp;sbuf, perm);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"File permission bits=%o %s\n"</span>, sbuf.st_mode &amp; <span class="number">07777</span>, perm);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">filetype</span><span class="params">(struct stat *buf)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> flag = <span class="number">0</span>;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Filetype:"</span>);</div><div class="line">	<span class="keyword">mode_t</span> mode;</div><div class="line">	mode = buf-&gt;st_mode;</div><div class="line">	<span class="keyword">switch</span> (mode &amp; S_IFMT) &#123;</div><div class="line">	<span class="keyword">case</span> S_IFSOCK:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"socket\n"</span>);</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> S_IFLNK:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"symbolic link\n"</span>);</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> S_IFREG:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"regular file\n"</span>);</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> S_IFBLK:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"block device\n"</span>);</div><div class="line">		flag = <span class="number">1</span>;</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> S_IFDIR:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"directory\n"</span>);</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> S_IFCHR:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"character device\n"</span>);</div><div class="line">		flag = <span class="number">1</span>;</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> S_IFIFO:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"FIFO\n"</span>);</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	<span class="keyword">default</span>:</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"unknown file type\n"</span>);</div><div class="line">		<span class="keyword">break</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> flag;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">fileperm</span><span class="params">(struct stat *buf, <span class="keyword">char</span> *perm)</span> </span>&#123;</div><div class="line">	<span class="built_in">strcpy</span>(perm, <span class="string">"----------"</span>);</div><div class="line">	perm[<span class="number">0</span>] = <span class="string">'?'</span>;</div><div class="line">	<span class="keyword">mode_t</span> mode;</div><div class="line">        mode = buf-&gt;st_mode;</div><div class="line">        <span class="keyword">switch</span> (mode &amp; S_IFMT)</div><div class="line">        &#123;</div><div class="line">        <span class="keyword">case</span> S_IFSOCK:</div><div class="line">		perm[<span class="number">0</span>] = <span class="string">'s'</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> S_IFLNK:</div><div class="line">		perm[<span class="number">0</span>] = <span class="string">'l'</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> S_IFREG:</div><div class="line">		perm[<span class="number">0</span>] = <span class="string">'-'</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> S_IFBLK:</div><div class="line">		perm[<span class="number">0</span>] = <span class="string">'b'</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> S_IFDIR:</div><div class="line">		perm[<span class="number">0</span>] = <span class="string">'d'</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> S_IFCHR:</div><div class="line">		perm[<span class="number">0</span>] = <span class="string">'c'</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">	<span class="keyword">case</span> S_IFIFO:</div><div class="line">		perm[<span class="number">0</span>] = <span class="string">'p'</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IRUSR)</div><div class="line">		perm[<span class="number">1</span>] = <span class="string">'r'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IWUSR)</div><div class="line">		perm[<span class="number">2</span>] = <span class="string">'w'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IXUSR)</div><div class="line">		perm[<span class="number">3</span>] = <span class="string">'x'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IRGRP)</div><div class="line">		perm[<span class="number">4</span>] = <span class="string">'r'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IWGRP)</div><div class="line">		perm[<span class="number">5</span>] = <span class="string">'w'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IXGRP)</div><div class="line">		perm[<span class="number">6</span>] = <span class="string">'x'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IROTH)</div><div class="line">		perm[<span class="number">7</span>] = <span class="string">'r'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IWOTH)</div><div class="line">		perm[<span class="number">8</span>] = <span class="string">'w'</span>;</div><div class="line">	<span class="keyword">if</span> (mode &amp; S_IXOTH)</div><div class="line">		perm[<span class="number">9</span>] = <span class="string">'x'</span>;</div><div class="line">	perm[<span class="number">10</span>] = <span class="string">'\0'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="dup函数"><a href="#dup函数" class="headerlink" title="dup函数"></a>dup函数</h2><ul>
+<li>功能：复制文件描述符</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> oldfd)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup3</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">int</span> newfd, <span class="keyword">int</span> flags)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>oldfd：被复制的文件描述符</li>
+<li>newfd：指定复制的文件描述符</li>
+<li>flags：指定O_CLOEXEC标志</li>
+</ul>
+</li>
+<li>返回值：成功返回复制的描述符，失败返回-1<br><img src="/img/file_dup.png" alt=""><center>执行dup前后</center>
+
+</li>
+</ul>
+<p>dup实现IO重定向：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> fd;</div><div class="line">	fd = open(<span class="string">"test.txt"</span>, O_WRONLY);</div><div class="line">	<span class="keyword">if</span> (fd == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"open"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	close(<span class="number">1</span>);</div><div class="line">	dup(fd);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"hello\n"</span>);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="fcntl函数"><a href="#fcntl函数" class="headerlink" title="fcntl函数"></a>fcntl函数</h2><ul>
+<li><p>功能：操纵文件描述符，改变已打开的文件的属性</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fcntl</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> cmd, ... <span class="comment">/* arg */</span> )</span></span>;</div><div class="line"><span class="comment">/*文件锁结构体*/</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">flock</span> &#123;</span></div><div class="line">	...</div><div class="line">	<span class="keyword">short</span> l_type;       <span class="comment">/* Type of lock: F_RDLCK,</span></div><div class="line"><span class="comment">			         F_WRLCK, F_UNLCK */</span></div><div class="line">	<span class="keyword">short</span> l_whence; <span class="comment">/* How to interpret l_start:</span></div><div class="line"><span class="comment">                                   SEEK_SET, SEEK_CUR, SEEK_END */</span></div><div class="line">	<span class="keyword">off_t</span> l_start;       <span class="comment">/* Starting offset for lock */</span></div><div class="line">	<span class="keyword">off_t</span> l_len;         <span class="comment">/* Number of bytes to lock */</span></div><div class="line">	<span class="keyword">pid_t</span> l_pid;        <span class="comment">/* PID of process blocking our lock</span></div><div class="line"><span class="comment">                                   (F_GETLK only) */</span></div><div class="line">     ...</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>fd：文件描述符</li>
+<li>cmd：指定的命令</li>
+</ul>
+</li>
+<li>返回值：失败返回-1</li>
+</ul>
+<p>cmd参数：</p>
+<ul>
+<li>复制文件描述符<ul>
+<li>F_DUPFD (long)</li>
+</ul>
+</li>
+<li>文件描述符标志<ul>
+<li>F_GETFD (void)</li>
+<li>F_SETFD (long)</li>
+</ul>
+</li>
+<li>文件状态标志<ul>
+<li>F_GETFL (void)</li>
+<li>F_SETFL (long)</li>
+</ul>
+</li>
+<li>文件锁<ul>
+<li>F_GETLK</li>
+<li>F_SETLK，F_SETLKW</li>
+</ul>
+</li>
+</ul>
+<p>更改状态信息：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">set_flag</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">clr_flag</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	set_flag(<span class="number">0</span>, O_NONBLOCK);</div><div class="line">	<span class="keyword">int</span> ret;</div><div class="line">	<span class="keyword">char</span> buf[<span class="number">1024</span>];</div><div class="line">	ret = read(<span class="number">0</span>, buf, <span class="number">1024</span>);</div><div class="line">	<span class="keyword">if</span> (ret == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"read"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"buf = %s\n"</span>, buf);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">set_flag</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> flags)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> val;</div><div class="line">	val = fcntl(fd, F_GETFL, <span class="number">0</span>);</div><div class="line">	<span class="keyword">if</span> (val == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fcntl"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> ret;</div><div class="line">	ret = fcntl(fd, F_SETFL, val | flags);</div><div class="line">	<span class="keyword">if</span> (ret == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fcntl"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">clr_flag</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> flags)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> val;</div><div class="line">	val = fcntl(fd, F_GETFL, <span class="number">0</span>);</div><div class="line">	<span class="keyword">if</span> (val == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fcntl"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> ret;</div><div class="line">	ret = fcntl(fd, F_SETFL, val &amp; ~flags);</div><div class="line">	<span class="keyword">if</span> (ret == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fcntl"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>文件锁：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> fd;</div><div class="line">	<span class="keyword">if</span> ((fd = open(<span class="string">"test2.txt"</span>, O_CREAT | O_RDWR | O_TRUNC, <span class="number">0666</span>)) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"open"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">flock</span> <span class="title">lock</span>;</span></div><div class="line">	<span class="built_in">memset</span>(&amp;lock, <span class="number">0</span>, <span class="keyword">sizeof</span>(lock));</div><div class="line">	lock.l_type = F_WRLCK;</div><div class="line">	lock.l_whence = SEEK_SET;</div><div class="line">	lock.l_start = <span class="number">0</span>;</div><div class="line">	lock.l_len = <span class="number">0</span>;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> ((fcntl(fd, F_SETLK, &amp;lock)) == <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"lock success\n"</span>);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"press any key to unlock\n"</span>);</div><div class="line">		getchar();</div><div class="line">		lock.l_type = F_UNLCK;</div><div class="line">		<span class="keyword">if</span> (fcntl(fd, F_SETLK, &amp;lock) == <span class="number">0</span>) &#123;</div><div class="line">			<span class="built_in">printf</span>(<span class="string">"unlock success\n"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			ERR_EXIT(<span class="string">"unlock fail"</span>);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		ERR_EXIT(<span class="string">"lock fail"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -560,8 +786,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/05/linuxipc/" rel="next" title="进程间通信">
-                <i class="fa fa-chevron-left"></i> 进程间通信
+              <a href="/2018/05/04/designpatterninterpreter/" rel="next" title="解析器">
+                <i class="fa fa-chevron-left"></i> 解析器
               </a>
             
           </div>
@@ -570,8 +796,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/08/linuxmessagequeue/" rel="prev" title="System V 消息队列">
-                System V 消息队列 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/05/linuxipc/" rel="prev" title="进程间通信">
+                进程间通信 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -626,10 +852,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -649,8 +875,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">86</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -661,7 +887,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -672,7 +898,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -706,7 +932,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是I-O？"><span class="nav-number">1.</span> <span class="nav-text">什么是I/O？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件描述符与文件指针转换"><span class="nav-number">2.</span> <span class="nav-text">文件描述符与文件指针转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统调用"><span class="nav-number">3.</span> <span class="nav-text">文件系统调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#open函数"><span class="nav-number">3.1.</span> <span class="nav-text">open函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#close函数"><span class="nav-number">4.</span> <span class="nav-text">close函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#create函数"><span class="nav-number">5.</span> <span class="nav-text">create函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是I-O？"><span class="nav-number">1.</span> <span class="nav-text">什么是I/O？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件描述符"><span class="nav-number">2.</span> <span class="nav-text">文件描述符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件共享"><span class="nav-number">3.</span> <span class="nav-text">文件共享</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件描述符与文件指针转换"><span class="nav-number">4.</span> <span class="nav-text">文件描述符与文件指针转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统调用"><span class="nav-number">5.</span> <span class="nav-text">文件系统调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#open函数"><span class="nav-number">5.1.</span> <span class="nav-text">open函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#close函数"><span class="nav-number">5.2.</span> <span class="nav-text">close函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create函数"><span class="nav-number">5.3.</span> <span class="nav-text">create函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#read函数"><span class="nav-number">5.4.</span> <span class="nav-text">read函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#write函数"><span class="nav-number">5.5.</span> <span class="nav-text">write函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lseek函数"><span class="nav-number">5.6.</span> <span class="nav-text">lseek函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opendir函数"><span class="nav-number">5.7.</span> <span class="nav-text">opendir函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readdir函数"><span class="nav-number">5.8.</span> <span class="nav-text">readdir函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#closedir函数"><span class="nav-number">5.9.</span> <span class="nav-text">closedir函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mkdir函数"><span class="nav-number">5.10.</span> <span class="nav-text">mkdir函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rmdir函数"><span class="nav-number">5.11.</span> <span class="nav-text">rmdir函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chmod函数"><span class="nav-number">5.12.</span> <span class="nav-text">chmod函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chown函数"><span class="nav-number">5.13.</span> <span class="nav-text">chown函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stat函数"><span class="nav-number">5.14.</span> <span class="nav-text">stat函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dup函数"><span class="nav-number">5.15.</span> <span class="nav-text">dup函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fcntl函数"><span class="nav-number">5.16.</span> <span class="nav-text">fcntl函数</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -736,7 +962,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 

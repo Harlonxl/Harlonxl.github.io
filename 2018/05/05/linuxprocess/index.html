@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux 进程的概念和数据结构，以及进程的接口函数的使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 进程">
+<meta property="og:url" content="http://harlon.org/2018/05/05/linuxprocess/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Linux 进程的概念和数据结构，以及进程的接口函数的使用。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/linux_process_state.png">
+<meta property="og:image" content="http://harlon.org/img/linux_process_share_file.png">
+<meta property="og:image" content="http://harlon.org/img/linux_process_exit.png">
+<meta property="og:updated_time" content="2018-05-25T16:24:06.257Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 进程">
+<meta name="twitter:description" content="Linux 进程的概念和数据结构，以及进程的接口函数的使用。">
+<meta name="twitter:image" content="http://harlon.org/img/linux_process_state.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/05/05/linuxprocess/"/>
+
+
+
+
+
+  <title>Linux 进程 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/05/linuxprocess/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux 进程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-05T22:06:23+08:00">
+                2018-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Linux 进程的概念和数据结构，以及进程的接口函数的使用。<br><a id="more"></a></p>
+<h1 id="什么是程序？"><a href="#什么是程序？" class="headerlink" title="什么是程序？"></a>什么是程序？</h1><ul>
+<li>程序是完成特定任务的一系列指令集合。</li>
+</ul>
+<hr>
+<h1 id="什么是进程？"><a href="#什么是进程？" class="headerlink" title="什么是进程？"></a>什么是进程？</h1><ul>
+<li>从用户的角度来看进程是程序的一次执行过程。</li>
+<li>从操作系统的核心来看，进程是操作系统分配的内存、CPU时间片等资源的基本单位。</li>
+<li>进程是资源分配的最小单位。</li>
+<li>每一个进程都有自己独立的地址空间与执行状态。</li>
+<li>像UNIX这样的多任务操作系统能够让许多程序同时运行，每一个运行着的程序就构成了一个进程。</li>
+</ul>
+<hr>
+<h1 id="进程数据结构"><a href="#进程数据结构" class="headerlink" title="进程数据结构"></a>进程数据结构</h1><ul>
+<li>我们进程的静态描述：由三部分组成：PCB、有关程序段和该程序段对其进行操作的数据结构集。</li>
+<li>进程控制块：用于描述进程情况及控制进程运行所需的全部信息。</li>
+<li>代码段：是进程中能被进程调度程序在CPU上执行的程序代码段。</li>
+<li>数据段：一个进程的数据段，可以是进程对应的程序加工处理的原始数据，也可以是程序执行后产生的中间或最终数据。</li>
+</ul>
+<hr>
+<h1 id="进程与程序的区别"><a href="#进程与程序的区别" class="headerlink" title="进程与程序的区别"></a>进程与程序的区别</h1><ul>
+<li>进程是动态的，程序是静态的。</li>
+<li>进程的生命周期是相对短暂的，而程序是永久的。</li>
+<li>进程数据结构PCB。</li>
+<li>一个进程只能对应一个程序，一个程序可以对应多个进程。</li>
+</ul>
+<hr>
+<h1 id="Linux-进程状态"><a href="#Linux-进程状态" class="headerlink" title="Linux 进程状态"></a>Linux 进程状态</h1><ul>
+<li>运行状态（TASK_RUNNING）</li>
+<li>可中断睡眠状态（TASK_INTERRUPTIBLE）</li>
+<li>不可中断睡眠状态（TASK_UNINTERRUPTIBLE）</li>
+<li>暂停状态（TASK_STOPPED）</li>
+<li>僵死状态（TASK_ZOMBIE）<br><img src="/img/linux_process_state.png" alt=""></li>
+</ul>
+<hr>
+<h1 id="进程控制块"><a href="#进程控制块" class="headerlink" title="进程控制块"></a>进程控制块</h1><ul>
+<li>进程描述信息<ul>
+<li>进程标识符用于唯一的标识一个进程。</li>
+</ul>
+</li>
+<li>进程控制信息<ul>
+<li>进程当前状态</li>
+<li>进程优先级</li>
+<li>程序开始地址</li>
+<li>各种计时信息</li>
+<li>通信信息</li>
+</ul>
+</li>
+<li>资源信息<ul>
+<li>占用内存大小及管理用数据结构指针</li>
+<li>交换区相关信息</li>
+<li>I/O设备号、缓冲、设备相关的数结构</li>
+<li>文件系统相关指针</li>
+</ul>
+</li>
+<li>现场保护信息<ul>
+<li>寄存器</li>
+<li>PC</li>
+<li>程序状态字PSW</li>
+<li>栈指针</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="进程标识符"><a href="#进程标识符" class="headerlink" title="进程标识符"></a>进程标识符</h1><ul>
+<li>每个进程都会分配到一个独一无二的数字编号，我们称之为“进程标识”(process identifier),或者就直接叫它PID。</li>
+<li>是一个正整数，取值范围从2到32768。</li>
+<li>当一个进程被启动时，它会顺序挑选下一个未使用的编号数字做为自己的PID。</li>
+<li>数字1一般为特殊进程init保留的。</li>
+</ul>
+<hr>
+<h1 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h1><ul>
+<li>给新创建的进程分配一个内部标识，在内核中建立进程结构。</li>
+<li>复制父进程的环境。</li>
+<li>为进程分配资源， 包括进程映像所需要的所有元素（程序、数据、用户栈等），</li>
+<li>复制父进程地址空间的内容到该进程地址空间中。</li>
+<li>置该进程的状态为就绪，插入就绪队列。</li>
+</ul>
+<hr>
+<h1 id="进程撤销"><a href="#进程撤销" class="headerlink" title="进程撤销"></a>进程撤销</h1><p>进程终止时操作系统做以下工作：</p>
+<ul>
+<li>关闭软中断:因为进程即将终止而不再处理任何软中断信号；</li>
+<li>回收资源：释放进程分配的所有资源，如关闭所有已打开文件，释放进程相应的数据结构等；</li>
+<li>写记帐信息：将进程在运行过程中所产生的记帐数据（其中包括进程运行时的各种统计信息）记录到一个全局记帐文件中；</li>
+<li>置该进程为僵死状态：向父进程发送子进程死的软中断信号，将终止信息status送到指定的存储单元中；</li>
+<li>转进程调度：因为此时CPU已经被释放，需要由进程调度进行CPU再分配。</li>
+</ul>
+<hr>
+<h1 id="复制进程镜像"><a href="#复制进程镜像" class="headerlink" title="复制进程镜像"></a>复制进程镜像</h1><ul>
+<li>使用fork函数得到的子进程从父进程的继承了整个进程的地址空间，包括：进程上下文、进程堆栈、内存信息、打开的文件描述符、信号控制设置、进程优先级、进程组号、当前工作目录、根目录、资源限制、控制终端等。</li>
+<li>子进程与父进程的区别在于：<ul>
+<li>1、父进程设置的锁，子进程不继承</li>
+<li>2、各自的进程ID和父进程ID不同</li>
+<li>3、子进程的未决告警被清除；</li>
+<li>4、子进程的未决信号集设置为空集。<h2 id="SIGCHLD"><a href="#SIGCHLD" class="headerlink" title="SIGCHLD"></a>SIGCHLD</h2></li>
+</ul>
+</li>
+<li>当子进程退出的时候，内核会向父进程发送SIGCHLD信号，子进程的退出是个异步事件（子进程可以在父进程运行的任何时刻终止）。</li>
+<li>子进程退出时，内核将子进程置为僵尸状态，这个进程称为僵尸进程，它只保留最小的一些内核数据结构，以便父进程查询子进程的退出状态。</li>
+<li>父进程查询子进程的退出状态可以用wait/waitpid函数。</li>
+</ul>
+<hr>
+<h1 id="进程系统函数"><a href="#进程系统函数" class="headerlink" title="进程系统函数"></a>进程系统函数</h1><h2 id="fork函数"><a href="#fork函数" class="headerlink" title="fork函数"></a>fork函数</h2><ul>
+<li>功能:创建一个子进程</li>
+<li><p>原型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">pid_t</span>  fork();</div></pre></td></tr></table></figure>
+</li>
+<li><p>返回值：如果成功创建一个子进程，对于父进程来说返回子进程ID，对于子进程来说返回值为0，如果为-1表示创建失败</p>
+</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>fork系统调用之后，父子进程将交替执行。</li>
+<li>如果父进程先退出，子进程还没退出那么子进程的父进程将变为init进程。（注：任何一个进程都必须有父进程）</li>
+<li>如果子进程先退出，父进程还没退出，那么子进程必须等到父进程捕获到了子进程的退出状态才真正结束，否则这个时候子进程就成为僵进程。</li>
+</ul>
+<p>写时复制copy on write：</p>
+<ul>
+<li>如果多个进程要读取它们自己的那部分资源的副本，那么复制是不必要的。</li>
+<li>每个进程只要保存一个指向这个资源的指针就可以了。</li>
+<li>如果一个进程要修改自己的那份资源的“副本”，那么就会复制那份资源。这就是写时复制的含义。</li>
+</ul>
+<p>fork之后父进程与子进程共享文件<br><img src="/img/linux_process_share_file.png" alt=""></p>
+<p>父子进程同时写一个文件：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">pid_t</span> pid;</div><div class="line">	<span class="keyword">int</span> fd;</div><div class="line">	<span class="keyword">if</span> ((fd = open(<span class="string">"test.txt"</span>, O_WRONLY)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"open"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> ((pid = fork()) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fork"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (pid &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"parent process %d\n"</span>, getpid());</div><div class="line">		write(fd, <span class="string">"parent"</span>, <span class="number">6</span>);</div><div class="line">		sleep(<span class="number">3</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"child process %d\n"</span>, getpid());</div><div class="line">		write(fd, <span class="string">"child"</span>, <span class="number">5</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>fork与vfork：</p>
+<ul>
+<li>在fork还没实现copy on write之前。Unix设计者很关心fork之后立刻执行exec所造成的地址空间浪费，所以引入了vfork系统调用。</li>
+<li>vfork有个限制，子进程必须立刻执行_exit或者exec函数。</li>
+<li>即使fork实现了copy on write，效率也没有vfork高，但是我们不推荐使用vfork，因为几乎每一个vfork的实现，都或多或少存在一定的问题。</li>
+</ul>
+<hr>
+<h2 id="exit函数"><a href="#exit函数" class="headerlink" title="exit函数"></a>exit函数</h2><p>进程终止的五种方法：</p>
+<ul>
+<li>正常退出<ul>
+<li>从main函数返回</li>
+<li>调用exit</li>
+<li>调用_exit</li>
+</ul>
+</li>
+<li>异常退出<ul>
+<li>调用abort</li>
+<li>由信号终止</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/linux_process_exit.png" alt=""></p>
+<hr>
+<h2 id="atexit函数"><a href="#atexit函数" class="headerlink" title="atexit函数"></a>atexit函数</h2><ul>
+<li>功能：注册终止处理程序，最多可注册32个终止处理程序</li>
+<li><p>原型：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int atexit(void (*function)(void));</div></pre></td></tr></table></figure>
+</li>
+<li><p>返回值：成功返回0，失败返回非零</p>
+</li>
+<li>注意：终止处理函数的调用与注册次序相反</li>
+</ul>
+<hr>
+<h2 id="exec函数组"><a href="#exec函数组" class="headerlink" title="exec函数组"></a>exec函数组</h2><ul>
+<li>功能：把当前进程替换为一个新进程</li>
+<li><p>原型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execl</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ...)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execlp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ...)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">const</span> <span class="keyword">char</span> *arg,</span></span></div><div class="line"><span class="function"><span class="params">          ..., <span class="keyword">char</span> * <span class="keyword">const</span> envp[])</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数</p>
+<ul>
+<li>path：参数表示你要启动程序的名称包括路径名</li>
+<li>arg：参数表示启动程序所带的参数</li>
+</ul>
+</li>
+<li>返回值：失败返回-1，成功不返回</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>在进程的创建上Unix采用了一个独特的方法，它将进程创建与加载一个新进程映象分离。这样的好处是有更多的余地对两种操作进行管理。</li>
+<li>当我们创建了一个进程之后，通常将子进程替换成新的进程映象，这可以用exec系列的函数来进行。当然，exec系列的函数也可以将当前进程替换掉。</li>
+<li>execl，execlp，execle（都带“l”）的参数个数是可变的，参数以一个空指针结束。</li>
+<li>execv和execvp的第二个参数是一个字符串数组，新程序在启动时会把在argv数组中给定的参数传递到main</li>
+<li>这些函数通常都是用execve实现的，这是一种约定俗成的做法，并不是非这样不可。</li>
+<li>名字最后一个字母是“p”的函数会搜索PATH环境变量去查找新程序的可执行文件。如果可执行文件不在PATH定义的路径上，就必须把包括子目录在内的绝对文件名做为一个参数传递给这些函数。</li>
+</ul>
+<p>实例：<br>hello.c<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">extern</span> <span class="keyword">char</span>** environ;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"hello pid = %d\n"</span>, getpid());</div><div class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>; environ[i]!=<span class="literal">NULL</span>; ++i) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, environ[i]);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">pid_t</span> pid;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> ((pid = fork()) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fork"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (pid &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"parent process %d\n"</span>, getpid());</div><div class="line">		sleep(<span class="number">3</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">char</span> *<span class="keyword">const</span> args[] = &#123;<span class="string">"ps"</span>, <span class="literal">NULL</span>&#125;;</div><div class="line">		<span class="keyword">char</span> *<span class="keyword">const</span> envp[] = &#123;<span class="string">"AA=1"</span>, <span class="string">"BB=2"</span>, <span class="literal">NULL</span>&#125;;</div><div class="line">		execve(<span class="string">"./hello"</span>, args, envp);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"child process %d\n"</span>, getpid());</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="wait函数"><a href="#wait函数" class="headerlink" title="wait函数"></a>wait函数</h2><ul>
+<li>功能：等待子进程退出</li>
+<li><p>原型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">pid_t</span> wait(<span class="keyword">int</span> *status)</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数</p>
+<ul>
+<li>status：该参数可以获得你等待子进程的信息</li>
+</ul>
+</li>
+<li>返回值：成功等待子进程函数返回等待子进程的ID</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>wait系统调用会使父进程暂停执行，直到它的一个子进程结束为止。</li>
+<li>返回的是子进程的PID，它通常是结束的子进程。</li>
+<li>状态信息允许父进程判定子进程的退出状态，即从子进程的main函数返回的值或子进程中exit语句的退出码。</li>
+<li>如果status不是一个空指针，状态信息将被写入它指向的位置。</li>
+</ul>
+<p>退出状态：</p>
+<table>
+<thead>
+<tr>
+<th>宏定义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WIFEXITED(status)</td>
+<td>如果子进程正常结束，返回一个非零值</td>
+</tr>
+<tr>
+<td>WEXITSTATUS(status)</td>
+<td>如果WIFEXITED非零，返回子进程退出码</td>
+</tr>
+<tr>
+<td>WIFSIGNALED(status)</td>
+<td>子进程因为捕获信号而终止，返回非零值</td>
+</tr>
+<tr>
+<td>WTERMSIG(status)</td>
+<td>如果WIFSIGNALED非零，返回信号代码</td>
+</tr>
+<tr>
+<td>WIFSTOPPED(status)</td>
+<td>如果子进程被暂停，返回一个非零值</td>
+</tr>
+<tr>
+<td>WSTOPSIG(status)</td>
+<td>如果WIFSTOPPED非零，返回一个信号代码</td>
+</tr>
+</tbody>
+</table>
+<p>实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">pid_t</span> pid;</div><div class="line">	<span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fork"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"this is child\n"</span>);</div><div class="line">		<span class="built_in">abort</span>();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"this is parent\n"</span>);</div><div class="line">	<span class="keyword">int</span> status;</div><div class="line">	<span class="keyword">int</span> ret;</div><div class="line">	ret = wait(&amp;status);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"ret = %d, child pid = %d\n"</span>, ret, pid);</div><div class="line">	<span class="keyword">if</span> (WIFEXITED(status)) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"child exited normal exit status=%d\n"</span>, WEXITSTATUS(status));</div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (WIFSIGNALED(status)) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"child exited abnormal signal number=%d\n"</span>, WTERMSIG(status));</div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (WIFSTOPPED(status))&#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"child exited abnormal signal number=%d\n"</span>, WTERMSIG(status));</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="waitpid函数"><a href="#waitpid函数" class="headerlink" title="waitpid函数"></a>waitpid函数</h2><ul>
+<li>功能：用来等待某个特定进程的结束</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">pid_t</span> waitpid(<span class="keyword">pid_t</span> pid, <span class="keyword">int</span> *status,<span class="keyword">int</span> options)</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>status：如果不是空，会把状态信息写到它指向的位置</li>
+<li>options：允许改变waitpid的行为，最有用的一个选项是WNOHANG，它的作用是防止waitpid把调用者的执行挂起</li>
+</ul>
+</li>
+<li>返回值：如果成功返回等待子进程的ID，失败返回-1</li>
+</ul>
+<p>pid参数：<br>对于waitpid的pid参数的解释与其值有关：</p>
+<ul>
+<li>pid == -1 等待任一子进程。于是在这一功能方面waitpid与wait等效。</li>
+<li>pid &gt; 0 等待其进程ID与pid相等的子进程。</li>
+<li>pid == 0 等待其组ID等于调用进程的组ID的任一子进程。换句话说是与调用者进程同在一个组的进程。</li>
+<li>pid &lt; -1 等待其组ID等于pid的绝对值的任一子进程。</li>
+</ul>
+<hr>
+<h2 id="system函数"><a href="#system函数" class="headerlink" title="system函数"></a>system函数</h2><ul>
+<li>功能：system()函数调用“/bin/sh -c command”执行特定的命令，阻塞当前进程直到command命令执行完毕</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">system</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *command)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>返回值：如果无法启动shell运行命令，system将返回127；出现不能执行system调用的其他错误时返回-1。如果system能够顺利执行，返回那个命令的退出码。<br>system函数执行时，会调用fork、execve、waitpid等函数。</p>
+</li>
+</ul>
+<p>自己实现system函数：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	my_system(<span class="string">"ls -l | wc -w"</span>);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_system</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *command)</span> </span>&#123;</div><div class="line">	<span class="keyword">pid_t</span> pid;</div><div class="line">	<span class="keyword">int</span> status;</div><div class="line">	<span class="keyword">if</span> (command == <span class="literal">NULL</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</div><div class="line">		status = <span class="number">-1</span>;</div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		execl(<span class="string">"/bin/sh"</span>, <span class="string">"sh"</span>, <span class="string">"-c"</span>, command);</div><div class="line">		<span class="built_in">exit</span>(<span class="number">127</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">while</span> (waitpid(pid, &amp;status, <span class="number">0</span>) &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR) &#123;</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			status = <span class="number">-1</span>;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> status;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h1><h2 id="什么是守护进程？"><a href="#什么是守护进程？" class="headerlink" title="什么是守护进程？"></a>什么是守护进程？</h2><ul>
+<li>守护进程是在后台运行不受控端控制的进程，通常情况下守护进程在系统启动时自动运行。</li>
+<li>守护进程的名称通常以d结尾，比如sshd、xinetd、crond等。</li>
+</ul>
+<hr>
+<h2 id="创建守护进程的步骤"><a href="#创建守护进程的步骤" class="headerlink" title="创建守护进程的步骤"></a>创建守护进程的步骤</h2><ul>
+<li>调用fork()，创建新进程，它会是将来的守护进程</li>
+<li>在父进程中调用exit，保证子进程不是进程组组长</li>
+<li>调用setsid创建新的会话期</li>
+<li>将当前目录改为根目录</li>
+<li>将标准输入、标准输出、标准错误重定向到/dev/null</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">        <span class="keyword">do</span> \</div><div class="line">        &#123; \</div><div class="line">                perror(m); \</div><div class="line">                <span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">        &#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="comment">//set_demon(0, 0);</span></div><div class="line">	daemon(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line">	<span class="keyword">for</span>(;;);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">set_demon</span><span class="params">(<span class="keyword">int</span> nochdir,<span class="keyword">int</span> noclose)</span> </span>&#123;</div><div class="line">	<span class="keyword">pid_t</span> pid;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"fork"</span>);</div><div class="line">	&#125; </div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	setsid();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (nochdir == <span class="number">0</span>) &#123;</div><div class="line">		chdir(<span class="string">"/"</span>);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">if</span> (noclose == <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">int</span> i;</div><div class="line">		<span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;<span class="number">3</span>; ++i) &#123;</div><div class="line">			close(i);</div><div class="line">		&#125;</div><div class="line">		open(<span class="string">"/dev/null"</span>, O_RDWR);</div><div class="line">		dup(<span class="number">0</span>);</div><div class="line">		dup(<span class="number">0</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="daemon函数"><a href="#daemon函数" class="headerlink" title="daemon函数"></a>daemon函数</h2><ul>
+<li>功能：创建一个守护进程</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">daemon</span><span class="params">(<span class="keyword">int</span> nochdir, <span class="keyword">int</span> noclose)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>nochdir：=0将当前目录更改至“/”</li>
+<li>noclose：=0将标准输入、标准输出、标准错误重定向至“/dev/null”</li>
+</ul>
+</li>
+<li>返回值：成功返回0，失败返回-1</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/05/linuxipc/" rel="next" title="进程间通信">
+                <i class="fa fa-chevron-left"></i> 进程间通信
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/08/linuxmessagequeue/" rel="prev" title="System V 消息队列">
+                System V 消息队列 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是程序？"><span class="nav-number">1.</span> <span class="nav-text">什么是程序？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是进程？"><span class="nav-number">2.</span> <span class="nav-text">什么是进程？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程数据结构"><span class="nav-number">3.</span> <span class="nav-text">进程数据结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程与程序的区别"><span class="nav-number">4.</span> <span class="nav-text">进程与程序的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-进程状态"><span class="nav-number">5.</span> <span class="nav-text">Linux 进程状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程控制块"><span class="nav-number">6.</span> <span class="nav-text">进程控制块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程标识符"><span class="nav-number">7.</span> <span class="nav-text">进程标识符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程创建"><span class="nav-number">8.</span> <span class="nav-text">进程创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程撤销"><span class="nav-number">9.</span> <span class="nav-text">进程撤销</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复制进程镜像"><span class="nav-number">10.</span> <span class="nav-text">复制进程镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SIGCHLD"><span class="nav-number">10.1.</span> <span class="nav-text">SIGCHLD</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程系统函数"><span class="nav-number">11.</span> <span class="nav-text">进程系统函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fork函数"><span class="nav-number">11.1.</span> <span class="nav-text">fork函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exit函数"><span class="nav-number">11.2.</span> <span class="nav-text">exit函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#atexit函数"><span class="nav-number">11.3.</span> <span class="nav-text">atexit函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exec函数组"><span class="nav-number">11.4.</span> <span class="nav-text">exec函数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wait函数"><span class="nav-number">11.5.</span> <span class="nav-text">wait函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#waitpid函数"><span class="nav-number">11.6.</span> <span class="nav-text">waitpid函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system函数"><span class="nav-number">11.7.</span> <span class="nav-text">system函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#守护进程"><span class="nav-number">12.</span> <span class="nav-text">守护进程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是守护进程？"><span class="nav-number">12.1.</span> <span class="nav-text">什么是守护进程？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建守护进程的步骤"><span class="nav-number">12.2.</span> <span class="nav-text">创建守护进程的步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#daemon函数"><span class="nav-number">12.3.</span> <span class="nav-text">daemon函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
