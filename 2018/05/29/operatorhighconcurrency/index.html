@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。">
+<meta name="description" content="首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。 半同步/半异步模式在并发模式下，同步和异步的概念与I/O同步异步的概念有所不同，这里的同步是指程序按照代码的顺序执行，而异步指的是程序的执行需要系统事件来驱动，比如信号、中断等。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="服务器高并发设计模式">
-<meta property="og:url" content="http://harlon.org/2018/04/14/operatorhighconcurrency/index.html">
+<meta property="og:url" content="http://harlon.org/2018/05/29/operatorhighconcurrency/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。">
+<meta property="og:description" content="首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。 半同步/半异步模式在并发模式下，同步和异步的概念与I/O同步异步的概念有所不同，这里的同步是指程序按照代码的顺序执行，而异步指的是程序的执行需要系统事件来驱动，比如信号、中断等。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/tongbu.png">
 <meta property="og:image" content="http://harlon.org/img/courrency_banfanyin.png">
 <meta property="og:image" content="http://harlon.org/img/courrency_banfanyin_pro.png">
-<meta property="og:updated_time" content="2018-04-14T08:02:09.045Z">
+<meta property="og:updated_time" content="2018-07-06T02:59:58.435Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器高并发设计模式">
-<meta name="twitter:description" content="首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。">
+<meta name="twitter:description" content="首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。 半同步/半异步模式在并发模式下，同步和异步的概念与I/O同步异步的概念有所不同，这里的同步是指程序按照代码的顺序执行，而异步指的是程序的执行需要系统事件来驱动，比如信号、中断等。">
 <meta name="twitter:image" content="http://harlon.org/img/tongbu.png">
 
 
@@ -123,7 +123,7 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2018/04/14/operatorhighconcurrency/"/>
+  <link rel="canonical" href="http://harlon.org/2018/05/29/operatorhighconcurrency/"/>
 
 
 
@@ -276,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/14/operatorhighconcurrency/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/29/operatorhighconcurrency/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -305,8 +305,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-14T14:47:23+08:00">
-                2018-04-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-29T14:47:23+08:00">
+                2018-05-29
               </time>
             
 
@@ -365,8 +365,8 @@
       
 
       
-        <p>首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。<br><a id="more"></a></p>
-<h1 id="半同步-半异步模式"><a href="#半同步-半异步模式" class="headerlink" title="半同步/半异步模式"></a>半同步/半异步模式</h1><p>在并发模式下，同步和异步的概念与I/O同步异步的概念有所不同，这里的同步是指程序按照代码的顺序执行，而异步指的是程序的执行需要系统事件来驱动，比如信号、中断等。<br><img src="/img/tongbu.png" alt=""><br>异步线程效率高，但编写相对复杂，难于调式，而同步线程刚好相反，逻辑简单，但效率较差。<br>半同步/半异步模式结合了同步线程和异步线程的优点，它在处理I/O事件时使用异步线程，处理客户逻辑则使用同步线程。这样既满足了客户连接的实时性，又能同时处理多个连接。<br>实现半同步/半异步需要三个模块：<strong>异步处理模块、同步处理模块和队列模块</strong>。<br>在实际的应用中，一般使用I/O复用epoll在主线程上监听客户端的连接，一旦监听到新的客户请求后，将其封装成请求对象，插入到队列中，同时，很多工作线程可以来读取并处理该请求对象。<br>在这个模式中，最可能阻塞的操作放在同步模块中，这样不会影响到异步模块的处理，不同模块可以使用不同的同步策略，互不干扰，模块间通信则使用IPC实现，但这样则会造成同步模块和异步模块使用队列模块传送数据的时候，由于数据拷贝和上下文切换导致的性能开销。</p>
+        <p>首先要区分并发和并行的概念，并发强调能够处理多个事务的能力，而并行是指同时能够处理多个事务。这里主要讨论高并发下，我们如何利用对程序进行合理的设计，提高系统的并发性。</p>
+<h1 id="半同步-半异步模式"><a href="#半同步-半异步模式" class="headerlink" title="半同步/半异步模式"></a>半同步/半异步模式</h1><p>在并发模式下，同步和异步的概念与I/O同步异步的概念有所不同，这里的同步是指程序按照代码的顺序执行，而异步指的是程序的执行需要系统事件来驱动，比如信号、中断等。<br><a id="more"></a><br><img src="/img/tongbu.png" alt=""><br>异步线程效率高，但编写相对复杂，难于调式，而同步线程刚好相反，逻辑简单，但效率较差。<br>半同步/半异步模式结合了同步线程和异步线程的优点，它在处理I/O事件时使用异步线程，处理客户逻辑则使用同步线程。这样既满足了客户连接的实时性，又能同时处理多个连接。<br>实现半同步/半异步需要三个模块：<strong>异步处理模块、同步处理模块和队列模块</strong>。<br>在实际的应用中，一般使用I/O复用epoll在主线程上监听客户端的连接，一旦监听到新的客户请求后，将其封装成请求对象，插入到队列中，同时，很多工作线程可以来读取并处理该请求对象。<br>在这个模式中，最可能阻塞的操作放在同步模块中，这样不会影响到异步模块的处理，不同模块可以使用不同的同步策略，互不干扰，模块间通信则使用IPC实现，但这样则会造成同步模块和异步模块使用队列模块传送数据的时候，由于数据拷贝和上下文切换导致的性能开销。</p>
 <hr>
 <h1 id="半同步-半反应堆模式"><a href="#半同步-半反应堆模式" class="headerlink" title="半同步/半反应堆模式"></a>半同步/半反应堆模式</h1><p><img src="/img/courrency_banfanyin.png" alt=""><br>半同步/半反应堆模式是半同步/半异步模式的一个变体，在半同步/半异步模式中，工作线程如何选择队列中的请求，是事先设计好的。而在半同步/半反应堆模式中，工作线程通过竞争（例如申请互斥锁）来获得任务的接管权。<br>半同步/半反应堆可以采用Reactor模式，也可以采用Proactor模式处理，另外两种I/O模式的区别参考：<a href="">I/O设计模式</a><br>半同步/半反应堆中，异步线程是主线程，负责监听所有的socket事件，如果监听socket上有可读事件发生，指的是新的连接到来，那么异步线程接受它，插入到请求队列中，空闲工作线程开始竞争任务，之后这个线程管理这个socket的所有I/O任务，直到客户关闭连接，工作线程各自监听管理不同的事件，所以不需要通信，每个线程都是异步模式。<br>缺点：对此进行队列操作是，都需要加锁解锁，从而消耗CPU事件，另外一个线程同一时间只能处理一个客户请求，如果队列中积累了很多任务，如果增加工作线程，工作线程的切换也会耗费大量CPU时间。<br>改进：工作线程可以调用epoll_wait，这样一个工作线程也可以处理多个客户请求。<br><img src="/img/courrency_banfanyin_pro.png" alt=""></p>
 <hr>
@@ -399,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/13/cpluscpluspolymorphism/" rel="next" title="C++之多态">
-                <i class="fa fa-chevron-left"></i> C++之多态
+              <a href="/2018/05/22/operatorpool/" rel="next" title="线程池、进程池与内存池">
+                <i class="fa fa-chevron-left"></i> 线程池、进程池与内存池
               </a>
             
           </div>
@@ -409,8 +409,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/14/distributedsystemlock/" rel="prev" title="分布式锁以及三种实现方式">
-                分布式锁以及三种实现方式 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/06/09/cpluscplusstlcode/" rel="prev" title="C++之STL源码剖析【更新中】">
+                C++之STL源码剖析【更新中】 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
