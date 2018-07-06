@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。">
+<meta name="description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。其架构图如图所示：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sheepdog之dog源码解析">
 <meta property="og:url" content="http://harlon.org/2018/07/02/sheepdog-dog/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。">
+<meta property="og:description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。其架构图如图所示：">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/sheepdog.jpg">
 <meta property="og:image" content="http://harlon.org/img/dog.png">
 <meta property="og:image" content="http://harlon.org/img/dog-process.png">
 <meta property="og:image" content="http://harlon.org/img/vdi_create.png">
-<meta property="og:updated_time" content="2018-07-06T02:41:57.484Z">
+<meta property="og:updated_time" content="2018-07-06T02:44:22.799Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sheepdog之dog源码解析">
-<meta name="twitter:description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。">
+<meta name="twitter:description" content="Sheepdog简介Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。其架构图如图所示：">
 <meta name="twitter:image" content="http://harlon.org/img/sheepdog.jpg">
 
 
@@ -190,7 +190,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -240,7 +240,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -304,7 +304,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-02T16:24:23+08:00">
                 2018-07-02
@@ -325,7 +325,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -366,8 +366,7 @@
       
 
       
-        <h1 id="Sheepdog简介"><a href="#Sheepdog简介" class="headerlink" title="Sheepdog简介"></a>Sheepdog简介</h1><p>Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。<br><a id="more"></a><br>其架构图如图所示：</p>
-<p><img src="/img/sheepdog.jpg" alt="Sheepdog"></p>
+        <h1 id="Sheepdog简介"><a href="#Sheepdog简介" class="headerlink" title="Sheepdog简介"></a>Sheepdog简介</h1><p>Sheepdog是一个虚拟块设备存储系统，旨在为虚拟机提供高可用的块级别的存储，能够扩展到数千台机器，支持快照、克隆等高级特性。<br>其架构图如图所示：<br><img src="/img/sheepdog.jpg" alt="Sheepdog"><br><a id="more"></a></p>
 <hr>
 <h1 id="dog"><a href="#dog" class="headerlink" title="dog"></a>dog</h1><p>Sheepdog的dog处理输入命令，将一系列命令转换为相应的操作发送到sheep<br><img src="/img/dog.png" alt="Sheepdog"><br>虚拟机通过相应的模块提交创建虚拟块设备的请求，Sheepdog通过一致性哈希算法，类似于Ceph组织整个集群，不同的虚拟机可以配置不同的Sheepdog，这样可以消除单台服务器的瓶颈，但是也会带来一致性开销比较大的问题。getway、dog和sheep都是属于sheepdog的模块，getway将请求转发到相应的机器进行处理。dog是Sheepdog中的命令行工具，用于处理用户输入的一些列命令，通过sock本地通信文件提交到getway进行处理。</p>
 <h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">sheepdog</div><div class="line">│···</div><div class="line">└─── dog</div><div class="line">      │farm</div><div class="line">      │benchmark.c Dog的benchmark</div><div class="line">      │cluster.c Sheepdog集群命令处理文件</div><div class="line">      │common.c 通用函数模块</div><div class="line">      │dog.c 程序初始化和入口文件</div><div class="line">      │nfs.c NFS文件系统相关命令</div><div class="line">      │node.c 节点命令处理文件</div><div class="line">      │trace.c 跟踪及调试文件</div><div class="line">      │treeview.c 查看跟踪及调试文件</div><div class="line">      │upgrade.c 更新操作</div><div class="line">      │vdi.c 块设备命令处理文件</div><div class="line">      │dog.h dog操作头文件</div><div class="line">      │treeview.h vid树头文件</div><div class="line">│···</div></pre></td></tr></table></figure>
@@ -528,10 +527,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -552,7 +551,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">87</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -563,7 +562,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -574,7 +573,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -638,7 +637,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
