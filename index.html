@@ -1401,7 +1401,17 @@
 
       
         
-          <p>线程池、进程池与内存池的概念介绍与实现。<br>
+          <hr>
+<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
+<li>用于执行大量相对短暂的任务</li>
+<li>当任务增加的时候能够动态的增加线程池中线程的数量直到达到一个阈值</li>
+<li><p>当任务执行完毕的时候，能够动态的销毁线程池中的线程</p>
+</li>
+<li><p>该线程池的实现本质上也是生产者与消费模型的应用。生产者线程向任务队列中添加任务，一旦队列有任务到来，如果有等待线程就唤醒来执行任务，如果没有等待线程并且线程数没有达到阈值，就创建新线程来执行任务。</p>
+</li>
+<li><p>计算密集型任务：线程数 = CPU个数</p>
+</li>
+<li>I/O密集型任务：线程数 &gt; CPU个数
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/22/operatorpool/#more" rel="contents">
