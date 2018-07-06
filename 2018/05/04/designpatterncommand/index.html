@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="命令模式">
+<meta name="description" content="在软件构建过程中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合——比如需要对行为进行“记录、撤销/重（undo/redo）、事务”等处理，这种无法抵御变化的紧耦合是不合适的。在这种情况下，如何将“行为请求者”与“行为实现者”解耦？将一组行为抽象为对象，可以实现两者之间的松耦合。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="命令模式">
 <meta property="og:url" content="http://harlon.org/2018/05/04/designpatterncommand/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="命令模式">
+<meta property="og:description" content="在软件构建过程中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合——比如需要对行为进行“记录、撤销/重（undo/redo）、事务”等处理，这种无法抵御变化的紧耦合是不合适的。在这种情况下，如何将“行为请求者”与“行为实现者”解耦？将一组行为抽象为对象，可以实现两者之间的松耦合。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/command.png">
-<meta property="og:updated_time" content="2018-05-04T13:32:19.799Z">
+<meta property="og:updated_time" content="2018-07-06T03:34:55.320Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="命令模式">
-<meta name="twitter:description" content="命令模式">
+<meta name="twitter:description" content="在软件构建过程中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合——比如需要对行为进行“记录、撤销/重（undo/redo）、事务”等处理，这种无法抵御变化的紧耦合是不合适的。在这种情况下，如何将“行为请求者”与“行为实现者”解耦？将一组行为抽象为对象，可以实现两者之间的松耦合。">
 <meta name="twitter:image" content="http://harlon.org/img/command.png">
 
 
@@ -353,8 +353,7 @@
       
 
       
-        <p>命令模式<br><a id="more"></a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合——比如需要对行为进行“记录、撤销/重（undo/redo）、事务”等处理，这种无法抵御变化的紧耦合是不合适的。<br>在这种情况下，如何将“行为请求者”与“行为实现者”解耦？将一组行为抽象为对象，可以实现两者之间的松耦合。</p>
+        <p>在软件构建过程中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合——比如需要对行为进行“记录、撤销/重（undo/redo）、事务”等处理，这种无法抵御变化的紧耦合是不合适的。<br>在这种情况下，如何将“行为请求者”与“行为实现者”解耦？将一组行为抽象为对象，可以实现两者之间的松耦合。<br><a id="more"></a></p>
 <hr>
 <h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>将一个请求（行为）封装为一个对象，从而使你可以用不同的请求对客户进行参数化，对请求排队或记录请求日志，以及支持可撤销的操作。</p>
 <hr>
@@ -537,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">1.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">2.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">3.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
             
 
           </div>

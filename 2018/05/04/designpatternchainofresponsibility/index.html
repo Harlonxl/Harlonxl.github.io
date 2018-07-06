@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="职责链">
+<meta name="description" content="在软件构建过程中，一个请求可能被对个对象处理，但是每个请求在运行时只能由一个接受者，如果显式指定，将必不可少地带来请求发送者与接受者的紧耦合。如何使请求的发送者不需要指定具体的接受者？让请求的接受者自己在运行时决定来处理请求，从而使两者解耦。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="职责链">
 <meta property="og:url" content="http://harlon.org/2018/05/04/designpatternchainofresponsibility/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="职责链">
+<meta property="og:description" content="在软件构建过程中，一个请求可能被对个对象处理，但是每个请求在运行时只能由一个接受者，如果显式指定，将必不可少地带来请求发送者与接受者的紧耦合。如何使请求的发送者不需要指定具体的接受者？让请求的接受者自己在运行时决定来处理请求，从而使两者解耦。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/chainofresponsibility.png">
-<meta property="og:updated_time" content="2018-05-04T13:15:24.932Z">
+<meta property="og:updated_time" content="2018-07-06T03:34:46.569Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="职责链">
-<meta name="twitter:description" content="职责链">
+<meta name="twitter:description" content="在软件构建过程中，一个请求可能被对个对象处理，但是每个请求在运行时只能由一个接受者，如果显式指定，将必不可少地带来请求发送者与接受者的紧耦合。如何使请求的发送者不需要指定具体的接受者？让请求的接受者自己在运行时决定来处理请求，从而使两者解耦。">
 <meta name="twitter:image" content="http://harlon.org/img/chainofresponsibility.png">
 
 
@@ -353,8 +353,7 @@
       
 
       
-        <p>职责链<br><a id="more"></a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，一个请求可能被对个对象处理，但是每个请求在运行时只能由一个接受者，如果显式指定，将必不可少地带来请求发送者与接受者的紧耦合。<br>如何使请求的发送者不需要指定具体的接受者？让请求的接受者自己在运行时决定来处理请求，从而使两者解耦。</p>
+        <p>在软件构建过程中，一个请求可能被对个对象处理，但是每个请求在运行时只能由一个接受者，如果显式指定，将必不可少地带来请求发送者与接受者的紧耦合。<br>如何使请求的发送者不需要指定具体的接受者？让请求的接受者自己在运行时决定来处理请求，从而使两者解耦。<br><a id="more"></a></p>
 <hr>
 <h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>使多个对象都有机会处理请求，从而避免请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链请求，直到有一个对象处理它为止。</p>
 <hr>
@@ -537,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">1.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">2.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">3.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
             
 
           </div>

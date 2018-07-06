@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/30/designpatternadapter/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/30/designpatternproxy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -279,7 +279,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/04/30/designpatternadapter/" itemprop="url">适配器</a></h1>
+                <a class="post-title-link" href="/2018/04/30/designpatternproxy/" itemprop="url">代理模式</a></h1>
         
 
         <div class="post-meta">
@@ -291,7 +291,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-30T20:20:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-30T20:49:23+08:00">
                 2018-04-30
               </time>
             
@@ -352,10 +352,10 @@
 
       
         
-          <p>适配器<br>
+          <p>在面向对象系统中，有些对象由于某种原因（比如对象创建的开销很大，或者某些操作需要安全控制，或者需要进程外的访问等），直接访问会给使用者、或者系统结构带来很多麻烦。<br>如何在不失去透明操作对象的通知来管理/控制这些对象特有的复杂性？增加一层间接层是软件开发中常见的解决方式。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/04/30/designpatternadapter/#more" rel="contents">
+            <a class="btn" href="/2018/04/30/designpatternproxy/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -556,6 +556,154 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/30/designpatternadapter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/30/designpatternadapter/" itemprop="url">适配器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-30T20:20:23+08:00">
+                2018-04-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在软件系统中，由于应用环境的变化，常常需要将“一些现存的对象“放在新的环境中应用，但是对象新环境要求的接口是这些现存对象所不满足的。<br>如何应对这种“迁移的变化”？如何既能利用现有对象的良好实现，同时又能满足新的应用环境所要求的接口？<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/30/designpatternadapter/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+      
+    
+      
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/28/designpatternflyweight/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -648,7 +796,7 @@
 
       
         
-          <p>享元模式<br>
+          <p>在软件系统采用纯粹对象的方案的问题在于大量细粒度的对象会很快充斥在系统中，从而带来很高的运行时代价——主要指内存需求方面的代价。<br>如何避免大量细粒度对象问题的同时，让外部客户程序仍然能够透明地使用面向对象的方式来进行操作？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/28/designpatternflyweight/#more" rel="contents">
@@ -796,7 +944,7 @@
 
       
         
-          <p>单件模式<br>
+          <p>在软件系统中，经常有这样一些特殊的类，必须保证他们在系统中只有一个实例，才能确保他们的逻辑正确性、以及良好的效率。<br>如何绕过常规的构造器，提供一种机制来保证一个类只有一个实例？<br>这应该是类设计者的责任，而不是使用者的责任。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/28/designpatternsingleton/#more" rel="contents">
@@ -944,7 +1092,7 @@
 
       
         
-          <p>构建器模型<br>
+          <p>在软件系统中，有时候面临着“一个复杂对象”的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。<br>如何应对这种变化？如何提供一种“封装机制”来隔离出“复杂对象的各个部分”的变化，从而保持系统中的“稳定构建算法”不随着需求改变而改变？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/28/designpatternbuilder/#more" rel="contents">
@@ -1092,7 +1240,7 @@
 
       
         
-          <p>抽象工厂模式<br>
+          <p>在软件系统中，经常面临着“一系列相互依赖的对象”的创建工作；同时，由于需求的变化，往往存在更多系列对象的创建工作。<br>如何应对这种变化？如何绕过常规的对象创建方法(new)，提供一种“封装机制”来避免客户程序和这种“具体对象创建工作”的紧耦合？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/28/designpatternabstractfactory/#more" rel="contents">
@@ -1240,7 +1388,7 @@
 
       
         
-          <p>工厂模式<br>
+          <p>在软件系统中，经常面临着创建对象的工作；由于需求的变化，需要创建的对象的具体类型经常变化。<br>如何应对这种变化？如何绕过常规的对象创建方法(new)，提供一种“封装机制”来避免客户程序和这种“具体对象创建工作”的紧耦合？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/28/designpatternfactory/#more" rel="contents">
@@ -1388,7 +1536,7 @@
 
       
         
-          <p>原型模式<br>
+          <p>在软件系统中，经常面临着“某些结构复杂的对象”的创建工作；由于需求的变化，这些对象经常面临着剧烈的变化，但是他们却拥有文件稳定一致的接口。<br>如何应对这种变化？如何向“客户程序（使用这些对象的程序）”隔离出“这些易变对象”，从而使得“依赖这些异变对象的客户程序”不随着需求变化而变化？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/28/designpatternprototype/#more" rel="contents">
@@ -1536,158 +1684,10 @@
 
       
         
-          <p>桥模式<br>
+          <p>由于某些类型的固有的实现逻辑，使得它们具有两个变化的维度，乃至多个纬度的变化。<br>如何应对这种“多维度的变化”？如何利用面向对象技术来使得类型可以轻松地沿着两个乃至多个方向变化，而不引入额外的复杂度？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/26/designpatternbridge/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-      
-    
-      
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/26/designpatterndecorator/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Harlon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Harlon's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/26/designpatterndecorator/" itemprop="url">装饰者模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-26T21:28:23+08:00">
-                2018-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index">
-                    <span itemprop="name">Notes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>装饰者模式<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/26/designpatterndecorator/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>

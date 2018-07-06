@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="访问器">
+<meta name="description" content="在软件构建过程中，由于需求的改变，某些类层次结构中常常需要增加新的行为（方法），如果直接在基类中做这样的更改，将会给子类带来很繁重的变更负担，甚至破坏原有设计。如何在不更改类层次结构的前提下，在运行时根据需要透明地位类层次结构上的各个类动态添加新的操作，从而避免上述问题？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="访问器">
 <meta property="og:url" content="http://harlon.org/2018/05/04/designpatternvisitor/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="访问器">
+<meta property="og:description" content="在软件构建过程中，由于需求的改变，某些类层次结构中常常需要增加新的行为（方法），如果直接在基类中做这样的更改，将会给子类带来很繁重的变更负担，甚至破坏原有设计。如何在不更改类层次结构的前提下，在运行时根据需要透明地位类层次结构上的各个类动态添加新的操作，从而避免上述问题？">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/visitor.png">
-<meta property="og:updated_time" content="2018-05-04T13:44:19.504Z">
+<meta property="og:updated_time" content="2018-07-06T03:39:06.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="访问器">
-<meta name="twitter:description" content="访问器">
+<meta name="twitter:description" content="在软件构建过程中，由于需求的改变，某些类层次结构中常常需要增加新的行为（方法），如果直接在基类中做这样的更改，将会给子类带来很繁重的变更负担，甚至破坏原有设计。如何在不更改类层次结构的前提下，在运行时根据需要透明地位类层次结构上的各个类动态添加新的操作，从而避免上述问题？">
 <meta name="twitter:image" content="http://harlon.org/img/visitor.png">
 
 
@@ -353,8 +353,7 @@
       
 
       
-        <p>访问器<br><a id="more"></a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，由于需求的改变，某些类层次结构中常常需要增加新的行为（方法），如果直接在基类中做这样的更改，将会给子类带来很繁重的变更负担，甚至破坏原有设计。<br>如何在不更改类层次结构的前提下，在运行时根据需要透明地位类层次结构上的各个类动态添加新的操作，从而避免上述问题？</p>
+        <p>在软件构建过程中，由于需求的改变，某些类层次结构中常常需要增加新的行为（方法），如果直接在基类中做这样的更改，将会给子类带来很繁重的变更负担，甚至破坏原有设计。<br>如何在不更改类层次结构的前提下，在运行时根据需要透明地位类层次结构上的各个类动态添加新的操作，从而避免上述问题？<br><a id="more"></a></p>
 <hr>
 <h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>表示一个作用于某对象结构中的各元素的操作。使得可以在不改变（稳定）各元素的类的前提下定义（扩展）作用于这些元素的新操作（变化）。</p>
 <hr>
@@ -538,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">1.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">2.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">3.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
             
 
           </div>

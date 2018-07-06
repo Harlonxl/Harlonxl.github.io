@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="模板方法模式">
+<meta name="description" content="在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="模板方法模式">
 <meta property="og:url" content="http://harlon.org/2018/04/05/designpatterntemplatemethod/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="模板方法模式">
+<meta property="og:description" content="在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/templatemethod.png">
-<meta property="og:updated_time" content="2018-05-04T13:33:34.087Z">
+<meta property="og:updated_time" content="2018-07-06T03:38:58.754Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模板方法模式">
-<meta name="twitter:description" content="模板方法模式">
+<meta name="twitter:description" content="在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？">
 <meta name="twitter:image" content="http://harlon.org/img/templatemethod.png">
 
 
@@ -353,8 +353,7 @@
       
 
       
-        <p>模板方法模式<br><a id="more"></a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。<br>如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？</p>
+        <p>在软件构建过程中，对于某一项任务，它常常有稳定的整体操作结构，但各个子步骤却有很多改变的需求，或者由于固有的原因（比如框架与应用之间的关系）而无法和任务的整体结构同时实现。<br>如何在确定稳定操作结构的前提下，来灵活应对各个子步骤的变化或者晚期实现需求？<br><a id="more"></a></p>
 <hr>
 <h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>定义一个操作中的算法的骨架(稳定)，而将一些步骤延迟(变化)到子类中。Template Method使得子类可以不改变(复用)一个算法的结构即可重定义(override 重写)该算法的某些特定步骤。</p>
 <hr>
@@ -391,8 +390,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/05/designpatternstrategy/" rel="next" title="策略模式">
-                <i class="fa fa-chevron-left"></i> 策略模式
+              <a href="/2018/04/05/cpluscplusmemorypack/" rel="next" title="内存对齐策略">
+                <i class="fa fa-chevron-left"></i> 内存对齐策略
               </a>
             
           </div>
@@ -401,8 +400,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/07/networksocket/" rel="prev" title="网络编程之socket编程基础">
-                网络编程之socket编程基础 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/05/designpatternstrategy/" rel="prev" title="策略模式">
+                策略模式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -537,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">1.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">2.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">3.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
             
 
           </div>

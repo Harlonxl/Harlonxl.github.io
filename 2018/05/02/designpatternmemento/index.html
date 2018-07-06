@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="备忘录模型">
+<meta name="description" content="在软件构建过程中，某些对象的状态在转换过程中，可能由于某种需要，需要程序能够回溯到对象之前处于某个点时的状态。如果使用一些公有接口来让其他对象得到对象的状态，便会暴露对象的细节实现。如何实现对象的状态的良好保存与恢复？但同时又不会因此而破坏对象本身的封装性。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="备忘录模型">
 <meta property="og:url" content="http://harlon.org/2018/05/02/designpatternmemento/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="备忘录模型">
+<meta property="og:description" content="在软件构建过程中，某些对象的状态在转换过程中，可能由于某种需要，需要程序能够回溯到对象之前处于某个点时的状态。如果使用一些公有接口来让其他对象得到对象的状态，便会暴露对象的细节实现。如何实现对象的状态的良好保存与恢复？但同时又不会因此而破坏对象本身的封装性。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/memento.png">
-<meta property="og:updated_time" content="2018-05-02T14:16:38.808Z">
+<meta property="og:updated_time" content="2018-07-06T03:37:23.584Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="备忘录模型">
-<meta name="twitter:description" content="备忘录模型">
+<meta name="twitter:description" content="在软件构建过程中，某些对象的状态在转换过程中，可能由于某种需要，需要程序能够回溯到对象之前处于某个点时的状态。如果使用一些公有接口来让其他对象得到对象的状态，便会暴露对象的细节实现。如何实现对象的状态的良好保存与恢复？但同时又不会因此而破坏对象本身的封装性。">
 <meta name="twitter:image" content="http://harlon.org/img/memento.png">
 
 
@@ -353,8 +353,7 @@
       
 
       
-        <p>备忘录模型<br><a id="more"></a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，某些对象的状态在转换过程中，可能由于某种需要，需要程序能够回溯到对象之前处于某个点时的状态。如果使用一些公有接口来让其他对象得到对象的状态，便会暴露对象的细节实现。<br>如何实现对象的状态的良好保存与恢复？但同时又不会因此而破坏对象本身的封装性。</p>
+        <p>在软件构建过程中，某些对象的状态在转换过程中，可能由于某种需要，需要程序能够回溯到对象之前处于某个点时的状态。如果使用一些公有接口来让其他对象得到对象的状态，便会暴露对象的细节实现。<br>如何实现对象的状态的良好保存与恢复？但同时又不会因此而破坏对象本身的封装性。<br><a id="more"></a></p>
 <hr>
 <h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>在不破坏封装性的前提下，捕获一个对象的内部状态，并在对象之外保存这个状态。这样以后就可以将该对象恢复到原先保存的状态。</p>
 <hr>
@@ -537,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">1.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">2.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">3.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
             
 
           </div>

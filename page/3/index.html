@@ -260,6 +260,154 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/05/linuxfileio/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/05/linuxfileio/" itemprop="url">Linux 文件与I/O</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-05T22:06:23+08:00">
+                2018-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Linux 文件的概念，以及对文件I/O操作的接口。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/05/linuxfileio/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+      
+    
+      
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/04/designpatterninterpreter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -352,7 +500,7 @@
 
       
         
-          <p>解析器<br>
+          <p>在软件构建过程中，如果某一特定领域的问题比较复杂，类似的结构不断重复出现，如果使用普通的编程方式来实现将面临非常频繁的变化。<br>在这种情况下，将特定领域的问题表达为某种语法规则下的句子，然后构建一个解释器来解释这样的句子，从而达到解决问题的目的。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/04/designpatterninterpreter/#more" rel="contents">
@@ -500,7 +648,7 @@
 
       
         
-          <p>访问器<br>
+          <p>在软件构建过程中，由于需求的改变，某些类层次结构中常常需要增加新的行为（方法），如果直接在基类中做这样的更改，将会给子类带来很繁重的变更负担，甚至破坏原有设计。<br>如何在不更改类层次结构的前提下，在运行时根据需要透明地位类层次结构上的各个类动态添加新的操作，从而避免上述问题？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/04/designpatternvisitor/#more" rel="contents">
@@ -648,7 +796,7 @@
 
       
         
-          <p>命令模式<br>
+          <p>在软件构建过程中，“行为请求者”与“行为实现者”通常呈现一种“紧耦合”。但在某些场合——比如需要对行为进行“记录、撤销/重（undo/redo）、事务”等处理，这种无法抵御变化的紧耦合是不合适的。<br>在这种情况下，如何将“行为请求者”与“行为实现者”解耦？将一组行为抽象为对象，可以实现两者之间的松耦合。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/04/designpatterncommand/#more" rel="contents">
@@ -796,7 +944,7 @@
 
       
         
-          <p>职责链<br>
+          <p>在软件构建过程中，一个请求可能被对个对象处理，但是每个请求在运行时只能由一个接受者，如果显式指定，将必不可少地带来请求发送者与接受者的紧耦合。<br>如何使请求的发送者不需要指定具体的接受者？让请求的接受者自己在运行时决定来处理请求，从而使两者解耦。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/04/designpatternchainofresponsibility/#more" rel="contents">
@@ -944,7 +1092,7 @@
 
       
         
-          <p>组合模式<br>
+          <p>在软件在某些情况下，客户代码过多地依赖于对象容器复杂的内部实现结构，对象容器内部实现结构（而非抽象接口）的变化将引起客户代码的频繁变化，带来了代码的维护性、扩展性等弊端。<br>如何将“客户代码与复杂的对象容器结构”解耦？让对象容器自己来实现自身的复杂结构，从而使得客户代码就像处理简单对象一样来处理复杂的对象容器？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/02/designpatterncomposite/#more" rel="contents">
@@ -1092,7 +1240,7 @@
 
       
         
-          <p>备忘录模型<br>
+          <p>在软件构建过程中，某些对象的状态在转换过程中，可能由于某种需要，需要程序能够回溯到对象之前处于某个点时的状态。如果使用一些公有接口来让其他对象得到对象的状态，便会暴露对象的细节实现。<br>如何实现对象的状态的良好保存与恢复？但同时又不会因此而破坏对象本身的封装性。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/02/designpatternmemento/#more" rel="contents">
@@ -1240,7 +1388,7 @@
 
       
         
-          <p>迭代器<br>
+          <p>在软件构建过程中，集合对象内部结构常常变化各异。但对于这些集合对象，我们希望在不暴露其内部结构的同时，可以让外部客户代码透明地访问其中包含的元素；同时这种“透明遍历”也为“同一种算法在多种集合对象上进行操作”提供了可能。<br>使用面向对象技术将这种遍历机制抽象为“迭代器对象”为“应对变化中的集合对象”提供了一种优雅的方式。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/02/designpatterniterator/#more" rel="contents">
@@ -1388,7 +1536,7 @@
 
       
         
-          <p>状态模式<br>
+          <p>在软件构建过程中，某些对象的状态如何改变，其行为也会随之而发生变化，比如文档处于只读状态，其支持的行为和读写状态支持的行为就可能有些不同。<br>如何在运行时根据对象的状态来透明地更改对象的行为？而不会为对象操作和状态转换之间引入紧耦合？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/30/designpatternstate/#more" rel="contents">
@@ -1536,158 +1684,10 @@
 
       
         
-          <p>中介者<br>
+          <p>在软件构建中，经常会出现多个对象互相关联交互的情况，对象之间常常会维持一种复杂的引用关系，如何遇到一些需求的更改，这种直接的引用关系将面临不断的变化。<br>在这种情况下，我们可使用一个“中介对象”来管理对象间的关联关系，避免互相交互的对象之间的紧耦合引用关系，从而更好地抵御变化。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/30/designpatternmediator/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-      
-    
-      
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/04/30/designpatternproxy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Harlon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Harlon's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/30/designpatternproxy/" itemprop="url">代理模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-30T20:49:23+08:00">
-                2018-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index">
-                    <span itemprop="name">Notes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>代理模式<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/30/designpatternproxy/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>

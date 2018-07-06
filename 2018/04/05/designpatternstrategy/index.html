@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="策略模式">
+<meta name="description" content="在软件构建过程中，某些对象使用的算法可能多种多样，经常改变，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。如何在运行时根据需要透明地更改对象的算法？将算法与对象本身解耦，从而避免上述问题？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="策略模式">
 <meta property="og:url" content="http://harlon.org/2018/04/05/designpatternstrategy/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="策略模式">
+<meta property="og:description" content="在软件构建过程中，某些对象使用的算法可能多种多样，经常改变，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。如何在运行时根据需要透明地更改对象的算法？将算法与对象本身解耦，从而避免上述问题？">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/strategy.png">
-<meta property="og:updated_time" content="2018-04-30T12:15:19.048Z">
+<meta property="og:updated_time" content="2018-07-06T03:38:47.217Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="策略模式">
-<meta name="twitter:description" content="策略模式">
+<meta name="twitter:description" content="在软件构建过程中，某些对象使用的算法可能多种多样，经常改变，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。如何在运行时根据需要透明地更改对象的算法？将算法与对象本身解耦，从而避免上述问题？">
 <meta name="twitter:image" content="http://harlon.org/img/strategy.png">
 
 
@@ -353,8 +353,7 @@
       
 
       
-        <p>策略模式<br><a id="more"></a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>在软件构建过程中，某些对象使用的算法可能多种多样，经常改变，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。<br>如何在运行时根据需要透明地更改对象的算法？将算法与对象本身解耦，从而避免上述问题？</p>
+        <p>在软件构建过程中，某些对象使用的算法可能多种多样，经常改变，如果将这些算法都编码到对象中，将会使对象变得异常复杂；而且有时候支持不使用的算法也是一个性能负担。<br>如何在运行时根据需要透明地更改对象的算法？将算法与对象本身解耦，从而避免上述问题？<br><a id="more"></a></p>
 <hr>
 <h1 id="Defination"><a href="#Defination" class="headerlink" title="Defination"></a>Defination</h1><p>定义一系列算法，把它们一个个封装起来，并且使它们可互相替换（变化）。该模式使得算法可独立于使用它的客户程序(稳定)而变化（扩展，子类化）。</p>
 <hr>
@@ -391,8 +390,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/05/cpluscplusmemorypack/" rel="next" title="内存对齐策略">
-                <i class="fa fa-chevron-left"></i> 内存对齐策略
+              <a href="/2018/04/05/designpatterntemplatemethod/" rel="next" title="模板方法模式">
+                <i class="fa fa-chevron-left"></i> 模板方法模式
               </a>
             
           </div>
@@ -401,8 +400,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/05/designpatterntemplatemethod/" rel="prev" title="模板方法模式">
-                模板方法模式 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/07/networksocket/" rel="prev" title="网络编程之socket编程基础">
+                网络编程之socket编程基础 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -537,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">2.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">3.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">4.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">5.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Defination"><span class="nav-number">1.</span> <span class="nav-text">Defination</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure"><span class="nav-number">2.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Impletation"><span class="nav-number">3.</span> <span class="nav-text">Impletation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
             
 
           </div>
