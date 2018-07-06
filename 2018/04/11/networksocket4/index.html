@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/tcp_connect.png">
 <meta property="og:image" content="http://harlon.org/img/tcp_close.png">
-<meta property="og:updated_time" content="2018-04-11T06:04:33.454Z">
+<meta property="og:updated_time" content="2018-06-05T13:33:30.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络编程之TCP状态">
 <meta name="twitter:description" content="网络编程之TCP状态">
@@ -370,6 +370,17 @@
 <p><center>TCP三次握手</center><br><img src="/img/tcp_close.png" alt=""></p>
 <p><center>TCP四次挥手</center></p>
 <h1 id="SIGPIPE信号"><a href="#SIGPIPE信号" class="headerlink" title="SIGPIPE信号"></a>SIGPIPE信号</h1><p>往一个已经接收FIN的套接字写时允许的，接收到FIN仅仅代表对方不再发送数据。<br>在收到RST段之后，如果再调用write就会产生SIGPIPE信号，对于这个信号的处理的处理我们通常忽略即可。<br>signal(SIGPIPE, SIG_IGN);</p>
+<hr>
+<h1 id="TIME-WAIT状态"><a href="#TIME-WAIT状态" class="headerlink" title="TIME_WAIT状态"></a>TIME_WAIT状态</h1><p>TIME_WAIT状态对大并发服务器的影响，应尽可能在服务器避免出现TIME_WAIT状态，如果服务器端主动断开连接，服务端就会进入TIME_WAIT状态，协议设计上，应该让客户端主动断开连接，这样就把TIME_WAIT状态分散到大量的客户端。如果客户端不活跃了，一些客户端不断开连接，这样子就会占用服务器端的连接资源。服务器端也有有个机制踢掉不活跃的连接。</p>
+<hr>
+<h1 id="EMFILE错误"><a href="#EMFILE错误" class="headerlink" title="EMFILE错误"></a>EMFILE错误</h1><ul>
+<li>调高进程文件描述符数目</li>
+<li>死等</li>
+<li>退出程序</li>
+<li>关闭监听套接字。那什么时候重新打开呢？</li>
+<li>如果是epoll模型，可以改用edge trigger。问题是如果漏掉了一次accept(2)，程序再也不会收到新连接。</li>
+<li>准备一个空闲的文件描述符。遇到这种情况，先关闭这个空闲文件，获得一个文件描述符名额;再accept拿到socket连接的文件描述符；随后立刻close，这样就优雅地断开了与客户端的连接；最后重新打开空闲文件，把“坑”填上，以备再次出现这种情况时使用。</li>
+</ul>
 
       
     </div>
@@ -404,8 +415,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/11/networksocket6/" rel="prev" title="网络编程之shutdown函数与超时设置">
-                网络编程之shutdown函数与超时设置 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/04/11/networksocket7/" rel="prev" title="网络编程之UDP与实战">
+                网络编程之UDP与实战 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -483,7 +494,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">89</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -540,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP状态"><span class="nav-number">1.</span> <span class="nav-text">TCP状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIGPIPE信号"><span class="nav-number">2.</span> <span class="nav-text">SIGPIPE信号</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP状态"><span class="nav-number">1.</span> <span class="nav-text">TCP状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIGPIPE信号"><span class="nav-number">2.</span> <span class="nav-text">SIGPIPE信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TIME-WAIT状态"><span class="nav-number">3.</span> <span class="nav-text">TIME_WAIT状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EMFILE错误"><span class="nav-number">4.</span> <span class="nav-text">EMFILE错误</span></a></li></ol></div>
             
 
           </div>

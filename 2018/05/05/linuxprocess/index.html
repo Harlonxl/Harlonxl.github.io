@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://harlon.org/img/linux_process_state.png">
 <meta property="og:image" content="http://harlon.org/img/linux_process_share_file.png">
 <meta property="og:image" content="http://harlon.org/img/linux_process_exit.png">
-<meta property="og:updated_time" content="2018-05-25T16:24:06.257Z">
+<meta property="og:updated_time" content="2018-06-19T14:01:35.930Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 进程">
 <meta name="twitter:description" content="Linux 进程的概念和数据结构，以及进程的接口函数的使用。">
@@ -446,7 +446,7 @@
 <hr>
 <h1 id="进程撤销"><a href="#进程撤销" class="headerlink" title="进程撤销"></a>进程撤销</h1><p>进程终止时操作系统做以下工作：</p>
 <ul>
-<li>关闭软中断:因为进程即将终止而不再处理任何软中断信号；</li>
+<li>关闭软中断：因为进程即将终止而不再处理任何软中断信号；</li>
 <li>回收资源：释放进程分配的所有资源，如关闭所有已打开文件，释放进程相应的数据结构等；</li>
 <li>写记帐信息：将进程在运行过程中所产生的记帐数据（其中包括进程运行时的各种统计信息）记录到一个全局记帐文件中；</li>
 <li>置该进程为僵死状态：向父进程发送子进程死的软中断信号，将终止信息status送到指定的存储单元中；</li>
@@ -685,8 +685,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/05/linuxipc/" rel="next" title="进程间通信">
-                <i class="fa fa-chevron-left"></i> 进程间通信
+              <a href="/2018/05/05/linuxfileio/" rel="next" title="Linux 文件与I/O">
+                <i class="fa fa-chevron-left"></i> Linux 文件与I/O
               </a>
             
           </div>
@@ -695,8 +695,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/08/linuxmessagequeue/" rel="prev" title="System V 消息队列">
-                System V 消息队列 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/05/linuxsignal/" rel="prev" title="Linux 信号">
+                Linux 信号 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -774,7 +774,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">89</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

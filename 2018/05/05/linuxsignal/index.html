@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux 信号。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 信号">
+<meta property="og:url" content="http://harlon.org/2018/05/05/linuxsignal/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Linux 信号。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://harlon.org/img/signal_kernel.png">
+<meta property="og:updated_time" content="2018-05-30T12:11:16.567Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 信号">
+<meta name="twitter:description" content="Linux 信号。">
+<meta name="twitter:image" content="http://harlon.org/img/signal_kernel.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/05/05/linuxsignal/"/>
+
+
+
+
+
+  <title>Linux 信号 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tutorials">
+          <a href="/categories/Tutorials" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github"></i> <br />
+            
+            Tutorials
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/05/linuxsignal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux 信号</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-05T22:06:23+08:00">
+                2018-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Linux 信号。<br><a id="more"></a></p>
+<h1 id="中断的概念和分类"><a href="#中断的概念和分类" class="headerlink" title="中断的概念和分类"></a>中断的概念和分类</h1><h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><ul>
+<li>中断是系统对于异步事件的响应</li>
+<li>中断信号</li>
+<li>中断源</li>
+<li>现场信息</li>
+<li>中断处理程序</li>
+<li>中断向量表</li>
+</ul>
+<hr>
+<h2 id="中断分类"><a href="#中断分类" class="headerlink" title="中断分类"></a>中断分类</h2><ul>
+<li>硬件中断（外部中断）<ul>
+<li>外部中断是指由外部设备通过硬件请求的方式产生的中断，也称为硬件中断</li>
+</ul>
+</li>
+<li>软件中断（内部中断）<ul>
+<li>内部中断是由CPU运行程序错误或执行内部程序调用引起的一种中断，也称为软件中断</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h1><ul>
+<li>信号是UNIX系统响应某些状况而产生的事件，进程在接收到信号时会采取相应的行动</li>
+<li>信号是因为某些错误条件而产生的，比如内存段冲突、浮点处理器错误或者非法指令等</li>
+<li>信号是在软件层次上对中断的一种模拟，所以通常把它称为是软中断</li>
+</ul>
+<hr>
+<h1 id="信号与中断"><a href="#信号与中断" class="headerlink" title="信号与中断"></a>信号与中断</h1><p>信号与中断的相似点：<br>（1）采用了相同的异步通信方式；<br>（2）当检测出有信号或中断请求时，都暂停正在执行的程序而转去执行相应的处理程序；<br>（3）都在处理完毕后返回到原来的断点；<br>（4）对信号或中断都可进行屏蔽。<br>信号与中断的区别：<br>（1）中断有优先级，而信号没有优先级，所有的信号都是平等的；<br>（2）信号处理程序是在用户态下运行的，而中断处理程序是在核心态下运行；<br>（3）中断响应是及时的，而信号响应通常都有较大的时间延迟。</p>
+<hr>
+<h1 id="进程对信号的三种响应"><a href="#进程对信号的三种响应" class="headerlink" title="进程对信号的三种响应"></a>进程对信号的三种响应</h1><ul>
+<li>忽略信号<ul>
+<li>不采取任何操作、有两个信号不能被忽略：SIGKILL和SIGSTOP。</li>
+</ul>
+</li>
+<li>捕获并处理信号<ul>
+<li>内核中断正在执行的代码，转去执行先前注册过的处理程序。</li>
+</ul>
+</li>
+<li>执行默认操作<ul>
+<li>默认操作通常是终止进程，这取决于被发送的信号。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="signal函数"><a href="#signal函数" class="headerlink" title="signal函数"></a>signal函数</h1><ul>
+<li>功能：安装信号</li>
+<li><p>原型:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*<span class="keyword">__sighandler_t</span>)</span> <span class="params">(<span class="keyword">int</span>)</span></span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_ERR ((__sighandler_t) -1)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_DFL ((__sighandler_t) 0)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_IGN ((__sighandler_t) 1)</span></div><div class="line">	<span class="keyword">__sighandler_t</span> signal(<span class="keyword">int</span> signum, <span class="keyword">__sighandler_t</span> handler);</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>signum：准备捕捉或屏蔽的信号</li>
+<li>handler：接收到指定信号时将要调用的函数</li>
+<li>handler也可以是下面两个特殊值：<ul>
+<li>SIG_IGN    屏蔽该信号</li>
+<li>SIG_DFL    恢复默认行为</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值：成功返回上次信号处理函数，失败返回-1</li>
+</ul>
+<hr>
+<h1 id="不可靠信号"><a href="#不可靠信号" class="headerlink" title="不可靠信号"></a>不可靠信号</h1><p>linux信号机制基本上是从unix系统中继承过来的。早期unix系统中的信号机制比较简单和原始，后来在实践中暴露出一些问题，它的主要问题是：</p>
+<ul>
+<li>进程每次处理信号后，就将对信号的响应设置为默认动作。在某些情况下，将导致对信号的错误处理；因此，用户如果不希望这样的操作，那么就要在信号处理函数结尾再一次调用signal()，重新安装该信号。</li>
+<li>早期unix下的不可靠信号主要指的是进程可能对信号做出错误的反应以及信号可能丢失。 </li>
+<li>linux支持不可靠信号，但是对不可靠信号机制做了改进：在调用完信号处理函数后，不必重新调用该信号的安装函数（信号安装函数是在可靠机制上的实现）。因此，linux下的不可靠信号问题主要指的是信号可能丢失。</li>
+</ul>
+<hr>
+<h1 id="可靠型号"><a href="#可靠型号" class="headerlink" title="可靠型号"></a>可靠型号</h1><ul>
+<li>随着时间的发展，实践证明了有必要对信号的原始机制加以改进和扩充。所以，后来出现的各种unix版本分别在这方面进行了研究，力图实现”可靠信 号”。由于原来定义的信号已有许多应用，不好再做改动，最终只好又新增加了一些信号，并在一开始就把它们定义为可靠信号，这些信号支持排队，不会丢失。</li>
+<li>同时，信号的发送和安装也出现了新版本：信号发送函数sigqueue()及信号安装函数sigaction()。</li>
+</ul>
+<hr>
+<h1 id="实时信号"><a href="#实时信号" class="headerlink" title="实时信号"></a>实时信号</h1><ul>
+<li>早期Unix系统只定义了32种信号，Ret hat7.2支持64种信号，编号0-63(SIGRTMIN=31，SIGRTMAX=63)，将来可能进一步增加，这需要得到内核的支持。前32种信号已经有了预定义值，每个信号有了确定的用途及含义，并且每种信号都有各自的缺省动作。如按键盘的CTRL ^C时，会产生SIGINT信号，对该信号的默认反应就是进程终止。后32个信号表示实时信号，等同于前面阐述的可靠信号。这保证了发送的多个实时信号都被接收。实时信号是POSIX标准的一部分，可用于应用进程。</li>
+<li>非实时信号都不支持排队，都是不可靠信号；实时信号都支持排队，都是可靠信号。</li>
+</ul>
+<hr>
+<h1 id="可重入函数"><a href="#可重入函数" class="headerlink" title="可重入函数"></a>可重入函数</h1><ul>
+<li>为了增强程序的稳定性，在信号处理函数中应使用可重入函数。 </li>
+<li>所谓可重入函数是指一个可以被多个任务调用的过程，任务在调用时不必担心数据是否会出错。因为进程在收到信号后，就将跳转到信号处理函数去接着执行。如果信号处理函数中使用了不可重入函数，那么信号处理函数可能会修改原来进程中不应该被修改的数据，这样进程从信号处理函数中返回接着执行时，可能会出现不可预料的后果。不可再入函数在信号处理函数中被视为不安全函数。</li>
+<li>满足下列条件的函数多数是不可再入的：（1）使用静态的数据结构，如getlogin()，gmtime()，getgrgid()，getgrnam()，getpwuid()以及getpwnam()等等；（2）函数实现时，调用了malloc（）或者free()函数；（3）实现时使用了标准I/O函数。</li>
+</ul>
+<hr>
+<h1 id="信号在内核中的表示"><a href="#信号在内核中的表示" class="headerlink" title="信号在内核中的表示"></a>信号在内核中的表示</h1><ul>
+<li>执行信号的处理动作称为信号递达（Delivery），信号从产生到递达之间的状态，称为信号未决（Pending）。进程可以选择阻塞（Block）某个信号。被阻塞的信号产生时将保持在未决状态，直到进程解除对此信号的阻塞，才执行递达的动作。注意，阻塞和忽略是不同的，只要信号被阻塞就不会递达，而忽略是在递达之后可选的一种处理动作。信号在内核中的表示可以看作是这样的：<br><img src="/img/signal_kernel.png" alt=""></li>
+</ul>
+<hr>
+<h1 id="kill函数"><a href="#kill函数" class="headerlink" title="kill函数"></a>kill函数</h1><ul>
+<li>功能：发送信号到指定的进程</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">kill</span><span class="params">(<span class="keyword">pid_t</span> pid, <span class="keyword">int</span> sig)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>pid：<ul>
+<li>pid &gt; 0 ：信号sig发送到进程号等于pid的进程</li>
+<li>pid = 0：信号sig将被发送给调用者所在组中的每一个进程</li>
+<li>pid = -1：信号sig将被发送给调用者进程有权限发送的每一个进程，除了1号进程与自身之外</li>
+<li>pid &lt; -1：信号sig将发送给进程组等于pid绝对值中的每一个进程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>参数：成功返回0，失败返回-1</li>
+</ul>
+<hr>
+<h1 id="raise函数"><a href="#raise函数" class="headerlink" title="raise函数"></a>raise函数</h1><ul>
+<li>功能：向自己发送信号</li>
+<li>原型：<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">raise</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="pause函数"><a href="#pause函数" class="headerlink" title="pause函数"></a>pause函数</h1><ul>
+<li>将进程置为可中断睡眠状态。然后它调用schedule()，使linux进程调度器找到另一个进程来运行。</li>
+<li>pause使调用者进程挂起，直到一个信号被捕获</li>
+</ul>
+<hr>
+<h1 id="信号集操作函数"><a href="#信号集操作函数" class="headerlink" title="信号集操作函数"></a>信号集操作函数</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigemptyset</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigfillset</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigaddset</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>, <span class="keyword">int</span> signo)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigdelset</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>, <span class="keyword">int</span> signo)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigismember</span><span class="params">(<span class="keyword">const</span> <span class="keyword">sigset_t</span> *<span class="built_in">set</span>, <span class="keyword">int</span> signo)</span></span>;</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="sigprocmask函数"><a href="#sigprocmask函数" class="headerlink" title="sigprocmask函数"></a>sigprocmask函数</h1><ul>
+<li>功能：读取或更改进程的信号屏蔽字。</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigprocmask</span><span class="params">(<span class="keyword">int</span> how, <span class="keyword">const</span> <span class="keyword">sigset_t</span> *<span class="built_in">set</span>, <span class="keyword">sigset_t</span> *oset)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>返回值：若成功则为0，若出错则为-1</p>
+</li>
+<li>注意：如果oset是非空指针，则读取进程的当前信号屏蔽字通过oset参数传出。如果set是非空指针，则更改进程的信号屏蔽字，参数how指示如何更改。如果oset和set都是非空指针，则先将原来的信号屏蔽字备份到oset里，然后根据set和how参数更改信号屏蔽字。假设当前的信号屏蔽字为mask，下表说明了how参数的可选值。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIG_BLOCK</td>
+<td>set包含了我们希望添加到当前信号屏蔽字的信号，相当于 mask = mask \</td>
+<td>set</td>
+</tr>
+<tr>
+<td>SIG_UNBLOCK</td>
+<td>set包含了我们希望添加到当前信号屏蔽字的信号，相当于 mask = mask &amp; ~set</td>
+</tr>
+<tr>
+<td>SIG_SET</td>
+<td>设置当前屏蔽字为set所指向的值，相当于 mask = set</td>
+</tr>
+</tbody>
+</table>
+<p>实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> \</div><div class="line">	&#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">hander</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (arg == SIGINT) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"recv a sig=%d\n"</span>, arg);</div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (arg == SIGQUIT) &#123;</div><div class="line">		<span class="keyword">sigset_t</span> uset;</div><div class="line">		sigemptyset(&amp;uset);</div><div class="line">		sigaddset(&amp;uset, SIGINT);</div><div class="line">		sigprocmask(SIG_UNBLOCK, &amp;uset, <span class="literal">NULL</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">printsigset</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line">	<span class="keyword">for</span> (i=<span class="number">1</span>; i&lt;NSIG; ++i) &#123;</div><div class="line">		<span class="keyword">if</span> (sigismember(<span class="built_in">set</span>, i)) &#123;</div><div class="line">			<span class="built_in">putchar</span>(<span class="string">'1'</span>);</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="built_in">putchar</span>(<span class="string">'0'</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">sigset_t</span> pset;</div><div class="line">	<span class="keyword">sigset_t</span> bset;</div><div class="line">	sigemptyset(&amp;bset);</div><div class="line">	sigaddset(&amp;bset, SIGINT);</div><div class="line">	<span class="keyword">if</span> (signal(SIGINT, hander) == SIG_ERR) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"signal"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (signal(SIGQUIT, hander) == SIG_ERR) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"signal"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	sigprocmask(SIG_BLOCK, &amp;bset, <span class="literal">NULL</span>);</div><div class="line"></div><div class="line">	<span class="keyword">for</span>(;;) &#123;</div><div class="line">		sigpending(&amp;pset);</div><div class="line">		printsigset(&amp;pset);</div><div class="line">		sleep(<span class="number">1</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="sigaction函数"><a href="#sigaction函数" class="headerlink" title="sigaction函数"></a>sigaction函数</h1><ul>
+<li>功能:sigaction函数用于改变进程接收到特定信号后的行为。</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span>  <span class="title">sigaction</span><span class="params">(<span class="keyword">int</span> signum,<span class="keyword">const</span> struct sigaction *act,<span class="keyword">const</span> struct sigaction *old)</span></span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> &#123;</span></div><div class="line">	<span class="keyword">void</span> (*sa_handler)(<span class="keyword">int</span>);</div><div class="line">	<span class="keyword">void</span> (*sa_sigaction)(<span class="keyword">int</span>, <span class="keyword">siginfo_t</span> *, <span class="keyword">void</span> *);</div><div class="line">	<span class="keyword">sigset_t</span> sa_mask;</div><div class="line">	<span class="keyword">int</span> sa_flags;</div><div class="line">	<span class="keyword">void</span> (*sa_restorer)(<span class="keyword">void</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>signum：信号的值，可以为除SIGKILL及SIGSTOP外的任何一 个特定有效的信号（为这两个信号定义自己的处理函数，将导致信号安装错误）</li>
+<li>act：结构sigaction的一个实例的指针，在结构 sigaction的实例中，指定了对特定信号的处理，可以为空，进程会以缺省方式对信号处理</li>
+<li>old：用来保存原来对相应信号的处理，可指定oldact为NULL。</li>
+</ul>
+</li>
+<li>返回值：函数成功返回0，失败返回-1</li>
+</ul>
+<p>用sigaction实现signal：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> \</div><div class="line">	&#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">handler</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"receive %d signal\n"</span>, arg);</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">__sighandler_t</span> my_signal(<span class="keyword">int</span> sig, <span class="keyword">__sighandler_t</span> handler) &#123;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">act</span>;</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">old</span>;</span></div><div class="line">	act.sa_handler = handler;</div><div class="line">	sigemptyset(&amp;act.sa_mask);</div><div class="line">	act.sa_flags = <span class="number">0</span>;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (sigaction(sig, &amp;act, &amp;old) &lt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">return</span> SIG_ERR;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> old.sa_handler;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (my_signal(SIGINT, handler) == SIG_ERR) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"my_signal"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (;;) &#123;</div><div class="line">		pause();</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="sigqueue函数"><a href="#sigqueue函数" class="headerlink" title="sigqueue函数"></a>sigqueue函数</h1><ul>
+<li>功能：新的发送信号系统调用，主要是针对实时信号提出的支持信号带有参数，与函数sigaction()配合使用。</li>
+<li><p>原型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigqueue</span><span class="params">(<span class="keyword">pid_t</span> pid, <span class="keyword">int</span> sig, <span class="keyword">const</span> <span class="keyword">union</span> sigval value)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>pid：定接收信号的进程id</li>
+<li>sig：即将发送的信号，</li>
+<li>value：信号传递的参数，即通常所说的4字节值。</li>
+</ul>
+</li>
+<li>返回值：成功返回0,失败返回-1 </li>
+</ul>
+<p>实例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> \</div><div class="line">	&#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125; <span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (argc != <span class="number">2</span>) &#123;</div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Usage: %s pid\n"</span>, argv[<span class="number">0</span>]);</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">pid_t</span> pid = atoi(argv[<span class="number">1</span>]);</div><div class="line">	<span class="keyword">union</span> sigval v;</div><div class="line">	v.sival_int = <span class="number">100</span>;</div><div class="line">	sigqueue(pid, SIGINT, v);</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="三种不同精度的睡眠"><a href="#三种不同精度的睡眠" class="headerlink" title="三种不同精度的睡眠"></a>三种不同精度的睡眠</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">sleep</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> seconds)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">usleep</span><span class="params">(<span class="keyword">useconds_t</span> usec)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">nanosleep</span><span class="params">(<span class="keyword">const</span> struct timespec *req, struct timespec *rem)</span></span>;</div><div class="line"></div><div class="line"><span class="keyword">time_t</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> &#123;</span></div><div class="line">	<span class="keyword">long</span>    tv_sec;         <span class="comment">/* seconds */</span></div><div class="line">	<span class="keyword">long</span>    tv_usec;        <span class="comment">/* microseconds */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> &#123;</span></div><div class="line">	<span class="keyword">time_t</span> tv_sec;        <span class="comment">/* seconds */</span></div><div class="line">	<span class="keyword">long</span>   tv_nsec;       <span class="comment">/* nanoseconds */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="setitimer函数"><a href="#setitimer函数" class="headerlink" title="setitimer函数"></a>setitimer函数</h1><ul>
+<li>功能：比alarm功能强大，支持3种类型的定时器</li>
+<li><p>原型：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int setitimer(int which, const struct itimerval *value, struct itimerval *ovalue));</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数：</p>
+</li>
+<li>which： 指定定时器类型</li>
+<li>value: 结构itimerval形式</li>
+<li>ovalue：可不做处理。</li>
+<li>返回值:成功返回0，失败返回-1</li>
+</ul>
+<p>which取值：</p>
+<ul>
+<li>ITIMER_REAL：经过指定的时间后，内核将发送SIGALRM信号给本进程 </li>
+<li>ITIMER_VIRTUAL ：程序在用户空间执行指定的时间后，内核将发送SIGVTALRM信号给本进程 </li>
+<li>ITIMER_PROF ：进程在内核空间中执行时，时间计数会减少，通常与ITIMER_VIRTUAL共用，代表进程在用户空间与内核空间中运行指定时间后，内核将发送SIGPROF信号给本进程。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/05/linuxprocess/" rel="next" title="Linux 进程">
+                <i class="fa fa-chevron-left"></i> Linux 进程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/05/linuxipc/" rel="prev" title="进程间通信">
+                进程间通信 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">89</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#中断的概念和分类"><span class="nav-number">1.</span> <span class="nav-text">中断的概念和分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#中断"><span class="nav-number">1.1.</span> <span class="nav-text">中断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中断分类"><span class="nav-number">1.2.</span> <span class="nav-text">中断分类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号"><span class="nav-number">2.</span> <span class="nav-text">信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号与中断"><span class="nav-number">3.</span> <span class="nav-text">信号与中断</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程对信号的三种响应"><span class="nav-number">4.</span> <span class="nav-text">进程对信号的三种响应</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#signal函数"><span class="nav-number">5.</span> <span class="nav-text">signal函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不可靠信号"><span class="nav-number">6.</span> <span class="nav-text">不可靠信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可靠型号"><span class="nav-number">7.</span> <span class="nav-text">可靠型号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实时信号"><span class="nav-number">8.</span> <span class="nav-text">实时信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可重入函数"><span class="nav-number">9.</span> <span class="nav-text">可重入函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号在内核中的表示"><span class="nav-number">10.</span> <span class="nav-text">信号在内核中的表示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kill函数"><span class="nav-number">11.</span> <span class="nav-text">kill函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#raise函数"><span class="nav-number">12.</span> <span class="nav-text">raise函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pause函数"><span class="nav-number">13.</span> <span class="nav-text">pause函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号集操作函数"><span class="nav-number">14.</span> <span class="nav-text">信号集操作函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigprocmask函数"><span class="nav-number">15.</span> <span class="nav-text">sigprocmask函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigaction函数"><span class="nav-number">16.</span> <span class="nav-text">sigaction函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sigqueue函数"><span class="nav-number">17.</span> <span class="nav-text">sigqueue函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三种不同精度的睡眠"><span class="nav-number">18.</span> <span class="nav-text">三种不同精度的睡眠</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#setitimer函数"><span class="nav-number">19.</span> <span class="nav-text">setitimer函数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

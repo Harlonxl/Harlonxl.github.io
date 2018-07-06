@@ -89,9 +89,11 @@
 <meta property="og:image" content="http://harlon.org/img/block_io.png">
 <meta property="og:image" content="http://harlon.org/img/noblock_io.png">
 <meta property="og:image" content="http://harlon.org/img/io_multi.png">
+<meta property="og:image" content="http://harlon.org/img/epoll_lt.png">
+<meta property="og:image" content="http://harlon.org/img/epoll_et.png">
 <meta property="og:image" content="http://harlon.org/img/signal.png">
 <meta property="og:image" content="http://harlon.org/img/aio.png">
-<meta property="og:updated_time" content="2018-05-09T14:44:51.246Z">
+<meta property="og:updated_time" content="2018-06-05T15:00:33.068Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络编程之IO模型">
 <meta name="twitter:description" content="网络编程之IO模型">
@@ -418,16 +420,100 @@
 <hr>
 <h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create1</span><span class="params">(<span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, <span class="keyword">int</span> fd, struct epoll_evect *event)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_evect *events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</div></pre></td></tr></table></figure>
 <p>epoll与select、poll区别</p>
-<ul>
-<li>相比于select与poll，epoll最大的好处在于它不会随着监听fd数目的增长而降低效率</li>
-<li>内核中的select与poll的实现采用轮询来处理的，轮询的fd数目越多，自然耗时越多</li>
-<li>epoll的实现是基于回调的，如果fd有期望的事件发生就通过回调函数将其加入epoll就绪队列中，也就是说它只关心“活跃”的fd，与fd数目无关</li>
-<li>内核/用户空间内存拷贝问题，如何让内核把fd消息通知给用户空间呢？在这个问题上select/poll采取了内存拷贝方法，而epoll采用了共享内存的的方式</li>
-<li>epoll不仅会告诉应用程序有I/O事件到来，还会告诉应用程序相关的信息，这些信息是引用程序填充的，因此根据这些信息应用程序就能直接定位到事件，而不必遍历整个fd集合</li>
-</ul>
-<p>EPOLLLT：水平触发的模式，完全靠kernel epoll驱动，应用程序只需要处理从epoll_wait返回的fds，这些fds我们认为他们处于就绪状态</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">I/O复用方式</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">select</td>
+<td>select本质上是通过设置或者检查存放fd标志位的数据结构来进行下一步处理。这样所带来的缺点是：1 单个进程可监视的fd数量被限制2 需要维护一个用来存放大量fd的数据结构，这样会使得用户空间和内核空间在传递该结构时复制开销大3 对socket进行扫描时是线性扫描</td>
+</tr>
+<tr>
+<td style="text-align:center">poll</td>
+<td>poll本质上和select没有区别，它将用户传入的数组拷贝到内核空间，然后查询每个fd对应的设备状态，如果设备就绪则在设备等待队列中加入一项并继续遍历，如果遍历完所有fd后没有发现就绪设备，则挂起当前进程，直到设备就绪或者主动超时，被唤醒后它又要再次遍历fd。这个过程经历了多次无谓的遍历。它没有最大连接数的限制，原因是它是基于链表来存储的，但是同样有一个缺点：大量的fd的数组被整体复制于用户态和内核地址空间之间，而不管这样的复制是不是有意义。poll还有一个特点是“水平触发”，如果报告了fd后，没有被处理，那么下次poll时会再次报告该fd。</td>
+</tr>
+<tr>
+<td style="text-align:center">epoll</td>
+<td>在前面说到的复制问题上，epoll使用mmap减少复制开销。还有一个特点是，epoll使用“事件”的就绪通知方式，通过epoll_ctl注册fd，一旦该fd就绪，内核就会采用类似callback的回调机制来激活该fd，epoll_wait便可以收到通知。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">I/O复用方式</th>
+<th>一个进程所能打开的最大连接数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">select</td>
+<td>单个进程所能打开的最大连接数有FD_SETSIZE宏定义，其大小是32个整数的大小（在32位的机器上，大小就是32*32，同理64位机器上FD_SETSIZE为32*64），当然我们可以对进行修改，然后重新编译内核，但是性能可能会受到影响，这需要进一步的测试。</td>
+</tr>
+<tr>
+<td style="text-align:center">poll</td>
+<td>poll本质上和select没有区别，但是它没有最大连接数的限制，原因是它是基于链表来存储的</td>
+</tr>
+<tr>
+<td style="text-align:center">epoll</td>
+<td>虽然连接数有上限，但是很大，1G内存的机器上可以打开10万左右的连接，2G内存的机器可以打开20万左右的连接</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">I/O复用方式</th>
+<th>FD剧增后带来的IO效率问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">select</td>
+<td>因为每次调用时都会对连接进行线性遍历，所以随着FD的增加会造成遍历速度慢的“线性下降性能问题”。</td>
+</tr>
+<tr>
+<td style="text-align:center">poll</td>
+<td>同上</td>
+</tr>
+<tr>
+<td style="text-align:center">epoll</td>
+<td>因为epoll内核中实现是根据每个fd上的callback函数来实现的，只有活跃的socket才会主动调用callback，所以在活跃socket较少的情况下，使用epoll没有前面两者的线性下降的性能问题，但是所有socket都很活跃的情况下，可能会有性能问题。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">I/O复用方式</th>
+<th>消息传递方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">select</td>
+<td>内核需要将消息传递到用户空间，都需要内核拷贝动作</td>
+</tr>
+<tr>
+<td style="text-align:center">poll</td>
+<td>同上</td>
+</tr>
+<tr>
+<td style="text-align:center">epoll</td>
+<td>epoll通过内核和用户空间共享一块内存来实现的。</td>
+</tr>
+</tbody>
+</table>
+<p>EPOLLIN：水平触发的模式，完全靠kernel epoll驱动，应用程序只需要处理从epoll_wait返回的fds，这些fds我们认为他们处于就绪状态</p>
 <p>EPOLLET：边沿触发模式，此模式下，系统仅仅通知应用程序哪些fds变成了就绪状态，一旦fd变成就绪状态，epoll将不再关注这个fd的任何消息，（从epoll队列移除）直到应用程序通过读写触发EAGAIN状态，epoll认为这个fd又变为空闲状态，那么epoll又重新关注这个fd的状态变化（重新加入epoll队列）<br>随着epoll_wait的返回，队列中的fds是在减少的，所以在大并发的系统中，EPOLLET更有优势。但对程序员的要求也最高。</p>
 <p>epoll实现回射客户/服务器<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*server.cpp*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;struct epoll_event&gt; EventList;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> &#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125;<span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">packet</span> &#123;</span></div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> buf[<span class="number">1024</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">echo_svr</span><span class="params">(<span class="keyword">int</span> linstenfd)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> epollfd = epoll_create1(EPOLL_CLOEXEC);</div><div class="line">	<span class="keyword">if</span> (epollfd &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"epoll_create1"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function">EventList <span class="title">eventlist</span><span class="params">(<span class="number">16</span>)</span></span>;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">event</span>;</span></div><div class="line">	event.data.fd = linstenfd;</div><div class="line">	event.events = EPOLLIN | EPOLLET;</div><div class="line">	<span class="keyword">if</span> (epoll_ctl(epollfd, EPOLL_CTL_ADD, linstenfd, &amp;event) == <span class="number">-1</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"epoll_ctl"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> nready;</div><div class="line">	<span class="keyword">int</span> conn;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</div><div class="line">		nready = epoll_wait(epollfd, &amp;(*eventlist.begin()), <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(eventlist.size()), <span class="number">-1</span>);</div><div class="line">		<span class="keyword">if</span> (nready == <span class="number">-1</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR) &#123;</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			&#125;</div><div class="line">			ERR_EXIT(<span class="string">"poll"</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (nready == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">continue</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">for</span> (i=<span class="number">0</span>; i&lt; nready; ++i) &#123;</div><div class="line">			<span class="keyword">if</span> (eventlist[i].data.fd == linstenfd) &#123;</div><div class="line">				<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientaddr</span>;</span></div><div class="line">				<span class="keyword">int</span> clientaddrlen = <span class="keyword">sizeof</span>(clientaddr);</div><div class="line">				<span class="keyword">int</span> conn = accept(linstenfd, (struct sockaddr*)&amp;clientaddr, (<span class="keyword">socklen_t</span>*)&amp;clientaddrlen);</div><div class="line"></div><div class="line">				<span class="keyword">if</span> (conn &lt; <span class="number">0</span>) &#123;</div><div class="line">					ERR_EXIT(<span class="string">"accept"</span>);</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				<span class="built_in">printf</span>(<span class="string">"ip=%s, port=%d\n"</span>, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));</div><div class="line"></div><div class="line">				<span class="keyword">if</span> (++count &gt;= eventlist.size()) &#123;</div><div class="line">					eventlist.resize(<span class="number">2</span>*count);</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				event.data.fd = conn;</div><div class="line">				event.events = EPOLLIN | EPOLLET;</div><div class="line">				epoll_ctl(epollfd, EPOLL_CTL_ADD, conn, &amp;event);</div><div class="line"></div><div class="line"></div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (eventlist[i].events &amp; EPOLLIN) &#123;</div><div class="line">				conn = eventlist[i].data.fd;</div><div class="line">				<span class="class"><span class="keyword">struct</span> <span class="title">packet</span> <span class="title">recv_packet</span>;</span></div><div class="line">				<span class="keyword">int</span> ret;</div><div class="line">				<span class="built_in">memset</span>(&amp;recv_packet, <span class="number">0</span>, <span class="keyword">sizeof</span>(recv_packet));</div><div class="line"></div><div class="line">				<span class="keyword">if</span> ((ret = read(conn, &amp;recv_packet.len, <span class="keyword">sizeof</span>(<span class="keyword">int</span>))) &lt; <span class="number">0</span>) &#123;</div><div class="line">					ERR_EXIT(<span class="string">"read len"</span>);</div><div class="line">				&#125; <span class="keyword">else</span> <span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</div><div class="line">					<span class="built_in">printf</span>(<span class="string">"client close\n"</span>);</div><div class="line">					event = eventlist[i];</div><div class="line">					epoll_ctl(epollfd, EPOLL_CTL_DEL, conn, &amp;event);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				<span class="keyword">int</span> n = ntohl(recv_packet.len);</div><div class="line"></div><div class="line">				<span class="keyword">if</span> ((ret = read(conn, recv_packet.buf, n)) &lt; <span class="number">0</span>) &#123;</div><div class="line">					ERR_EXIT(<span class="string">"read buf"</span>);</div><div class="line">				&#125;</div><div class="line">				</div><div class="line">				<span class="built_in">fputs</span>(recv_packet.buf, <span class="built_in">stdout</span>);</div><div class="line">				write(conn, &amp;recv_packet, <span class="number">4</span>+n);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	signal(SIGCHLD, SIG_IGN); <span class="comment">// 避免僵尸进程</span></div><div class="line">	<span class="keyword">int</span> sockfd;</div><div class="line">	<span class="keyword">if</span> ((sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"socket"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serveraddr</span>;</span></div><div class="line">	<span class="built_in">memset</span>(&amp;serveraddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serveraddr));</div><div class="line">	serveraddr.sin_family = AF_INET;</div><div class="line">	serveraddr.sin_port = htons(<span class="number">5534</span>);</div><div class="line">	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);</div><div class="line"></div><div class="line">	<span class="keyword">int</span> on = <span class="number">1</span>;</div><div class="line">	<span class="keyword">if</span> (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &amp;on, <span class="keyword">sizeof</span>(on)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"setsockopt"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (bind(sockfd, (struct sockaddr*)&amp;serveraddr, <span class="keyword">sizeof</span>(serveraddr)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"bind"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (listen(sockfd, SOMAXCONN) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"listen"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	echo_svr(sockfd);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>epoll LT工作模式<br><img src="/img/epoll_lt.png" alt=""></p>
+<p>epoll ET工作模式<br><img src="/img/epoll_et.png" alt=""></p>
+<hr>
 <h1 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h1><p><img src="/img/signal.png" alt=""></p>
 <center>信号驱动IO模型</center>
 
@@ -547,7 +633,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">89</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
