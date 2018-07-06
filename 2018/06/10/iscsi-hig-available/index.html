@@ -82,12 +82,12 @@
 <meta name="description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iSCSI高可用性研究">
-<meta property="og:url" content="http://harlon.org/2018/03/12/iscsi-hig-available/index.html">
+<meta property="og:url" content="http://harlon.org/2018/06/10/iscsi-hig-available/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/iscsi.png">
-<meta property="og:updated_time" content="2018-03-12T08:45:01.942Z">
+<meta property="og:updated_time" content="2018-07-06T02:58:22.305Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iSCSI高可用性研究">
 <meta name="twitter:description" content="iSCSIiSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Co">
@@ -121,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2018/03/12/iscsi-hig-available/"/>
+  <link rel="canonical" href="http://harlon.org/2018/06/10/iscsi-hig-available/"/>
 
 
 
@@ -274,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/03/12/iscsi-hig-available/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/06/10/iscsi-hig-available/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -303,8 +303,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-12T16:24:23+08:00">
-                2018-03-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-10T16:24:23+08:00">
+                2018-06-10
               </time>
             
 
@@ -363,7 +363,7 @@
       
 
       
-        <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br><a id="more"></a><br><img src="/img/iscsi.png" alt="iSCSI"></p>
+        <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br><img src="/img/iscsi.png" alt="iSCSI"><br><a id="more"></a></p>
 <hr>
 <h1 id="多路径"><a href="#多路径" class="headerlink" title="多路径"></a>多路径</h1><p>MPIO和MC/S都是通过利用Initiator和Target端建立多条实体存取通道，通过轮询的存取方式，避免单一实体通道中断时，连带导致存取中断；也可以起到传输的均衡，避免传输负荷集中在单一实体通道上，但两种</p>
 <h2 id="多重路径-MPIO"><a href="#多重路径-MPIO" class="headerlink" title="多重路径 MPIO"></a>多重路径 MPIO</h2><p>MPIO允许一个iSCSI Initiator通过多个Session连如同一个iSCSI Target设备，以便利用多网卡或iSCSI HBA启用负载平衡与故障失效切换机制。</p>
@@ -420,8 +420,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/20/python/" rel="next" title="python入门到精通">
-                <i class="fa fa-chevron-left"></i> python入门到精通
+              <a href="/2018/06/09/cpluscplusstlcode/" rel="next" title="C++之STL源码剖析【更新中】">
+                <i class="fa fa-chevron-left"></i> C++之STL源码剖析【更新中】
               </a>
             
           </div>
@@ -430,8 +430,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/21/cplusplusstl/" rel="prev" title="C++之STL用法">
-                C++之STL用法 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/06/14/designpattern/" rel="prev" title="面向对象设计与设计模式">
+                面向对象设计与设计模式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
