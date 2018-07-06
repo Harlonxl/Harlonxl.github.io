@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="System V 共享内存的介绍与使用。">
+<meta name="description" content="共享内存是常用的进程通信，两个进程可以直接共享访问同一块内存区域，本文介绍System V的共享内存的概念，并介绍了mmap和shm共享内存。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="System V 共享内存">
 <meta property="og:url" content="http://harlon.org/2018/05/10/linuxmemory/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="System V 共享内存的介绍与使用。">
+<meta property="og:description" content="共享内存是常用的进程通信，两个进程可以直接共享访问同一块内存区域，本文介绍System V的共享内存的概念，并介绍了mmap和shm共享内存。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/sharememory.png">
-<meta property="og:updated_time" content="2018-05-17T12:54:14.285Z">
+<meta property="og:updated_time" content="2018-07-06T03:28:01.024Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="System V 共享内存">
-<meta name="twitter:description" content="System V 共享内存的介绍与使用。">
+<meta name="twitter:description" content="共享内存是常用的进程通信，两个进程可以直接共享访问同一块内存区域，本文介绍System V的共享内存的概念，并介绍了mmap和shm共享内存。">
 <meta name="twitter:image" content="http://harlon.org/img/sharememory.png">
 
 
@@ -353,7 +353,7 @@
       
 
       
-        <p>System V 共享内存的介绍与使用。<br><a id="more"></a></p>
+        <p>共享内存是常用的进程通信，两个进程可以直接共享访问同一块内存区域，本文介绍System V的共享内存的概念，并介绍了mmap和shm共享内存。<br><a id="more"></a></p>
 <h1 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h1><p>共享内存是最快的IPC形式，一旦这样的内存映射到共享它的进程的地址空间，这些就进程间数据传递不再涉及到内核，换句话说是进程不再通过执行进入内核的系统调用来传递彼此的数据。</p>
 <hr>
 <h1 id="共享内存示意图"><a href="#共享内存示意图" class="headerlink" title="共享内存示意图"></a>共享内存示意图</h1><p><img src="/img/sharememory.png" alt=""></p>

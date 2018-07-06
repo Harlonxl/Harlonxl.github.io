@@ -648,7 +648,7 @@
 
       
         
-          <p>POSIX 消息队列的介绍与使用。<br>
+          <p>POSIX 消息队列与System V消息队列主要区别在于：Posix消息队列的读总是返回最高优先级的消息，往空队列放置消息时，Posix消息队列允许产生一个信号或启动一个线程。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/16/linuxposixmessagequeue/#more" rel="contents">
@@ -944,7 +944,7 @@
 
       
         
-          <p>System V 共享内存的介绍与使用。<br>
+          <p>共享内存是常用的进程通信，两个进程可以直接共享访问同一块内存区域，本文介绍System V的共享内存的概念，并介绍了mmap和shm共享内存。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/10/linuxmemory/#more" rel="contents">
@@ -1092,7 +1092,7 @@
 
       
         
-          <p>System V 消息队列的介绍与使用。<br>
+          <p>消息队列可以认为是一个消息列表，消息队列是随着内核持续的，本文主要介绍System V的消息队列相关概念和使用方法。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/08/linuxmessagequeue/#more" rel="contents">
@@ -1148,7 +1148,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/05/linuxprocess/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/05/linuxipc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -1167,7 +1167,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/05/linuxprocess/" itemprop="url">Linux 进程</a></h1>
+                <a class="post-title-link" href="/2018/05/05/linuxipc/" itemprop="url">进程间通信</a></h1>
         
 
         <div class="post-meta">
@@ -1240,10 +1240,10 @@
 
       
         
-          <p>Linux 进程的概念和数据结构，以及进程的接口函数的使用。<br>
+          <p>进程间通信的基本概念。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/05/linuxprocess/#more" rel="contents">
+            <a class="btn" href="/2018/05/05/linuxipc/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1444,7 +1444,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/05/linuxipc/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/05/05/linuxprocess/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -1463,7 +1463,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/05/linuxipc/" itemprop="url">进程间通信</a></h1>
+                <a class="post-title-link" href="/2018/05/05/linuxprocess/" itemprop="url">Linux 进程</a></h1>
         
 
         <div class="post-meta">
@@ -1536,10 +1536,10 @@
 
       
         
-          <p>进程间通信的基本概念。<br>
+          <p>Linux 进程的概念和数据结构，以及进程的接口函数的使用。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/05/linuxipc/#more" rel="contents">
+            <a class="btn" href="/2018/05/05/linuxprocess/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
