@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux服务器程序处理三类事件：I/O事件、信号和定时事件，在处理这三类事件时我们一般要考虑以下三个问题：  统一事件源：统一管理这些事件，既能使代码通俗易懂，也能避免一下潜在的问题，可以利用I/O复用系统调用统一管理所有的时间； 可移植性：不同的系统具有不同的I/O复用的方式，例如Solaris的/dev/poll文件，FreeBSD的kqueue机制，Linux的epoll系统调用； 对并发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Libevent源码分析">
+<meta property="og:url" content="http://harlon.org/2018/07/09/libevent/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="Linux服务器程序处理三类事件：I/O事件、信号和定时事件，在处理这三类事件时我们一般要考虑以下三个问题：  统一事件源：统一管理这些事件，既能使代码通俗易懂，也能避免一下潜在的问题，可以利用I/O复用系统调用统一管理所有的时间； 可移植性：不同的系统具有不同的I/O复用的方式，例如Solaris的/dev/poll文件，FreeBSD的kqueue机制，Linux的epoll系统调用； 对并发">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-09T03:34:31.607Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Libevent源码分析">
+<meta name="twitter:description" content="Linux服务器程序处理三类事件：I/O事件、信号和定时事件，在处理这三类事件时我们一般要考虑以下三个问题：  统一事件源：统一管理这些事件，既能使代码通俗易懂，也能避免一下潜在的问题，可以利用I/O复用系统调用统一管理所有的时间； 可移植性：不同的系统具有不同的I/O复用的方式，例如Solaris的/dev/poll文件，FreeBSD的kqueue机制，Linux的epoll系统调用； 对并发">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/07/09/libevent/"/>
+
+
+
+
+
+  <title>Libevent源码分析 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/07/09/libevent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Libevent源码分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-09T09:59:23+08:00">
+                2018-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index">
+                    <span itemprop="name">Technology</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Linux服务器程序处理三类事件：I/O事件、信号和定时事件，在处理这三类事件时我们一般要考虑以下三个问题：</p>
+<ul>
+<li>统一事件源：统一管理这些事件，既能使代码通俗易懂，也能避免一下潜在的问题，可以利用I/O复用系统调用统一管理所有的时间；</li>
+<li>可移植性：不同的系统具有不同的I/O复用的方式，例如Solaris的/dev/poll文件，FreeBSD的kqueue机制，Linux的epoll系统调用；</li>
+<li>对并发编程的支持：在多线程和多进程环境下，我们需要考虑各执行实体如何协同处理客户连接、信号和定时器，以避免竞态条件。<br>开源社区提供了很多优秀的I/O框架来解决上述问题，例如ACE、ASIO和Libevent，让我们将更多的精力放在业务与逻辑开发上，但是理解这些框架的原理对我们也是非常有帮助的，这篇博文主要分析Libevent的源码。<a id="more"></a>
+</li>
+</ul>
+<hr>
+<h1 id="Libevent简介"><a href="#Libevent简介" class="headerlink" title="Libevent简介"></a>Libevent简介</h1><p>Libevent是开源社区的一款高性能I/O框架库，其学习者和使用者众多，其著名案例有：高性能分布式内存对象缓存软件memcached，Google浏览器Chromium的Linux版本。作为一个I/O框架库，Libevent具有如下特点：</p>
+<ul>
+<li>跨平台支持：Libevent支持Linux、Unix和Windows；</li>
+<li>统一事件源：Libevent对I/O事件、信号和定时事件提供统一的处理；</li>
+<li>线程安全：Libevent使用libevent_pthreads库来提供线程安全支持；</li>
+<li>基于Reactor模式实现。</li>
+</ul>
+<hr>
+<h1 id="Libevent源码组织结构"><a href="#Libevent源码组织结构" class="headerlink" title="Libevent源码组织结构"></a>Libevent源码组织结构</h1><ul>
+<li>include/event2：Libevent主版本升级到2.0之后引入的，提供给应用程序使用的头文件；<ul>
+<li>event.h：提供核心函数；</li>
+<li>http.h：提供HTTP协议相关服务；</li>
+<li>rpc.h：提供远程调用支持。</li>
+</ul>
+</li>
+<li>源码根目录下的头文件：这些分为两类，一类是对include/event2目录下的部分头文件的包装，另外一类是提供Libevent内部使用的辅助性头文件，具有*-internal.h；</li>
+<li>compat/sys：通用数据结构目录，只有一个文件queue.h，封装了跨平台的基础数据结构，包括单向链表、双向链表、队列、尾队列和循环队列；</li>
+<li>sample：提供一些实例代码；</li>
+<li>test：提供一些测试代码；</li>
+<li>WIN32-Code目录：提供Windows平台的一些专用代码；</li>
+<li>event.c：该文件实现了Libevent的整体框架，主要是event和event_base两个结构体的相关操作；</li>
+<li>devpoll.c、kqueue.c、evport.c、select.c、win32select.c、poll.c和epoll.c文件，分别封装了如下I/O复用机制：/dev/poll、kqueue、event ports、POSIX select、Windows select、poll和epoll。这些文件的主要内容相似，都是对结构体eventtop定义的接口函数的具体实现；</li>
+<li>minheap-internal.h：时间堆的实现，提供对定时事件的支持；</li>
+<li>signal.c：提供对信号的支持；</li>
+<li>evmap.c：维护句柄（文件描述符或信号）与事件处理器的映射关系；</li>
+<li>event_tagging.c：提供缓冲区中添加标记数据，以及从缓冲区中读取标记数据的函数；</li>
+<li>event_iocp.c：提供对Windows IOCP的支持；</li>
+<li>buffer*.c：提供对网络I/O缓冲的控制，包括：输入输出数据过滤，传输速率限制，使用SSL协议对应用数据进行保护，以及零拷贝文件传输等；</li>
+<li>evthread*.c：提供对多线程的支持；</li>
+<li>listener.c：封装了对监听socket的操作，包括监听连接和接受连接；</li>
+<li>logs.c：Libevent的日志系统；</li>
+<li>evutils.c、evutils_rand.c、strlcpy.c和arc4random.c：提供一些基本操作，比如生成随机数、获取socket地址信息、读取文件、设置socket属性等；</li>
+<li>evdns.c、http.c和evrpc.c：提供对DNS协议、HTTP协议和RPC协议的支持；</li>
+</ul>
+<hr>
+<h1 id="event结构体"><a href="#event结构体" class="headerlink" title="event结构体"></a>event结构体</h1><p>event结构体封装了句柄、事件类型、回调函数，以及其他必要的标志和数据，event结构体在include/event2/event_struct.h中定义：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">event</span> &#123;</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">event_callback</span> <span class="title">ev_evcallback</span>;</span></div><div class="line"></div><div class="line">	<span class="comment">/* for managing timeouts */</span></div><div class="line">	<span class="keyword">union</span> &#123;</div><div class="line">		TAILQ_ENTRY(event) ev_next_with_common_timeout;</div><div class="line">		<span class="keyword">int</span> min_heap_idx;</div><div class="line">	&#125; ev_timeout_pos;</div><div class="line">	<span class="keyword">evutil_socket_t</span> ev_fd;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">event_base</span> *<span class="title">ev_base</span>;</span></div><div class="line"></div><div class="line">	<span class="keyword">union</span> &#123;</div><div class="line">		<span class="comment">/* used for io events */</span></div><div class="line">		<span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">			LIST_ENTRY (event) ev_io_next;</div><div class="line">			<span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">ev_timeout</span>;</span></div><div class="line">		&#125; ev_io;</div><div class="line"></div><div class="line">		<span class="comment">/* used by signal events */</span></div><div class="line">		<span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">			LIST_ENTRY (event) ev_signal_next;</div><div class="line">			<span class="keyword">short</span> ev_ncalls;</div><div class="line">			<span class="comment">/* Allows deletes in callback */</span></div><div class="line">			<span class="keyword">short</span> *ev_pncalls;</div><div class="line">		&#125; ev_signal;</div><div class="line">	&#125; ev_;</div><div class="line"></div><div class="line">	<span class="keyword">short</span> ev_events;</div><div class="line">	<span class="keyword">short</span> ev_res;		<span class="comment">/* result passed to event callback */</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">ev_timeout</span>;</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>下面详细的介绍事件处理器event结构的每个成员：</p>
+<ul>
+<li><p>ev_events：时间类型，取值如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_TIMEOUT      0x01 <span class="comment">// 定时事件</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_READ            0x02 <span class="comment">// 可读事件</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_WRITE           0x04 <span class="comment">// 可写事件</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_SIGNAL         0x08 <span class="comment">// 信号事件</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_PERSIST        0x10 <span class="comment">// 永久事件</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_ET	                 0x20 <span class="comment">// 边沿触发事件，需要结合epoll使用</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_FINALIZE      0x40 <span class="comment">// 释放事件</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSED       0x80 <span class="comment">// 关闭事件</span></span></div></pre></td></tr></table></figure>
+</li>
+<li><p>ev_evcallback：事件处理器，其定义如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">event_callback</span> &#123;</span></div><div class="line">	TAILQ_ENTRY(event_callback) evcb_active_next;</div><div class="line">	<span class="keyword">short</span> evcb_flags;</div><div class="line">	<span class="keyword">ev_uint8_t</span> evcb_pri;	<span class="comment">/* smaller numbers are higher priority */</span></div><div class="line">	<span class="keyword">ev_uint8_t</span> evcb_closure;</div><div class="line">	<span class="comment">/* allows us to adopt for different types of events */</span></div><div class="line">        <span class="keyword">union</span> &#123;</div><div class="line">		<span class="keyword">void</span> (*evcb_callback)(<span class="keyword">evutil_socket_t</span>, <span class="keyword">short</span>, <span class="keyword">void</span> *);</div><div class="line">		<span class="keyword">void</span> (*evcb_selfcb)(struct event_callback *, <span class="keyword">void</span> *);</div><div class="line">		<span class="keyword">void</span> (*evcb_evfinalize)(struct event *, <span class="keyword">void</span> *);</div><div class="line">		<span class="keyword">void</span> (*evcb_cbfinalize)(struct event_callback *, <span class="keyword">void</span> *);</div><div class="line">	&#125; evcb_cb_union;</div><div class="line">	<span class="keyword">void</span> *evcb_arg;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>ev_active_next：所有被激活的事件处理器通过该成员串联成一个尾队列，称之为活动时间队列，宏TAILQ_ENTRY定义在compat/sys/queue.h文件中;</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> TAILQ_ENTRY(type)						\</span></div><div class="line"><span class="class"><span class="keyword">struct</span> &#123;</span>								\</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">type</span> *<span class="title">tqe_next</span>;</span>	<span class="comment">/* next element */</span>			\</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">type</span> **<span class="title">tqe_prev</span>;</span>	<span class="comment">/* address of previous next element */</span>	\</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>evcb_flags：事件标志，可选值如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_TIMEOUT	    0x01 <span class="comment">// 事件处理器从属于通用定时器队列或时间堆</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_INSERTED	    0x02 <span class="comment">// 事件处理器从属于注册事件队列</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_SIGNAL	    0x04 <span class="comment">// 没有使用</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_ACTIVE	    0x08 <span class="comment">/// 事件处理器从属于活动时间队列</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_INTERNAL	    0x10 <span class="comment">// 内部使用</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_ACTIVE_LATER 0x20 <span class="comment">// 事件处理器延迟激活</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_FINALIZING   0x40 <span class="comment">// 事件处理器已被释放</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_INIT	    0x80 <span class="comment">// 事件处理器已被初始化</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EVLIST_ALL          0xff <span class="comment">// 定义所有标志</span></span></div></pre></td></tr></table></figure>
+</li>
+<li><p>evcb_pri：事件处理器的优先级，值越小优先级越高，不同优先级的事件处理器会被插入到不同的活动事件队列中，Reactor会按照优先级从高到低遍历所有活动事件队列；</p>
+</li>
+<li><p>evcb_closure：指定event_base执行事件处理器的回调函数时的行为，可选值如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** 默认行为  */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSURE_EVENT 0</span></div><div class="line"><span class="comment">/** 执行信号的事件处理回调函数是，调用_ev.ev_signal.ev_ncalls次该回调函数 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSURE_EVENT_SIGNAL 1</span></div><div class="line"><span class="comment">/** 执行完回调函数后，再次将事件添加到注册事件队列中 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSURE_EVENT_PERSIST 2</span></div><div class="line"><span class="comment">/** 简单的回调函数 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSURE_CB_SELF 3</span></div><div class="line"><span class="comment">/** 释放回调函数 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSURE_CB_FINALIZE 4</span></div><div class="line"><span class="comment">/** 关闭回调函数 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSURE_EVENT_FINALIZE 5</span></div><div class="line"><span class="comment">/** 关闭之后释放回调函数 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_CLOSURE_EVENT_FINALIZE_FREE 6</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>evcb_cb_union：事件处理器回调函数的联合体，支持多种回调函数；</p>
+</li>
+<li>evcb_arg：回调函数参数。</li>
+</ul>
+</li>
+<li>ev_timeout_pos：定时事件处理器，支持时间堆和链表管理定时时间；</li>
+<li>ev<em>：联合体，将具有相同文件描述符的I/O时间通过ev</em>.ev<em>io串联成一个队列，称之为I/O事件队列，将具有相同信号值的信号处理器通过ev</em>.ev_signal串联成一个队列，成为之信号事件队列；</li>
+<li>ev_res：当前激活事件的类型；</li>
+<li>ev_timeout：定时器超时值。</li>
+</ul>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/06/interview/" rel="next" title="面试知识点总结【更新中】">
+                <i class="fa fa-chevron-left"></i> 面试知识点总结【更新中】
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Libevent简介"><span class="nav-number">1.</span> <span class="nav-text">Libevent简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Libevent源码组织结构"><span class="nav-number">2.</span> <span class="nav-text">Libevent源码组织结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#event结构体"><span class="nav-number">3.</span> <span class="nav-text">event结构体</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
