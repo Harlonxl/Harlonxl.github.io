@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="Linux服务器程序处理三类事件：I/O事件、信号和定时事件，在处理这三类事件时我们一般要考虑以下三个问题：  统一事件源：统一管理这些事件，既能使代码通俗易懂，也能避免一下潜在的问题，可以利用I/O复用系统调用统一管理所有的时间； 可移植性：不同的系统具有不同的I/O复用的方式，例如Solaris的/dev/poll文件，FreeBSD的kqueue机制，Linux的epoll系统调用； 对并发">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-09T03:34:31.607Z">
+<meta property="og:updated_time" content="2018-07-09T03:50:31.649Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Libevent源码分析">
 <meta name="twitter:description" content="Linux服务器程序处理三类事件：I/O事件、信号和定时事件，在处理这三类事件时我们一般要考虑以下三个问题：  统一事件源：统一管理这些事件，既能使代码通俗易懂，也能避免一下潜在的问题，可以利用I/O复用系统调用统一管理所有的时间； 可移植性：不同的系统具有不同的I/O复用的方式，例如Solaris的/dev/poll文件，FreeBSD的kqueue机制，Linux的epoll系统调用； 对并发">
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -225,7 +225,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -289,7 +289,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-09T09:59:23+08:00">
                 2018-07-09
@@ -310,7 +310,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -355,9 +355,9 @@
 <ul>
 <li>统一事件源：统一管理这些事件，既能使代码通俗易懂，也能避免一下潜在的问题，可以利用I/O复用系统调用统一管理所有的时间；</li>
 <li>可移植性：不同的系统具有不同的I/O复用的方式，例如Solaris的/dev/poll文件，FreeBSD的kqueue机制，Linux的epoll系统调用；</li>
-<li>对并发编程的支持：在多线程和多进程环境下，我们需要考虑各执行实体如何协同处理客户连接、信号和定时器，以避免竞态条件。<br>开源社区提供了很多优秀的I/O框架来解决上述问题，例如ACE、ASIO和Libevent，让我们将更多的精力放在业务与逻辑开发上，但是理解这些框架的原理对我们也是非常有帮助的，这篇博文主要分析Libevent的源码。<a id="more"></a>
-</li>
+<li>对并发编程的支持：在多线程和多进程环境下，我们需要考虑各执行实体如何协同处理客户连接、信号和定时器，以避免竞态条件。<br>开源社区提供了很多优秀的I/O框架来解决上述问题，例如ACE、ASIO和Libevent，让我们将更多的精力放在业务与逻辑开发上，但是理解这些框架的原理对我们也是非常有帮助的，这篇博文主要分析Libevent的源码。</li>
 </ul>
+<a id="more"></a>
 <hr>
 <h1 id="Libevent简介"><a href="#Libevent简介" class="headerlink" title="Libevent简介"></a>Libevent简介</h1><p>Libevent是开源社区的一款高性能I/O框架库，其学习者和使用者众多，其著名案例有：高性能分布式内存对象缓存软件memcached，Google浏览器Chromium的Linux版本。作为一个I/O框架库，Libevent具有如下特点：</p>
 <ul>
@@ -420,7 +420,7 @@
 </ul>
 </li>
 <li>ev_timeout_pos：定时事件处理器，支持时间堆和链表管理定时时间；</li>
-<li>ev<em>：联合体，将具有相同文件描述符的I/O时间通过ev</em>.ev<em>io串联成一个队列，称之为I/O事件队列，将具有相同信号值的信号处理器通过ev</em>.ev_signal串联成一个队列，成为之信号事件队列；</li>
+<li>ev_：联合体，将具有相同文件描述符的I/O时间通过ev_.ev<em>io串联成一个队列，称之为I/O事件队列，将具有相同信号值的信号处理器通过ev</em>.ev_signal串联成一个队列，成为之信号事件队列；</li>
 <li>ev_res：当前激活事件的类型；</li>
 <li>ev_timeout：定时器超时值。</li>
 </ul>
@@ -511,10 +511,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Übersicht
           </li>
         </ul>
       
@@ -535,7 +535,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">88</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -546,7 +546,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -557,7 +557,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -621,7 +621,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
