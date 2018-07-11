@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于服务器程序来讲，除了在编程上要尽可能提高服务器程序的性能，也要掌握一些服务器调制、调试和测试的手段，这篇文章主要总结常用的一些服务器程序调制、调试和测试的常用方法和工具。  系统调制这里讲的调制主要是是Linux系统内核微调，我们可以通过命令或者修改文件的方式来微调内核参数，从而发挥服务器的最大性能。  最大文件描述符在这些参数中最大文件描述符尤为重要，基本上每个服务器程序都要与文件描述符打交">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务器开发调制、调试和测试的一些方法">
+<meta property="og:url" content="http://harlon.org/2017/11/20/serverdebugging/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="对于服务器程序来讲，除了在编程上要尽可能提高服务器程序的性能，也要掌握一些服务器调制、调试和测试的手段，这篇文章主要总结常用的一些服务器程序调制、调试和测试的常用方法和工具。  系统调制这里讲的调制主要是是Linux系统内核微调，我们可以通过命令或者修改文件的方式来微调内核参数，从而发挥服务器的最大性能。  最大文件描述符在这些参数中最大文件描述符尤为重要，基本上每个服务器程序都要与文件描述符打交">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-11T01:35:00.846Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="服务器开发调制、调试和测试的一些方法">
+<meta name="twitter:description" content="对于服务器程序来讲，除了在编程上要尽可能提高服务器程序的性能，也要掌握一些服务器调制、调试和测试的手段，这篇文章主要总结常用的一些服务器程序调制、调试和测试的常用方法和工具。  系统调制这里讲的调制主要是是Linux系统内核微调，我们可以通过命令或者修改文件的方式来微调内核参数，从而发挥服务器的最大性能。  最大文件描述符在这些参数中最大文件描述符尤为重要，基本上每个服务器程序都要与文件描述符打交">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2017/11/20/serverdebugging/"/>
+
+
+
+
+
+  <title>服务器开发调制、调试和测试的一些方法 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/11/20/serverdebugging/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">服务器开发调制、调试和测试的一些方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-20T10:19:18+08:00">
+                2017-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index">
+                    <span itemprop="name">Technology</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于服务器程序来讲，除了在编程上要尽可能提高服务器程序的性能，也要掌握一些服务器调制、调试和测试的手段，这篇文章主要总结常用的一些服务器程序调制、调试和测试的常用方法和工具。</p>
+<hr>
+<h1 id="系统调制"><a href="#系统调制" class="headerlink" title="系统调制"></a>系统调制</h1><p>这里讲的调制主要是是Linux系统内核微调，我们可以通过命令或者修改文件的方式来微调内核参数，从而发挥服务器的最大性能。</p>
+<hr>
+<h2 id="最大文件描述符"><a href="#最大文件描述符" class="headerlink" title="最大文件描述符"></a>最大文件描述符</h2><p>在这些参数中最大文件描述符尤为重要，基本上每个服务器程序都要与文件描述符打交道，文件描述符是我们获得系统资源的基本途径。<br>Linux对应用程序能够打开的文件描述符数量有两个层次的限制：用户级限制和系统级限制。用户级限制是指目标用户运行的所有进程总共能打开的文件描述符；系统级限制是指所有用户总共能打开的文件描述符数。<br>查看用户级文件描述符数：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ulimit -n</div></pre></td></tr></table></figure></p>
+<p>设置用户级文件描述符数：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ulimit -SHn 20000</div></pre></td></tr></table></figure></p>
+<p>永久设置用户级文件描述符数，修改/etc/security/limits.conf配置文件，加入如下两项：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">* hard nofile 20000</div><div class="line">* soft nofile 10000</div></pre></td></tr></table></figure></p>
+<p>第一项是硬限制，第二项是软限制<br>修改系统级文件描述符数限制：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl -w fs.file-max=1000000</div></pre></td></tr></table></figure></p>
+<p>永修修改系统级文件描述符数，修改/etc/sysctl.conf，加入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fs.file-max=1000000</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="调整内核参数"><a href="#调整内核参数" class="headerlink" title="调整内核参数"></a>调整内核参数</h2><p>几乎所有的内核参数，包括内核核心模块和驱动程序，都在/proc/sys文件系统下提供了某些配置文件以供用户调整模块的属性和行为，通常一个配置文件对应一个内核参数，文件名就是内核参数的名字，可以通过以下命令来查看所有的内核参数：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl -a</div></pre></td></tr></table></figure></p>
+<hr>
+<p>/proc/sys/fs目录：</p>
+<ul>
+<li>/proc/sys/fs/file-max：系统级文件描述符限制</li>
+<li>/proc/sys/fs/max_user_watches：一个用户能够往epoll内核事件中注册的时间的总量<br>/proc/sys/net目录：</li>
+<li>/proc/sys/net/core/somaxconn：listen监听队列里，能够建立完整连接从而进入ESTABLISHED状态的socket的最大数目</li>
+<li>/proc/sys/net/ipv4/tcp_max_syn_backlog：listen监听队列里，能够转移至ESTABLISHED或者SYN_RCVD状态的最大数目</li>
+<li>/proc/sys/net/ipv4/tcp_wmem：包括3个值，分别指定一个socket的TCP写缓冲区的最小值、默认值和最大值</li>
+<li>/proc/sys/net/ipv4/tcp_rmem：包括3个值，分别指定一个socket的TCP读缓冲区的最小值、默认值和最大值</li>
+<li>/pro/sys/net/ipv4/tcp_syncookies：指定是否打开TCP同步标签（syncookie），防止SYN风暴。</li>
+</ul>
+<hr>
+<h1 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h1><p>Linux服务器程序调试一般使用gdb工具，这部分我们讨论如何使用gdb，以及如何使用gdb调试多进程、多线程程序</p>
+<h2 id="gdb使用方法"><a href="#gdb使用方法" class="headerlink" title="gdb使用方法"></a>gdb使用方法</h2><p>调试可执行程序<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gdb test</div></pre></td></tr></table></figure></p>
+<p>对于C++程序，要在编译前加上-g选项<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">g++ -g test.cpp -o test</div></pre></td></tr></table></figure></p>
+<p>gdb的基本命令如下：<br>运行：</p>
+<ul>
+<li>run（r）：简记为 r ，其作用是运行程序，当遇到断点后，程序会在断点处停止运行，等待用户输入下一步的命令;</li>
+<li>continue（c）：继续执行，到下一个断点处（或运行结束）;</li>
+<li>next：（n）：单步跟踪程序，当遇到函数调用时，也不进入此函数体；此命令同 step 的主要区别是，step 遇到用户自定义的函数，将步进到函数中去运行，而 next 则直接调用函数，不会进入到函数体内；</li>
+<li>step （s）：单步调试如果有函数调用，则进入函数；与命令n不同，n是不进入调用的函数的；</li>
+<li>until：当你厌倦了在一个循环体内单步跟踪时，这个命令可以运行程序直到退出循环体；</li>
+<li>until+行号： 运行至某行，不仅仅用来跳出循环；</li>
+<li>finish： 运行程序，直到当前函数完成返回，并打印函数返回时的堆栈地址和返回值及参数值等信息；</li>
+<li>call 函数(参数)：调用程序中可见的函数，并传递“参数”，如：call gdb_test(55)；</li>
+<li>quit：简记为 q ，退出gdb；<br>设置断点：</li>
+<li>break n （b n）:在第n行处设置断点（可以带上代码路径和代码名称： b OAGUPDATE.cpp:578）；</li>
+<li>b fn1 if a＞b：条件断点设置；</li>
+<li>break func（b）：在函数func()的入口处设置断点，如：break cb_button；</li>
+<li>delete 断点号n：删除第n个断点；</li>
+<li>disable 断点号n：暂停第n个断点；</li>
+<li>enable 断点号n：开启第n个断点；</li>
+<li>clear 行号n：清除第n行的断点；</li>
+<li>info b （info breakpoints） ：显示当前程序的断点设置情况；</li>
+<li>delete breakpoints：清除所有断点：<br>查看源码：</li>
+<li>list （r）：其作用就是列出程序的源代码，默认每次显示10行；</li>
+<li>list 行号：将显示当前文件以“行号”为中心的前后10行代码，如：list 12；</li>
+<li>list 函数名：将显示“函数名”所在函数的源代码，如：list main；</li>
+<li>list ：不带参数，将接着上一次 list 命令的，输出下边的内容；<br>打印表达式</li>
+<li>print 表达式（p）：其中“表达式”可以是任何当前正在被测试程序的有效表达式，比如当前正在调试C语言的程序，那么“表达式”可以是任何C语言的有效表达式，包括数字，变量甚至是函数调用；</li>
+<li>print a：将显示整数 a 的值；</li>
+<li>print ++a：将把 a 中的值加1，并显示出来；</li>
+<li>print name：将显示字符串 name 的值；</li>
+<li>print gdb_test(22)：将以整数22作为参数调用 gdb_test() 函数；</li>
+<li>print gdb_test(a)：将以变量 a 作为参数调用 gdb_test() 函数；</li>
+<li>display 表达式：在单步运行时将非常有用，使用display命令设置一个表达式后，它将在每次单步进行指令后，紧接着输出被设置的表达式及值。如： display a；</li>
+<li>watch 表达式：设置一个监视点，一旦被监视的“表达式”的值改变，gdb将强行终止正在被调试的程序。如： watch a；</li>
+<li>whatis ：查询变量或函数；</li>
+<li>info function： 查询函数；</li>
+<li>扩展info locals： 显示当前堆栈页的所有变量；<br>查询运行信息：</li>
+<li>where/bt ：当前运行的堆栈列表；</li>
+<li>bt backtrace 显示当前调用堆栈</li>
+<li>up/down 改变堆栈显示的深度</li>
+<li>set args 参数:指定运行时的参数</li>
+<li>show args：查看设置好的参数</li>
+<li>info program： 来查看程序的是否在运行，进程号，被暂停的原因。<br>分割窗口：</li>
+<li>layout：用于分割窗口，可以一边查看代码，一边测试：</li>
+<li>layout src：显示源代码窗口</li>
+<li>layout asm：显示反汇编窗口</li>
+<li>layout regs：显示源代码/反汇编和CPU寄存器窗口</li>
+<li>layout split：显示源代码和反汇编窗口</li>
+<li>Ctrl + L：刷新窗口</li>
+</ul>
+<hr>
+<h2 id="gdb调试多进程程序"><a href="#gdb调试多进程程序" class="headerlink" title="gdb调试多进程程序"></a>gdb调试多进程程序</h2><ul>
+<li><p>方法一：先运行程序，然后找到其子进程的PID，再附加（attach）到gdb调试器上；</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> gdb</div><div class="line">(gdb) attach 4183</div></pre></td></tr></table></figure>
+</li>
+<li><p>方法二：gdb调试选项follow-fork-mode允许我们选择程序在执行fork系统调用后是继续调试父进程还是调试子进程，其用法如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) set follow-fork-mode mode</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其中，mode的可选值是parent和child。</p>
+<hr>
+<h2 id="gdb调试多线程程序"><a href="#gdb调试多线程程序" class="headerlink" title="gdb调试多线程程序"></a>gdb调试多线程程序</h2><ul>
+<li>info threads：显示当前可调试的所有线程，gdb会为每个线程分配一个ID，我们可以使用这个ID来操作对应的线程，ID前面有”*“号的是当前被调试的线程；</li>
+<li>thread ID：调试目标ID指定的线程；</li>
+<li>set scheduler-locking [off|on|step]：调试多线程程序时，默认除了被调试的线程在执行外，其他线程也继续执行，但有的时候我们希望只让被调试的线程运行，可以通过这个命令来实现，off表示不锁定任何线程，即所有的线程都可以继续执行，on表示只有当前被调试的进程会继续执行，step表示在单步执行的时候，只有当前程序会执行。</li>
+</ul>
+<hr>
+<h1 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h1><p>压力测试程序有很多实现方式，比如I/O复用、多线程、多进程并发编程方式，以及这些方式的结合使用，不过，单纯的I/O复用方式的施压程度是最高的，因为线程、进程的调度本身会占用一定的CPU时间的。<br><a href="https://github.com/Harlonxl/TMemter" target="_blank" rel="external">压力测试程序代码</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/20/python/" rel="next" title="python入门到精通">
+                <i class="fa fa-chevron-left"></i> python入门到精通
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/21/cplusplusstl/" rel="prev" title="C++之STL用法">
+                C++之STL用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#系统调制"><span class="nav-number">1.</span> <span class="nav-text">系统调制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最大文件描述符"><span class="nav-number">1.1.</span> <span class="nav-text">最大文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调整内核参数"><span class="nav-number">1.2.</span> <span class="nav-text">调整内核参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试"><span class="nav-number">2.</span> <span class="nav-text">调试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gdb使用方法"><span class="nav-number">2.1.</span> <span class="nav-text">gdb使用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gdb调试多进程程序"><span class="nav-number">2.2.</span> <span class="nav-text">gdb调试多进程程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gdb调试多线程程序"><span class="nav-number">2.3.</span> <span class="nav-text">gdb调试多线程程序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#压力测试"><span class="nav-number">3.</span> <span class="nav-text">压力测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
