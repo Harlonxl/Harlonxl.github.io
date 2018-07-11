@@ -82,11 +82,11 @@
 <meta name="description" content="对于服务器程序来讲，除了在编程上要尽可能提高服务器程序的性能，也要掌握一些服务器调制、调试和测试的手段，这篇文章主要总结常用的一些服务器程序调制、调试和测试的常用方法和工具。  系统调制这里讲的调制主要是是Linux系统内核微调，我们可以通过命令或者修改文件的方式来微调内核参数，从而发挥服务器的最大性能。  最大文件描述符在这些参数中最大文件描述符尤为重要，基本上每个服务器程序都要与文件描述符打交">
 <meta property="og:type" content="article">
 <meta property="og:title" content="服务器开发调制、调试和测试的一些方法">
-<meta property="og:url" content="http://harlon.org/2017/11/20/serverdebugging/index.html">
+<meta property="og:url" content="http://harlon.org/2018/01/11/serverdebugging/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="对于服务器程序来讲，除了在编程上要尽可能提高服务器程序的性能，也要掌握一些服务器调制、调试和测试的手段，这篇文章主要总结常用的一些服务器程序调制、调试和测试的常用方法和工具。  系统调制这里讲的调制主要是是Linux系统内核微调，我们可以通过命令或者修改文件的方式来微调内核参数，从而发挥服务器的最大性能。  最大文件描述符在这些参数中最大文件描述符尤为重要，基本上每个服务器程序都要与文件描述符打交">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-11T01:35:00.846Z">
+<meta property="og:updated_time" content="2018-07-11T01:40:02.236Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器开发调制、调试和测试的一些方法">
 <meta name="twitter:description" content="对于服务器程序来讲，除了在编程上要尽可能提高服务器程序的性能，也要掌握一些服务器调制、调试和测试的手段，这篇文章主要总结常用的一些服务器程序调制、调试和测试的常用方法和工具。  系统调制这里讲的调制主要是是Linux系统内核微调，我们可以通过命令或者修改文件的方式来微调内核参数，从而发挥服务器的最大性能。  最大文件描述符在这些参数中最大文件描述符尤为重要，基本上每个服务器程序都要与文件描述符打交">
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2017/11/20/serverdebugging/"/>
+  <link rel="canonical" href="http://harlon.org/2018/01/11/serverdebugging/"/>
 
 
 
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -225,7 +225,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2017/11/20/serverdebugging/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/01/11/serverdebugging/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -289,10 +289,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-20T10:19:18+08:00">
-                2017-11-20
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-11T09:39:18+08:00">
+                2018-01-11
               </time>
             
 
@@ -310,7 +310,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -533,10 +533,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Übersicht
           </li>
         </ul>
       
@@ -557,7 +557,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">90</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -568,7 +568,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -579,7 +579,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -643,7 +643,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
