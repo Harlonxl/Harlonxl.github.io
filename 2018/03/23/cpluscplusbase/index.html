@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="C/C++基础开发知识复习总结。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-22T09:43:46.391Z">
+<meta property="og:updated_time" content="2018-07-22T16:03:09.337Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C&#x2F;C++编程基础部分常见问题梳理">
 <meta name="twitter:description" content="C/C++基础开发知识复习总结。">
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Accueil
           </a>
         </li>
       
@@ -225,7 +225,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -299,7 +299,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-23T18:17:23+08:00">
                 2018-03-23
@@ -320,7 +320,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -524,15 +524,6 @@
 <li>delete[]会调用数组中每个元素的析构函数</li>
 </ul>
 <hr>
-<h1 id="23、C-默认函数有哪些？"><a href="#23、C-默认函数有哪些？" class="headerlink" title="23、C++默认函数有哪些？"></a><span id="id22">23、C++默认函数有哪些？</span></h1><ul>
-<li>默认构造函数</li>
-<li>默认拷贝构造函数</li>
-<li>默认析构函数</li>
-<li>赋值函数</li>
-<li>取地址符</li>
-<li>取地址符 const<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Empty</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    Empty() &#123; &#125;</div><div class="line">    Empty(<span class="keyword">const</span> Empty &amp;) &#123; &#125;</div><div class="line">    ~Empty() &#123; &#125;</div><div class="line">    Empty&amp; <span class="keyword">operator</span>= (<span class="keyword">const</span> Empty &amp;) &#123; &#125;</div><div class="line">    Empty* <span class="keyword">operator</span>&amp; () &#123; &#125;</div><div class="line">    <span class="keyword">const</span> Empty* <span class="keyword">operator</span>&amp;() <span class="keyword">const</span> &#123; &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-</ul>
 <blockquote>
 <p>参考资料：<br><a href="https://github.com/linw7/Skill-Tree/blob/master/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80C%2B%2B.md" target="_blank" rel="external">编程语言(C/C++)</a></p>
 </blockquote>
@@ -626,10 +617,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table Des Matières
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Ensemble
           </li>
         </ul>
       
@@ -650,7 +641,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">90</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">articles</span>
                 </a>
               </div>
             
@@ -661,7 +652,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -672,7 +663,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -706,7 +697,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、变量声明和定义有什么不同？"><span class="nav-number">1.</span> <span class="nav-text">1、变量声明和定义有什么不同？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、零值比较？"><span class="nav-number">2.</span> <span class="nav-text">2、零值比较？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、strlen和sizeof区别？"><span class="nav-number">3.</span> <span class="nav-text">3、strlen和sizeof区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、相同类的同一对象可以相互赋值吗？"><span class="nav-number">4.</span> <span class="nav-text">4、相同类的同一对象可以相互赋值吗？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、结构体内存对齐问题？"><span class="nav-number">5.</span> <span class="nav-text">5、结构体内存对齐问题？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6、struct和class的区别？"><span class="nav-number">6.</span> <span class="nav-text">6、struct和class的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7、malloc和new的区别？"><span class="nav-number">7.</span> <span class="nav-text">7、malloc和new的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8、指针和引用的区别？"><span class="nav-number">8.</span> <span class="nav-text">8、指针和引用的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9、宏定义和函数的区别？"><span class="nav-number">9.</span> <span class="nav-text">9、宏定义和函数的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10、define和const的区别？"><span class="nav-number">10.</span> <span class="nav-text">10、define和const的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11、宏定义和typedef区别？"><span class="nav-number">11.</span> <span class="nav-text">11、宏定义和typedef区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12、宏定义和内联函数-inline-的区别？"><span class="nav-number">12.</span> <span class="nav-text">12、宏定义和内联函数(inline)的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13、条件编译-ifdef，-else，-endif作用？"><span class="nav-number">13.</span> <span class="nav-text">13、条件编译#ifdef，#else，#endif作用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14、区分一下几种变量？"><span class="nav-number">14.</span> <span class="nav-text">14、区分一下几种变量？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15、volatile有什么作用？"><span class="nav-number">15.</span> <span class="nav-text">15、volatile有什么作用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16、什么是常引用？"><span class="nav-number">16.</span> <span class="nav-text">16、什么是常引用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17、区分以下指针类型？"><span class="nav-number">17.</span> <span class="nav-text">17、区分以下指针类型？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#18、a和-amp-a有什么区别？"><span class="nav-number">18.</span> <span class="nav-text">18、a和&a有什么区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#19、数组名和指针（这里为指向数组首元素的指针）区别？"><span class="nav-number">19.</span> <span class="nav-text">19、数组名和指针（这里为指向数组首元素的指针）区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#20、野指针是什么？"><span class="nav-number">20.</span> <span class="nav-text">20、野指针是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#21、堆和栈的区别？"><span class="nav-number">21.</span> <span class="nav-text">21、堆和栈的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#22、delete和delete-的区别？"><span class="nav-number">22.</span> <span class="nav-text">22、delete和delete[]的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#23、C-默认函数有哪些？"><span class="nav-number">23.</span> <span class="nav-text">23、C++默认函数有哪些？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、变量声明和定义有什么不同？"><span class="nav-number">1.</span> <span class="nav-text">1、变量声明和定义有什么不同？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、零值比较？"><span class="nav-number">2.</span> <span class="nav-text">2、零值比较？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、strlen和sizeof区别？"><span class="nav-number">3.</span> <span class="nav-text">3、strlen和sizeof区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、相同类的同一对象可以相互赋值吗？"><span class="nav-number">4.</span> <span class="nav-text">4、相同类的同一对象可以相互赋值吗？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、结构体内存对齐问题？"><span class="nav-number">5.</span> <span class="nav-text">5、结构体内存对齐问题？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6、struct和class的区别？"><span class="nav-number">6.</span> <span class="nav-text">6、struct和class的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7、malloc和new的区别？"><span class="nav-number">7.</span> <span class="nav-text">7、malloc和new的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8、指针和引用的区别？"><span class="nav-number">8.</span> <span class="nav-text">8、指针和引用的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9、宏定义和函数的区别？"><span class="nav-number">9.</span> <span class="nav-text">9、宏定义和函数的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10、define和const的区别？"><span class="nav-number">10.</span> <span class="nav-text">10、define和const的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11、宏定义和typedef区别？"><span class="nav-number">11.</span> <span class="nav-text">11、宏定义和typedef区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12、宏定义和内联函数-inline-的区别？"><span class="nav-number">12.</span> <span class="nav-text">12、宏定义和内联函数(inline)的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13、条件编译-ifdef，-else，-endif作用？"><span class="nav-number">13.</span> <span class="nav-text">13、条件编译#ifdef，#else，#endif作用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14、区分一下几种变量？"><span class="nav-number">14.</span> <span class="nav-text">14、区分一下几种变量？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15、volatile有什么作用？"><span class="nav-number">15.</span> <span class="nav-text">15、volatile有什么作用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16、什么是常引用？"><span class="nav-number">16.</span> <span class="nav-text">16、什么是常引用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17、区分以下指针类型？"><span class="nav-number">17.</span> <span class="nav-text">17、区分以下指针类型？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#18、a和-amp-a有什么区别？"><span class="nav-number">18.</span> <span class="nav-text">18、a和&a有什么区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#19、数组名和指针（这里为指向数组首元素的指针）区别？"><span class="nav-number">19.</span> <span class="nav-text">19、数组名和指针（这里为指向数组首元素的指针）区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#20、野指针是什么？"><span class="nav-number">20.</span> <span class="nav-text">20、野指针是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#21、堆和栈的区别？"><span class="nav-number">21.</span> <span class="nav-text">21、堆和栈的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#22、delete和delete-的区别？"><span class="nav-number">22.</span> <span class="nav-text">22、delete和delete[]的区别？</span></a></li></ol></div>
             
 
           </div>
@@ -736,7 +727,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -744,7 +735,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 

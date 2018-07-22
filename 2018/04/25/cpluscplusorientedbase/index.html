@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="C++面向对象基础面试题收录。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-25T12:18:39.000Z">
+<meta property="og:updated_time" content="2018-07-22T16:25:09.387Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++面向对象基础">
 <meta name="twitter:description" content="C++面向对象基础面试题收录。">
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Accueil
           </a>
         </li>
       
@@ -225,7 +225,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -299,7 +299,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-25T19:20:23+08:00">
                 2018-04-25
@@ -320,7 +320,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -380,17 +380,20 @@
 <h1 id="C-空类有哪些成员函数？"><a href="#C-空类有哪些成员函数？" class="headerlink" title="C++空类有哪些成员函数？"></a>C++空类有哪些成员函数？</h1><ul>
 <li>空类大小为1字节</li>
 <li>默认函数有：<ul>
-<li>构造函数</li>
-<li>析构函数</li>
-<li>拷贝构造函数</li>
-<li>拷贝赋值函数</li>
+<li>默认构造函数</li>
+<li>默认拷贝构造函数</li>
+<li>默认析构函数</li>
+<li>赋值函数</li>
+<li>取地址符</li>
+<li>取地址符 const<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Empty</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    Empty() &#123; &#125;</div><div class="line">    Empty(<span class="keyword">const</span> Empty &amp;) &#123; &#125;</div><div class="line">    ~Empty() &#123; &#125;</div><div class="line">    Empty&amp; <span class="keyword">operator</span>= (<span class="keyword">const</span> Empty &amp;) &#123; &#125;</div><div class="line">    Empty* <span class="keyword">operator</span>&amp; () &#123; &#125;</div><div class="line">    <span class="keyword">const</span> Empty* <span class="keyword">operator</span>&amp;() <span class="keyword">const</span> &#123; &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
 </ul>
 <hr>
 <h1 id="构造函数是否为虚函数？析构函数呢？"><a href="#构造函数是否为虚函数？析构函数呢？" class="headerlink" title="构造函数是否为虚函数？析构函数呢？"></a>构造函数是否为虚函数？析构函数呢？</h1><ul>
 <li>构造函数：构造函数不能为虚函数，创建类对象时，首先会创建基类对象，调用基类的构造函数，如果构造函数是虚函数，要通过虚函数指针判断执行的是父类函数还是子类函数，而对象还没有创建，所以不存在虚函数指针。</li>
-<li>构造函数：构造函数可以是虚函数，而别一般都是虚函数，这样delete释放子类的时候，父类的析构函数才能被调用。</li>
+<li>析构函数：析构函数可以是虚函数，而且一般都是虚函数，这样delete释放子类的时候，父类的析构函数才能被调用。</li>
 </ul>
 <hr>
 <h1 id="构造函数调用顺序，析构函数呢？"><a href="#构造函数调用顺序，析构函数呢？" class="headerlink" title="构造函数调用顺序，析构函数呢？"></a>构造函数调用顺序，析构函数呢？</h1><ul>
@@ -406,7 +409,7 @@
 <h1 id="拷贝构造函数和赋值运算符的区别？"><a href="#拷贝构造函数和赋值运算符的区别？" class="headerlink" title="拷贝构造函数和赋值运算符的区别？"></a>拷贝构造函数和赋值运算符的区别？</h1><ul>
 <li>拷贝构造函数是函数，赋值运算符是运算符重载。</li>
 <li>拷贝构造函数会生成新的类，赋值运算符不能。</li>
-<li>拷贝构造函数直接构造一个新的类对象，所以在初始化对象前不需要检查源对象和新建对象是否相同；赋值运算符要检查源对象和被赋值对象是否相同，另外复制运算符中如果原来的对象有内存分配需要将原来的内存释放掉。</li>
+<li>拷贝构造函数直接构造一个新的类对象，所以在初始化对象前不需要检查源对象和新建对象是否相同；赋值运算符要检查源对象和被赋值对象是否相同，另外赋值运算符中如果原来的对象有内存分配需要将原来的内存释放掉。</li>
 </ul>
 <hr>
 <h1 id="重载，覆盖和隐藏的区别"><a href="#重载，覆盖和隐藏的区别" class="headerlink" title="重载，覆盖和隐藏的区别"></a>重载，覆盖和隐藏的区别</h1><ul>
@@ -520,10 +523,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table Des Matières
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Ensemble
           </li>
         </ul>
       
@@ -544,7 +547,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">90</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">articles</span>
                 </a>
               </div>
             
@@ -555,7 +558,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -566,7 +569,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -630,7 +633,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -638,7 +641,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
