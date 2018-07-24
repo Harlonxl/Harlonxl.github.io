@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="海量数据处理算法">
+<meta property="og:url" content="http://harlon.org/2018/07/23/datastructurebigdata/index.html">
+<meta property="og:site_name" content="Harlon&#39;s BLOG">
+<meta property="og:description" content="海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-22T17:56:00.596Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="海量数据处理算法">
+<meta name="twitter:description" content="海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://harlon.org/2018/07/23/datastructurebigdata/"/>
+
+
+
+
+
+  <title>海量数据处理算法 | Harlon's BLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Harlon's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Accueil
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-technology">
+          <a href="/categories/Technology/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Technology
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-notes">
+          <a href="/categories/Notes" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Notes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-system-design">
+          <a href="/categories/Design" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br />
+            
+            System Design
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/07/23/datastructurebigdata/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">海量数据处理算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-23T12:47:23+08:00">
+                2018-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。<br><a id="more"></a></p>
+<h1 id="海量数据处理问题的考点"><a href="#海量数据处理问题的考点" class="headerlink" title="海量数据处理问题的考点"></a>海量数据处理问题的考点</h1><p>首先来看一道简单的例子：<a href="https://www.lintcode.com/problem/intersection-of-two-arrays/description" target="_blank" rel="external">求数组A和数据B的交集</a><br>三种不同的解法：<br>方法一：暴力求解，对于数据B中的每一个元素，在A中查找是否存在，如果存在，添加到结果集中，注意去重（排序或hash），时间复杂度 <code>O(m*n)</code>。<br>方法二：Hash，将A中每个元素添加到hash中，遍历B中的元素，如果命中，添加到结果集中，注意去重（hash），时间复杂度<code>O(m + n)</code>。<br>方法三：二分，对A进行排序，遍历B，在A中二分查找元素是否存在，如果存在，添加到结果集中，注意去重（排序），时间复杂度<code>O(mlog(m) + nlog(n))</code>。</p>
+<p>海量数据处理的问题：求两个超大文件中 URLs 的交集，内存不足以放下所有 URLs。<br>首先我们来看一下常见的考点：<br>算法方面：</p>
+<ol>
+<li>外排序算法（External Sorting）</li>
+<li>Map Reduce</li>
+<li>非精确算法</li>
+<li>概率算法</li>
+<li>哈希算法与哈希函数（Hash Function）</li>
+</ol>
+<p>数据结构方面：</p>
+<ol>
+<li>哈希表（Hash Table）</li>
+<li>堆（Heap）</li>
+<li>布隆过滤器（BloomFliter）</li>
+<li>位图（Bitmap）</li>
+<li>Trie树（Trie）</li>
+</ol>
+<hr>
+<h1 id="最高频K项问题"><a href="#最高频K项问题" class="headerlink" title="最高频K项问题"></a>最高频K项问题</h1><p>问题：找到一个大文件或者数据流中出现频率最高的 K 项<br>这个问题的难点在于，如果条件不同，解决的方法是完全不一样的：</p>
+<ol>
+<li>是否需要精确的Top K结果？即，是否允许小概率出错。</li>
+<li>数据是离线的还是在线的？即是一个大文件的形式计算一次得到一个结果，还是数据流的形式返回结果。</li>
+</ol>
+<hr>
+<h2 id="整数数组前k大"><a href="#整数数组前k大" class="headerlink" title="整数数组前k大"></a>整数数组前k大</h2><p>问题：在一个整数数组中，找最大的 K 个整数</p>
+<ol>
+<li>离线算法：QuickSort，时间复杂度<code>O(N)</code></li>
+<li>在线算法：Heap，小顶堆，时间复杂度<code>O(Nlogk)</code></li>
+</ol>
+<hr>
+<h2 id="最高频-K-项的离线算法"><a href="#最高频-K-项的离线算法" class="headerlink" title="最高频 K 项的离线算法"></a>最高频 K 项的离线算法</h2><p>伪代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 1. 用一个Hash表统计单词出现的次数</span></div><div class="line"><span class="comment"># 2. 循环每一个出现的项，用最大K项的方法，获得最大的K项</span></div><div class="line">hash = &#123;&#125;</div><div class="line"><span class="keyword">for</span> e <span class="keyword">in</span> elements:</div><div class="line">    hash[e] = hash.get(e, <span class="number">0</span>) + <span class="number">1</span></div><div class="line">    </div><div class="line"><span class="keyword">for</span> element, frequency <span class="keyword">in</span> hash:</div><div class="line">    用最小堆统计&lt;element, frequency&gt;的前K项</div></pre></td></tr></table></figure></p>
+<p>问：时空复杂度：<br>答：第一步的时间复杂度<code>O(N)</code>，空间复杂度<code>O(N)</code>，第二步时间复杂度<code>O(NlogK)</code>，空间复杂度<code>O(K)</code>，总的时间复杂度<code>O(NlogK)</code>，空间复杂度<code>O(N)</code>。</p>
+<p>Follow up 1：还有办法提速吗？<br>如果是上T的数据，扫描一次会非常的耗时，算法时间复杂度<code>O(NlogK)</code>看起来是理论上的下限，但有没有办法再提速？<br>问题描述：这里假设你有若干个小文件（如果是一个很大的文件，可以先进行 split，分割为若干个小文件），他们加起来有 1T 那么大。每个文件中用空格隔开若干单词，你需要统计出现次数最多的 K 个单词。</p>
+<p>Map Reduce解决最高频K项问题：</p>
+<ol>
+<li>通过Map步骤，将每个文件中的单词一个一个取出，组成<key, 1="">这样的key-value二元组，作为Map的输出；</key,></li>
+<li>通过Reduce步骤，每个Reducer将收到的key的value加起来，这样就得到了每个key出现的次数，每个Reducer维护一个小顶堆，如果大于小顶堆的堆顶，就删除堆顶元素，将元素插入堆。通过Reducer处理完成之后，输出得到的Top K；</li>
+<li>可能有多个Reducer，因此我们会得到多个Top K，之后扫描这些Top K，得到最终的Top K。</li>
+</ol>
+<p>Follow up 2：内存不够怎么办？<br>问题描述：上面这个算法中，我们花费了 O(N) 的空间耗费，也就是需要把所有的，比如说单词，都放到内存里。<br>在现实场景中，这很可能是不行的，因为 N 可能非常的大。即便我们使用上了 Follow up 1 中的 Map Reduce 的办法，那么比如说就算你用了很多台机器，但是分到每台机器上的时候，仍然无法全部加载到内存中，也是有可能的。<br>假设现在只有一台机器，内存为 1G，你有一个 1T 大小的文件，需要统计里面最高频的 K 个单词。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/22/interview/" rel="next" title="面试知识点总结【更新中】">
+                <i class="fa fa-chevron-left"></i> 面试知识点总结【更新中】
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Harlon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">91</span>
+                  <span class="site-state-item-name">articles</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#海量数据处理问题的考点"><span class="nav-number">1.</span> <span class="nav-text">海量数据处理问题的考点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最高频K项问题"><span class="nav-number">2.</span> <span class="nav-text">最高频K项问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整数数组前k大"><span class="nav-number">2.1.</span> <span class="nav-text">整数数组前k大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频-K-项的离线算法"><span class="nav-number">2.2.</span> <span class="nav-text">最高频 K 项的离线算法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Harlon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

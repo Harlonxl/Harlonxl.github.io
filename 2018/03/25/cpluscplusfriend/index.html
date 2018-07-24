@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="C++友元提供了一种普通函数或者类成员函数，访问另一个类中的私有或者保护成员的机制。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-25T08:02:35.000Z">
+<meta property="og:updated_time" content="2018-07-23T16:07:35.613Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之友元">
 <meta name="twitter:description" content="C++友元提供了一种普通函数或者类成员函数，访问另一个类中的私有或者保护成员的机制。">
@@ -369,7 +369,7 @@
 <li>友元类：友元类可以访问该类中所有的私有或者保护成员<br>友元提高了程序的运行效率，但也破坏了类的封装和数据的透明性。</li>
 </ul>
 <hr>
-<h1 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h1><p>友元函数是类外定义的、不属于当前类的函数也可以在类中声明，但要在前面加friend关键字，这样就构成了友元函数。友元函数可以是友元函数可以是不属于任何类的非成员函数，也可以是其他类的成员函数。<br>友元函数可以访问当前类中的所有成员，包括public、protected、private。</p>
+<h1 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h1><p>友元函数是类外定义的、不属于当前类的函数也可以在类中声明，但要在前面加friend关键字，这样就构成了友元函数。友元函数可以是不属于任何类的非成员函数，也可以是其他类的成员函数。<br>友元函数可以访问当前类中的所有成员，包括public、protected、private。</p>
 <h2 id="非成员函数"><a href="#非成员函数" class="headerlink" title="非成员函数"></a>非成员函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    Student(<span class="built_in">string</span> name, <span class="keyword">int</span> age, <span class="keyword">float</span> score) : m_name(name), m_age(age), m_score(score) &#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">void</span> <span class="title">Show</span><span class="params">(<span class="keyword">const</span> Student&amp;)</span></span>;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="built_in">string</span> m_name;</div><div class="line">    <span class="keyword">int</span> m_age;</div><div class="line">    <span class="keyword">float</span> m_score;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Show</span><span class="params">(<span class="keyword">const</span> Student&amp; stu)</span> </span>&#123;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; stu.m_name &lt;&lt; <span class="string">", age: "</span> &lt;&lt; stu.m_age &lt;&lt; <span class="string">", socre: "</span> &lt;&lt; stu.m_score &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="function">Student <span class="title">stu</span><span class="params">(<span class="string">"Harlon"</span>, <span class="number">25</span>, <span class="number">88</span>)</span></span>;</div><div class="line">    Show(stu);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>运行结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Harlon, age: 25, socre: 88</div></pre></td></tr></table></figure></p>
 <p>类的成员函数可以隐式的增加this指针，指明被调用的对象，从而使用该对象的成员；而普通的非成员函数作为类的友元函数时，并没有this指针，所以必须通过对象去引用类的成员。</p>
@@ -499,7 +499,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">articles</span>
                 </a>
               </div>

@@ -87,7 +87,7 @@
 <meta property="og:description" content="异常是程序执行过程中发生的错误，C++的异常提供了检测和处理这种错误的手段，由三个关键字try，catch，throw来完成异常处理。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/cpp_exceptions.jpg">
-<meta property="og:updated_time" content="2018-04-24T12:29:55.000Z">
+<meta property="og:updated_time" content="2018-07-23T16:29:03.690Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之异常处理">
 <meta name="twitter:description" content="异常是程序执行过程中发生的错误，C++的异常提供了检测和处理这种错误的手段，由三个关键字try，catch，throw来完成异常处理。">
@@ -374,8 +374,8 @@
 <p>使用catch(…)用来匹配任何异常。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    <span class="comment">// 保护代码</span></div><div class="line">&#125; <span class="keyword">catch</span>(...) &#123;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Unknown exception happened!"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>说明：</p>
 <blockquote>
-<p>1、thorw可以抛出任意类型的变量（或表达式），catch按照抛出的变量编译时类型进行匹配，找到第一个匹配的类型即进入异常处理。<br>2、如果抛出的异常没有被处理，默认会调用terminate()函数终止整个程序。<br>3、异常匹配时、只允许三中类型转换：const与非const，派生类与基类，数组与指针。（不允许隐式或显示类型转换）<br>4、throw抛出的对象称之为异常对象，由编译器管理，catch接受到的对象不是引用或者指针的话，要进行对象拷贝，所以不允许传入不允许拷贝的异常对象。<br>5、构造函数可以抛出异常，可以在构造函数中或者构造函数初始化式中。如果构造函数发生异常，对象的析构函数将不会调用，所以需要在构造函数进行try-catch释放自己申请的资源，语法如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Constuctor()  <span class="keyword">try</span>: m_A(), m_B() &#123;  &#125; <span class="keyword">catch</span>(...) &#123;&#125;</div></pre></td></tr></table></figure></p>
-<p>6、析构函数不应该抛出异常，如果析构函数在执行过程中可能抛出异常，就应该在析构函数内部将这个异常处理，而不是将异常抛出。<br>7、catch可以将这个异常重新抛出进行处理。<br>8、异常处理中尽可能使用智能指针，异常发生时，会自动销毁资源。</p>
+<p>1、thorw可以抛出任意类型的变量（或表达式），catch按照抛出的变量编译时类型进行匹配，找到第一个匹配的类型即进入异常处理。<br>2、如果抛出的异常没有被处理，默认会调用terminate()函数终止整个程序。<br>3、异常匹配时、只允许三种类型转换：const与非const，派生类与基类，数组与指针。（不允许隐式或显示类型转换）<br>4、throw抛出的对象称之为异常对象，由编译器管理，catch接受到的对象不是引用或者指针的话，要进行对象拷贝，所以不允许传入不允许拷贝的异常对象。<br>5、构造函数可以抛出异常，可以在构造函数中或者构造函数初始化式中。如果构造函数发生异常，对象的析构函数将不会调用，所以需要在构造函数进行try-catch释放自己申请的资源，语法如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Constuctor()  <span class="keyword">try</span>: m_A(), m_B() &#123;  &#125; <span class="keyword">catch</span>(...) &#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>6、析构函数不应该抛出异常，如果析构函数在执行过程中可能抛出异常，就应该在析构函数内部将这个异常处理进行处理，而不是将异常抛出。<br>7、catch可以将这个异常重新抛出进行处理。<br>8、异常处理中尽可能使用智能指针，异常发生时，会自动销毁资源。</p>
 </blockquote>
 <hr>
 <h1 id="C-标准异常"><a href="#C-标准异常" class="headerlink" title="C++标准异常"></a>C++标准异常</h1><p>C++提供了一系列的标准异常，定义在<exception>头文件中，它们是以父子类层次结构组织起来的，如下图所示：<br><img src="/img/cpp_exceptions.jpg" alt="C++标准异常"><br>下表是对上图层次结构中的每个异常的说明：</exception></p>
@@ -564,7 +564,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">articles</span>
                 </a>
               </div>
