@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="C/C++基础开发知识复习总结。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-22T16:03:09.337Z">
+<meta property="og:updated_time" content="2018-07-24T14:42:24.741Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C&#x2F;C++编程基础部分常见问题梳理">
 <meta name="twitter:description" content="C/C++基础开发知识复习总结。">
@@ -362,86 +362,86 @@
 
       
         <p>C/C++基础开发知识复习总结。<br><a id="more"></a></p>
-<hr>
-<h1 id="1、变量声明和定义有什么不同？"><a href="#1、变量声明和定义有什么不同？" class="headerlink" title="1、变量声明和定义有什么不同？"></a><span id="id1">1、变量声明和定义有什么不同？</span></h1><ul>
+<h1 id="基础部分"><a href="#基础部分" class="headerlink" title="基础部分"></a>基础部分</h1><hr>
+<h2 id="1、变量声明和定义有什么不同？"><a href="#1、变量声明和定义有什么不同？" class="headerlink" title="1、变量声明和定义有什么不同？"></a>1、变量声明和定义有什么不同？</h2><ul>
 <li>声明仅仅是将变量的名字和类型告诉编译器，并不分配存储空间。例如：extern int a;</li>
 <li>定义则会为其分配存储空间，也可能会为变量赋一个初始值。例如：int a; int pi = 3.14; // 声明并定义；</li>
 <li>变量能且只能被定义一次，但可以被多次声明；</li>
 <li>另外：extern double pi = 3.14，此时对extern变量赋予初值，就变成定义了。</li>
 </ul>
 <hr>
-<h1 id="2、零值比较？"><a href="#2、零值比较？" class="headerlink" title="2、零值比较？"></a><span id="id2">2、零值比较？</span></h1><ul>
+<h2 id="2、零值比较？"><a href="#2、零值比较？" class="headerlink" title="2、零值比较？"></a>2、零值比较？</h2><ul>
 <li>bool类型：if(flag)</li>
 <li>int类型：if(flag == 0)</li>
 <li>指针类型：if(flag == null)</li>
 <li>float类型：if((flag &gt;= -0.000001) &amp;&amp; (flag &lt;= 0.000001))</li>
 </ul>
 <hr>
-<h1 id="3、strlen和sizeof区别？"><a href="#3、strlen和sizeof区别？" class="headerlink" title="3、strlen和sizeof区别？"></a><span id="id3">3、strlen和sizeof区别？</span></h1><ul>
+<h2 id="3、strlen和sizeof区别？"><a href="#3、strlen和sizeof区别？" class="headerlink" title="3、strlen和sizeof区别？"></a>3、strlen和sizeof区别？</h2><ul>
 <li>sizeof是运算符，并不是函数，它的结果是在编译而非运行中获得的，strlen是字符处理的库函数；</li>
 <li>sizeof参数可以是任何数据的类型或者结构（sizeof参数不退化）；strlen的参数只能是字符指针且结尾是’\0’的字符串。</li>
 </ul>
 <hr>
-<h1 id="4、相同类的同一对象可以相互赋值吗？"><a href="#4、相同类的同一对象可以相互赋值吗？" class="headerlink" title="4、相同类的同一对象可以相互赋值吗？"></a><span id="id4">4、相同类的同一对象可以相互赋值吗？</span></h1><ul>
+<h2 id="4、相同类的同一对象可以相互赋值吗？"><a href="#4、相同类的同一对象可以相互赋值吗？" class="headerlink" title="4、相同类的同一对象可以相互赋值吗？"></a>4、相同类的同一对象可以相互赋值吗？</h2><ul>
 <li>可以，但是要对含有指针成员时需注意；</li>
 <li>深拷贝和浅拷贝的区别：浅拷贝只是增加了一个指向相同内存的指针，而深拷贝是重新申请了一块内存，并把原来内存的值拷贝过来，使的拷贝的指针指向新的内存的指针。</li>
 </ul>
 <hr>
-<h1 id="5、结构体内存对齐问题？"><a href="#5、结构体内存对齐问题？" class="headerlink" title="5、结构体内存对齐问题？"></a><span id="id5">5、结构体内存对齐问题？</span></h1><ul>
+<h2 id="5、结构体内存对齐问题？"><a href="#5、结构体内存对齐问题？" class="headerlink" title="5、结构体内存对齐问题？"></a>5、结构体内存对齐问题？</h2><ul>
 <li>结构体内成员按照声明顺序存储，第一个成员地址和整个结构体地址相同；</li>
 <li>未特殊说明时，按结构体中size最大的成员对齐（若有double成员），按8字节对齐。</li>
 </ul>
 <hr>
-<h1 id="6、struct和class的区别？"><a href="#6、struct和class的区别？" class="headerlink" title="6、struct和class的区别？"></a><span id="id6">6、struct和class的区别？</span></h1><ul>
+<h2 id="6、struct和class的区别？"><a href="#6、struct和class的区别？" class="headerlink" title="6、struct和class的区别？"></a>6、struct和class的区别？</h2><ul>
 <li>struct默认访问修饰符是public，class默认访问修饰符是private。</li>
 </ul>
 <hr>
-<h1 id="7、malloc和new的区别？"><a href="#7、malloc和new的区别？" class="headerlink" title="7、malloc和new的区别？"></a><span id="id7">7、malloc和new的区别？</span></h1><ul>
+<h2 id="7、malloc和new的区别？"><a href="#7、malloc和new的区别？" class="headerlink" title="7、malloc和new的区别？"></a>7、malloc和new的区别？</h2><ul>
 <li>malloc和free是标准库函数，支持覆盖；new和delete是运算符，并且支持重载；</li>
 <li>malloc仅仅分配内存空间，free仅仅回收内存空间，不具备调用构造函数和析构函数的功能，用malloc函数分配存储类的对象存在风险；new的delete除了分配回收功能外，还能调用构造函数和析构函数。</li>
 <li>malloc返回的是void类型的指针，必须进行类型转换，而new和delete返回的是具体类型指针。</li>
 </ul>
 <hr>
-<h1 id="8、指针和引用的区别？"><a href="#8、指针和引用的区别？" class="headerlink" title="8、指针和引用的区别？"></a><span id="id8">8、指针和引用的区别？</span></h1><ul>
+<h2 id="8、指针和引用的区别？"><a href="#8、指针和引用的区别？" class="headerlink" title="8、指针和引用的区别？"></a>8、指针和引用的区别？</h2><ul>
 <li>引用只是别名，并不占用具体存储空间，只有声明而没有定义；指针是具体变量，需要占用存储空间；</li>
 <li>引用一旦初始化之后就不可以再改变（变量可以被引用多次，但引用只能作为一个变量引用）；指针变量可以重新指向；</li>
 <li>不存在引用的引用，引用必须是实体；而存在指针的指针。</li>
 </ul>
 <hr>
-<h1 id="9、宏定义和函数的区别？"><a href="#9、宏定义和函数的区别？" class="headerlink" title="9、宏定义和函数的区别？"></a><span id="id9">9、宏定义和函数的区别？</span></h1><ul>
+<h2 id="9、宏定义和函数的区别？"><a href="#9、宏定义和函数的区别？" class="headerlink" title="9、宏定义和函数的区别？"></a>9、宏定义和函数的区别？</h2><ul>
 <li>宏定义是在编译时完成替换，之后被替换的文本参与编译，相当于直接插入了代码，运行时不存在函数调用，执行起来更快；函数调用运行时需要跳转到具体函数；</li>
 <li>宏函数属于在结构体中插入代码，没有返回值；函数调用具有返回值；</li>
 <li>宏函数参数没有类型，不进行类型检查；函数参数有具体类型，需要检查类型；</li>
 <li>宏函数不要在后面加封号。</li>
 </ul>
 <hr>
-<h1 id="10、define和const的区别？"><a href="#10、define和const的区别？" class="headerlink" title="10、define和const的区别？"></a><span id="id10">10、define和const的区别？</span></h1><ul>
+<h2 id="10、define和const的区别？"><a href="#10、define和const的区别？" class="headerlink" title="10、define和const的区别？"></a>10、define和const的区别？</h2><ul>
 <li>宏替换发生在编译预处理时，属于文本插入；const作用发生于编译过程中；</li>
 <li>宏不检查类型；const会做类型安全检查；</li>
 <li>宏定义的数据没有分配空间，只是简单的替换；const定义的变量不能改变，但是要分配空间。</li>
 </ul>
 <hr>
-<h1 id="11、宏定义和typedef区别？"><a href="#11、宏定义和typedef区别？" class="headerlink" title="11、宏定义和typedef区别？"></a><span id="id11">11、宏定义和typedef区别？</span></h1><ul>
+<h2 id="11、宏定义和typedef区别？"><a href="#11、宏定义和typedef区别？" class="headerlink" title="11、宏定义和typedef区别？"></a>11、宏定义和typedef区别？</h2><ul>
 <li>宏定义主要用来定义常量和书写复杂且重复的内容；typedef主要用于定义类型别名；</li>
 <li>宏替换发生在编译预处理阶段，属于文本插入替换；typedef是编译的一部分；</li>
 <li>宏不检查类型；typedef会检查数据类型；</li>
 <li>宏不是语句，后面不需要加分好；typedef是语句，要加分号标识结束。</li>
 </ul>
 <hr>
-<h1 id="12、宏定义和内联函数-inline-的区别？"><a href="#12、宏定义和内联函数-inline-的区别？" class="headerlink" title="12、宏定义和内联函数(inline)的区别？"></a><span id="id12">12、宏定义和内联函数(inline)的区别？</span></h1><ul>
+<h2 id="12、宏定义和内联函数-inline-的区别？"><a href="#12、宏定义和内联函数-inline-的区别？" class="headerlink" title="12、宏定义和内联函数(inline)的区别？"></a>12、宏定义和内联函数(inline)的区别？</h2><ul>
 <li>在使用时，宏只是简单字符串替换（编译预处理）；而内联函数可以进行参数类型检查（编译时），且具有返回值；</li>
 <li>内联函数本身就是函数，强调函数特性，且具有重载等功能；</li>
 <li>内联函数可以作为某个类的成员函数，这样可以使用类的保护成员和私有成员。而当一个表达式涉及到类保护成员或私有成员时，宏就不能实现了。</li>
 </ul>
 <hr>
-<h1 id="13、条件编译-ifdef，-else，-endif作用？"><a href="#13、条件编译-ifdef，-else，-endif作用？" class="headerlink" title="13、条件编译#ifdef，#else，#endif作用？"></a><span id="id13">13、条件编译#ifdef，#else，#endif作用？</span></h1><ul>
+<h2 id="13、条件编译-ifdef，-else，-endif作用？"><a href="#13、条件编译-ifdef，-else，-endif作用？" class="headerlink" title="13、条件编译#ifdef，#else，#endif作用？"></a>13、条件编译#ifdef，#else，#endif作用？</h2><ul>
 <li>可以通过#define，并通过#ifdef来判断，将某些具体模块包括进要编译的内容；</li>
 <li>用于子程序前加#define DEBUG用于程序调试；</li>
 <li>应对硬件的设置（机器类型等）；</li>
 <li>条件编译功能if也可以实现，但条件编译可以减少被编译语句，从而减少目标程序大小；</li>
 </ul>
 <hr>
-<h1 id="14、区分一下几种变量？"><a href="#14、区分一下几种变量？" class="headerlink" title="14、区分一下几种变量？"></a><span id="id14">14、区分一下几种变量？</span></h1><blockquote>
+<h2 id="14、区分一下几种变量？"><a href="#14、区分一下几种变量？" class="headerlink" title="14、区分一下几种变量？"></a>14、区分一下几种变量？</h2><blockquote>
 <p>const int a<br>int const a<br>const int *a<br>int *const a</p>
 </blockquote>
 <ul>
@@ -450,19 +450,19 @@
 <li>int *const a，指针常量，表示a是指向int变量的指针，但a的值不能发生变化。</li>
 </ul>
 <hr>
-<h1 id="15、volatile有什么作用？"><a href="#15、volatile有什么作用？" class="headerlink" title="15、volatile有什么作用？"></a><span id="id15">15、volatile有什么作用？</span></h1><ul>
+<h2 id="15、volatile有什么作用？"><a href="#15、volatile有什么作用？" class="headerlink" title="15、volatile有什么作用？"></a>15、volatile有什么作用？</h2><ul>
 <li>volatile定义变量的值是易变的，每次用到这个变量的值都要重新读取这个变量的值，而不是读寄存器内的备份；</li>
 <li>多线程中几个被任务共享的变量需要定义成volatile类型。‘</li>
 </ul>
 <hr>
-<h1 id="16、什么是常引用？"><a href="#16、什么是常引用？" class="headerlink" title="16、什么是常引用？"></a><span id="id16">16、什么是常引用？</span></h1><ul>
+<h2 id="16、什么是常引用？"><a href="#16、什么是常引用？" class="headerlink" title="16、什么是常引用？"></a>16、什么是常引用？</h2><ul>
 <li>常引用可以理解为常量指针，形式为const typename&amp; refname=varname;</li>
 <li>常引用下，原变量值不会被别名所修改；</li>
 <li>原变量值可以通过原名修改；</li>
 <li>常引用通常用作只读变量别名或是形参传递。</li>
 </ul>
 <hr>
-<h1 id="17、区分以下指针类型？"><a href="#17、区分以下指针类型？" class="headerlink" title="17、区分以下指针类型？"></a><span id="id17">17、区分以下指针类型？</span></h1><blockquote>
+<h2 id="17、区分以下指针类型？"><a href="#17、区分以下指针类型？" class="headerlink" title="17、区分以下指针类型？"></a>17、区分以下指针类型？</h2><blockquote>
 <p>int *p[10];<br>int (*p)[10];<br>int *p(int)<br>int (*p)(int)</p>
 </blockquote>
 <ul>
@@ -472,7 +472,7 @@
 <li>int (*p)(int)是函数指针，是指针类型，指向的具有int参数，返回值是int的函数</li>
 </ul>
 <hr>
-<h1 id="18、a和-amp-a有什么区别？"><a href="#18、a和-amp-a有什么区别？" class="headerlink" title="18、a和&amp;a有什么区别？"></a><span id="id18">18、a和&amp;a有什么区别？</span></h1><blockquote>
+<h2 id="18、a和-amp-a有什么区别？"><a href="#18、a和-amp-a有什么区别？" class="headerlink" title="18、a和&amp;a有什么区别？"></a>18、a和&amp;a有什么区别？</h2><blockquote>
 <p>假设数组int a[10]<br>int (*p)[10] = &amp;a</p>
 </blockquote>
 <ul>
@@ -481,13 +481,13 @@
 <li>若(int *)p ，此时输出 *p时，其值为a[0]的值，因为被转为int *类型，解引用时按照int类型大小来读取。</li>
 </ul>
 <hr>
-<h1 id="19、数组名和指针（这里为指向数组首元素的指针）区别？"><a href="#19、数组名和指针（这里为指向数组首元素的指针）区别？" class="headerlink" title="19、数组名和指针（这里为指向数组首元素的指针）区别？"></a><span id="id19">19、数组名和指针（这里为指向数组首元素的指针）区别？</span></h1><ul>
+<h2 id="19、数组名和指针（这里为指向数组首元素的指针）区别？"><a href="#19、数组名和指针（这里为指向数组首元素的指针）区别？" class="headerlink" title="19、数组名和指针（这里为指向数组首元素的指针）区别？"></a>19、数组名和指针（这里为指向数组首元素的指针）区别？</h2><ul>
 <li>二者均可以通过增减偏移量来访问数组中的元素；</li>
 <li>数组名不是真正意义上的指针，可以理解为指针常量，所以数组名没有自增、自减等操作；</li>
 <li>当数组名当做形参传递给调用函数后，就失去了原有特性，退化成一般指针，多了自增、自减操作，但sizeof运算符不能再得到原数组的大小了。</li>
 </ul>
 <hr>
-<h1 id="20、野指针是什么？"><a href="#20、野指针是什么？" class="headerlink" title="20、野指针是什么？"></a><span id="id20">20、野指针是什么？</span></h1><ul>
+<h2 id="20、野指针是什么？"><a href="#20、野指针是什么？" class="headerlink" title="20、野指针是什么？"></a>20、野指针是什么？</h2><ul>
 <li>野指针也叫空悬指针，不是指向null的指针，指向垃圾内存的指针；</li>
 <li>产生的原因及解决办法：<ul>
 <li>指针变量未及时初始化=&gt;定义指针变量要及时初始化，要么置空</li>
@@ -496,7 +496,7 @@
 </li>
 </ul>
 <hr>
-<h1 id="21、堆和栈的区别？"><a href="#21、堆和栈的区别？" class="headerlink" title="21、堆和栈的区别？"></a><span id="id21">21、堆和栈的区别？</span></h1><ul>
+<h2 id="21、堆和栈的区别？"><a href="#21、堆和栈的区别？" class="headerlink" title="21、堆和栈的区别？"></a>21、堆和栈的区别？</h2><ul>
 <li>申请方式不同：<ul>
 <li>栈由系统分配；</li>
 <li>堆由程序员手动分配。</li>
@@ -519,9 +519,51 @@
 </li>
 </ul>
 <hr>
-<h1 id="22、delete和delete-的区别？"><a href="#22、delete和delete-的区别？" class="headerlink" title="22、delete和delete[]的区别？"></a><span id="id22">22、delete和delete[]的区别？</span></h1><ul>
+<h2 id="22、delete和delete-的区别？"><a href="#22、delete和delete-的区别？" class="headerlink" title="22、delete和delete[]的区别？"></a>22、delete和delete[]的区别？</h2><ul>
 <li>delete只会调用一次析构函数</li>
 <li>delete[]会调用数组中每个元素的析构函数</li>
+</ul>
+<hr>
+<h1 id="编译及调试"><a href="#编译及调试" class="headerlink" title="编译及调试"></a>编译及调试</h1><h2 id="1、编译"><a href="#1、编译" class="headerlink" title="1、编译"></a>1、编译</h2><ul>
+<li><p>预处理</p>
+<ul>
+<li>展开所有宏定义。</li>
+<li>处理条件编译语句，通过是否具有某个宏过滤掉哪些代码。</li>
+<li>处理#include指令，将被包含的文件插入到该指令所在位置。</li>
+<li>过滤掉注释语句。</li>
+<li>添加行号和文件名。</li>
+<li>保留所有#pargma编译器指令</li>
+</ul>
+</li>
+<li><p>编译</p>
+<ul>
+<li>词法分析</li>
+<li>语法分析</li>
+<li>语义分析</li>
+<li>中间代码生成</li>
+<li>目标代码生成与优化</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2、链接"><a href="#2、链接" class="headerlink" title="2、链接"></a>2、链接</h2><p>各个源代码模块独立的被编译，然后将他们组装起来成为一个整体，组装的过程就是链接。被链接的各个部分本本身就是二进制文件，所以在被链接时需要将所有目标文件的代码段拼接在一起，然后将所有对符号地址的引用加以修正。</p>
+<ul>
+<li>静态链接<br>静态链接最简单的情况就是在编译时和静态库链接在一起成为完整的可执行程序。这里所说的静态库就是对多个目标文件（.o）文件的打包，通常静态链接的包名为lib<em>**</em>.a，静态链接所有被用到的目标文件都会复制到最终生成的可执行目标文件中。这种方式的好处是在运行时，可执行目标文件已经完全装载完毕，只要按指令序执行即可，速度比较快，但缺点也有很多。<br>打包命令：<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gcc -c test1.c</div><div class="line">gcc -c test2.c</div><div class="line">ar cr libtest.a test1.o test2.o</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>首先编译得到test1.o和test2.o两个目标文件，之后通过ar命令将这两个文件打包为.a文件，文件名格式为lib + 静态库名 + .a后缀。在生成可执行文件需要使用到它的时候只需要在编译时加上即可。需要注意的是，使用静态库时加在最后的名字不是libtest.a，而是l + 静态库名。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc main.c -o main -ltest</div></pre></td></tr></table></figure></p>
+<ul>
+<li>动态链接<br>静态链接发生于编译阶段，加载至内存前已经完整，但缺点是如果多个程序都需要使用某个静态库，则该静态库会在每个程序中都拷贝一份，非常浪费内存资源，所以出现了动态链接的方式来解决这个问题。</li>
+</ul>
+<p>动态链接在形式上倒是和静态链接非常相似，首先也是需要打包，打包成动态库，不过文件名格式为lib + 动态库名 + .so后缀。不过动态库的打包不需要使用ar命令，gcc就可以完成，但要注意在编译时要加上-fPIC选项，打包时加上-shared选项。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gcc -fPIC -c test1.c</div><div class="line">gcc -fPIC -c test2.c</div><div class="line">gcc -shared test1.o test2.o -o libtest.so</div></pre></td></tr></table></figure>
+<p>使用动态链接的用法和静态链接相同。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -o main mian.c -ltest</div></pre></td></tr></table></figure></p>
+<p>如果仅仅像上面的步骤是没有办法正常使用库的，我们可以通过加-Lpath指定搜索库文件的目录（-L.表示当前目录），默认情况下会到环境变量LD_LIBRARY_PATH指定的目录下搜索库文件，默认情况是/usr/lib，我们可以将库文件拷贝到那个目录下再链接。</p>
+<p>静态库和动态库的优缺点：</p>
+<ul>
+<li>动态库运行时会先检查内存中是否已经有该库的拷贝，若有则共享拷贝，否则重新加载动态库（C语言的标准库就是动态库）。静态库则是每次在编译阶段都将静态库文件打包进去，当某个库被多次引用到时，内存中会有多份副本，浪费资源。</li>
+<li>动态库另一个有点就是更新很容易，当库发生变化时，如果接口没变只需要用新的动态库替换掉就可以了。但是如果是静态库的话就需要重新被编译。</li>
+<li>不过静态库也有优点，主要就是静态库一次性完成了所有内容的绑定，运行时就不必再去考虑链接的问题了，执行效率会稍微高一些。</li>
 </ul>
 <hr>
 <blockquote>
@@ -697,7 +739,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、变量声明和定义有什么不同？"><span class="nav-number">1.</span> <span class="nav-text">1、变量声明和定义有什么不同？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、零值比较？"><span class="nav-number">2.</span> <span class="nav-text">2、零值比较？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、strlen和sizeof区别？"><span class="nav-number">3.</span> <span class="nav-text">3、strlen和sizeof区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、相同类的同一对象可以相互赋值吗？"><span class="nav-number">4.</span> <span class="nav-text">4、相同类的同一对象可以相互赋值吗？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、结构体内存对齐问题？"><span class="nav-number">5.</span> <span class="nav-text">5、结构体内存对齐问题？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6、struct和class的区别？"><span class="nav-number">6.</span> <span class="nav-text">6、struct和class的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7、malloc和new的区别？"><span class="nav-number">7.</span> <span class="nav-text">7、malloc和new的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8、指针和引用的区别？"><span class="nav-number">8.</span> <span class="nav-text">8、指针和引用的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9、宏定义和函数的区别？"><span class="nav-number">9.</span> <span class="nav-text">9、宏定义和函数的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10、define和const的区别？"><span class="nav-number">10.</span> <span class="nav-text">10、define和const的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11、宏定义和typedef区别？"><span class="nav-number">11.</span> <span class="nav-text">11、宏定义和typedef区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12、宏定义和内联函数-inline-的区别？"><span class="nav-number">12.</span> <span class="nav-text">12、宏定义和内联函数(inline)的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13、条件编译-ifdef，-else，-endif作用？"><span class="nav-number">13.</span> <span class="nav-text">13、条件编译#ifdef，#else，#endif作用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14、区分一下几种变量？"><span class="nav-number">14.</span> <span class="nav-text">14、区分一下几种变量？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15、volatile有什么作用？"><span class="nav-number">15.</span> <span class="nav-text">15、volatile有什么作用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16、什么是常引用？"><span class="nav-number">16.</span> <span class="nav-text">16、什么是常引用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17、区分以下指针类型？"><span class="nav-number">17.</span> <span class="nav-text">17、区分以下指针类型？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#18、a和-amp-a有什么区别？"><span class="nav-number">18.</span> <span class="nav-text">18、a和&a有什么区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#19、数组名和指针（这里为指向数组首元素的指针）区别？"><span class="nav-number">19.</span> <span class="nav-text">19、数组名和指针（这里为指向数组首元素的指针）区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#20、野指针是什么？"><span class="nav-number">20.</span> <span class="nav-text">20、野指针是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#21、堆和栈的区别？"><span class="nav-number">21.</span> <span class="nav-text">21、堆和栈的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#22、delete和delete-的区别？"><span class="nav-number">22.</span> <span class="nav-text">22、delete和delete[]的区别？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础部分"><span class="nav-number">1.</span> <span class="nav-text">基础部分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、变量声明和定义有什么不同？"><span class="nav-number">1.1.</span> <span class="nav-text">1、变量声明和定义有什么不同？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、零值比较？"><span class="nav-number">1.2.</span> <span class="nav-text">2、零值比较？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、strlen和sizeof区别？"><span class="nav-number">1.3.</span> <span class="nav-text">3、strlen和sizeof区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、相同类的同一对象可以相互赋值吗？"><span class="nav-number">1.4.</span> <span class="nav-text">4、相同类的同一对象可以相互赋值吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5、结构体内存对齐问题？"><span class="nav-number">1.5.</span> <span class="nav-text">5、结构体内存对齐问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6、struct和class的区别？"><span class="nav-number">1.6.</span> <span class="nav-text">6、struct和class的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7、malloc和new的区别？"><span class="nav-number">1.7.</span> <span class="nav-text">7、malloc和new的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8、指针和引用的区别？"><span class="nav-number">1.8.</span> <span class="nav-text">8、指针和引用的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9、宏定义和函数的区别？"><span class="nav-number">1.9.</span> <span class="nav-text">9、宏定义和函数的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10、define和const的区别？"><span class="nav-number">1.10.</span> <span class="nav-text">10、define和const的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11、宏定义和typedef区别？"><span class="nav-number">1.11.</span> <span class="nav-text">11、宏定义和typedef区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12、宏定义和内联函数-inline-的区别？"><span class="nav-number">1.12.</span> <span class="nav-text">12、宏定义和内联函数(inline)的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13、条件编译-ifdef，-else，-endif作用？"><span class="nav-number">1.13.</span> <span class="nav-text">13、条件编译#ifdef，#else，#endif作用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14、区分一下几种变量？"><span class="nav-number">1.14.</span> <span class="nav-text">14、区分一下几种变量？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15、volatile有什么作用？"><span class="nav-number">1.15.</span> <span class="nav-text">15、volatile有什么作用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16、什么是常引用？"><span class="nav-number">1.16.</span> <span class="nav-text">16、什么是常引用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17、区分以下指针类型？"><span class="nav-number">1.17.</span> <span class="nav-text">17、区分以下指针类型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18、a和-amp-a有什么区别？"><span class="nav-number">1.18.</span> <span class="nav-text">18、a和&a有什么区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#19、数组名和指针（这里为指向数组首元素的指针）区别？"><span class="nav-number">1.19.</span> <span class="nav-text">19、数组名和指针（这里为指向数组首元素的指针）区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20、野指针是什么？"><span class="nav-number">1.20.</span> <span class="nav-text">20、野指针是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#21、堆和栈的区别？"><span class="nav-number">1.21.</span> <span class="nav-text">21、堆和栈的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#22、delete和delete-的区别？"><span class="nav-number">1.22.</span> <span class="nav-text">22、delete和delete[]的区别？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译及调试"><span class="nav-number">2.</span> <span class="nav-text">编译及调试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、编译"><span class="nav-number">2.1.</span> <span class="nav-text">1、编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、链接"><span class="nav-number">2.2.</span> <span class="nav-text">2、链接</span></a></li></ol></li></ol></div>
             
 
           </div>
