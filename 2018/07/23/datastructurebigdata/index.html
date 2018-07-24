@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-22T17:56:00.596Z">
+<meta property="og:updated_time" content="2018-07-24T11:25:55.957Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="海量数据处理算法">
 <meta name="twitter:description" content="海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。">
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Home
           </a>
         </li>
       
@@ -299,7 +299,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-23T12:47:23+08:00">
                 2018-07-23
@@ -388,7 +388,7 @@
 <hr>
 <h2 id="整数数组前k大"><a href="#整数数组前k大" class="headerlink" title="整数数组前k大"></a>整数数组前k大</h2><p>问题：在一个整数数组中，找最大的 K 个整数</p>
 <ol>
-<li>离线算法：QuickSort，时间复杂度<code>O(N)</code></li>
+<li>离线算法：QuickSelect，时间复杂度<code>O(N)</code></li>
 <li>在线算法：Heap，小顶堆，时间复杂度<code>O(Nlogk)</code></li>
 </ol>
 <hr>
@@ -402,7 +402,28 @@
 <li>可能有多个Reducer，因此我们会得到多个Top K，之后扫描这些Top K，得到最终的Top K。</li>
 </ol>
 <p>Follow up 2：内存不够怎么办？<br>问题描述：上面这个算法中，我们花费了 O(N) 的空间耗费，也就是需要把所有的，比如说单词，都放到内存里。<br>在现实场景中，这很可能是不行的，因为 N 可能非常的大。即便我们使用上了 Follow up 1 中的 Map Reduce 的办法，那么比如说就算你用了很多台机器，但是分到每台机器上的时候，仍然无法全部加载到内存中，也是有可能的。<br>假设现在只有一台机器，内存为 1G，你有一个 1T 大小的文件，需要统计里面最高频的 K 个单词。</p>
-
+<hr>
+<h2 id="最高频K项的在线算法"><a href="#最高频K项的在线算法" class="headerlink" title="最高频K项的在线算法"></a>最高频K项的在线算法</h2><p>问题描述：数据流中不断流过一些单词，提供一个接口，返回当前出现过的单词中，频次最高的Top K个单词。<br>即：给定的K，比如100，实现两个接口：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">add(word)</div><div class="line"><span class="comment"># 添加一个单词</span></div><div class="line"></div><div class="line">topk()</div><div class="line"><span class="comment"># 返回集合中的Top K的高频词</span></div></pre></td></tr></table></figure></p>
+<p>标准在线算法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TopKAnalyzer</span>:</span></div><div class="line">    <span class="comment"># 构造函数，初始化一个top k分析器，指定k的大小</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, k)</span>:</span></div><div class="line">        self.k = k</div><div class="line">        <span class="comment"># 初始化一个哈希堆（HashHeap）</span></div><div class="line">        self.hashheap = HashHeap()</div><div class="line"></div><div class="line">        <span class="comment"># 初始化一个哈希表，用于单词计数</span></div><div class="line">        self.hash = Hash()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(word)</span>:</span></div><div class="line">        <span class="comment"># 单词计数 +1</span></div><div class="line">        self.hash[word] += <span class="number">1</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> word <span class="keyword">in</span> self.hashheap:</div><div class="line">            <span class="comment"># 调整word在hashheap中的位置</span></div><div class="line">            self.hashheap.adjust(word, self.hash[word])</div><div class="line">            reutrn</div><div class="line">        </div><div class="line">        <span class="comment"># 如果没满，就接着往hashheap里面放</span></div><div class="line">        <span class="keyword">if</span> self.hashheap.size() &lt; self.k</div><div class="line">            self.hashheap.push(word, self.hash[word])</div><div class="line">        </div><div class="line">        <span class="comment"># 和hash heap里出现频次最低的单词相比</span></div><div class="line">        <span class="comment"># 如果当前单词更大，就踢掉hashheap里频次最低的单词</span></div><div class="line">        <span class="keyword">if</span> self.hash[word] &gt; self.hashheap.top().value:</div><div class="line">            self.hashheap.pop()</div><div class="line">            self.hashheap.push(word, self.hash[word])</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">topk</span><span class="params">()</span>:</span></div><div class="line">        <span class="comment"># 从hashheap中导出Top K的单词</span></div><div class="line">        <span class="keyword">return</span> self.hashheap.toList()</div></pre></td></tr></table></figure></p>
+<p>复杂度分析：<br>这算法的时间复杂度要从两个维度讨论：</p>
+<ol>
+<li>add的时间复杂度是<code>O(logK)</code>，因此最坏情况下，就是pop掉一个单词，push进去一个新单词。由于hashheap的大小最多是k，那么复杂度为<code>O(logK)</code>。</li>
+<li>topk的时间复杂度是<code>O(KlogK)</code></li>
+</ol>
+<p>Follow up：内存不够怎么办？<br>在上述标准的在线算法中，哈希表的耗费是最多的，如果内存无法存的下哈希表，该如何解决？<br>有哪些算法可以用精度换空间？<br>有很多科研学者都研究过这个问题，一些比较成熟的算法有：</p>
+<ol>
+<li>Lossy Counting</li>
+<li>Sticky Sample</li>
+<li>Space Saving</li>
+<li>Efficent Count</li>
+<li>Hash Count</li>
+</ol>
+<p>这里介绍一个比较容易掌握的，和标准在线算法相比之需要很少改动的一个算法：<code>Hash Count</code>。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TopKAnalyzer</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, k)</span>:</span></div><div class="line">        self.k = k</div><div class="line">        self.hashheap = HashHeap()</div><div class="line">        self.hashcount = 开一个整数数组，内存能让你开多大就开多大</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, word)</span>:</span></div><div class="line">        index = hashfunc(word) % self.hashcount.size</div><div class="line">        self.hashcount[index] += <span class="number">1</span></div><div class="line">        wordCount = self.hashcount[index]</div><div class="line"></div><div class="line">        <span class="comment"># 其他部分和标准在线算法一样</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">topk</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="comment"># 和标准在线算法一样</span></div></pre></td></tr></table></figure></p>
+<p>上述的算法对精度的影响有多大呢？事实上，根据“长尾效应”，在实际数据的统计中，由于Top K的K相对整个数据流集合中的不同数据项个数N的关系是K远远小于N，而TopK的这些数据项的计数远远大于其他的数据项。因此，Top K的hashcode % hashcount.size扎堆的可能性是非常非常小的，因此这个算法的精确度也就不会太差。</p>
+<hr>
+<h1 id="布隆过滤器（Bloom-Filter"><a href="#布隆过滤器（Bloom-Filter" class="headerlink" title="布隆过滤器（Bloom Filter)"></a>布隆过滤器（Bloom Filter)</h1><h2 id="标准布隆过滤器"><a href="#标准布隆过滤器" class="headerlink" title="标准布隆过滤器"></a>标准布隆过滤器</h2><h2 id="计数布隆过滤器"><a href="#计数布隆过滤器" class="headerlink" title="计数布隆过滤器"></a>计数布隆过滤器</h2><hr>
+<h1 id="外排序算法"><a href="#外排序算法" class="headerlink" title="外排序算法"></a>外排序算法</h1><hr>
+<h1 id="概率类的大数据问题"><a href="#概率类的大数据问题" class="headerlink" title="概率类的大数据问题"></a>概率类的大数据问题</h1>
       
     </div>
     
@@ -488,10 +509,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table Des Matières
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Ensemble
+            Overview
           </li>
         </ul>
       
@@ -512,7 +533,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">91</span>
-                  <span class="site-state-item-name">articles</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -568,7 +589,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#海量数据处理问题的考点"><span class="nav-number">1.</span> <span class="nav-text">海量数据处理问题的考点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最高频K项问题"><span class="nav-number">2.</span> <span class="nav-text">最高频K项问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整数数组前k大"><span class="nav-number">2.1.</span> <span class="nav-text">整数数组前k大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频-K-项的离线算法"><span class="nav-number">2.2.</span> <span class="nav-text">最高频 K 项的离线算法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#海量数据处理问题的考点"><span class="nav-number">1.</span> <span class="nav-text">海量数据处理问题的考点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最高频K项问题"><span class="nav-number">2.</span> <span class="nav-text">最高频K项问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整数数组前k大"><span class="nav-number">2.1.</span> <span class="nav-text">整数数组前k大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频-K-项的离线算法"><span class="nav-number">2.2.</span> <span class="nav-text">最高频 K 项的离线算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频K项的在线算法"><span class="nav-number">2.3.</span> <span class="nav-text">最高频K项的在线算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#布隆过滤器（Bloom-Filter"><span class="nav-number">3.</span> <span class="nav-text">布隆过滤器（Bloom Filter)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标准布隆过滤器"><span class="nav-number">3.1.</span> <span class="nav-text">标准布隆过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计数布隆过滤器"><span class="nav-number">3.2.</span> <span class="nav-text">计数布隆过滤器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外排序算法"><span class="nav-number">4.</span> <span class="nav-text">外排序算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概率类的大数据问题"><span class="nav-number">5.</span> <span class="nav-text">概率类的大数据问题</span></a></li></ol></div>
             
 
           </div>
@@ -606,7 +627,7 @@
 
 
 
-  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
