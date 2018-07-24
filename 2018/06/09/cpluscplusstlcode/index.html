@@ -87,7 +87,7 @@
 <meta property="og:description" content="侯捷STL源码剖析笔记。STL六大部件：  容器（Container） 分配器（Allocators） 算法（Algorithms） 迭代器（Iterators） 适配器（Adapters） 仿函数（Functors）">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/stl-component.png">
-<meta property="og:updated_time" content="2018-07-24T16:58:04.003Z">
+<meta property="og:updated_time" content="2018-07-24T17:16:12.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之STL源码剖析【更新中】">
 <meta name="twitter:description" content="侯捷STL源码剖析笔记。STL六大部件：  容器（Container） 分配器（Allocators） 算法（Algorithms） 迭代器（Iterators） 适配器（Adapters） 仿函数（Functors）">
@@ -392,7 +392,7 @@
 <p>list的数据结构：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">alloc</span>&gt;</span></div><div class="line"><span class="class"><span class="title">class</span> <span class="title">list</span> &#123;</span></div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    <span class="keyword">typedef</span> __list_node&lt;T&gt; list_node;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> list_node* link_type;</div><div class="line">    <span class="function">iterator <span class="title">begin</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> ((*node).next); &#125;</div><div class="line">    <span class="function">iterator <span class="title">end</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> node; &#125;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> node-&gt;next = node; &#125;</div><div class="line">    ...</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    link_type node;</div></pre></td></tr></table></figure></p>
 <hr>
 <h1 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h1><blockquote>
-<p>参考资料：<br><a href="https://blog.csdn.net/lixungogogo/article/details/52196783" target="_blank" rel="external">C++泛型编程1——函数模板实例化，模板参数，重载及特化</a><br><a href="https://blog.csdn.net/lixungogogo/article/details/52201917" target="_blank" rel="external">C++泛型编程2——类模板，容器适配器，仿函数</a></p>
+<p>参考资料：<br>STL源码剖析 侯捷</p>
 </blockquote>
 
       
