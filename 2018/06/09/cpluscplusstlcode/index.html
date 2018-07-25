@@ -87,7 +87,8 @@
 <meta property="og:description" content="侯捷STL源码剖析笔记。STL六大部件：  容器（Container） 分配器（Allocators） 算法（Algorithms） 迭代器（Iterators） 适配器（Adapters） 仿函数（Functors）">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/stl-component.png">
-<meta property="og:updated_time" content="2018-07-24T17:16:12.691Z">
+<meta property="og:image" content="http://harlon.org/img/deque.png">
+<meta property="og:updated_time" content="2018-07-25T13:59:48.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++之STL源码剖析【更新中】">
 <meta name="twitter:description" content="侯捷STL源码剖析笔记。STL六大部件：  容器（Container） 分配器（Allocators） 算法（Algorithms） 迭代器（Iterators） 适配器（Adapters） 仿函数（Functors）">
@@ -187,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -291,7 +292,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-09T18:23:23+08:00">
                 2018-06-09
@@ -312,7 +313,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -381,7 +382,15 @@
 <p>list的迭代器设计：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Ref</span>, <span class="title">class</span> <span class="title">Ptr</span>&gt;</span></div><div class="line"><span class="class"><span class="title">struct</span> __<span class="title">list_iterator</span> &#123;</span></div><div class="line">    <span class="keyword">typedef</span> __list_iterator&lt;T, T&amp;, T*&gt; iterator;</div><div class="line">    <span class="keyword">typedef</span> __list_iterator&lt;T, Ref, Ptr&gt; self;</div><div class="line"></div><div class="line">    <span class="keyword">typedef</span> __list_node&lt;T&gt;* link_type;</div><div class="line"></div><div class="line">    __list_iterator(link_type x) : node(x) &#123; &#125;</div><div class="line">    __list_iterator() &#123; &#125;</div><div class="line">    __list_iterator(<span class="keyword">const</span> iterator&amp; x) : node(x.node) &#123; &#125;</div><div class="line">    </div><div class="line">    link_type node;</div><div class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span>==(<span class="keyword">const</span> self&amp; x) <span class="keyword">const</span> &#123; <span class="keyword">return</span> node == x.node; &#125;</div><div class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span>!=(<span class="keyword">const</span> self&amp; x) <span class="keyword">const</span> &#123; <span class="keyword">return</span> node == x.node; &#125;</div><div class="line">    </div><div class="line">    reference <span class="keyword">operator</span>*() <span class="keyword">const</span> &#123; <span class="keyword">return</span> (*node).data; &#125;</div><div class="line">    pointer <span class="keyword">operator</span>-&gt;() <span class="keyword">const</span> &#123; <span class="keyword">return</span> &amp;(<span class="keyword">operator</span>*()); &#125;</div><div class="line">    self&amp; <span class="keyword">operator</span>++() &#123;</div><div class="line">        node = (link_type)((*node).next);</div><div class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">    self <span class="keyword">operator</span>++(<span class="keyword">int</span>) &#123;</div><div class="line">        self tmp = *<span class="keyword">this</span>;</div><div class="line">        ++*<span class="keyword">this</span>;</div><div class="line">        <span class="keyword">return</span> tmp;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    self&amp; <span class="keyword">operator</span>--() &#123;</div><div class="line">        node = (link_type)((*node).prev);</div><div class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    self <span class="keyword">operator</span>--(<span class="keyword">int</span>) &#123;</div><div class="line">        self tmp = *<span class="keyword">this</span>;</div><div class="line">        --*<span class="keyword">this</span>;</div><div class="line">        <span class="keyword">return</span> tmp;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>list的数据结构：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">alloc</span>&gt;</span></div><div class="line"><span class="class"><span class="title">class</span> <span class="title">list</span> &#123;</span></div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    <span class="keyword">typedef</span> __list_node&lt;T&gt; list_node;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> list_node* link_type;</div><div class="line">    <span class="function">iterator <span class="title">begin</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> ((*node).next); &#125;</div><div class="line">    <span class="function">iterator <span class="title">end</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> node; &#125;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> node-&gt;next = node; &#125;</div><div class="line">    ...</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    link_type node;</div></pre></td></tr></table></figure></p>
 <hr>
-<h1 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h1><blockquote>
+<h1 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h1><p>deque是一种双向开口的连续线性空间，可以在头尾两端分别做元素的插入和删除操作。deque和vector的最大差异在于：</p>
+<ul>
+<li>deque允许在常数时间内对头端进行元素的插入或删除操作</li>
+<li>deque没有容量的概念</li>
+</ul>
+<p>deque的结构如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">alloc</span>, <span class="title">size_t</span> <span class="title">BufSiz</span> = 0&gt;</span></div><div class="line"><span class="class"><span class="title">class</span> <span class="title">deque</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> T value_type;</div><div class="line">    <span class="keyword">typedef</span> value_type* pointer;</div><div class="line">    <span class="keyword">typedef</span> __deque_iterator&lt;T, T&amp;, T*, BufSiz&gt; iterator;</div><div class="line">    ...</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    <span class="keyword">typedef</span> pointer* map_pointer;</div><div class="line">    iterator start;</div><div class="line">    iterator finish;</div><div class="line">    map_pointer <span class="built_in">map</span>;</div><div class="line">    size_type map_size;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function">iterator <span class="title">begin</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> start; &#125;</div><div class="line">    <span class="function">iterator <span class="title">end</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> finish; &#125;</div><div class="line">    </div><div class="line">    reference <span class="keyword">operator</span>[] (size_type n) &#123;</div><div class="line">        <span class="keyword">return</span> start[difference_type(n)];</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> finish == start;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>deque的迭代器：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Ref</span>, <span class="title">class</span> <span class="title">Ptr</span>， <span class="title">size_t</span> <span class="title">BufSiz</span>&gt;</span></div><div class="line"><span class="class"><span class="title">struct</span> __<span class="title">deque_iterator</span> &#123;</span></div><div class="line">    <span class="keyword">typedef</span> __deque_iterator&lt;T, T&amp;, T*, BufSiz&gt; iterator;</div><div class="line">    <span class="keyword">typedef</span> __deque_iterator&lt;T, <span class="keyword">const</span> T&amp; <span class="keyword">const</span> T*, BufSiz&gt; const_iterator;</div><div class="line">    ...</div><div class="line">    <span class="keyword">typedef</span> __deque_iterator self;</div><div class="line">    T* cur; <span class="comment">// 此迭代器所指之缓冲区中的现行元素</span></div><div class="line">    T* first; <span class="comment">// 此迭代器所指之缓冲区的头</span></div><div class="line">    T* last; <span class="comment">// 此迭代器所指之缓冲区的尾</span></div><div class="line">    map_pointer node;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">set_node</span><span class="params">(map_pointer new_node)</span> </span>&#123;</div><div class="line">        node = new_node;</div><div class="line">        first = *new_node;</div><div class="line">        last = first + difference_type(buffer_size());</div><div class="line">    &#125;</div><div class="line">    self&amp; <span class="keyword">operator</span>++() &#123;</div><div class="line">        ++cur;</div><div class="line">        <span class="keyword">if</span> (cur == last) &#123;</div><div class="line">            set_node(node + <span class="number">1</span>);</div><div class="line">            cur = first;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">&#125;；</div></pre></td></tr></table></figure></p>
+<p>这种映射关系如下图：<br><img src="/img/deque.png" alt=""></p>
+<blockquote>
 <p>参考资料：<br>STL源码剖析 侯捷</p>
 </blockquote>
 
@@ -474,10 +483,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -498,7 +507,7 @@
                 <a href="/archives">
               
                   <span class="site-state-item-count">91</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -509,7 +518,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -520,7 +529,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -584,7 +593,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
