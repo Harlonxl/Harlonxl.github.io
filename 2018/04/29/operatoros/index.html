@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="进程和线程的区别？首先来说进程和线程的定义：  进程：程序执行时的一个实例，进程是系统进行资源分配和调度的一个基本单位； 线程：进程的一个实体，是CPU调度和分派的最小单位，线程只拥有一点在运行过程中必不可少的资源（程序计数器、通用寄存器、栈等），其他的共享与它所属的进程；从进程和线程的关系来看：一个线程必定属于某个进程，而一个进程可以用于多个线程而且至少拥有一个线程，多个线程可以并发执行；其次，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-24T14:14:51.783Z">
+<meta property="og:updated_time" content="2018-07-25T17:03:57.607Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统基础知识">
 <meta name="twitter:description" content="进程和线程的区别？首先来说进程和线程的定义：  进程：程序执行时的一个实例，进程是系统进行资源分配和调度的一个基本单位； 线程：进程的一个实体，是CPU调度和分派的最小单位，线程只拥有一点在运行过程中必不可少的资源（程序计数器、通用寄存器、栈等），其他的共享与它所属的进程；从进程和线程的关系来看：一个线程必定属于某个进程，而一个进程可以用于多个线程而且至少拥有一个线程，多个线程可以并发执行；其次，">
@@ -385,6 +385,15 @@
 <h1 id="进程间通信的机制有哪些？"><a href="#进程间通信的机制有哪些？" class="headerlink" title="进程间通信的机制有哪些？"></a>进程间通信的机制有哪些？</h1><p>信号、文件、文件锁、管道（无名管道、有名管道）、消息队列、信号量、共享内存、UNIX域套接字</p>
 <hr>
 <h1 id="线程间同步的机制有哪些？"><a href="#线程间同步的机制有哪些？" class="headerlink" title="线程间同步的机制有哪些？"></a>线程间同步的机制有哪些？</h1><p>互斥锁、条件变量、POSIX信号量、自旋锁、读写锁</p>
+<hr>
+<h1 id="操作系统常见的进程调度算法有哪些？"><a href="#操作系统常见的进程调度算法有哪些？" class="headerlink" title="操作系统常见的进程调度算法有哪些？"></a>操作系统常见的进程调度算法有哪些？</h1><ul>
+<li>先来先服务调度算法</li>
+<li>短作业调度算法</li>
+<li>优先级调度算法</li>
+<li>高响应比优先调度算法</li>
+<li>轮转调度算法</li>
+<li>多级反馈队列调度算法</li>
+</ul>
 
       
     </div>
@@ -555,7 +564,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#进程和线程的区别？"><span class="nav-number">1.</span> <span class="nav-text">进程和线程的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号和信号量的区别？"><span class="nav-number">2.</span> <span class="nav-text">信号和信号量的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#共享内存mmap和shm的区别？"><span class="nav-number">3.</span> <span class="nav-text">共享内存mmap和shm的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程间通信的机制有哪些？"><span class="nav-number">4.</span> <span class="nav-text">进程间通信的机制有哪些？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程间同步的机制有哪些？"><span class="nav-number">5.</span> <span class="nav-text">线程间同步的机制有哪些？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#进程和线程的区别？"><span class="nav-number">1.</span> <span class="nav-text">进程和线程的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#信号和信号量的区别？"><span class="nav-number">2.</span> <span class="nav-text">信号和信号量的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#共享内存mmap和shm的区别？"><span class="nav-number">3.</span> <span class="nav-text">共享内存mmap和shm的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程间通信的机制有哪些？"><span class="nav-number">4.</span> <span class="nav-text">进程间通信的机制有哪些？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程间同步的机制有哪些？"><span class="nav-number">5.</span> <span class="nav-text">线程间同步的机制有哪些？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作系统常见的进程调度算法有哪些？"><span class="nav-number">6.</span> <span class="nav-text">操作系统常见的进程调度算法有哪些？</span></a></li></ol></div>
             
 
           </div>
