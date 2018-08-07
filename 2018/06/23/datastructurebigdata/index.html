@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。主要有以下内容：  最高频问题 布隆过滤器 外排序算法 概率类的大数据问题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-03T02:39:13.000Z">
+<meta property="og:updated_time" content="2018-08-06T12:39:01.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="海量数据处理算法">
 <meta name="twitter:description" content="海量数据类处理问题，是面试中非常高频的一类问题，本文归纳总结了面试中常用的海量数据处理算法。主要有以下内容：  最高频问题 布隆过滤器 外排序算法 概率类的大数据问题">
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -289,7 +289,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-23T12:47:23+08:00">
                 2018-06-23
@@ -310,7 +310,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -467,32 +467,6 @@
 <li>第 5 条 Query 处理时，有 3/5 的概率被留下，那么第 5 条 Query 被选中的概率此时就是 3/5。</li>
 <li>第 5 条 Query 处理时，如果留下之后，会从 Buffer 中以 1/3 的概率踢走一条 Query。前4条Query能够顺利进入Buffer并被留下的概率是：3/4 <em> (2/5 + 2/3 </em> 3/5) = 3/5。其中 2/5 是第 5 条 Query 没有被选中的概率。3/4 是前3条 Queries 在处理完第4条 Query 之后，进入 Buffer的概率，2/3 * 3/5 第5条Query被选中之后但是没有踢走自己的概率。</li>
 </ul>
-<hr>
-<h1 id="面试题总结"><a href="#面试题总结" class="headerlink" title="面试题总结"></a>面试题总结</h1><h2 id="最近7天的热门歌曲"><a href="#最近7天的热门歌曲" class="headerlink" title="最近7天的热门歌曲"></a>最近7天的热门歌曲</h2><p><strong>问题描述</strong><br>计一个听歌统计系统，返回用户 7 天内听的最多 10 首的歌<br><strong>问题分析</strong><br>在解决这个问题之前，我们需要和面试官沟通如下的几个问题条件：</p>
-<ol>
-<li>7天和10首歌这个数字是固定的么？有可能一会儿7天一会儿10天，一会儿10首歌一会儿8首歌么？</li>
-<li>对实时性要求严格么？即，是否允许一定时间的延迟？比如一首个一分钟内被点爆，是否需要在这1分钟之内在榜单中体现出来？<br>澄清问题是面试中重要的一个步骤，因为上述问题的答案，稍有不同，则算法的设计，系统的设计就截然不同。<br>我们先做如下的合理假设：</li>
-<li>7天10首歌这两个数字是固定的。</li>
-<li>对实时性要求不严格，可以有1小时的误差。</li>
-</ol>
-<p><strong>方法1：离线算法</strong><br>这种方法比较简单粗暴，但也非常行之有效。因为通常来说，系统都会进行一些 log。比如用户在什么时候听了什么歌曲，都会被作为一条条的log 记录下来，用于以后的大数据分析用户行为的之用。那么这个时候，我们可以每小时运行一次分析程序，来计算最近7天被听的最多的10首歌。这个分析程序则读取最近 7 天的听歌记录，用前面的 Hash + Heap 的方法进行统计即可。如果这个记录过大，需要加速的话，还可以使用 Map Reduce 来提速。<br><strong>方法2：在线算法</strong><br>这个问题较普通的 Top K 问题的区别和难点在于，有7天这个时间窗口。这个时间窗口意味着几件事情：</p>
-<ol>
-<li>新数据来的时候，需要丢弃对应的7天前的旧数据。</li>
-<li>7天之内的数据，都应该按照某种带着时间标记的方式被保存下来，而不是只有一个计数。</li>
-<li>在线 Hash + Heap 的方法“可能”不再奏效，因为跌出前10名的歌曲，还可能在过短时间后回到前10名。而之前介绍中我们在 Heap 中保存的是前10名，跌出前10名的元素不再有机会回到前10名，则无需保存。<br>在“方法1”中的算法，存在着如下一些缺点：</li>
-<li>每小时都需要进行一次对前7天的数据统计，如果数据量很大，则工作量就很大，如果使用 Map Reduce 则会耗费很多计算资源。</li>
-<li>如果系统的实时性要求变高，如5分钟，则该方法很有可能不奏效，因为可能5分钟无法完成对过去7天的听歌记录的统计工作。<br>针对这两个缺点，这里提出一种基于桶（Bucket）的统计方法：<br><strong>聚合（Aggregate）</strong>：将用户的同个记录，按照1小时为单位进行一次聚合（Aggregate），即整合成一个 Hash 表，Key是歌曲的id，Value是歌曲在这1小时之内被播放的次数。这种方法的好处在于，因为很多歌曲，特别是热门歌曲，是被高频率点播的，这个时候没有必要去一条一条的记录点播记录，只需要记录一个1小时的统计即可。这里每个小时就是一个桶（Bucket），比如当前时刻是 1月1日的18点，那么18点之后，19点之前的点播记录，都放在18点的这个桶里，进行聚合统计。<br><strong>滑动窗口（Sliding Window）</strong>：7天的话，只需要在内存中保存 7 * 24 = 144 个桶，随着时间轴的推移，旧的桶则可以被删除。每次需要获得 Top 10 的时候，则将这 144 个桶的结果进行合并即可。</li>
-</ol>
-<p>这种方法的好处在于，如果我们对这个实时性的要求提高了，如提高到了5分钟，则把桶的大小缩小到5分钟即可。</p>
-<p><strong>Q &amp; A</strong><br><strong>Q: 如果我们对内存要求很高，每个桶统计所用的哈希表多大，无法放进内存怎么办？</strong><br>A: 这种情况下，我们必须允许一定程度的结果误差，在每个桶的局部统计中，我们可以删除那些 value 很小的 key。因为根据长尾理论，这些很冷门的歌曲，事实上占据了很大部分的内存空间，而他们最终也不会成为 Top 10 的热门歌曲。</p>
-<p><strong>Q: 桶存在哪儿？如果是内存的话，断电了怎么办？</strong><br>A: 桶存同时存在内存和硬盘中。存在内存中的目的，是为了更快的计算 Top 10，存在硬盘中的目的，是断电之后可以重新快速 load 桶的内容进来。另外还有一个保险机制是，用户点播的log依然会存在数据库中，即便桶没有被存储下来，也可以通过这些点播的log重新还原每一个桶里的Hash 表。</p>
-<p><strong>Q: 是每次用户想要查看 Top 10 的时候，都进行一次统计么？</strong><br>A: 不是，这个统计只会每小时进行一次。一旦统计结果获得了，就可以存在数据库里，并 cache 在内存中供用户读取。</p>
-<p><strong>Q: 如果实时性要求高，比如需要精确到秒为单位，那样桶所起到的优化效果就很小了，这个时候如何快速获得最近7天的Top10？</strong><br>A: 如果是这样，则必须要有很大的内存。在 Hash + Heap 的方法中，Hash 和 Heap 都保存下所有的歌曲和其对应的点播次数。随着时间的推移，一些歌曲点播次数增加，一些歌曲的点播次数减少，然后点播次数有变化的歌曲，都在 Heap 中调整其相应的位置。然后需要获得 Top 10 时，则从 Heap 中获得。</p>
-<hr>
-<h2 id="访问Baidu次数最多的IP"><a href="#访问Baidu次数最多的IP" class="headerlink" title="访问Baidu次数最多的IP"></a>访问Baidu次数最多的IP</h2><p><strong>问题描述</strong><br>给你海量的日志数据，提取出访问百度次数最多的那个 IP。<br>（为了简化问题，我们假设从每一行日志数据中提取 IP 的工具已经有了）<br>假设内存 &lt; 4G</p>
-<p><strong>问题分析</strong><br>首先问题说的是 IP 地址，IP 地址的范围转换为整数是在 0 ~ 2^32-1 的。但是问题中也给出了，内存大小 &lt; 4G，因此如果我们需要开辟一个 2^32 的整数数组，是不够的。</p>
-<p><strong>初步解决方法</strong><br>解决这种内存不够的大数据处理问题，通常的办法是：内存不够，就分批次处理。假如内存现在是 2G 的话，可以将这些日志数据分两批处理，IP地址的二进制表示中，先末尾是0的，再统计末尾是1的。各自保存下一个访问次数最多的 IP 地址，最后两者中取较大值。这种方法的缺点需要多次扫描文件。有一些网上的解答中，会说先把文件分割成多个文件之后再进行处理。虽然算法本质上没错，但是实现的时候不能这么实现，因为实现文件分割会产生“写”操作，写操作是比读操作慢很多的，而且也没有必要。所以读两次文件即可，而不需要真的把文件给拆分成小文件。</p>
-<p><strong>进一步 Follow up：如何避免多次扫描</strong><br>上面这个方法很容易想到，但是缺点也很明显。就是需要多次扫描日志文件。当这个日志文件记录非常非常大的时候，每一次扫描都是很大的耗费。有没有只扫描一次就能找到最大出现次数IP的方法呢？会想我们在这一章节中学过的最高频 K 项的在线算法。事实上，这就是一个 K = 1 的特殊情况。而在之前的解决方法中，我们也提到过，可以用 Hash Count 的算法，在极小概率会损失准确性的情况下来获得空间的优化。所以那些能够节省空间的高频项统计算法都是可以解决该问题的。唯一缺点是，有可能会损失准确性，即有可能求出的最高频项不是真正的最高项，但是这个概率很低，就看实际应用场景中对准确性的要求了。<br>另外也可以使用升级版的 Hash Count，即布隆过滤器（Bloom Filter）来进行统计。</p>
 
       
     </div>
@@ -583,10 +557,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -607,7 +581,7 @@
                 <a href="/archives">
               
                   <span class="site-state-item-count">91</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -618,7 +592,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -629,7 +603,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -663,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#海量数据处理问题的考点"><span class="nav-number">1.</span> <span class="nav-text">海量数据处理问题的考点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最高频K项问题"><span class="nav-number">2.</span> <span class="nav-text">最高频K项问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整数数组前k大"><span class="nav-number">2.1.</span> <span class="nav-text">整数数组前k大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频-K-项的离线算法"><span class="nav-number">2.2.</span> <span class="nav-text">最高频 K 项的离线算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频K项的在线算法"><span class="nav-number">2.3.</span> <span class="nav-text">最高频K项的在线算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#布隆过滤器（Bloom-Filter"><span class="nav-number">3.</span> <span class="nav-text">布隆过滤器（Bloom Filter)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标准布隆过滤器"><span class="nav-number">3.1.</span> <span class="nav-text">标准布隆过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计数布隆过滤器"><span class="nav-number">3.2.</span> <span class="nav-text">计数布隆过滤器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外排序算法"><span class="nav-number">4.</span> <span class="nav-text">外排序算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概率类的大数据问题"><span class="nav-number">5.</span> <span class="nav-text">概率类的大数据问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#面试题总结"><span class="nav-number">6.</span> <span class="nav-text">面试题总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最近7天的热门歌曲"><span class="nav-number">6.1.</span> <span class="nav-text">最近7天的热门歌曲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问Baidu次数最多的IP"><span class="nav-number">6.2.</span> <span class="nav-text">访问Baidu次数最多的IP</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#海量数据处理问题的考点"><span class="nav-number">1.</span> <span class="nav-text">海量数据处理问题的考点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最高频K项问题"><span class="nav-number">2.</span> <span class="nav-text">最高频K项问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整数数组前k大"><span class="nav-number">2.1.</span> <span class="nav-text">整数数组前k大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频-K-项的离线算法"><span class="nav-number">2.2.</span> <span class="nav-text">最高频 K 项的离线算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最高频K项的在线算法"><span class="nav-number">2.3.</span> <span class="nav-text">最高频K项的在线算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#布隆过滤器（Bloom-Filter"><span class="nav-number">3.</span> <span class="nav-text">布隆过滤器（Bloom Filter)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标准布隆过滤器"><span class="nav-number">3.1.</span> <span class="nav-text">标准布隆过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计数布隆过滤器"><span class="nav-number">3.2.</span> <span class="nav-text">计数布隆过滤器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外排序算法"><span class="nav-number">4.</span> <span class="nav-text">外排序算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概率类的大数据问题"><span class="nav-number">5.</span> <span class="nav-text">概率类的大数据问题</span></a></li></ol></div>
             
 
           </div>
@@ -693,7 +667,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
