@@ -87,15 +87,13 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="前言美团实习的这段时间里，主要负责分布式调度系统Cantor。Cantor的中文含义是合唱指挥家，不得不说这个名字非常符合Cantor的业务场景，Cantor主要用来调度数据生产的任务，最主要的业务是公司每天通过join生成的各种报表，以及一些需要周期性或者定期执行的入库，出库、Spark、Hadoop等任务。这类任务的主要特点是：（1）任务与数据相关，必须提供一些任务失败的修补操作，Cantor">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/cantor.png">
 <meta property="og:image" content="http://harlon.org/img/cantor-fe.png">
-<meta property="og:image" content="http://harlon.org/img/cantor-lifecycle.png">
 <meta property="og:image" content="http://harlon.org/img/tarjan-graph.png">
-<meta property="og:updated_time" content="2018-08-24T04:49:59.000Z">
+<meta property="og:updated_time" content="2018-08-24T12:35:39.089Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="美团点评实习总结">
 <meta name="twitter:description" content="前言美团实习的这段时间里，主要负责分布式调度系统Cantor。Cantor的中文含义是合唱指挥家，不得不说这个名字非常符合Cantor的业务场景，Cantor主要用来调度数据生产的任务，最主要的业务是公司每天通过join生成的各种报表，以及一些需要周期性或者定期执行的入库，出库、Spark、Hadoop等任务。这类任务的主要特点是：（1）任务与数据相关，必须提供一些任务失败的修补操作，Cantor">
-<meta name="twitter:image" content="http://harlon.org/img/cantor.png">
+<meta name="twitter:image" content="http://harlon.org/img/cantor-fe.png">
 
 
 
@@ -359,7 +357,7 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>美团实习的这段时间里，主要负责分布式调度系统<code>Cantor</code>。<code>Cantor</code>的中文含义是合唱指挥家，不得不说这个名字非常符合<code>Cantor</code>的业务场景，<code>Cantor</code>主要用来调度数据生产的任务，最主要的业务是公司每天通过<code>join</code>生成的各种报表，以及一些需要周期性或者定期执行的入库，出库、<code>Spark</code>、<code>Hadoop</code>等任务。这类任务的主要特点是：（1）<strong>任务与数据相关</strong>，必须提供一些任务失败的修补操作，<code>Cantor</code>提供了重导工具；（2）<strong>大部分任务在夜间执行</strong>，要求调度系统要稳定执行，没有人会想凌晨起来去维护系统，目前<code>Cantor</code>启动的运维优化项目，目的就是降低运维的成本，提高系统的运维能力；（3）<strong>任务并发高</strong>，按小时、天、月执行的任务每次动辄几万个任务，必须要有相应的措施保证任务成功执行，<code>Cantor</code>通过队列+线程的方式处理高并发；（4）<strong>任务具有依赖关系</strong>，数据生产的任务之间具有依赖关系，<code>Cantor</code>通过对任务抽象为<code>DAG</code>（有向无环图）来处理任务之间的依赖关系。<br><a id="more"></a></p>
 <hr>
-<h1 id="技术篇"><a href="#技术篇" class="headerlink" title="技术篇"></a>技术篇</h1><p><img src="/img/cantor.png" alt=""><br><br><br>Cantor的架构如上图所示，主要分为四个组件：</p>
+<h1 id="技术篇"><a href="#技术篇" class="headerlink" title="技术篇"></a>技术篇</h1><p><code>Cantor</code>主要分为四个组件：</p>
 <ul>
 <li><code>fe</code>：<code>Cantor web</code>前端，用于查看创建、查询、重导任务、监控、运维等，提供<code>Restful API</code>；</li>
 <li><code>core</code>：核心调度器，提供队列任务和<code>cron</code>任务调度器，分配任务到相应的执行机；</li>
@@ -378,7 +376,7 @@
 <p><strong>主要工作：</strong></p>
 <ul>
 <li><strong>1、解决登录认证时<code>web api crash</code>问题</strong><br><strong>问题描述：</strong>进行<code>SSO</code>认证时，<code>Cantor</code>会在<code>cookie</code>中设置<code>cantor_redirect_url</code>，通过<code>cantor_redirect_url</code>发送重定向响应包，如果用户丢失<code>cookie</code>，导致<code>cantor_redirect_url</code>为空，<code>fe</code>没有相应的处理逻辑，导致程序奔溃。<br><strong>解决方案：</strong>加入判断逻辑，如果为空默认跳转到首页。</li>
-<li><strong>2、生命周期页面详情页</strong><br><strong>问题描述：</strong>任务执行失败，用户无法感知当前任务执行阶段，实时展示任务生命周期详情页，方便定位问题，降低运维成本。<br><strong>解决方案：</strong>任务执行到每个阶段，更新<code>DAG</code>并写入到<code>squirrel</code>（美团<code>Redis</code>基础服务）中，前端页面访问<code>API</code>从<code>squirrel</code>拉取消息。<br><img src="/img/cantor-lifecycle.png" alt=""></li>
+<li><strong>2、生命周期页面详情页</strong><br><strong>问题描述：</strong>任务执行失败，用户无法感知当前任务执行阶段，实时展示任务生命周期详情页，方便定位问题，降低运维成本。<br><strong>解决方案：</strong>任务执行到每个阶段，更新<code>DAG</code>并写入到<code>squirrel</code>（美团<code>Redis</code>基础服务）中，前端页面访问<code>API</code>从<code>squirrel</code>拉取消息。</li>
 </ul>
 <hr>
 <h2 id="core"><a href="#core" class="headerlink" title="core"></a>core</h2><p><code>core</code>模块实现了<code>Cantor</code>的两个核心调度器，队列任务调度器<code>Scheduler</code>和<code>cron</code>任务调度器<code>CronService</code>，通过<code>apscheduler</code>库实现任务的周期执行，类似<code>Crontable</code>。这里主要介绍队列任务：<br>队列任务分为按小时、天、周、月执行的任务，<code>apscheduler</code>创建相应的<code>QueueEvent</code>，<code>QueueEvent</code>创建<code>Scheduler</code>调度器生成任务<code>DAG</code>，调度器根据<code>DAG</code>中的依赖关系将任务提交到<code>worker</code>子进程中，<code>worker</code>创建一个线程提交任务到执行机，然后轮询获取任务的状态。队列任务运行流程如下：</p>
