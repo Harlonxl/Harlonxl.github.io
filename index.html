@@ -352,64 +352,14 @@
 
       
         
-          
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>美团实习的这段时间里，主要负责分布式调度系统<code>Cantor</code>。<code>Cantor</code>的中文含义是合唱指挥家，不得不说这个名字非常符合<code>Cantor</code>的业务场景，<code>Cantor</code>主要用来调度数据生产的任务，最主要的业务是公司每天通过<code>join</code>生成的各种报表，以及一些需要周期性或者定期执行的入库，出库、<code>Spark</code>、<code>Hadoop</code>等任务。这类任务的主要特点是：（1）<strong>任务与数据相关</strong>，必须提供一些任务失败的修补操作，<code>Cantor</code>提供了重导工具；（2）<strong>大部分任务在夜间执行</strong>，要求调度系统要稳定执行，没有人会想凌晨起来去维护系统，目前<code>Cantor</code>启动的运维优化项目，目的就是降低运维的成本，提高系统的运维能力；（3）<strong>任务并发高</strong>，按小时、天、月执行的任务每次动辄几万个任务，必须要有相应的措施保证任务成功执行，<code>Cantor</code>通过队列+线程的方式处理高并发；（4）<strong>任务具有依赖关系</strong>，数据生产的任务之间具有依赖关系，<code>Cantor</code>通过对任务抽象为<code>DAG</code>（有向无环图）来处理任务之间的依赖关系。</p>
-<hr>
-<h1 id="技术篇"><a href="#技术篇" class="headerlink" title="技术篇"></a>技术篇</h1><p><img src="/img/cantor.png" alt=""><br><br><br>Cantor的架构如上图所示，主要分为四个组件：</p>
-<ul>
-<li><code>fe</code>：<code>Cantor web</code>前端，用于查看创建、查询、重导任务、监控、运维等，提供<code>Restful API</code>；</li>
-<li><code>core</code>：核心调度器，提供队列任务和<code>cron</code>任务调度器，分配任务到相应的执行机；</li>
-<li><code>executor</code>：执行机，管理执行机的资源槽，运行并监控相应任务，对任务执行日志缓存；</li>
-<li><code>reload</code>：重导调度器，对执行失败的任务重新执行。</li>
-</ul>
-<p>在实习期间，我主要负责<code>fe</code>和<code>core</code>模块的内容，下面我主要分析这两个模块以及我所做的工作。</p>
-<hr>
-<h2 id="fe"><a href="#fe" class="headerlink" title="fe"></a>fe</h2><p>用户可以通过<code>Cantor</code>前端界面提交任务，查询任务的状态等，<code>Cantor</code>前端使用<code>React</code>，<code>web</code>服务器使用<code>gunicorn+Flask</code>，默认开启<code>2*cpu + 1</code>个进程处理<code>HTTP</code>请求。<br><img src="/img/cantor-fe.png" alt=""><br><br><br><code>gunicorn</code>作为<code>Cantor</code>的<code>WSGI</code>，服务网关接口，具有很强的伸缩性，能够运行在多线程多进程环境下，接口请求并路由到相应的<code>web</code>应用处理请求，<code>Flask</code>处理<code>HTTP</code>请求，通过<code>URL</code>去执行相应的函数，并求静态资源进行缓存。<br><code>Cantor</code>接收通过<code>SSO</code>单点登录进行用户认证，查询类请求操作先查缓存，缓存未命中再去查询数据库。操作类请通过<code>RPC</code>调用响应的接口。这里主要分析<code>Cantor</code>创建任务的流程：</p>
-<ol>
-<li>用户通过<code>web</code>界面或者直接创建<code>HTTP</code>请求发送创建任务的请求，请求数据包括任务的基本信息：任务类型、任务名称、任务的负责人等，生产计划：任务执行命令、执行机组、超时时间、重试次数等，上游依赖关系；</li>
-<li><code>API</code>接受到请求后，对用户信息进行认证，写访问日志，规范化请求数据；</li>
-<li>更新数据库<code>task</code>、<code>plan</code>、<code>task_relation</code>表，创建任务时不检查环，只创建依赖关系；</li>
-<li>调用<code>RPC</code>提交任务。<br><br><br><strong>主要工作：</strong></li>
-</ol>
-<ul>
-<li><strong>1、解决登录认证时<code>web api crash</code>问题</strong><br><strong>问题描述：</strong>进行<code>SSO</code>认证时，<code>Cantor</code>会在<code>cookie</code>中设置<code>cantor_redirect_url</code>，通过<code>cantor_redirect_url</code>发送重定向响应包，如果用户丢失<code>cookie</code>，导致<code>cantor_redirect_url</code>为空，<code>fe</code>没有相应的处理逻辑，导致程序奔溃。<br><strong>解决方案：</strong>加入判断逻辑，如果为空默认跳转到首页。</li>
-<li><strong>2、生命周期页面详情页</strong><br><strong>问题描述：</strong>任务执行失败，用户无法感知当前任务执行阶段，实时展示任务生命周期详情页，方便定位问题，降低运维成本。<br><strong>解决方案：</strong>任务执行到每个阶段，更新<code>DAG</code>并写入到<code>squirrel</code>（美团<code>Redis</code>基础服务）中，前端页面访问<code>API</code>从<code>squirrel</code>拉取消息。<br><img src="cantor-lifecycle.png" alt=""></li>
-</ul>
-<hr>
-<hr>
-<h2 id="core"><a href="#core" class="headerlink" title="core"></a>core</h2><p><code>core</code>模块实现了<code>Cantor</code>的两个核心调度器，队列任务调度器<code>Scheduler</code>和<code>cron</code>任务调度器<code>CronService</code>，通过<code>apscheduler</code>库实现任务的周期执行，类似<code>Crontable</code>。这里主要介绍队列任务：<br>队列任务分为按小时、天、周、月执行的任务，<code>apscheduler</code>创建相应的<code>QueueEvent</code>，<code>QueueEvent</code>创建<code>Scheduler</code>调度器生成任务<code>DAG</code>，调度器根据<code>DAG</code>中的依赖关系将任务提交到<code>worker</code>子进程中，<code>worker</code>创建一个线程提交任务到执行机，然后轮询获取任务的状态。队列任务运行流程如下：</p>
-<ol>
-<li>初始化日志，最大并发数，资源队列；</li>
-<li>根据依赖关系生成<code>DAG</code>，<code>DAG</code>是队列任务的核心数据结构，所有的任务调度都要根据<code>DAG</code>中的顺序进行，上游任务执行失败，如果是强依赖关系，下游任务任务不能执行，弱依赖关系下下游任务可以执行；</li>
-<li>筛选顶层节点，根据大V，SLA，优先级，就绪时间放入资源桶进行排序；</li>
-<li>筛选槽位以及并发数满足要求的任务；</li>
-<li>执行任务，成功后从<code>DAG</code>移除，转到第3步进行执行。<br><br><br><strong>主要工作：</strong></li>
-</ol>
-<ul>
-<li><p><strong>1、解决重导时卡在“等待执行”状态</strong><br><strong>问题描述：</strong>这个是重导时出现的问题，但重导和正常调度的逻辑基本上相同的，用户提交重导时，需要选择重导执行时间，之后提交到<code>reviewer</code>进行审核，如果<code>reviewer</code>审核时间超过24小时，在<code>apscheduler</code>中设置只执行时间在24小时内的任务，此时该重导任务一直处于等待执行状态。<br><strong>解决方案：</strong>将重导和正常调度的超时时间分开设置，添加到配置项中。默认设置重导超时时间为一周，正常执行超时时间为24小时。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">MISFIRE_FRACE_TIME = <span class="number">24</span> * <span class="number">3600</span> <span class="comment"># 如果作业未调起执行，在多长时间内允许作业被执行</span></div><div class="line">RELOAD_MISFIRE_FRACE_TIME = <span class="number">7</span> * <span class="number">24</span> * <span class="number">3600</span> <span class="comment"># 重导任务在多长时间内允许被执行</span></div></pre></td></tr></table></figure>
-</li>
-<li><p><strong>2、DAG强连通分量算法</strong><br><strong>问题描述：</strong>生成<code>DAG</code>时，需要检测任务之间是否形成环，对于形成环的任务要及时预警，负责人通过查看形成环的任务，适当的更改任务消除环。<br><strong>解决方案：</strong>求解有向联通图中强连通分量的算法有<code>Kosaraju</code>、<code>Gabow</code>和<code>Tarjan</code>算法，<code>Gabow</code>和<code>Tarjan</code>算法的时间复杂度优于<code>Kosaraju</code>，只需要对图作一次<code>DFS</code>就可以求出图中强连通分量，<code>Tarjan</code>算法和<code>Gabow</code>算法的思想是相同的，<code>Tarjan</code>算法用数组保存最早追溯到的父节点，<code>Gabow</code>用栈来保存，<code>Cantor</code>采用了<code>Tarjan</code>算法。<br><code>Tarjan</code>算法简称为缩点算法，主要思想是维护一个深度优先搜索的访问次序数组<code>dfs</code>，以及表示通过有向边最早被访问到的节点的数组<code>low</code>，具有相同访问的“根”在<code>low</code>中缩成一个点，用栈来维护当前强连通节点。伪代码如下：<br><img src="/img/tarjan-graph.png" alt=""></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">id = <span class="number">0</span>;</div><div class="line">tarjan:</div><div class="line">    dfs[u] = ++id;</div><div class="line">    low[u] = ++id;</div><div class="line">    stack.push(u);</div><div class="line">    <span class="keyword">for</span> (w : u)</div><div class="line">        <span class="keyword">if</span> w <span class="keyword">is</span> visited:</div><div class="line">            tarjan(w)</div><div class="line">            low[u] = min(low[u], low[w])</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> w <span class="keyword">in</span> stack:</div><div class="line">            low[u] = min(low[u], dfs[w])</div><div class="line"></div><div class="line">    <span class="keyword">if</span> low[u] == dfs[u]:</div><div class="line">        <span class="keyword">while</span> u == stack.top():</div><div class="line">            res = stack.top()</div><div class="line">            stack.pop()</div></pre></td></tr></table></figure>
-</li>
-<li><p><strong>3、参与运维优化项目</strong><br><strong>问题描述：</strong><code>Cantor</code>中队列调度器是一个剥落调度模式，上游任务完成移除之后，加载下游任务执行，这样始终只有一层任务处于活跃状态，如果想操作之前执行过的任务，只能通过重导工具来进行，这样造成任务运维成本高，复杂度高。<br><strong>解决方案：</strong>改造<code>jobdag</code>，缓存所有任务的状态，将剥落式调度改为按分支调度，通知也支持多分支并发执行，大V分支加速等高级特性，同时更改运维为置为成功，置为失败，强制运行，挂起/解挂，运维操作更加清晰明了，运维成本也大大降低。这里简述一下置为成功的实现过程：</p>
-</li>
-</ul>
-<ol>
-<li>更新任务状态为<code>FINISHED</code>，写入数据库；</li>
-<li>如何<code>cur_inst_id</code>不为空，表示任务正在执行机上运行，<code>cur_inst_id</code>置空；</li>
-<li>根据<code>cur_inst_id</code>，杀死任务。</li>
-</ol>
-<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p><code>Cantor</code>作为一个基于依赖关系的分布式调度系统，再发展进步的同时也存在一些问题，下面是我自己的一些见解。</p>
-<ol>
-<li>系统耦合度比较高，模块划分不清晰；</li>
-<li>可扩展性差，<code>core</code>作为核心调度器，由于采用了进程间通信，无法分机部署，导致<code>core</code>容易出现瓶颈；</li>
-<li>面向对象和面向过程思想融合在一起，维护性差，学习成本高；</li>
-</ol>
-<hr>
-<h1 id="生活篇"><a href="#生活篇" class="headerlink" title="生活篇"></a>生活篇</h1><p>这次实习让我切身体会到，如何将自己平时学到的东西用在实践中，同时也明显感觉到自己对问题的理解能力一步一步提高。除了技术上的提升，实习也让我对公司的正规化运营流程，开发流程有了新的认识。在实习期间，我一直抱着这样的思想来完成我需要做的事情，为什么要做这个？做这个对系统会产生什么样的结果？实习让我明白了一个思想，结果导向，再做任何事之前要明确的认知到产生的结果。<br>“北漂”的生活也快要结束了，又要回到象牙塔中，学校生活了19年了，对社会，未来的工作充满了期待，不管结果如何，相信一切都是最好的安排，努力奋斗追逐明天。</p>
-
-          
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>美团实习的这段时间里，主要负责分布式调度系统<code>Cantor</code>。<code>Cantor</code>的中文含义是合唱指挥家，不得不说这个名字非常符合<code>Cantor</code>的业务场景，<code>Cantor</code>主要用来调度数据生产的任务，最主要的业务是公司每天通过<code>join</code>生成的各种报表，以及一些需要周期性或者定期执行的入库，出库、<code>Spark</code>、<code>Hadoop</code>等任务。这类任务的主要特点是：（1）<strong>任务与数据相关</strong>，必须提供一些任务失败的修补操作，<code>Cantor</code>提供了重导工具；（2）<strong>大部分任务在夜间执行</strong>，要求调度系统要稳定执行，没有人会想凌晨起来去维护系统，目前<code>Cantor</code>启动的运维优化项目，目的就是降低运维的成本，提高系统的运维能力；（3）<strong>任务并发高</strong>，按小时、天、月执行的任务每次动辄几万个任务，必须要有相应的措施保证任务成功执行，<code>Cantor</code>通过队列+线程的方式处理高并发；（4）<strong>任务具有依赖关系</strong>，数据生产的任务之间具有依赖关系，<code>Cantor</code>通过对任务抽象为<code>DAG</code>（有向无环图）来处理任务之间的依赖关系。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/23/meituan/#more" rel="contents">
+              Weiterlesen &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
