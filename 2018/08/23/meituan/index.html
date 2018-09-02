@@ -88,8 +88,9 @@
 <meta property="og:description" content="前言美团实习的这段时间里，主要负责分布式调度系统Cantor。Cantor的中文含义是合唱指挥家，不得不说这个名字非常符合Cantor的业务场景，Cantor主要用来调度数据生产的任务，最主要的业务是公司每天通过join生成的各种报表，以及一些需要周期性或者定期执行的入库，出库、Spark、Hadoop等任务。这类任务的主要特点是：（1）任务与数据相关，必须提供一些任务失败的修补操作，Cantor">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/cantor-fe.png">
+<meta property="og:image" content="http://harlon.org/img/cantor-lifecycle.png">
 <meta property="og:image" content="http://harlon.org/img/tarjan-graph.png">
-<meta property="og:updated_time" content="2018-08-28T12:55:12.431Z">
+<meta property="og:updated_time" content="2018-08-31T02:57:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="美团点评实习总结">
 <meta name="twitter:description" content="前言美团实习的这段时间里，主要负责分布式调度系统Cantor。Cantor的中文含义是合唱指挥家，不得不说这个名字非常符合Cantor的业务场景，Cantor主要用来调度数据生产的任务，最主要的业务是公司每天通过join生成的各种报表，以及一些需要周期性或者定期执行的入库，出库、Spark、Hadoop等任务。这类任务的主要特点是：（1）任务与数据相关，必须提供一些任务失败的修补操作，Cantor">
@@ -189,7 +190,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -293,7 +294,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-23T16:34:23+08:00">
                 2018-08-23
@@ -314,7 +315,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -376,7 +377,7 @@
 <p><strong>主要工作：</strong></p>
 <ul>
 <li><strong>1、解决登录认证时<code>web api crash</code>问题</strong><br><strong>问题描述：</strong>进行<code>SSO</code>认证时，<code>Cantor</code>会在<code>cookie</code>中设置<code>cantor_redirect_url</code>，通过<code>cantor_redirect_url</code>发送重定向响应包，如果用户丢失<code>cookie</code>，导致<code>cantor_redirect_url</code>为空，<code>fe</code>没有相应的处理逻辑，导致程序奔溃。<br><strong>解决方案：</strong>加入判断逻辑，如果为空默认跳转到首页。</li>
-<li><strong>2、生命周期页面详情页</strong><br><strong>问题描述：</strong>任务执行失败，用户无法感知当前任务执行阶段，实时展示任务生命周期详情页，方便定位问题，降低运维成本。<br><strong>解决方案：</strong>任务执行到每个阶段，更新<code>DAG</code>并写入到<code>squirrel</code>（美团<code>Redis</code>基础服务）中，前端页面访问<code>API</code>从<code>squirrel</code>拉取消息。</li>
+<li><strong>2、生命周期页面详情页</strong><br><strong>问题描述：</strong>任务执行失败，用户无法感知当前任务执行阶段，实时展示任务生命周期详情页，方便定位问题，降低运维成本。<br><strong>解决方案：</strong>任务执行到每个阶段，更新<code>DAG</code>并写入到<code>squirrel</code>（美团<code>Redis</code>基础服务）中，前端页面访问<code>API</code>从<code>squirrel</code>拉取消息。<br><img src="/img/cantor-lifecycle.png" alt=""></li>
 </ul>
 <hr>
 <h2 id="core"><a href="#core" class="headerlink" title="core"></a>core</h2><p><code>core</code>模块实现了<code>Cantor</code>的两个核心调度器，队列任务调度器<code>Scheduler</code>和<code>cron</code>任务调度器<code>CronService</code>，通过<code>apscheduler</code>库实现任务的周期执行，类似<code>Crontable</code>。这里主要介绍队列任务：<br>队列任务分为按小时、天、周、月执行的任务，<code>apscheduler</code>创建相应的<code>QueueEvent</code>，<code>QueueEvent</code>创建<code>Scheduler</code>调度器生成任务<code>DAG</code>，调度器根据<code>DAG</code>中的依赖关系将任务提交到<code>worker</code>子进程中，<code>worker</code>创建一个线程提交任务到执行机，然后轮询获取任务的状态。队列任务运行流程如下：</p>
@@ -389,7 +390,9 @@
 </ol>
 <p><strong>主要工作：</strong></p>
 <ul>
-<li><strong>1、解决重导时卡在“等待执行”状态</strong><br><strong>问题描述：</strong>这个是重导时出现的问题，但重导和正常调度的逻辑基本上相同的，用户提交重导时，需要选择重导执行时间，之后提交到<code>reviewer</code>进行审核，如果<code>reviewer</code>审核时间超过24小时，在<code>apscheduler</code>中设置只执行时间在24小时内的任务，此时该重导任务一直处于等待执行状态。<br><strong>解决方案：</strong>将重导和正常调度的超时时间分开设置，添加到配置项中。默认设置重导超时时间为一周，正常执行超时时间为24小时。</li>
+<li><p><strong>1、解决重导时卡在“等待执行”状态</strong><br><strong>问题描述：</strong>这个是重导时出现的问题，但重导和正常调度的逻辑基本上相同的，用户提交重导时，需要选择重导执行时间，之后提交到<code>reviewer</code>进行审核，如果<code>reviewer</code>审核时间超过24小时，在<code>apscheduler</code>中设置只执行时间在24小时内的任务，此时该重导任务一直处于等待执行状态。<br><strong>解决方案：</strong>将重导和正常调度的超时时间分开设置，添加到配置项中。默认设置重导超时时间为一周，正常执行超时时间为24小时。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">MISFIRE_FRACE_TIME = <span class="number">24</span> * <span class="number">3600</span> <span class="comment"># 如果作业未调起执行，在多长时间内允许作业被执行</span></div><div class="line">RELOAD_MISFIRE_FRACE_TIME = <span class="number">7</span> * <span class="number">24</span> * <span class="number">3600</span> <span class="comment"># 重导任务在多长时间内允许被执行</span></div></pre></td></tr></table></figure>
+</li>
 <li><p><strong>2、DAG强连通分量算法</strong><br><strong>问题描述：</strong>生成<code>DAG</code>时，需要检测任务之间是否形成环，对于形成环的任务要及时预警，负责人通过查看形成环的任务，适当的更改任务消除环。<br><strong>解决方案：</strong>求解有向联通图中强连通分量的算法有<code>Kosaraju</code>、<code>Gabow</code>和<code>Tarjan</code>算法，<code>Gabow</code>和<code>Tarjan</code>算法的时间复杂度优于<code>Kosaraju</code>，只需要对图作一次<code>DFS</code>就可以求出图中强连通分量，<code>Tarjan</code>算法和<code>Gabow</code>算法的思想是相同的，<code>Tarjan</code>算法用数组保存最早追溯到的父节点，<code>Gabow</code>用栈来保存，<code>Cantor</code>采用了<code>Tarjan</code>算法。<br><code>Tarjan</code>算法简称为缩点算法，主要思想是维护一个深度优先搜索的访问次序数组<code>dfs</code>，以及表示通过有向边最早被访问到的节点的数组<code>low</code>，具有相同访问的“根”在<code>low</code>中缩成一个点，用栈来维护当前强连通节点。伪代码如下：<br><img src="/img/tarjan-graph.png" alt=""></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">id = <span class="number">0</span>;</div><div class="line">tarjan:</div><div class="line">    dfs[u] = ++id;</div><div class="line">    low[u] = ++id;</div><div class="line">    stack.push(u);</div><div class="line">    <span class="keyword">for</span> (w : u)</div><div class="line">        <span class="keyword">if</span> w <span class="keyword">is</span> visited:</div><div class="line">            tarjan(w)</div><div class="line">            low[u] = min(low[u], low[w])</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> w <span class="keyword">in</span> stack:</div><div class="line">            low[u] = min(low[u], dfs[w])</div><div class="line"></div><div class="line">    <span class="keyword">if</span> low[u] == dfs[u]:</div><div class="line">        <span class="keyword">while</span> u == stack.top():</div><div class="line">            res = stack.top()</div><div class="line">            stack.pop()</div></pre></td></tr></table></figure>
 </li>
@@ -450,6 +453,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/09/03/redenvelope/" rel="prev" title="抢红包算法">
+                抢红包算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -502,10 +509,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Übersicht
           </li>
         </ul>
       
@@ -525,8 +532,8 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">92</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -537,7 +544,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -548,7 +555,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -612,7 +619,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 

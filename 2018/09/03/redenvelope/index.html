@@ -79,20 +79,17 @@
 
 
 
-<meta name="description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
+<meta name="description" content="抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分布式一致性算法综述">
-<meta property="og:url" content="http://harlon.org/2018/06/09/distributedsystemconsistency/index.html">
+<meta property="og:title" content="抢红包算法">
+<meta property="og:url" content="http://harlon.org/2018/09/03/redenvelope/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
+<meta property="og:description" content="抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://harlon.org/img/basic-paxos-phases.png">
-<meta property="og:image" content="http://harlon.org/img/raft-leader-election.png">
-<meta property="og:updated_time" content="2018-07-23T14:50:30.418Z">
+<meta property="og:updated_time" content="2018-09-02T16:38:59.139Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分布式一致性算法综述">
-<meta name="twitter:description" content="分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。">
-<meta name="twitter:image" content="http://harlon.org/img/basic-paxos-phases.png">
+<meta name="twitter:title" content="抢红包算法">
+<meta name="twitter:description" content="抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？">
 
 
 
@@ -122,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://harlon.org/2018/06/09/distributedsystemconsistency/"/>
+  <link rel="canonical" href="http://harlon.org/2018/09/03/redenvelope/"/>
 
 
 
 
 
-  <title>分布式一致性算法综述 | Harlon's BLOG</title>
+  <title>抢红包算法 | Harlon's BLOG</title>
   
 
 
@@ -265,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/06/09/distributedsystemconsistency/">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/09/03/redenvelope/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Harlon">
@@ -282,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">分布式一致性算法综述</h1>
+          <h1 class="post-title" itemprop="name headline">抢红包算法</h1>
         
 
         <div class="post-meta">
@@ -294,8 +291,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-09T17:38:23+08:00">
-                2018-06-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-03T12:34:23+08:00">
+                2018-09-03
               </time>
             
 
@@ -317,8 +314,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index">
-                    <span itemprop="name">Notes</span>
+                  <a href="/categories/Design/" itemprop="url" rel="index">
+                    <span itemprop="name">Design</span>
                   </a>
                 </span>
 
@@ -354,39 +351,24 @@
       
 
       
-        <p>分布式系统中，网络不可靠，主机的差异性（包块性能、时钟），主机的不可靠等特性，从而产生了分布式系统的一致性问题，我们要保障分布式中的主机以同样的顺序来执行指令，从而产生一致性的结果，使得整个分布式系统像一台主机。<br><a id="more"></a></p>
-<hr>
-<h1 id="一致性问题"><a href="#一致性问题" class="headerlink" title="一致性问题"></a>一致性问题</h1><p>分布式系统产生一致性问题的原因可总结如下：</p>
-<ul>
-<li>网络不可靠</li>
-<li>主机不可靠</li>
-<li>主机之间的差异性（性能、时钟等）</li>
+        <p>抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？<br><a id="more"></a></p>
+<h1 id="基本要求"><a href="#基本要求" class="headerlink" title="基本要求"></a>基本要求</h1><ul>
+<li>所有抢到红包的金额等于红包金额；</li>
+<li>每个人至少抢到0.01元；</li>
+<li>保证所有人抢到金额的几率相等；</li>
 </ul>
-<p>首先，网络可能导致我们发送的数据或者指令以乱序的方式到达，也可能会丢失数据，其次主机时不可靠的，可能会出现宕机，重启等，主机之间的差异性，包括主机的性能和时钟，这些都会导致分布式系统难于实现一致性，FLP不可能理论指出无法彻底解决一致性问题，在CAP中我们只能选择两项，大多数的分布式系统都选择了最终一致性，即若一致性来保证可用性和分区容错性。<br>在实际的生产环境中，一致性算法需要具备以下属性：</p>
-<ul>
-<li>安全性：即不管怎样都不能返回错误的结果；</li>
-<li>可用性：主要大部门的机器正常，就仍然可以正常工作；</li>
-<li>不依赖时间来确保一致,即系统是异步的；</li>
-<li>一般情况下,运行时间由大多数的机器决定,不会因为有少部分慢的机器而影响总体效率</li>
-</ul>
-<p>通俗来讲，一致性的问题可以分解为两个问题：<br>1、任何一次修改保证数据一致性<br>2、多次数据修改的一致性</p>
-<p>弱一致性：不要求每次修改的内容在修改后多副本的内容是一致的，对问题1的解决比较宽松，更多解决问题2，该类算法追求每次修改的高度并发性，减少多副本之间修改的关联性，以获得更好的并发性能。例如最终一致性，无所谓每次用户修改后的多副本的一致性及格过，只要求在单调的时间方向上，数据最终保持一致，如此获得了修改极大的并发性能。<br>强一致性：强调单次修改后结果的一致，需要保证了对问题1和问题2要求的实现，牺牲了并发性能。<br>一致性算法有：两阶段提交算法、分布式锁服务、Paxos算法和Raft算法。<br>两阶段提交参见这里<a href="">分布式事务</a><br>分布式锁服务参加这里<a href="http://harlon.org/2018/04/14/distributedsystemlock/">分布式锁以及三种实现方式</a><br>下面主要介绍Paxos算法和Raft一致性算法。</p>
 <hr>
-<h1 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h1><p>Paxos算法是一个会者简单，不会者觉得很难的算法，就连Lamport本文也不得不为Paxos先后做了三次解释。<br>查阅了很多资料，最后发现维基百科中对Paxos的解释最为准确和易懂，可见参考文件中。这里只是阐述算法的过程和原理，不再做深一步的证明和理解。<br>Paxos算法分为两个简单，分别是准备阶段（Prepare）和接受阶段（Accept），当Proposer接收到来自客户端的请求时，就会进入如下流程：<br><img src="/img/basic-paxos-phases.png" alt=""></p>
-<p><center>Paxos算法</center><br>只要Proposer经过多数派接受，该提案就会成为正式的决议。</p>
-<hr>
-<h1 id="Raft一致性算法"><a href="#Raft一致性算法" class="headerlink" title="Raft一致性算法"></a>Raft一致性算法</h1><p>Raft是Paxos的变体，不过Raft简化了Paxos，任何时间内，只有leader能够发起提案，这就涉及到leader选举问题。<br>Raft算法中有一下三个角色：</p>
-<ul>
-<li>1.Leader：负责 Client 交互 和 log 复制，同一时刻系统中最多存在一个；</li>
-<li>2.Follower：被动响应请求 RPC，从不主动发起请求 RPC；</li>
-<li>3.Candidate : 由Follower 向Leader转换的中间状态。</li>
-</ul>
-<p>Leader选举过程：<br>在极简的思维下，一个最小的 Raft 民主集群需要三个参与者（如下图：A、B、C），这样才可能投出多数票。初始状态 ABC 都是 Follower，然后发起选举这时有三种可能情形发生。下图中前二种都能选出 Leader，第三种则表明本轮投票无效（Split Votes），每方都投给了自己，结果没有任何一方获得多数票。之后每个参与方随机休息一阵（Election Timeout）重新发起投票直到一方获得多数票。这里的关键就是随机 timeout，最先从 timeout 中恢复发起投票的一方向还在 timeout 中的另外两方请求投票，这时它们就只能投给对方了，很快达成一致。<br><img src="/img/raft-leader-election.png" alt=""></p>
-<p>Raft 协议强依赖 Leader 节点的可用性来确保集群数据的一致性。数据的流向只能从 Leader 节点向 Follower 节点转移。当 Client 向集群 Leader 节点提交数据后，Leader 节点接收到的数据处于未提交状态（Uncommitted），接着 Leader 节点会并发向所有 Follower 节点复制数据并等待接收响应，确保至少集群中超过半数节点已接收到数据后再向 Client 确认数据已接收。一旦向 Client 发出数据接收 Ack 响应后，表明此时数据状态进入已提交（Committed），Leader 节点再向 Follower 节点发通知告知该数据状态已提交。<br>Leader的选举问题</p>
-<hr>
+<h1 id="一个简单的抢红包算法"><a href="#一个简单的抢红包算法" class="headerlink" title="一个简单的抢红包算法"></a>一个简单的抢红包算法</h1><p>M为剩余红包的金额，剩余人数为N，每个人抢的红包的金额为：</p>
 <blockquote>
-<p>参考资料<br><a href="https://blog.csdn.net/lucky_greenegg/article/details/52644213" target="_blank" rel="external">分布式系统一致性问题和一致性算法</a><br><a href="https://draveness.me/consensus" target="_blank" rel="external">分布式一致性与共识算法</a><br><a href="https://zh.wikipedia.org/zh-cn/Paxos%E7%AE%97%E6%B3%95" target="_blank" rel="external">Paxos算法</a><br><a href="http://www.cnblogs.com/mindwind/p/5231986.html" target="_blank" rel="external">Raft 为什么是更易理解的分布式一致性算法</a><br><a href="https://blog.csdn.net/followMyInclinations/article/details/52870418" target="_blank" rel="external">分布式事务与一致性算法Paxos &amp; raft &amp; zab</a></p>
+<p> 每次抢到的金额 = 随机区间(0, M / N * 2)</p>
 </blockquote>
+<p>这样能够满足上述的要求：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> random</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">redenvelope</span><span class="params">(money, n)</span>:</span></div><div class="line">    redmoney = []</div><div class="line">    <span class="keyword">while</span> n != <span class="number">1</span>:</div><div class="line">        get_money = round(random.random() * <span class="number">2</span> * money / n, <span class="number">2</span>)</div><div class="line">        redmoney.append(get_money)</div><div class="line">        money -= get_money</div><div class="line">        n -= <span class="number">1</span></div><div class="line"></div><div class="line">    redmoney.append(round(money, <span class="number">2</span>))</div><div class="line">    <span class="keyword">return</span> redmoney</div></pre></td></tr></table></figure></p>
+<p>简单测试<code>QPS</code>能够达到8w，但是这种算法能够抢到的最大红包数只能是平均值的2倍，微信使用的肯定不是这种算法。</p>
+<hr>
+<h1 id="裂变方法"><a href="#裂变方法" class="headerlink" title="裂变方法"></a>裂变方法</h1><p>从红包金额中随机n-1个随机数，然后对红包进行切割，这种方法最接近接近微信的实现，比较完整的实现如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> random</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">money_val</span><span class="params">(min, max)</span>:</span></div><div class="line">    <span class="keyword">return</span> min <span class="keyword">if</span> min &gt; max <span class="keyword">else</span> random.randint(min, max)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">redenvelope</span><span class="params">(money, n, min = <span class="number">0.01</span>)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    :param money:   红包金额</span></div><div class="line"><span class="string">    :param n:       抢红包的人数</span></div><div class="line"><span class="string">    :param min:     抢到红包的最小金额</span></div><div class="line"><span class="string">    :return:        每个人抢到红包的金额</span></div><div class="line"><span class="string">    """</span></div><div class="line">    money_list = []</div><div class="line"></div><div class="line">    <span class="keyword">if</span> money &lt; n * min:</div><div class="line">        <span class="keyword">return</span> money_list, <span class="string">u'Invalid Value'</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n):</div><div class="line">        safe_total = (money - (n - i) * min) / (n - i)</div><div class="line">        get_money = round(money_val(min * <span class="number">100</span>, int(safe_total) * <span class="number">100</span>) / <span class="number">100</span>, <span class="number">2</span>)</div><div class="line">        money -= get_money</div><div class="line">        money_list.append(get_money)</div><div class="line"></div><div class="line">    money_list.append(round(money, <span class="number">2</span>))</div><div class="line">    random.shuffle(money_list)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> money_list, <span class="string">u'success'</span></div></pre></td></tr></table></figure></p>
+<p>测试发现裂变式的<code>QPS</code>只有1.2w，相对第一个方法，这种方法更加贴合微信中拆红包的实现。</p>
+<hr>
+<h1 id="进一步的思考"><a href="#进一步的思考" class="headerlink" title="进一步的思考"></a>进一步的思考</h1><p>裂变方法实现的抢红包算法应用于小型系统中没有问题，但是对于微信这种百亿红包，峰值达到百万级别的系统来讲，上述算法还不能够很好的满足这样的需求。有没有更好的解决办法？可以通过预分配的思想去解决，通过事先大量随机一些值存到内存中，这样把红包的生成算法转换为查询操作，可以提高并发。</p>
 
       
     </div>
@@ -411,8 +393,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/29/operatorhighconcurrency/" rel="next" title="服务器高并发设计模式">
-                <i class="fa fa-chevron-left"></i> 服务器高并发设计模式
+              <a href="/2018/08/23/meituan/" rel="next" title="美团点评实习总结">
+                <i class="fa fa-chevron-left"></i> 美团点评实习总结
               </a>
             
           </div>
@@ -420,10 +402,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/09/cpluscplusstlcode/" rel="prev" title="C++之STL源码剖析【更新中】">
-                C++之STL源码剖析【更新中】 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -557,7 +535,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一致性问题"><span class="nav-number">1.</span> <span class="nav-text">一致性问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Paxos算法"><span class="nav-number">2.</span> <span class="nav-text">Paxos算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Raft一致性算法"><span class="nav-number">3.</span> <span class="nav-text">Raft一致性算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本要求"><span class="nav-number">1.</span> <span class="nav-text">基本要求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一个简单的抢红包算法"><span class="nav-number">2.</span> <span class="nav-text">一个简单的抢红包算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#裂变方法"><span class="nav-number">3.</span> <span class="nav-text">裂变方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进一步的思考"><span class="nav-number">4.</span> <span class="nav-text">进一步的思考</span></a></li></ol></div>
             
 
           </div>
