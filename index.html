@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Accueil
           </a>
         </li>
       
@@ -260,6 +260,154 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/09/12/compare_and_swap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Harlon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Harlon's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/12/compare_and_swap/" itemprop="url">无锁队列的实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-12T02:34:23+08:00">
+                2018-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index">
+                    <span itemprop="name">Notes</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>先贴上代码，之后写一下概念总结。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/09/12/compare_and_swap/#more" rel="contents">
+              Lire la suite &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+      
+    
+      
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/09/03/redenvelope/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -289,7 +437,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-03T12:34:23+08:00">
                 2018-09-03
@@ -310,7 +458,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -356,7 +504,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/09/03/redenvelope/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -437,7 +585,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-23T16:34:23+08:00">
                 2018-08-23
@@ -458,7 +606,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -504,7 +652,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/08/23/meituan/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -575,7 +723,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/23/interview/" itemprop="url">面试知识点总结【更新中】</a></h1>
+                <a class="post-title-link" href="/2018/07/23/interview/" itemprop="url">面试知识点总结</a></h1>
         
 
         <div class="post-meta">
@@ -585,7 +733,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-23T13:48:23+08:00">
                 2018-07-23
@@ -606,7 +754,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -652,7 +800,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/23/interview/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -733,7 +881,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-19T14:39:18+08:00">
                 2018-07-19
@@ -754,7 +902,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -805,7 +953,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/19/serverdebugging/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -886,7 +1034,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-09T09:59:23+08:00">
                 2018-07-09
@@ -907,7 +1055,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -958,7 +1106,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/09/libevent/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1039,7 +1187,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-02T16:24:23+08:00">
                 2018-07-02
@@ -1060,7 +1208,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1106,7 +1254,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/02/sheepdog-dog/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1187,7 +1335,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-23T12:47:23+08:00">
                 2018-06-23
@@ -1208,7 +1356,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1260,7 +1408,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/23/datastructurebigdata/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1341,7 +1489,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-20T22:55:23+08:00">
                 2018-06-20
@@ -1362,7 +1510,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1408,7 +1556,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/20/database/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1489,7 +1637,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posté le</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T21:00:23+08:00">
                 2018-06-14
@@ -1510,7 +1658,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -1556,155 +1704,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/14/designpattern/#more" rel="contents">
-              Weiterlesen &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-      
-    
-      
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://harlon.org/2018/06/10/iscsi-hig-available/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Harlon">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Harlon's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/10/iscsi-hig-available/" itemprop="url">iSCSI高可用性研究</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-10T16:24:23+08:00">
-                2018-06-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">in</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Technology/" itemprop="url" rel="index">
-                    <span itemprop="name">Technology</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>iSCSI相对于FC，具有价格低，部署简单的优点，不需要购买专门的硬件设备，利用网络就可以非常的便捷的构建IPSAN，但也存在着很多的不足，例如易受工具，可用带宽低、缺乏高可用性的冗余机制。<br>目前来说，实现iSCSI高可用有两种方式，基于多路径和基于虚拟IP。基于多路径的实现可以分为MPIO（Multi-Path Input/Output，多路径输入输出）与MC/S（Multiple Connection per Session， 多重链接）。<br><img src="/img/iscsi.png" alt="iSCSI"><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/10/iscsi-hig-available/#more" rel="contents">
-              Weiterlesen &raquo;
+              Lire la suite &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1792,8 +1792,8 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">93</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">articles</span>
                 </a>
               </div>
             
@@ -1804,7 +1804,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -1815,7 +1815,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -1863,7 +1863,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -1871,7 +1871,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
