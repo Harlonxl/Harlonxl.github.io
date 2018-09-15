@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？">
+<meta name="description" content="微信抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。站在程序员的角度上，该如何设计抢红包的算法呢？并考虑到实际应用场景，微信是如何设计上亿用户的抢红包系统，高并发下对抢红包算法会带来一些挑战，如何去应对这种挑战？本文设计了一个类似微信的红包算法，并做了简单的性能分析以及考虑到实际部署时需要考虑的情况。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="抢红包算法的实现与思考">
 <meta property="og:url" content="http://harlon.org/2018/09/03/redenvelope/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？">
+<meta property="og:description" content="微信抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。站在程序员的角度上，该如何设计抢红包的算法呢？并考虑到实际应用场景，微信是如何设计上亿用户的抢红包系统，高并发下对抢红包算法会带来一些挑战，如何去应对这种挑战？本文设计了一个类似微信的红包算法，并做了简单的性能分析以及考虑到实际部署时需要考虑的情况。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-02T16:40:20.277Z">
+<meta property="og:updated_time" content="2018-09-15T16:24:53.436Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="抢红包算法的实现与思考">
-<meta name="twitter:description" content="抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？">
+<meta name="twitter:description" content="微信抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。站在程序员的角度上，该如何设计抢红包的算法呢？并考虑到实际应用场景，微信是如何设计上亿用户的抢红包系统，高并发下对抢红包算法会带来一些挑战，如何去应对这种挑战？本文设计了一个类似微信的红包算法，并做了简单的性能分析以及考虑到实际部署时需要考虑的情况。">
 
 
 
@@ -185,7 +185,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Accueil
+            Startseite
           </a>
         </li>
       
@@ -289,7 +289,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-03T12:34:23+08:00">
                 2018-09-03
@@ -310,7 +310,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -351,7 +351,7 @@
       
 
       
-        <p>抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。作为开发者的角度上来讲，我们如何设计抢红包的算法呢？考虑到实际应用场景，高并发对抢红包算法会带来一些挑战，如何去应对这种挑战？<br><a id="more"></a></p>
+        <p>微信抢红包成了逢年过节必不可少的一个环节，每次抢红包都要人品大爆发才能抢到大红包。站在程序员的角度上，该如何设计抢红包的算法呢？并考虑到实际应用场景，微信是如何设计上亿用户的抢红包系统，高并发下对抢红包算法会带来一些挑战，如何去应对这种挑战？本文设计了一个类似微信的红包算法，并做了简单的性能分析以及考虑到实际部署时需要考虑的情况。<br><a id="more"></a></p>
 <h1 id="基本要求"><a href="#基本要求" class="headerlink" title="基本要求"></a>基本要求</h1><ul>
 <li>所有抢到红包的金额等于红包金额；</li>
 <li>每个人至少抢到0.01元；</li>
@@ -459,10 +459,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table Des Matières
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Ensemble
+            Übersicht
           </li>
         </ul>
       
@@ -483,7 +483,7 @@
                 <a href="/archives">
               
                   <span class="site-state-item-count">94</span>
-                  <span class="site-state-item-name">articles</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -494,7 +494,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -505,7 +505,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -569,7 +569,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -577,7 +577,7 @@
 
 
 
-  <div class="theme-info">Thème &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
 
 
 
