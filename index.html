@@ -352,7 +352,7 @@
 
       
         
-          <p>先贴上代码，之后写一下概念总结。<br>
+          <p>无锁编程，称为<code>lock-free</code>，是利用处理器的一些特殊原子指令来避免传统并行设计中对锁的使用，例如<code>x86</code>平台下对应的指令是<code>CMPXCHG</code>。使用无锁编程至少能够带来两个方面的好处，首先是避免锁的争用，提高性能，其次通过避免锁的使用，避免死锁。无锁队列是无锁编程中最基础的，本文在这里给出一个实现。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/09/12/compare_and_swap/#more" rel="contents">

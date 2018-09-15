@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="先贴上代码，之后写一下概念总结。">
+<meta name="description" content="无锁编程，称为lock-free，是利用处理器的一些特殊原子指令来避免传统并行设计中对锁的使用，例如x86平台下对应的指令是CMPXCHG。使用无锁编程至少能够带来两个方面的好处，首先是避免锁的争用，提高性能，其次通过避免锁的使用，避免死锁。无锁队列是无锁编程中最基础的，本文在这里给出一个实现。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="无锁队列的实现">
 <meta property="og:url" content="http://harlon.org/2018/09/12/compare_and_swap/index.html">
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
-<meta property="og:description" content="先贴上代码，之后写一下概念总结。">
+<meta property="og:description" content="无锁编程，称为lock-free，是利用处理器的一些特殊原子指令来避免传统并行设计中对锁的使用，例如x86平台下对应的指令是CMPXCHG。使用无锁编程至少能够带来两个方面的好处，首先是避免锁的争用，提高性能，其次通过避免锁的使用，避免死锁。无锁队列是无锁编程中最基础的，本文在这里给出一个实现。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-11T18:35:25.653Z">
+<meta property="og:updated_time" content="2018-09-15T16:16:47.422Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="无锁队列的实现">
-<meta name="twitter:description" content="先贴上代码，之后写一下概念总结。">
+<meta name="twitter:description" content="无锁编程，称为lock-free，是利用处理器的一些特殊原子指令来避免传统并行设计中对锁的使用，例如x86平台下对应的指令是CMPXCHG。使用无锁编程至少能够带来两个方面的好处，首先是避免锁的争用，提高性能，其次通过避免锁的使用，避免死锁。无锁队列是无锁编程中最基础的，本文在这里给出一个实现。">
 
 
 
@@ -351,9 +351,44 @@
       
 
       
-        <p>先贴上代码，之后写一下概念总结。<br><a id="more"></a><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> &#123;</span></div><div class="line">    ListNode *next;</div><div class="line">    <span class="keyword">int</span> value;</div><div class="line">    ListNode (<span class="keyword">int</span> val) : value(val), next(<span class="literal">NULL</span>) &#123; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CASQueue</span> &#123;</span></div><div class="line"><span class="keyword">private</span>:</div><div class="line">    ListNode *head;</div><div class="line">    ListNode *tail;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    CASQueue() &#123;</div><div class="line">        head = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</div><div class="line">        tail = head;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</div><div class="line">        ListNode *node = <span class="keyword">new</span> ListNode(value);</div><div class="line">        ListNode *p = tail;</div><div class="line"></div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            <span class="keyword">while</span> (p-&gt;next != <span class="literal">NULL</span>) &#123;</div><div class="line">                p = p-&gt;next;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">while</span> (__sync_bool_compare_and_swap(&amp;p-&gt;next, <span class="literal">NULL</span>, node) != <span class="literal">true</span>);</div><div class="line"></div><div class="line">        __sync_bool_compare_and_swap(&amp;tail, p, node);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</div><div class="line">        ListNode *node = head;</div><div class="line">        ListNode *p;</div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            p = head;</div><div class="line">        &#125; <span class="keyword">while</span> (__sync_bool_compare_and_swap(&amp;head, p, p-&gt;next) != <span class="literal">true</span>);</div><div class="line">        <span class="keyword">int</span> val = node-&gt;next-&gt;value;</div><div class="line">        <span class="keyword">delete</span> node-&gt;next;</div><div class="line">        node-&gt;next = <span class="literal">NULL</span>;</div><div class="line">        <span class="keyword">return</span> val;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    CASQueue <span class="built_in">queue</span>;</div><div class="line">    <span class="built_in">queue</span>.push(<span class="number">3</span>);</div><div class="line">    <span class="built_in">queue</span>.push(<span class="number">4</span>);</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">queue</span>.pop() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+        <p>无锁编程，称为<code>lock-free</code>，是利用处理器的一些特殊原子指令来避免传统并行设计中对锁的使用，例如<code>x86</code>平台下对应的指令是<code>CMPXCHG</code>。使用无锁编程至少能够带来两个方面的好处，首先是避免锁的争用，提高性能，其次通过避免锁的使用，避免死锁。无锁队列是无锁编程中最基础的，本文在这里给出一个实现。<br><a id="more"></a></p>
+<h1 id="无锁编程基础"><a href="#无锁编程基础" class="headerlink" title="无锁编程基础"></a>无锁编程基础</h1><p>无锁编程最基本的一个操作是<code>CAS</code>(<code>compare and swap</code>)，无锁编程的操作用C++语言描述的话如下所示，简而言之就是看看<code>*reg</code>里面的内容是不是<code>oldval</code>，如果是的话，对其复制为<code>newval</code>。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_and_swap</span><span class="params">(T *reg, T oldval, T newval)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (*reg = oldval) &#123;</div><div class="line">        *reg = newval;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>CAS</code>实现是依赖编译器的：</p>
+<ul>
+<li><p><code>GCC</code>的<code>CAS</code><br><code>GCC4.1+</code>版本支持<code>CAS</code>的原子操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> __sync_bool_compare_and_swap (type *ptr, type oldval type newval, ...)</div><div class="line">type __sync_val_compare_and_swap (type *ptr, type oldval type newval, ...)</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>Windows</code>的<code>CAS</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">InterlockedCompareExchange ( __inout LONG <span class="keyword">volatile</span> *Target,</div><div class="line">                                __in LONG Exchange,</div><div class="line">                                __in LONG Comperand);</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>C++11</code>中的<code>CAS</code><br><code>C++11</code>中的<code>STL</code>的<code>atomic</code>类的函数可以跨平台实现<code>CAS</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt; <span class="class"><span class="keyword">class</span> <span class="title">T</span> &gt;</span></div><div class="line"><span class="class"><span class="title">bool</span> <span class="title">atomic_compare_exchange_weak</span>( <span class="title">std</span>:</span>:atomic* obj,</div><div class="line">                                   T* expected, T desired );</div><div class="line"><span class="keyword">template</span>&lt; <span class="class"><span class="keyword">class</span> <span class="title">T</span> &gt;</span></div><div class="line"><span class="class"><span class="title">bool</span> <span class="title">atomic_compare_exchange_weak</span>( <span class="title">volatile</span> <span class="title">std</span>:</span>:atomic* obj,</div><div class="line">                                   T* expected, T desired );</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="无锁队列的实现"><a href="#无锁队列的实现" class="headerlink" title="无锁队列的实现"></a>无锁队列的实现</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> &#123;</span></div><div class="line">    ListNode *next;</div><div class="line">    <span class="keyword">int</span> value;</div><div class="line">    ListNode (<span class="keyword">int</span> val) : value(val), next(<span class="literal">NULL</span>) &#123; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CASQueue</span> &#123;</span></div><div class="line"><span class="keyword">private</span>:</div><div class="line">    ListNode *head;</div><div class="line">    ListNode *tail;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    CASQueue() &#123;</div><div class="line">        head = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</div><div class="line">        tail = head;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</div><div class="line">        ListNode *node = <span class="keyword">new</span> ListNode(value);</div><div class="line">        ListNode *p = tail;</div><div class="line"></div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            <span class="keyword">while</span> (p-&gt;next != <span class="literal">NULL</span>) &#123;</div><div class="line">                p = p-&gt;next;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">while</span> (__sync_bool_compare_and_swap(&amp;p-&gt;next, <span class="literal">NULL</span>, node) != <span class="literal">true</span>);</div><div class="line"></div><div class="line">        __sync_bool_compare_and_swap(&amp;tail, p, node);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</div><div class="line">        ListNode *node = head;</div><div class="line">        ListNode *p;</div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            p = head;</div><div class="line">        &#125; <span class="keyword">while</span> (__sync_bool_compare_and_swap(&amp;head, p, p-&gt;next) != <span class="literal">true</span>);</div><div class="line">        <span class="keyword">int</span> val = node-&gt;next-&gt;value;</div><div class="line">        <span class="keyword">delete</span> node-&gt;next;</div><div class="line">        node-&gt;next = <span class="literal">NULL</span>;</div><div class="line">        <span class="keyword">return</span> val;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    CASQueue <span class="built_in">queue</span>;</div><div class="line">    <span class="built_in">queue</span>.push(<span class="number">3</span>);</div><div class="line">    <span class="built_in">queue</span>.push(<span class="number">4</span>);</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">queue</span>.pop() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="CAS的ABA问题"><a href="#CAS的ABA问题" class="headerlink" title="CAS的ABA问题"></a>CAS的ABA问题</h1><p><code>CAS</code>的<code>ABA</code>问题可以概括如下：</p>
+<ol>
+<li>进程P1在共享变量中读到值为A</li>
+<li>P1被抢占了，进程P2执行</li>
+<li>P2把共享变量里的值从A改成了B，再改回到A，此时被P1抢占</li>
+<li>P1回来看到共享变量里的值没有被改变，于是继续执行</li>
+</ol>
+<p>虽然P1以为变量值没有改变，继续执行了，但是这个会引发一些潜在的问题。ABA问题最容易发生在<code>lock free</code>的算法中的，<code>CAS</code>首当其冲，因为<code>CAS</code>判断的是指针的地址。如果这个地址被重用了呢，问题就很大了。（地址被重用是很经常发生的，一个内存分配后释放了，再分配，很有可能还是原来的地址）</p>
+<p>维基百科上有一个比较通俗的比喻：</p>
 <blockquote>
-<p> 参考文献：<br> <a href="https://coolshell.cn/articles/8239.html" target="_blank" rel="external">无锁队列的实现</a></p>
+<p> 你拿着一个装满钱的手提箱在飞机场，此时过来了一个火辣性感的美女，然后她很暖昧地挑逗着你，并趁你不注意的时候，把用一个一模一样的手提箱和你那装满钱的箱子调了个包，然后就离开了，你看到你的手提箱还在那，于是就提着手提箱去赶飞机去了。</p>
+</blockquote>
+<hr>
+<h1 id="解决ABA问题"><a href="#解决ABA问题" class="headerlink" title="解决ABA问题"></a>解决ABA问题</h1><p>可以用<code>double CAS</code>，双保险<code>CAS</code>解决<code>ABA</code>问题，例如在32位系统上，我们要检查64位长的内容。</p>
+<ul>
+<li>一次用<code>CAS</code>检查双倍长度的值，前半部是指针，后半部分是一个计数器。</li>
+<li>只有这两个都一样，才算通过检查，要赋新的值。并把计数器累加1。<br>这样一来，<code>ABA</code>发生时，虽然值一样，但是计数器就不一样（但是在32位的系统上，这个计数器会溢出回来又从1开始的，这还是会有ABA的问题）</li>
+</ul>
+<hr>
+<blockquote>
+<p> 参考文献：<br> <a href="https://coolshell.cn/articles/8239.html" target="_blank" rel="external">无锁队列的实现</a><br><a href="https://www.jianshu.com/p/88b5138ec027" target="_blank" rel="external">无锁编程基础</a></p>
 </blockquote>
 
       
@@ -439,8 +474,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -502,6 +546,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#无锁编程基础"><span class="nav-number">1.</span> <span class="nav-text">无锁编程基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#无锁队列的实现"><span class="nav-number">2.</span> <span class="nav-text">无锁队列的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAS的ABA问题"><span class="nav-number">3.</span> <span class="nav-text">CAS的ABA问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决ABA问题"><span class="nav-number">4.</span> <span class="nav-text">解决ABA问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
