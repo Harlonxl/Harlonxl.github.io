@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Harlon&#39;s BLOG">
 <meta property="og:description" content="C++面向对象基础面试题收录。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-22T16:25:09.387Z">
+<meta property="og:updated_time" content="2018-09-22T09:41:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++面向对象基础">
 <meta name="twitter:description" content="C++面向对象基础面试题收录。">
@@ -420,6 +420,12 @@
 <li>模板类：类模板根据具体的类型实例化的类，称之为模板类，编译器会为不同类型的类模板实例化不同的对象。</li>
 </ul>
 <hr>
+<h1 id="C-中哪些函数不能加上inline关键字？"><a href="#C-中哪些函数不能加上inline关键字？" class="headerlink" title="C++中哪些函数不能加上inline关键字？"></a>C++中哪些函数不能加上inline关键字？</h1><ul>
+<li>包含了递归、循环的函数</li>
+<li>虚函数不会被内联</li>
+<li>构造和析构函数一般不会内联</li>
+<li>内联函数调用了其他函数也不会被内联</li>
+</ul>
 <blockquote>
 <p>参考资料：<br><a href="https://github.com/Harlonxl/Skill-Tree/blob/master/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80C%2B%2B.md#oop" target="_blank" rel="external">编程语言(C/C++)</a><br><a href="http://blog.chinaunix.net/uid-26921272-id-3360269.html" target="_blank" rel="external">c语言实现面向对象编程</a></p>
 </blockquote>
@@ -593,7 +599,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象三大特性"><span class="nav-number">1.</span> <span class="nav-text">面向对象三大特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C语言实现面向对象编程"><span class="nav-number">2.</span> <span class="nav-text">C语言实现面向对象编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#public-protected-private区别"><span class="nav-number">3.</span> <span class="nav-text">public/protected/private区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-空类有哪些成员函数？"><span class="nav-number">4.</span> <span class="nav-text">C++空类有哪些成员函数？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数是否为虚函数？析构函数呢？"><span class="nav-number">5.</span> <span class="nav-text">构造函数是否为虚函数？析构函数呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数调用顺序，析构函数呢？"><span class="nav-number">6.</span> <span class="nav-text">构造函数调用顺序，析构函数呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数中深拷贝和浅拷贝的区别"><span class="nav-number">7.</span> <span class="nav-text">构造函数中深拷贝和浅拷贝的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拷贝构造函数和赋值运算符的区别？"><span class="nav-number">8.</span> <span class="nav-text">拷贝构造函数和赋值运算符的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重载，覆盖和隐藏的区别"><span class="nav-number">9.</span> <span class="nav-text">重载，覆盖和隐藏的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#哪几种情况会用到初始化成员列表？"><span class="nav-number">10.</span> <span class="nav-text">哪几种情况会用到初始化成员列表？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类模板和模板类"><span class="nav-number">11.</span> <span class="nav-text">类模板和模板类</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#面向对象三大特性"><span class="nav-number">1.</span> <span class="nav-text">面向对象三大特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C语言实现面向对象编程"><span class="nav-number">2.</span> <span class="nav-text">C语言实现面向对象编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#public-protected-private区别"><span class="nav-number">3.</span> <span class="nav-text">public/protected/private区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-空类有哪些成员函数？"><span class="nav-number">4.</span> <span class="nav-text">C++空类有哪些成员函数？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数是否为虚函数？析构函数呢？"><span class="nav-number">5.</span> <span class="nav-text">构造函数是否为虚函数？析构函数呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数调用顺序，析构函数呢？"><span class="nav-number">6.</span> <span class="nav-text">构造函数调用顺序，析构函数呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数中深拷贝和浅拷贝的区别"><span class="nav-number">7.</span> <span class="nav-text">构造函数中深拷贝和浅拷贝的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拷贝构造函数和赋值运算符的区别？"><span class="nav-number">8.</span> <span class="nav-text">拷贝构造函数和赋值运算符的区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重载，覆盖和隐藏的区别"><span class="nav-number">9.</span> <span class="nav-text">重载，覆盖和隐藏的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#哪几种情况会用到初始化成员列表？"><span class="nav-number">10.</span> <span class="nav-text">哪几种情况会用到初始化成员列表？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类模板和模板类"><span class="nav-number">11.</span> <span class="nav-text">类模板和模板类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-中哪些函数不能加上inline关键字？"><span class="nav-number">12.</span> <span class="nav-text">C++中哪些函数不能加上inline关键字？</span></a></li></ol></div>
             
 
           </div>
