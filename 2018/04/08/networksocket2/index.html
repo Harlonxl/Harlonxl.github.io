@@ -87,7 +87,7 @@
 <meta property="og:description" content="网络编程之TCP粘包问题，介绍粘包问题产生的原因以及解决办法。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://harlon.org/img/network2.png">
-<meta property="og:updated_time" content="2018-07-30T14:39:17.253Z">
+<meta property="og:updated_time" content="2018-09-22T17:50:14.057Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络编程之TCP粘包问题">
 <meta name="twitter:description" content="网络编程之TCP粘包问题，介绍粘包问题产生的原因以及解决办法。">
@@ -187,7 +187,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -291,7 +291,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-08T17:15:23+08:00">
                 2018-04-08
@@ -312,7 +312,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">in</span>
+                <span class="post-meta-item-text">In</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -362,7 +362,7 @@
 <li>定长包</li>
 <li>包尾\r\n（ftp）</li>
 <li>包头加上包头长度</li>
-<li>更负责的应用层协议</li>
+<li>更复杂的应用层协议</li>
 </ul>
 <hr>
 <h1 id="readn-和writen"><a href="#readn-和writen" class="headerlink" title="readn()和writen()"></a>readn()和writen()</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*server.c*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_EXIT(m) \</span></div><div class="line">	<span class="keyword">do</span> &#123; \</div><div class="line">		perror(m); \</div><div class="line">		<span class="built_in">exit</span>(EXIT_FAILURE); \</div><div class="line">	&#125;<span class="keyword">while</span>(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> readn(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> n) &#123;</div><div class="line">	<span class="keyword">int</span> nleft = n;</div><div class="line">	<span class="keyword">int</span> nread;</div><div class="line">	<span class="keyword">char</span> *bufp = (<span class="keyword">char</span> *)buf;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (nleft &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">if</span>((nread = read(fd, bufp, nleft)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR)</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (nread == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> n - nleft;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		nleft -= nread;</div><div class="line">		bufp += nread;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> n;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> writen(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> n) &#123;</div><div class="line">	<span class="keyword">int</span> nleft = n;</div><div class="line">	<span class="keyword">int</span> nwrite;</div><div class="line">	<span class="keyword">char</span> *bufp = (<span class="keyword">char</span> *)buf;</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (nleft &gt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="keyword">if</span>((nwrite = write(fd, buf, nleft)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (errno == EINTR)</div><div class="line">				<span class="keyword">continue</span>;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (nwrite == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> n - nleft;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		nleft -= nwrite;</div><div class="line">		buf += nwrite;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> n;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">handler</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">	<span class="keyword">while</span> (waitpid(<span class="number">-1</span>, <span class="literal">NULL</span>, WNOHANG) &gt; <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="comment">// signal(SIGCHLD, SIG_IGN); // 避免僵尸进程</span></div><div class="line">	signal(SIGCHLD, handler);</div><div class="line">	<span class="keyword">int</span> sockfd;</div><div class="line">	<span class="keyword">if</span> ((sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"socket"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serveraddr</span>;</span></div><div class="line">	<span class="built_in">memset</span>(&amp;serveraddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serveraddr));</div><div class="line">	serveraddr.sin_family = AF_INET;</div><div class="line">	serveraddr.sin_port = htons(<span class="number">5534</span>);</div><div class="line">	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);</div><div class="line"></div><div class="line">	<span class="keyword">int</span> on = <span class="number">1</span>;</div><div class="line">	<span class="keyword">if</span> (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &amp;on, <span class="keyword">sizeof</span>(on)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"setsockopt"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (bind(sockfd, (struct sockaddr*)&amp;serveraddr, <span class="keyword">sizeof</span>(serveraddr)) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"bind"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (listen(sockfd, SOMAXCONN) &lt; <span class="number">0</span>) &#123;</div><div class="line">		ERR_EXIT(<span class="string">"listen"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> conn;</div><div class="line">	<span class="keyword">pid_t</span> pid;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientaddr</span>;</span></div><div class="line">	<span class="keyword">int</span> clientaddrlen = <span class="keyword">sizeof</span>(clientaddr);</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (<span class="number">1</span>) &#123;</div><div class="line">		<span class="keyword">if</span> ((conn = accept(sockfd, (struct sockaddr*)&amp;clientaddr, &amp;clientaddrlen)) &lt; <span class="number">0</span>) &#123;</div><div class="line">			ERR_EXIT(<span class="string">"accept"</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="built_in">printf</span>(<span class="string">"ip=%s, port=%d\n"</span>, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));</div><div class="line"></div><div class="line">		<span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</div><div class="line">			ERR_EXIT(<span class="string">"fork"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123; <span class="comment">// 子进程</span></div><div class="line">			close(sockfd);</div><div class="line">			<span class="keyword">while</span>(<span class="number">1</span>) &#123;</div><div class="line">				<span class="keyword">char</span> recvbuf[<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;</div><div class="line">				<span class="keyword">int</span> ret;</div><div class="line">				<span class="keyword">if</span> ((ret = readn(conn, recvbuf, <span class="number">10</span>)) &lt; <span class="number">0</span>) &#123;</div><div class="line">					ERR_EXIT(<span class="string">"readn"</span>);</div><div class="line">				&#125; <span class="keyword">else</span> <span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</div><div class="line">					<span class="built_in">printf</span>(<span class="string">"client close\n"</span>);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line">				<span class="built_in">fputs</span>(recvbuf, <span class="built_in">stdout</span>);</div><div class="line"></div><div class="line">				writen(conn, recvbuf, <span class="number">10</span>);</div><div class="line">				<span class="built_in">memset</span>(recvbuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(recvbuf));</div><div class="line">			&#125;</div><div class="line">			close(conn);</div><div class="line">			<span class="built_in">exit</span>(EXIT_SUCCESS);</div><div class="line">		&#125; <span class="keyword">else</span> &#123; <span class="comment">// 父进程</span></div><div class="line">			close(conn);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -461,10 +461,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            Overview
           </li>
         </ul>
       
@@ -485,7 +485,7 @@
                 <a href="/archives">
               
                   <span class="site-state-item-count">94</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -496,7 +496,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Kategorien</span>
+                  <span class="site-state-item-name">categories</span>
                 
               </div>
             
@@ -507,7 +507,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-name">tags</span>
                 
               </div>
             
@@ -571,7 +571,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
